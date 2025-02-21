@@ -29,7 +29,11 @@
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(danhSachCauThu),
+        body: JSON.stringify({ 
+          tenDoiBong: tenDoiBong, 
+          sanNha: sanNha, 
+          danhSachCauThu: danhSachCauThu 
+        }),
       });
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -64,6 +68,7 @@
       name="td"
       type="text"
       placeholder="Ten doi"
+      bind:value={tenDoiBong}
       class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
     />
     <input
@@ -71,6 +76,7 @@
       name="sn"
       type="text"
       placeholder="San nha"
+      bind:value={sanNha}
       class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
     />
     <button
