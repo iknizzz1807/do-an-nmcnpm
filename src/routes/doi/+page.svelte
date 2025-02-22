@@ -1,17 +1,20 @@
 <script lang="ts">
   import ButtonPrimary from "$lib/components/ButtonPrimary.svelte";
   import Table from "$lib/components/Table.svelte";
-  import { onMount } from "svelte";
+  import type { PageProps } from "./$types";
+  let { data }: PageProps = $props();
 
   type DoiBong = {
     tenDoi: string;
     sanNha: string;
   };
 
-  let danhSachDoiBong: DoiBong[] = $state([
-    { tenDoi: "Man United", sanNha: "Old Trafford" },
-    { tenDoi: "Man City", sanNha: "Etihad" },
-  ]);
+  let danhSachDoiBong: DoiBong[] = $state(data.danhSachDoiBong);
+
+  // let danhSachDoiBong: DoiBong[] = $state([
+  //   { tenDoi: "Man United", sanNha: "Old Trafford" },
+  //   { tenDoi: "Man City", sanNha: "Etihad" },
+  // ]);
 
   const columns = [
     { header: "Tên đội", accessor: "tenDoi" },
@@ -63,6 +66,10 @@
     }
   };
 </script>
+
+<svelte:head>
+  <title>Các đội bóng</title>
+</svelte:head>
 
 <Table title="Danh sách các đội bóng" {columns} data={danhSachDoiBong} />
 <div class="flex justify-center">

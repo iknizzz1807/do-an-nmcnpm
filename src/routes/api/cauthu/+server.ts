@@ -1,5 +1,5 @@
 import type { RequestHandler } from "./$types";
-import { CauThu } from "$lib/server/db/schema/CauThu";
+import { CauThu, type InsertCauThuParams } from "$lib/server/db/schema/CauThu";
 import { ThamGiaDB } from "$lib/server/db/schema/ThamGiaDB";
 import { db } from "$lib/server/db/client";
 import { v4 as uuidv4 } from "uuid";
@@ -26,12 +26,14 @@ export const POST: RequestHandler = async ({
 
   for (const cauThu of danhSachCauThu) {
     const maCT = uuidv4();
-    const cauThuMoi = {
+    const cauThuMoi: InsertCauThuParams = {
       maCT: maCT,
       tenCT: cauThu.ten,
       ngaySinh: new Date(),
       loaiCT: cauThu.loai,
       ghiChu: cauThu.ghiChu,
+      nuocNgoai: 0,
+      // Cái này để bừa sau này nhớ chỉnh
     };
     await db.insert(CauThu).values(cauThuMoi);
     await db.insert(ThamGiaDB).values({

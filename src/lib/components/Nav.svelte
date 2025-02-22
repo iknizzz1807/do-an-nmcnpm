@@ -11,7 +11,7 @@
           >Trang chủ</a
         >
         <a
-          href="/"
+          href="/cauthu"
           class="px-3 py-2 rounded-md text-sm font-medium hover:bg-green-700"
           >Cầu thủ</a
         >
@@ -21,12 +21,12 @@
           >Đội</a
         >
         <a
-          href="/"
+          href="/trandau"
           class="px-3 py-2 rounded-md text-sm font-medium hover:bg-green-700"
           >Trận đấu</a
         >
         <a
-          href="/bangxephang"
+          href="/bxh"
           class="px-3 py-2 rounded-md text-sm font-medium hover:bg-green-700"
           >Bảng xếp hạng</a
         >

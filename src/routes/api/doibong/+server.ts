@@ -5,8 +5,8 @@ import { DoiBong } from "$lib/server/db/schema/DoiBong";
 import { DSMuaGiai } from "$lib/server/db/schema/DSMuaGiai";
 
 export const GET: RequestHandler = async () => {
-  let doiBongs = await db.select().from(DoiBong);
-  return new Response(JSON.stringify(doiBongs), {
+  let danhSachDoiBong = await db.select().from(DoiBong);
+  return new Response(JSON.stringify(danhSachDoiBong), {
     status: 200,
     headers: {
       "Content-Type": "application/json",
@@ -23,7 +23,10 @@ export const POST: RequestHandler = async ({
   const data = await request.json();
   // console.log(data);
 
-  await db.insert(DSMuaGiai).values({ maMG: 1, tenMG: "2025-2026" }); // Hard coded type shit =))
+  await db
+    .insert(DSMuaGiai)
+    .values({ maMG: 1, tenMG: "2025-2026" })
+    .onConflictDoNothing(); // Hard coded type shit =))
 
   // Thêm đội bóng mới vào danh sách các đội bóng
   const maDoi: string = uuidv4();
