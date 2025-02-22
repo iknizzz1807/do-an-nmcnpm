@@ -16,7 +16,7 @@
           >Cầu thủ</a
         >
         <a
-          href="/"
+          href="/doi"
           class="px-3 py-2 rounded-md text-sm font-medium hover:bg-green-700"
           >Đội</a
         >

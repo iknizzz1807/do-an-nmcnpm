@@ -1,5 +1,6 @@
 <script lang="ts">
-  let { title, col }: { title: string; col: string[] } = $props();
+  let { title, col, data }: { title: string; col: string[]; data: string[] } =
+    $props();
 </script>
 
 <main class="flex justify-center items-center h-full">
