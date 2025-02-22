@@ -16,15 +16,17 @@ export const POST: RequestHandler = async ({
   // Cái post request này để tạo đội bóng, response ok sẽ tiến hành trả về đội bóng mới vừa tạo
   const data = await request.json();
   // console.log(data);
-  await db.insert(DSMuaGiai).values({ maMG: 1, tenMG: "Gang Gang" }); // Đổi cái tên mùa giải này đi btw
+
+  await db.insert(DSMuaGiai).values({ maMG: 1, tenMG: "2025-2026" }); // Hard coded type shit =))
 
   // Thêm đội bóng mới vào danh sách các đội bóng
   const maDoi: string = uuidv4();
   const doiMoi = {
     maDoi: maDoi,
-    tenDoi: data.tenDoiBong,
+    tenDoi: data.tenDoi,
     sanNha: data.sanNha,
   };
+
   await db.insert(DoiBong).values(doiMoi);
 
   // Trả về response với đội bóng vừa tạo và status 200 OK

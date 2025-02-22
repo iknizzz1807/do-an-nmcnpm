@@ -1,37 +1,37 @@
 {
-	"name": "do-an-nmcnpm",
-	"private": true,
-	"version": "0.0.1",
-	"type": "module",
-	"scripts": {
-		"dev": "vite dev",
-		"build": "vite build",
-		"preview": "vite preview",
-		"prepare": "svelte-kit sync || echo ''",
-		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"generate:db": "drizzle-kit generate --config=src/lib/server/db/drizzle.config.ts",
-		"push:db": "drizzle-kit push --config=src/lib/server/db/drizzle.config.ts",
-		"migrate:db": "tsx src/lib/server/db/migrate.ts"
-	},
-	"devDependencies": {
-		"@sveltejs/adapter-auto": "^4.0.0",
-		"@sveltejs/kit": "^2.16.0",
-		"@sveltejs/vite-plugin-svelte": "^5.0.0",
-		"@tailwindcss/vite": "^4.0.0",
-		"@types/better-sqlite3": "^7.6.12",
-		"drizzle-kit": "^0.30.4",
-		"svelte": "^5.0.0",
-		"svelte-check": "^4.0.0",
-		"tailwindcss": "^4.0.0",
-		"typescript": "^5.0.0",
-		"vite": "^6.0.0"
-	},
-	"dependencies": {
-		"better-sqlite3": "^11.8.1",
-		"dotenv": "^16.4.7",
-		"drizzle-orm": "^0.39.3",
-		"tsx": "^4.19.3",
-		"uuid": "^11.1.0"
-	}
+  "name": "do-an-nmcnpm",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "prepare": "svelte-kit sync || echo ''",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "generate:db": "drizzle-kit generate --config=src/lib/server/db/drizzle.config.ts",
+    "push:db": "drizzle-kit push --config=src/lib/server/db/drizzle.config.ts",
+    "migrate:db": "tsx src/lib/server/db/migrate.ts"
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-auto": "^4.0.0",
+    "@sveltejs/kit": "^2.16.0",
+    "@sveltejs/vite-plugin-svelte": "^5.0.0",
+    "@tailwindcss/vite": "^4.0.0",
+    "@types/better-sqlite3": "^7.6.12",
+    "drizzle-kit": "^0.30.4",
+    "svelte": "^5.0.0",
+    "svelte-check": "^4.0.0",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.0.0",
+    "vite": "^6.0.0"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.8.1",
+    "dotenv": "^16.4.7",
+    "drizzle-orm": "^0.39.3",
+    "tsx": "^4.19.3",
+    "uuid": "^11.1.0"
+  }
 }
