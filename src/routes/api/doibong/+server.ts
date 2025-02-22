@@ -5,7 +5,13 @@ import { DoiBong } from "$lib/server/db/schema/DoiBong";
 import { DSMuaGiai } from "$lib/server/db/schema/DSMuaGiai";
 
 export const GET: RequestHandler = async () => {
-  return new Response();
+  let doiBongs = await db.select().from(DoiBong);
+  return new Response(JSON.stringify(doiBongs), {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 };
 
 export const POST: RequestHandler = async ({
