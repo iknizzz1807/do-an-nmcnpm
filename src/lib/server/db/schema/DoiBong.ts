@@ -6,6 +6,9 @@ export const DoiBong = sqliteTable('DoiBong', {
     tenDoi: text().notNull(),
     sanNha: text().notNull(),
 })
+
+export type InsertDoiBongParams = typeof DoiBong.$inferInsert;
+
 /*
 export interface DoiBong {
     maDoi: string;

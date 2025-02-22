@@ -12,6 +12,7 @@ export const ThamGiaDB = sqliteTable('ThamGiaDB', {
     primaryKey({ columns: [table.maDoi, table.maCT, table.maMG] }),
 ])
 
+export type InsertThamGiaDBParams = typeof ThamGiaDB.$inferInsert;
 /*
 export interface ThamGiaDB {
     maDoi: string;

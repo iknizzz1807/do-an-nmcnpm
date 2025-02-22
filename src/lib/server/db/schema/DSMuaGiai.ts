@@ -5,6 +5,7 @@ export const DSMuaGiai = sqliteTable('DSMuaGiai', {
     tenMG: text().notNull(),
 })
 
+export type InsertDSMuaGiaiParams = typeof DSMuaGiai.$inferInsert;
 /*
 export interface DSMuaGiai {
     maMG: number;

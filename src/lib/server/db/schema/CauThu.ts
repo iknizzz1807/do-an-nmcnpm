@@ -8,7 +8,10 @@ export const CauThu = sqliteTable('CauThu', {
         .$defaultFn(() => new Date()),
     loaiCT: integer().notNull(),
     ghiChu: text().notNull(),
+    nuocNgoai: integer().notNull()
 })
+
+export type InsertCauThuParams = typeof CauThu.$inferInsert;
 
 /*
 export interface CauThu {

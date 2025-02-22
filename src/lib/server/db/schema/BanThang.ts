@@ -14,6 +14,7 @@ export const BanThang = sqliteTable('BanThang', {
     primaryKey({ columns: [table.maTD, table.maCT, table.thoiDiem] }),
 ])
 
+export type InsertBanThangParams = typeof BanThang.$inferInsert;
 /*
 export interface BanThang {
     maTD: string;

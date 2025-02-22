@@ -14,6 +14,7 @@ export const LichThiDau = sqliteTable('LichThiDau', {
     doiThang: text().notNull().references(() => DoiBong.maDoi),
 })
 
+export type InsertLichThiDauParams = typeof LichThiDau.$inferInsert;
 /*
 export interface LichThiDau {
     maTD: string;
