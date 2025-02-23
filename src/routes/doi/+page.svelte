@@ -2,6 +2,7 @@
   import ButtonPrimary from "$lib/components/ButtonPrimary.svelte";
   import Table from "$lib/components/Table.svelte";
   import type { PageProps } from "./$types";
+  import { showErrorToast } from "$lib/components/Toast";
   let { data }: PageProps = $props();
 
   type DoiBong = {
@@ -32,6 +33,8 @@
 
   const closeForm = () => {
     formState = false;
+    inputSanNha = "";
+    inputTenDoi = "";
   };
 
   const submitForm = async (e: Event) => {
@@ -39,6 +42,16 @@
 
     if (inputTenDoi.trim() === "" || inputSanNha.trim() === "") return;
 
+    if (
+      danhSachDoiBong.some(
+        (doiBong) =>
+          doiBong.tenDoi.trim().toLowerCase() ===
+          inputTenDoi.trim().toLowerCase()
+      )
+    ) {
+      showErrorToast("Tên đội bóng đã tồn tại");
+      return;
+    }
     const data = { tenDoi: inputTenDoi, sanNha: inputSanNha };
 
     try {
@@ -71,7 +84,13 @@
   <title>Các đội bóng</title>
 </svelte:head>
 
-<Table title="Danh sách các đội bóng" {columns} data={danhSachDoiBong} />
+<Table
+  title="Danh sách các đội bóng"
+  {columns}
+  data={danhSachDoiBong}
+  redirectParam={"tenDoi"}
+  tableType="doi"
+/>
 <div class="flex justify-center">
   <ButtonPrimary text="Tạo đội mới" onclick={openForm} />
 </div>

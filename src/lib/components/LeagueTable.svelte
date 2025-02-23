@@ -1,5 +1,5 @@
 <div id="standings" class="bg-white rounded-lg shadow-md p-6">
-  <h2 class="text-2xl font-bold text-gray-800 mb-6">Championship Standings</h2>
+  <h2 class="text-2xl font-bold text-gray-800 mb-6">Bảng xếp hạng</h2>
   <div class="overflow-x-auto">
     <table class="min-w-full divide-y divide-gray-200">
       <thead class="bg-gray-50">
