@@ -8,9 +8,12 @@
       accessor: keyof T;
     }[];
     data: T[];
+    tableType: string;
+    redirectParam: string;
   };
 
-  let { title, columns, data }: TableProps<any> = $props();
+  let { title, columns, data, redirectParam, tableType }: TableProps<any> =
+    $props();
 </script>
 
 <main class="flex justify-center items-center">
@@ -35,7 +38,14 @@
         <tbody class="bg-white divide-y divide-gray-200">
           {#each data as row}
             <!-- Click vào để vào giao diện xem chi tiết và chỉnh sửa đội bóng -->
-            <tr onclick={() => {}} class="cursor-pointer hover:bg-gray-100">
+            <tr
+              onclick={() => {
+                goto(
+                  `/${tableType}/` + row[redirectParam].trim().toLowerCase()
+                );
+              }}
+              class="cursor-pointer hover:bg-gray-100"
+            >
               {#each columns as column}
                 <td class="px-6 py-4 whitespace-nowrap">
                   {row[column.accessor]}
