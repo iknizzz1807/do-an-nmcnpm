@@ -1,20 +1,18 @@
-import { randAddress, randAvatar, randBetweenDate, randText, randUserName } from "@ngneat/falso"
-import { getRandomUUID, randIntBetween } from '../../utils'
-import { db } from '../client'
-import { CauThu, type InsertCauThuParams } from "../schema/CauThu"
-import { DSMuaGiai, type InsertDSMuaGiaiParams } from "../schema/DSMuaGiai"
+import { randUserName } from "@ngneat/falso"
+import { type InsertDSMuaGiaiParams } from "../schema/DSMuaGiai"
+import { insertDSMuaGiai } from "../functions/DSMuaGiai"
 
 export const generateDSMuaGiaiData = async (count: number) : Promise<number[]> => {
     let ids : number[] = [];
     for (let i = 0; i < count; i++) {
-        let maMG = -1;
         const muaGiai : InsertDSMuaGiaiParams = {
             tenMG: randUserName()
         }
         
-        await db.insert(DSMuaGiai).values(muaGiai).returning({maMG: DSMuaGiai.maMG});
-        console.log(maMG);
-        ids.push(maMG);
+        await insertDSMuaGiai(muaGiai).then(
+            (value) => ids.push(...value.map((val) => val.id)),
+            (err) => { if (err) throw err; }
+        ); 
     }
     return ids;
 }

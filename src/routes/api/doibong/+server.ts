@@ -1,11 +1,11 @@
 import type { RequestHandler } from "./$types";
 import { db } from "$lib/server/db/client";
-import { v4 as uuidv4 } from "uuid";
-import { DoiBong } from "$lib/server/db/schema/DoiBong";
+import { DoiBong, type InsertDoiBongParams } from "$lib/server/db/schema/DoiBong";
 import { DSMuaGiai } from "$lib/server/db/schema/DSMuaGiai";
+import { insertDoiBong, selectAllDoiBong } from "$lib/server/db/functions/DoiBong";
 
 export const GET: RequestHandler = async () => {
-  let danhSachDoiBong = await db.select().from(DoiBong);
+  let danhSachDoiBong = await selectAllDoiBong();
   return new Response(JSON.stringify(danhSachDoiBong), {
     status: 200,
     headers: {
@@ -29,14 +29,12 @@ export const POST: RequestHandler = async ({
     .onConflictDoNothing(); // Hard coded type shit =))
 
   // Thêm đội bóng mới vào danh sách các đội bóng
-  const maDoi: string = uuidv4();
-  const doiMoi = {
-    maDoi: maDoi,
+  const doiMoi : InsertDoiBongParams = {
     tenDoi: data.tenDoi,
     sanNha: data.sanNha,
   };
 
-  await db.insert(DoiBong).values(doiMoi);
+  await insertDoiBong(doiMoi)
 
   // Trả về response với đội bóng vừa tạo và status 200 OK
   return new Response(JSON.stringify(doiMoi), {

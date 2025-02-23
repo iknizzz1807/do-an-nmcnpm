@@ -1,8 +1,8 @@
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
-
+import { db } from '../client';
 
 export const DoiBong = sqliteTable('DoiBong', {
-    maDoi: text().notNull().unique().primaryKey(),
+    maDoi: integer().notNull().unique().primaryKey({ autoIncrement: true }),
     tenDoi: text().notNull(),
     sanNha: text().notNull(),
 })

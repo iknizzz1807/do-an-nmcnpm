@@ -1,20 +1,19 @@
-import { randAddress, randAvatar, randUserName } from "@ngneat/falso"
-import { DoiBong, type InsertDoiBongParams } from "../schema/DoiBong"
-import { getRandomUUID } from '../../utils'
-import { db } from '../client'
+import { randAddress, randUserName } from "@ngneat/falso"
+import { type InsertDoiBongParams } from "../schema/DoiBong"
+import { insertDoiBong } from "../functions/DoiBong"
 
-export const generateDoiBongData = async (count: number) : Promise<string[]> => {
-    let ids : string[] = [];
+export const generateDoiBongData = async (count: number) : Promise<number[]> => {
+    let ids : number[] = [];
     for (let i = 0; i < count; i++) {
-        const maDoi = getRandomUUID();
         const doiBong : InsertDoiBongParams = {
-            maDoi: maDoi,
             tenDoi: randUserName(),
             sanNha: randAddress().city,
         }
         
-        await db.insert(DoiBong).values(doiBong);
-        ids.push(maDoi);
+        await insertDoiBong(doiBong).then(
+            (value) => ids.push(...value.map((val) => val.id)),
+            (err) => { if (err) throw err; }
+        ); 
     }
     return ids;
 }

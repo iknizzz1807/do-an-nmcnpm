@@ -3,18 +3,19 @@ import { DoiBong } from './DoiBong';
 import { DSMuaGiai } from './DSMuaGiai';
 
 export const LichThiDau = sqliteTable('LichThiDau', {
-    maTD: text().notNull().unique().primaryKey(),
-    doiMot: text().notNull().references(() => DoiBong.maDoi),
-    doiHai: text().notNull().references(() => DoiBong.maDoi),
+    maTD: integer().notNull().unique().primaryKey({ autoIncrement: true }),
+    doiMot: integer().notNull().references(() => DoiBong.maDoi),
+    doiHai: integer().notNull().references(() => DoiBong.maDoi),
     ngayGio: integer('', { mode: 'timestamp' })
         .notNull()
         .$defaultFn(() => new Date()),
     vongThiDau: integer().notNull(),
     maMG: integer().notNull().references(() => DSMuaGiai.maMG),
-    doiThang: text().notNull().references(() => DoiBong.maDoi),
+    doiThang: integer().notNull().references(() => DoiBong.maDoi),
 })
 
 export type InsertLichThiDauParams = typeof LichThiDau.$inferInsert;
+
 /*
 export interface LichThiDau {
     maTD: string;

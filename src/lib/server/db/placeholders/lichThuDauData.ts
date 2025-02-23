@@ -1,20 +1,19 @@
 import { randBetweenDate } from "@ngneat/falso"
-import { getRandomUUID, randIntBetween, choose } from '../../utils'
+import { randIntBetween, choose } from '../../utils'
 import { db } from '../client'
 import { DoiBong } from "../schema/DoiBong"
-import { LichThiDau, type InsertLichThiDauParams } from "../schema/LichThiDau"
+import { type InsertLichThiDauParams } from "../schema/LichThiDau"
+import { insertLichThiDau } from "../functions/LichThiDau"
 
-export const generateLichThuDauData = async (maMG: number) : Promise<string[]> => {
-    let ids : string[] = [];
+export const generateLichThuDauData = async (maMG: number) : Promise<number[]> => {
+    let ids : number[] = [];
     const doiBongs = await db.select().from(DoiBong);
     
     while(doiBongs.length >= 2) {
-        
-        const maTD = getRandomUUID();
+    
         const doiMotIndex = randIntBetween(0, doiBongs.length - 1);
         const doiHaiIndex = randIntBetween(0, doiBongs.length - 1);
         const lichThiDau : InsertLichThiDauParams = {
-            maTD: maTD,
             doiMot: doiBongs[doiMotIndex].maDoi,
             doiHai: doiBongs[doiHaiIndex].maDoi,
             vongThiDau: randIntBetween(1, 2),
@@ -25,8 +24,10 @@ export const generateLichThuDauData = async (maMG: number) : Promise<string[]> =
         doiBongs.splice(doiMotIndex, 1);
         doiBongs.splice(doiHaiIndex, 1);
 
-        await db.insert(LichThiDau).values(lichThiDau);
-        ids.push(maTD);
+        await insertLichThiDau(lichThiDau).then(
+            (value) => ids.push(...value.map((val) => val.id)),
+            (err) => { if (err) throw err; }
+        ); 
     }
     return ids;
 }

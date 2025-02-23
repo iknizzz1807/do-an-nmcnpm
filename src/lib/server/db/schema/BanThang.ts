@@ -3,18 +3,18 @@ import { LichThiDau } from './LichThiDau';
 import { CauThu } from './CauThu';
 import { DoiBong } from './DoiBong';
 
-
 export const BanThang = sqliteTable('BanThang', {
-    maTD: text().notNull().references(() => LichThiDau.maTD),
-    maCT: text().notNull().references(() => CauThu.maCT),
+    maTD: integer().notNull().references(() => LichThiDau.maTD),
+    maCT: integer().notNull().references(() => CauThu.maCT),
+    maDoi: integer().notNull().references(() => DoiBong.maDoi),
     thoiDiem: real().notNull(),
-    maDoi: text().notNull().references(() => DoiBong.maDoi),
     loaiBanThang: text().notNull(),
 }, (table) => [
     primaryKey({ columns: [table.maTD, table.maCT, table.thoiDiem] }),
 ])
 
 export type InsertBanThangParams = typeof BanThang.$inferInsert;
+
 /*
 export interface BanThang {
     maTD: string;

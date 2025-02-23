@@ -1,8 +1,7 @@
 import type { RequestHandler } from "./$types";
-import { CauThu, type InsertCauThuParams } from "$lib/server/db/schema/CauThu";
-import { ThamGiaDB } from "$lib/server/db/schema/ThamGiaDB";
-import { db } from "$lib/server/db/client";
-import { v4 as uuidv4 } from "uuid";
+import { type InsertCauThuParams } from "$lib/server/db/schema/CauThu";
+import { insertCauThu } from "$lib/server/db/functions/CauThu";
+import { insertThamGiaDB } from "$lib/server/db/functions/ThamGiaDB";
 
 export const GET: RequestHandler = async () => {
   return new Response();
@@ -25,22 +24,23 @@ export const POST: RequestHandler = async ({
   const danhSachCauThuTraVe = []; // Cái này có tác dụng để cập nhật UI
 
   for (const cauThu of danhSachCauThu) {
-    const maCT = uuidv4();
-    const cauThuMoi: InsertCauThuParams = {
-      maCT: maCT,
+    const cauThuMoi : InsertCauThuParams = {
       tenCT: cauThu.ten,
       ngaySinh: new Date(),
       loaiCT: cauThu.loai,
       ghiChu: cauThu.ghiChu,
       nuocNgoai: 0,
-      // Cái này để bừa sau này nhớ chỉnh
     };
-    await db.insert(CauThu).values(cauThuMoi);
-    await db.insert(ThamGiaDB).values({
+    let maCT = -1;
+    await insertCauThu(cauThuMoi).then(
+      (value) => maCT = value.at(0)?.id || 0,
+      (err) => { if(err) throw err; }
+    );
+    await insertThamGiaDB({
       maDoi: maDoi,
       maCT: maCT,
-      maMG: 1,
-    });
+      maMG: 1
+    })
     danhSachCauThuTraVe.push(cauThuMoi);
   }
 

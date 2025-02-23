@@ -1,7 +1,7 @@
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
 export const CauThu = sqliteTable('CauThu', {
-    maCT: text().notNull().unique().primaryKey(),
+    maCT: integer().notNull().unique().primaryKey({ autoIncrement: true }),
     tenCT: text().notNull(),
     ngaySinh: integer('', { mode: 'timestamp' })
         .notNull()

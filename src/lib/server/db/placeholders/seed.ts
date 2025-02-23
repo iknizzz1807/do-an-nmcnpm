@@ -5,6 +5,10 @@ import { generateLichThuDauData } from "./lichThuDauData";
 
 // npx tsx src/lib/server/db/placeholders/seed.ts
 const muaGiais = await generateDSMuaGiaiData(5);
+console.log(muaGiais);
 const doiBongs = await generateDoiBongData(5);
+console.log(doiBongs);
 const cauThus = await generateCauThuData(15);
+console.log(cauThus);
 const lichThiDau = await generateLichThuDauData(1);
+console.log(lichThiDau);

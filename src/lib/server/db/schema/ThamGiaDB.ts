@@ -3,16 +3,16 @@ import { DoiBong } from './DoiBong';
 import { CauThu } from './CauThu';
 import { DSMuaGiai } from './DSMuaGiai';
 
-
 export const ThamGiaDB = sqliteTable('ThamGiaDB', {
-    maDoi: text().notNull().references(() => DoiBong.maDoi),
-    maCT: text().notNull().references(() => CauThu.maCT),
+    maDoi: integer().notNull().references(() => DoiBong.maDoi),
+    maCT: integer().notNull().references(() => CauThu.maCT),
     maMG: integer().notNull().references(() => DSMuaGiai.maMG)
 }, (table) => [
     primaryKey({ columns: [table.maDoi, table.maCT, table.maMG] }),
 ])
 
 export type InsertThamGiaDBParams = typeof ThamGiaDB.$inferInsert;
+
 /*
 export interface ThamGiaDB {
     maDoi: string;
