@@ -1,26 +1,51 @@
 import { eq, and, ilike } from 'drizzle-orm';
 import { db } from '../client';
-import { CauThu, type InsertCauThuParams } from '../schema/CauThu';
-import { ThamGiaDB } from '../schema/ThamGiaDB';
+import { CauThuTable } from '../schema/CauThu';
+import { ThamGiaDBTable } from '../schema/ThamGiaDB';
+import { DoiBongTable } from '../schema/DoiBong';
+import { BanThangTable } from '../schema/BanThang';
+import type { CauThu, KQTraCuuCauThu } from '$lib/types';
 
-export const insertCauThu = async (...cauThu: InsertCauThuParams[]) => {
-    let returning = await db.insert(CauThu).values(cauThu).returning({ id: CauThu.maCT });
-    if (returning == null || returning.length == 0)
+export const insertCauThu = async (...cauThu: CauThu[]) => {
+    let returning = await db.insert(CauThuTable).values(cauThu).returning({ id: CauThuTable.maCT });
+    if (returning === null || returning.length === 0)
         throw new Error("Co gi do sai sot trong luc add vo CauThu: Insert khong duoc");
     return returning;
 }
 
 export const selectAllCauThu = async() => {
-    return db.select().from(CauThu);
+    return await db.select().from(CauThuTable) satisfies CauThu[];
 }
 
 export const selectCauThuTen = async(tenCT: string) => {
-    return db.select().from(CauThu).where(ilike(CauThu.maCT, tenCT));
+    return await db.select().from(CauThuTable).where(ilike(CauThuTable.maCT, tenCT)) satisfies CauThu[];
 }
 
 export const selectCauThuDoiBong = async (maMG: number, maDoi: number) => {
-    return db
+    return await db
         .select()
-        .from(CauThu)
-        .innerJoin(ThamGiaDB, and(eq(ThamGiaDB.maCT, CauThu.maCT), eq(ThamGiaDB.maMG, maMG), eq(ThamGiaDB.maDoi, maMG)));
+        .from(CauThuTable)
+        .innerJoin(ThamGiaDBTable, and(eq(ThamGiaDBTable.maCT, CauThuTable.maCT), eq(ThamGiaDBTable.maMG, maMG), eq(ThamGiaDBTable.maDoi, maMG)))
+        .innerJoin(DoiBongTable, eq(DoiBongTable.maDoi, ThamGiaDBTable.maDoi));
 }
+
+export const traCuuCauThu = async (tenCT: string) => {
+    let ketQua : KQTraCuuCauThu[] = [];
+    const cauThu = await db
+            .select()
+            .from(CauThuTable)
+            .innerJoin(ThamGiaDBTable, eq(ThamGiaDBTable.maCT, CauThuTable.maCT))
+            .innerJoin(DoiBongTable, eq(DoiBongTable.maDoi, ThamGiaDBTable.maDoi))
+            .where(ilike(CauThuTable.tenCT, '%' + tenCT + '%'));
+    cauThu.forEach(async (value) => {
+        const tongSoBanThang = await db.$count(BanThangTable, eq(BanThangTable.maCT, value.CauThu.maCT));
+        ketQua.push({
+            tenCT: value.CauThu.tenCT,
+            tenDoi: value.DoiBong.tenDoi,
+            loaiCT: value.CauThu.loaiCT,
+            tongSoBanThang: tongSoBanThang
+        })
+    })
+    return ketQua;
+}
+

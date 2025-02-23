@@ -1,13 +1,14 @@
+import type { DSMuaGiai } from '$lib/types';
 import { db } from '../client';
-import { DSMuaGiai, type InsertDSMuaGiaiParams } from '../schema/DSMuaGiai';
+import { DSMuaGiaiTable, type InsertDSMuaGiaiParams } from '../schema/DSMuaGiai';
 
-export const insertDSMuaGiai = async (...muaGiai: InsertDSMuaGiaiParams[]) => {
-    let returning = await db.insert(DSMuaGiai).values(muaGiai).returning({ id: DSMuaGiai.maMG });
-    if (returning == null || returning.length == 0)
+export const insertDSMuaGiai = async (...muaGiai: DSMuaGiai[]) => {
+    let returning = await db.insert(DSMuaGiaiTable).values(muaGiai).returning({ id: DSMuaGiaiTable.maMG });
+    if (returning === null || returning.length === 0)
         throw new Error("Co gi do sai sot trong luc add vo DSMuaGiai: Insert khong duoc");
     return returning;
 }
 
 export const selectAllDSMuaGiai = async() => {
-    return db.select().from(DSMuaGiai);
+    return await db.select().from(DSMuaGiaiTable) satisfies DSMuaGiai[];
 }

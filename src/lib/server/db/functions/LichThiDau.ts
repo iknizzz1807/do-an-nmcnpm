@@ -1,13 +1,22 @@
+import { eq, and } from 'drizzle-orm';
 import { db } from '../client';
-import { LichThiDau, type InsertLichThiDauParams } from '../schema/LichThiDau';
+import { LichThiDauTable } from '../schema/LichThiDau';
+import type { LichThiDau } from '$lib/types';
 
-export const insertLichThiDau = async (...lichThiDau: InsertLichThiDauParams[]) => {
-    let returning = await db.insert(LichThiDau).values(lichThiDau).returning({ id: LichThiDau.maTD });
-    if (returning == null || returning.length == 0)
+export const insertLichThiDau = async (...lichThiDau: LichThiDau[]) => {
+    let returning = await db.insert(LichThiDauTable).values(lichThiDau).returning({ id: LichThiDauTable.maTD });
+    if (returning === null || returning.length === 0)
         throw new Error("Co gi do sai sot trong luc add vo LichThiDau: Insert khong duoc");
     return returning;
 }
 
 export const selectAllLichThiDau = async() => {
-    return db.select().from(LichThiDau);
+    return await db.select().from(LichThiDauTable) satisfies LichThiDau[];
+}
+
+export const selectLichThiDauVong = async (vongThiDau: number, maMG: number) => {
+    return await db
+        .select()
+        .from(LichThiDauTable)
+        .where(and(eq(LichThiDauTable.maMG, maMG), eq(LichThiDauTable.vongThiDau, vongThiDau))) satisfies LichThiDau[];
 }

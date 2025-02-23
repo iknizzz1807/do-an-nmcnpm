@@ -1,7 +1,7 @@
 import type { RequestHandler } from "./$types";
-import { type InsertCauThuParams } from "$lib/server/db/schema/CauThu";
 import { insertCauThu } from "$lib/server/db/functions/CauThu";
 import { insertThamGiaDB } from "$lib/server/db/functions/ThamGiaDB";
+import type { CauThu } from "$lib/types";
 
 export const GET: RequestHandler = async () => {
   return new Response();
@@ -24,7 +24,7 @@ export const POST: RequestHandler = async ({
   const danhSachCauThuTraVe = []; // Cái này có tác dụng để cập nhật UI
 
   for (const cauThu of danhSachCauThu) {
-    const cauThuMoi : InsertCauThuParams = {
+    const cauThuMoi : CauThu = {
       tenCT: cauThu.ten,
       ngaySinh: new Date(),
       loaiCT: cauThu.loai,
@@ -32,6 +32,7 @@ export const POST: RequestHandler = async ({
       nuocNgoai: 0,
     };
     let maCT = -1;
+
     await insertCauThu(cauThuMoi).then(
       (value) => maCT = value.at(0)?.id || 0,
       (err) => { if(err) throw err; }

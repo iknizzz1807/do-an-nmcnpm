@@ -3,19 +3,10 @@
   import Table from "$lib/components/Table.svelte";
   import type { PageProps } from "./$types";
   import { showErrorToast } from "$lib/components/Toast";
+  import type { DoiBong } from "$lib/types";
   let { data }: PageProps = $props();
 
-  type DoiBong = {
-    tenDoi: string;
-    sanNha: string;
-  };
-
   let danhSachDoiBong: DoiBong[] = $state(data.danhSachDoiBong);
-
-  // let danhSachDoiBong: DoiBong[] = $state([
-  //   { tenDoi: "Man United", sanNha: "Old Trafford" },
-  //   { tenDoi: "Man City", sanNha: "Etihad" },
-  // ]);
 
   const columns = [
     { header: "Tên đội", accessor: "tenDoi" },

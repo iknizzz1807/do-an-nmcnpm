@@ -1,18 +1,21 @@
 import { integer, sqliteTable, text, primaryKey } from 'drizzle-orm/sqlite-core';
-import { DoiBong } from './DoiBong';
-import { CauThu } from './CauThu';
-import { DSMuaGiai } from './DSMuaGiai';
+import { DoiBongTable } from './DoiBong';
+import { CauThuTable } from './CauThu';
+import { DSMuaGiaiTable } from './DSMuaGiai';
+import type { ThamGiaDB } from '$lib/types';
+import type { TypesAreEqual } from '$lib/server/utils';
 
-export const ThamGiaDB = sqliteTable('ThamGiaDB', {
-    maDoi: integer().notNull().references(() => DoiBong.maDoi),
-    maCT: integer().notNull().references(() => CauThu.maCT),
-    maMG: integer().notNull().references(() => DSMuaGiai.maMG)
+export const ThamGiaDBTable = sqliteTable('ThamGiaDB', {
+    maDoi: integer().notNull().references(() => DoiBongTable.maDoi),
+    maCT: integer().notNull().references(() => CauThuTable.maCT),
+    maMG: integer().notNull().references(() => DSMuaGiaiTable.maMG)
 }, (table) => [
     primaryKey({ columns: [table.maDoi, table.maCT, table.maMG] }),
 ])
 
-export type InsertThamGiaDBParams = typeof ThamGiaDB.$inferInsert;
+export type InsertThamGiaDBParams = typeof ThamGiaDBTable.$inferInsert;
 
+const check : TypesAreEqual<InsertThamGiaDBParams, ThamGiaDB> = true;
 /*
 export interface ThamGiaDB {
     maDoi: string;

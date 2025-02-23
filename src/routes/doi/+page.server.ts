@@ -1,9 +1,5 @@
+import type { DoiBong } from "$lib/types";
 import type { PageServerLoad } from "./$types";
-
-type DoiBong = {
-  tenDoi: string;
-  sanNha: string;
-};
 
 export const load = (async ({ fetch }) => {
   try {

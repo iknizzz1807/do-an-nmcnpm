@@ -1,8 +1,9 @@
 import type { RequestHandler } from "./$types";
 import { db } from "$lib/server/db/client";
-import { DoiBong, type InsertDoiBongParams } from "$lib/server/db/schema/DoiBong";
-import { DSMuaGiai } from "$lib/server/db/schema/DSMuaGiai";
+import { DoiBongTable, type InsertDoiBongParams } from "$lib/server/db/schema/DoiBong";
+import { DSMuaGiaiTable } from "$lib/server/db/schema/DSMuaGiai";
 import { insertDoiBong, selectAllDoiBong } from "$lib/server/db/functions/DoiBong";
+import type { DoiBong } from "$lib/types";
 
 export const GET: RequestHandler = async () => {
   let danhSachDoiBong = await selectAllDoiBong();
@@ -24,12 +25,12 @@ export const POST: RequestHandler = async ({
   // console.log(data);
 
   await db
-    .insert(DSMuaGiai)
+    .insert(DSMuaGiaiTable)
     .values({ maMG: 1, tenMG: "2025-2026" })
     .onConflictDoNothing(); // Hard coded type shit =))
 
   // Thêm đội bóng mới vào danh sách các đội bóng
-  const doiMoi : InsertDoiBongParams = {
+  const doiMoi : DoiBong = {
     tenDoi: data.tenDoi,
     sanNha: data.sanNha,
   };

@@ -1,19 +1,23 @@
 import { integer, sqliteTable, text, primaryKey, real } from 'drizzle-orm/sqlite-core';
-import { LichThiDau } from './LichThiDau';
-import { CauThu } from './CauThu';
-import { DoiBong } from './DoiBong';
+import { LichThiDauTable } from './LichThiDau';
+import { CauThuTable } from './CauThu';
+import { DoiBongTable } from './DoiBong';
+import { type TypesAreEqual } from '$lib/server/utils';
+import { type BanThang } from '$lib/types';
 
-export const BanThang = sqliteTable('BanThang', {
-    maTD: integer().notNull().references(() => LichThiDau.maTD),
-    maCT: integer().notNull().references(() => CauThu.maCT),
-    maDoi: integer().notNull().references(() => DoiBong.maDoi),
+export const BanThangTable = sqliteTable('BanThang', {
+    maTD: integer().notNull().references(() => LichThiDauTable.maTD),
+    maCT: integer().notNull().references(() => CauThuTable.maCT),
+    maDoi: integer().notNull().references(() => DoiBongTable.maDoi),
     thoiDiem: real().notNull(),
     loaiBanThang: text().notNull(),
 }, (table) => [
     primaryKey({ columns: [table.maTD, table.maCT, table.thoiDiem] }),
 ])
 
-export type InsertBanThangParams = typeof BanThang.$inferInsert;
+export type InsertBanThangParams = typeof BanThangTable.$inferInsert;
+
+const check : TypesAreEqual<InsertBanThangParams, BanThang> = true;
 
 /*
 export interface BanThang {

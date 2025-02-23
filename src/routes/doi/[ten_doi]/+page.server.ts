@@ -1,50 +1,47 @@
+import type { CauThu } from "$lib/types";
 import type { PageServerLoad } from "./$types";
-
-type ThongTinCauThu = {
-  maCauThu: string;
-  tenCauThu: string;
-  ngaySinh: string;
-  loaiCauThu: string;
-  ghiChu: string;
-};
 
 export const load = (async ({ params }) => {
   // const danhSachCauThu = await getDanhSachCauThu(params.ten_doi);
   // Cái này là data giả để mô phỏng data thật được get request từ danh sách các cầu thủ của một đội bóng
-  const danhSachCauThuMU: ThongTinCauThu[] = [
+  const danhSachCauThuMU: CauThu[] = [
     {
-      maCauThu: "4321894745",
-      tenCauThu: "Bruno Fernades",
-      ngaySinh: "10-2-2001",
-      loaiCauThu: "Tiền vệ tấn công",
+      maCT: 4321894745,
+      tenCT: "Bruno Fernades",
+      ngaySinh: new Date("10-2-2001"),
+      loaiCT: 0,
+      nuocNgoai: 0,
       ghiChu: "Chuyên phất bậy",
     },
     {
-      maCauThu: "905634803",
-      tenCauThu: "Garnacho",
-      ngaySinh: "10-2-2001",
-      loaiCauThu: "Tiền đạo cánh trái",
+      maCT: 905634803,
+      tenCT: "Garnacho",
+      ngaySinh: new Date("10-2-2001"),
+      loaiCT: 0,
+      nuocNgoai: 0,
       ghiChu: "Đá ngu vc",
     },
   ];
-  const danhSachCauThuMC: ThongTinCauThu[] = [
+  const danhSachCauThuMC: CauThu[] = [
     {
-      maCauThu: "7546754676",
-      tenCauThu: "Kevin De Bruyne",
-      ngaySinh: "10-2-2001",
-      loaiCauThu: "Tiền vệ tấn công",
+      maCT: 7546754676,
+      tenCT: "Kevin De Bruyne",
+      ngaySinh: new Date("10-2-2001"),
+      loaiCT: 0,
+      nuocNgoai: 0,
       ghiChu: "Chuyền hay vc",
     },
     {
-      maCauThu: "092998043",
-      tenCauThu: "Rodri",
-      ngaySinh: "10-2-2001",
-      loaiCauThu: "Tiền vệ phòng ngự",
+      maCT: 92998043,
+      tenCT: "Rodri",
+      ngaySinh: new Date("10-2-2001"),
+      loaiCT: 0,
+      nuocNgoai: 0,
       ghiChu: "Chia bài tuyến giữa đỉnh vc",
     },
   ];
 
-  let danhSachCauThuTraVe: ThongTinCauThu[] =
+  let danhSachCauThuTraVe: CauThu[] =
     params.ten_doi === "mancity" ? danhSachCauThuMC : danhSachCauThuMU;
 
   return { danhSachCauThuTraVe };

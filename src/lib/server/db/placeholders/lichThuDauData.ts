@@ -1,13 +1,13 @@
 import { randBetweenDate } from "@ngneat/falso"
 import { randIntBetween, choose } from '../../utils'
 import { db } from '../client'
-import { DoiBong } from "../schema/DoiBong"
+import { DoiBongTable } from "../schema/DoiBong"
 import { type InsertLichThiDauParams } from "../schema/LichThiDau"
 import { insertLichThiDau } from "../functions/LichThiDau"
 
 export const generateLichThuDauData = async (maMG: number) : Promise<number[]> => {
     let ids : number[] = [];
-    const doiBongs = await db.select().from(DoiBong);
+    const doiBongs = await db.select().from(DoiBongTable);
     
     while(doiBongs.length >= 2) {
     

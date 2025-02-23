@@ -1,21 +1,24 @@
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
-import { DoiBong } from './DoiBong';
-import { DSMuaGiai } from './DSMuaGiai';
+import { DoiBongTable } from './DoiBong';
+import { DSMuaGiaiTable } from './DSMuaGiai';
+import type { LichThiDau } from '$lib/types';
+import type { TypesAreEqual } from '$lib/server/utils';
 
-export const LichThiDau = sqliteTable('LichThiDau', {
+export const LichThiDauTable = sqliteTable('LichThiDau', {
     maTD: integer().notNull().unique().primaryKey({ autoIncrement: true }),
-    doiMot: integer().notNull().references(() => DoiBong.maDoi),
-    doiHai: integer().notNull().references(() => DoiBong.maDoi),
+    doiMot: integer().notNull().references(() => DoiBongTable.maDoi),
+    doiHai: integer().notNull().references(() => DoiBongTable.maDoi),
     ngayGio: integer('', { mode: 'timestamp' })
         .notNull()
         .$defaultFn(() => new Date()),
     vongThiDau: integer().notNull(),
-    maMG: integer().notNull().references(() => DSMuaGiai.maMG),
-    doiThang: integer().notNull().references(() => DoiBong.maDoi),
+    maMG: integer().notNull().references(() => DSMuaGiaiTable.maMG),
+    doiThang: integer().notNull().references(() => DoiBongTable.maDoi),
 })
 
-export type InsertLichThiDauParams = typeof LichThiDau.$inferInsert;
+export type InsertLichThiDauParams = typeof LichThiDauTable.$inferInsert;
 
+const check : TypesAreEqual<InsertLichThiDauParams, LichThiDau> = true;
 /*
 export interface LichThiDau {
     maTD: string;
