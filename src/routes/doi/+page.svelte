@@ -2,7 +2,7 @@
   import ButtonPrimary from "$lib/components/ButtonPrimary.svelte";
   import Table from "$lib/components/Table.svelte";
   import type { PageProps } from "./$types";
-  import { showErrorToast } from "$lib/components/Toast";
+  import { showErrorToast, showOkToast } from "$lib/components/Toast";
   import type { DoiBong } from "$lib/types";
   let { data }: PageProps = $props();
 
@@ -63,10 +63,12 @@
       // Cập nhật danh sách đội bóng nếu cần thiết
       danhSachDoiBong.push(result);
 
-      // Đóng form sau khi thành công
+      // Đóng form và hiện toast thành công sau khi thành công
       closeForm();
+      showOkToast("Tạo đội bóng mới thành công");
     } catch (error) {
       console.error("Error:", error);
+      showErrorToast(String(error));
     }
   };
 </script>

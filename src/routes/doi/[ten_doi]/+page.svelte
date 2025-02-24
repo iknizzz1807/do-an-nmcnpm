@@ -6,10 +6,10 @@
   let danhSachCauThu = data.danhSachCauThuTraVe;
 
   const columns = [
-    { header: "Mã cầu thủ", accessor: "maCauThu" },
-    { header: "Tên cầu thủ", accessor: "tenCauThu" },
+    { header: "Mã cầu thủ", accessor: "maCT" },
+    { header: "Tên cầu thủ", accessor: "tenCT" },
     { header: "Ngày sinh", accessor: "ngaySinh" },
-    { header: "Loại cầu thủ", accessor: "loaiCauThu" },
+    { header: "Loại cầu thủ", accessor: "loaiCT" },
     { header: "Ghi chú", accessor: "ghiChu" },
   ];
 </script>

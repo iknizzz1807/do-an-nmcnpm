@@ -1,6 +1,14 @@
 import type { CauThu } from "$lib/types";
 import type { PageServerLoad } from "./$types";
 
+function formatDate(date: Date): string {
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+
+  return `${day}/${month}/${year}`;
+}
+
 export const load = (async ({ params }) => {
   // const danhSachCauThu = await getDanhSachCauThu(params.ten_doi);
   // Cái này là data giả để mô phỏng data thật được get request từ danh sách các cầu thủ của một đội bóng
@@ -41,8 +49,13 @@ export const load = (async ({ params }) => {
     },
   ];
 
-  let danhSachCauThuTraVe: CauThu[] =
-    params.ten_doi === "mancity" ? danhSachCauThuMC : danhSachCauThuMU;
+  let danhSachCauThuTraVe: CauThu[];
+
+  // Hard coded data
+
+  if (params.ten_doi === "mancity") danhSachCauThuTraVe = danhSachCauThuMC;
+  else if (params.ten_doi === "mu") danhSachCauThuTraVe = danhSachCauThuMU;
+  else danhSachCauThuTraVe = [];
 
   return { danhSachCauThuTraVe };
 }) satisfies PageServerLoad;
