@@ -12,7 +12,7 @@ export const selectBXHDoiNgay = async (ngay: Date) => {
     doiMot: LichThiDauTable.doiMot,
     doiHai: LichThiDauTable.doiHai
     }).from(LichThiDauTable)
-    .where(eq(LichThiDauTable.ngayGio, ngay))
+    .where(sql`date(${LichThiDauTable.ngayGio}) = date(${ngay.toJSON()})`)
     .groupBy(LichThiDauTable.doiMot, LichThiDauTable.doiHai);
 
   // Chuyen no thanh set

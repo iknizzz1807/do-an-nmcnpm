@@ -19,7 +19,7 @@ export const generateLichThuDauData = async (maMG: number) : Promise<number[]> =
             vongThiDau: randIntBetween(1, 2),
             maMG: maMG,
             doiThang: choose([doiBongs[doiMotIndex].maDoi, doiBongs[doiHaiIndex].maDoi, null]),
-            ngayGio: new Date()
+            ngayGio: new Date().toJSON()
         }
         
         const lichThiDau2 : InsertLichThiDauParams = {
@@ -28,7 +28,7 @@ export const generateLichThuDauData = async (maMG: number) : Promise<number[]> =
             vongThiDau: randIntBetween(1, 2),
             maMG: maMG,
             doiThang: doiBongs[choose([doiMotIndex, doiHaiIndex])].maDoi,
-            ngayGio: new Date()
+            ngayGio: new Date().toJSON()
         }
         doiBongs.splice(doiMotIndex, 1);
         doiBongs.splice(doiHaiIndex, 1);

@@ -64,5 +64,5 @@ export type LichThiDau = {
     maMG: number;
     doiThang?: number | null | undefined;
     maTD?: number | undefined;
-    ngayGio?: Date;
+    ngayGio?: string | undefined;
 }

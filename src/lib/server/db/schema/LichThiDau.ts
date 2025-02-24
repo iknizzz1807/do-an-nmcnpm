@@ -8,9 +8,9 @@ export const LichThiDauTable = sqliteTable('LichThiDau', {
     maTD: integer().notNull().unique().primaryKey({ autoIncrement: true }),
     doiMot: integer().notNull().references(() => DoiBongTable.maDoi),
     doiHai: integer().notNull().references(() => DoiBongTable.maDoi),
-    ngayGio: integer('', { mode: 'timestamp' })
+    ngayGio: text()
         .notNull()
-        .$defaultFn(() => new Date()),
+        .$defaultFn(() => new Date().toJSON()),
     vongThiDau: integer().notNull(),
     maMG: integer().notNull().references(() => DSMuaGiaiTable.maMG),
     doiThang: integer().references(() => DoiBongTable.maDoi),
