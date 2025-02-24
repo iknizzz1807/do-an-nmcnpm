@@ -6,6 +6,7 @@
 	"scripts": {
 		"dev": "vite dev",
 		"dev-resetdb": "npm run push:db && vite dev",
+		"dev-db": "npm run push:db && tsx src/lib/server/db/placeholders/seed.ts && vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
@@ -13,7 +14,8 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"generate:db": "drizzle-kit generate --config=src/lib/server/db/drizzle.config.ts",
 		"push:db": "drizzle-kit push --config=src/lib/server/db/drizzle.config.ts",
-		"migrate:db": "tsx src/lib/server/db/migrate.ts"
+		"migrate:db": "tsx src/lib/server/db/migrate.ts",
+		"create-placeholder:db": "tsx src/lib/server/db/placeholders/seed.ts"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^4.0.0",

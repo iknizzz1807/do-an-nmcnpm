@@ -1,10 +1,16 @@
 import type { RequestHandler } from "./$types";
-import { insertCauThu } from "$lib/server/db/functions/CauThu";
+import { insertCauThu, selectAllCauThu } from "$lib/server/db/functions/CauThu";
 import { insertThamGiaDB } from "$lib/server/db/functions/ThamGiaDB";
 import type { CauThu } from "$lib/types";
 
 export const GET: RequestHandler = async () => {
-  return new Response();
+  const danhSachCauThu = await selectAllCauThu();
+  return new Response(JSON.stringify(danhSachCauThu), {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 };
 
 export const POST: RequestHandler = async ({

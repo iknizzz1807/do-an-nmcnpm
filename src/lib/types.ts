@@ -13,6 +13,16 @@ export type KQTraCuuCauThu = {
     tongSoBanThang: number
 }
 
+export type BangXepHangNgay = {
+    tenDoi: string,
+    soTran: number,
+    soTranThang: number,
+    soTranThua: number,
+    soTranHoa: number,
+    hieuSo: number,
+    hang: number
+}
+
 export type DSMuaGiai = {
     maMG?: number | undefined;
     tenMG: string;
@@ -48,11 +58,11 @@ export type BanThang = {
 }
 
 export type LichThiDau = {
-    maMG: number;
     doiMot: number;
     doiHai: number;
     vongThiDau: number;
-    doiThang: number;
+    maMG: number;
+    doiThang?: number | null | undefined;
     maTD?: number | undefined;
-    ngayGio?: Date | undefined;
+    ngayGio?: Date;
 }

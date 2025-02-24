@@ -13,7 +13,7 @@ export const LichThiDauTable = sqliteTable('LichThiDau', {
         .$defaultFn(() => new Date()),
     vongThiDau: integer().notNull(),
     maMG: integer().notNull().references(() => DSMuaGiaiTable.maMG),
-    doiThang: integer().notNull().references(() => DoiBongTable.maDoi),
+    doiThang: integer().references(() => DoiBongTable.maDoi),
 })
 
 export type InsertLichThiDauParams = typeof LichThiDauTable.$inferInsert;

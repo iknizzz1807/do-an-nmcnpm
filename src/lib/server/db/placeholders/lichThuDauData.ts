@@ -18,8 +18,17 @@ export const generateLichThuDauData = async (maMG: number) : Promise<number[]> =
             doiHai: doiBongs[doiHaiIndex].maDoi,
             vongThiDau: randIntBetween(1, 2),
             maMG: maMG,
+            doiThang: choose([doiBongs[doiMotIndex].maDoi, doiBongs[doiHaiIndex].maDoi, null]),
+            ngayGio: new Date()
+        }
+        
+        const lichThiDau2 : InsertLichThiDauParams = {
+            doiMot: doiBongs[doiHaiIndex].maDoi,
+            doiHai: doiBongs[doiMotIndex].maDoi,
+            vongThiDau: randIntBetween(1, 2),
+            maMG: maMG,
             doiThang: doiBongs[choose([doiMotIndex, doiHaiIndex])].maDoi,
-            ngayGio: randBetweenDate({ from: new Date(2010, 0, 1), to: new Date()})
+            ngayGio: new Date()
         }
         doiBongs.splice(doiMotIndex, 1);
         doiBongs.splice(doiHaiIndex, 1);
@@ -28,6 +37,10 @@ export const generateLichThuDauData = async (maMG: number) : Promise<number[]> =
             (value) => ids.push(...value.map((val) => val.id)),
             (err) => { if (err) throw err; }
         ); 
+        await insertLichThiDau(lichThiDau2).then(
+            (value) => ids.push(...value.map((val) => val.id)),
+            (err) => { if (err) throw err; }
+        );
     }
     return ids;
 }
