@@ -5,6 +5,8 @@ To run the project in the development
 ```bash
 npm run dev
 
+npm run dev-resetdb
+
 # or start the server and open the app in a new browser tab
 npm run dev -- --open
 ```

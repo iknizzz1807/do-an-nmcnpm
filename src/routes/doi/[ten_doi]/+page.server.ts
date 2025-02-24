@@ -57,5 +57,5 @@ export const load = (async ({ params }) => {
   else if (params.ten_doi === "mu") danhSachCauThuTraVe = danhSachCauThuMU;
   else danhSachCauThuTraVe = [];
 
-  return { danhSachCauThuTraVe };
+  return { danhSachCauThuTraVe, ten_doi: params.ten_doi };
 }) satisfies PageServerLoad;
