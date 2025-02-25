@@ -1,8 +1,10 @@
 import { db } from "../client"
-import { and, eq, ne, or, sql } from "drizzle-orm"
+import { and, eq, getTableColumns, ne, or, sql } from "drizzle-orm"
 import { LichThiDauTable } from "../schema/LichThiDau"
 import { DoiBongTable } from "../schema/DoiBong";
 import type { BangXepHangNgay } from "$lib/types";
+import { CauThuTable } from "../schema/CauThu";
+import { BanThangTable } from "../schema/BanThang";
 
 export const selectBXHDoiNgay = async (ngay: Date) => {
   // Tat ca cac doi co tran co trung
@@ -48,4 +50,17 @@ export const selectBXHDoiNgay = async (ngay: Date) => {
     result.push(doiBXH);
   }
   return result;
+}
+
+export const selectCauThuGhiBan = async (maTD : number) => {
+  return await db.select({
+    maCT: CauThuTable.maCT, 
+    tenCT: CauThuTable.tenCT, 
+    tenDoi: DoiBongTable.tenDoi, 
+    loaiCT: CauThuTable.loaiCT,
+    soBanThang: sql<number>`count(*)`
+  }).from(CauThuTable)
+  .innerJoin(BanThangTable, and(eq(BanThangTable.maTD, maTD), eq(BanThangTable.maCT, CauThuTable.maCT)))
+  .innerJoin(DoiBongTable, eq(DoiBongTable.maDoi, BanThangTable.maDoi))
+  .groupBy(CauThuTable.maCT, CauThuTable.tenCT, DoiBongTable.tenDoi, CauThuTable.loaiCT);
 }
