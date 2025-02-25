@@ -1,4 +1,4 @@
-import { eq, and, ilike } from "drizzle-orm";
+import { eq, and, ilike, getTableColumns } from "drizzle-orm";
 import { db } from "../client";
 import { CauThuTable } from "../schema/CauThu";
 import { ThamGiaDBTable } from "../schema/ThamGiaDB";
@@ -28,19 +28,20 @@ export const selectCauThuTen = async (tenCT: string) => {
     .where(ilike(CauThuTable.maCT, tenCT))) satisfies CauThu[];
 };
 
-export const selectCauThuDoiBong = async (maMG: number, tenDoi: string) => {
+export const selectCauThuDoiBong = async (maMG: number, maDoi: number) => {
   return await db
-    .select()
+    .select({
+      ...getTableColumns(CauThuTable)
+    })
     .from(CauThuTable)
     .innerJoin(
       ThamGiaDBTable,
       and(
         eq(ThamGiaDBTable.maCT, CauThuTable.maCT),
-        eq(ThamGiaDBTable.maMG, maMG)
+        eq(ThamGiaDBTable.maMG, maMG),
+        eq(ThamGiaDBTable.maDoi, maDoi)
       )
     )
-    .innerJoin(DoiBongTable, eq(DoiBongTable.maDoi, ThamGiaDBTable.maDoi))
-    .where(eq(DoiBongTable.tenDoi, tenDoi));
 };
 
 export const traCuuCauThu = async (tenCT: string) => {

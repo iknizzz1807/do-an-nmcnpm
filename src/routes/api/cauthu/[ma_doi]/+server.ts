@@ -5,7 +5,11 @@ import { insertThamGiaDB } from "$lib/server/db/functions/ThamGiaDB";
 import type { CauThu } from "$lib/types";
 
 export const GET: RequestHandler = async ({ params }) => {
-  const danhSachCauThu = await selectCauThuDoiBong(0, params.ma_doi);
+  const maDoi = parseInt(params.ma_doi);
+  if (!Number.isFinite(maDoi))
+    throw new Error("Khong tim thay doi");
+  const danhSachCauThu = await selectCauThuDoiBong(1, maDoi);
+  console.log(danhSachCauThu);
 
   return new Response(JSON.stringify(danhSachCauThu), {
     status: 200,
