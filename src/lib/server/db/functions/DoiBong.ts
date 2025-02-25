@@ -25,10 +25,16 @@ export const selectDoiBongTen = async (tenDoi: string) => {
 };
 
 export const selectDoiBongTenTrung = async (tenDoi: string) => {
-  return (
-    await db
-      .select({ maDoi: DoiBongTable.maDoi })
-      .from(DoiBongTable)
-      .where(eq(DoiBongTable.tenDoi, tenDoi))
-  ).at(0);
+  const returning = await db
+    .select({ maDoi: DoiBongTable.maDoi })
+    .from(DoiBongTable)
+    .where(eq(DoiBongTable.tenDoi, tenDoi));
+
+  return Number(returning.at(0));
+  // return (
+  //   await db
+  //     .select({ maDoi: DoiBongTable.maDoi })
+  //     .from(DoiBongTable)
+  //     .where(eq(DoiBongTable.tenDoi, tenDoi))
+  // ).at(0);
 };
