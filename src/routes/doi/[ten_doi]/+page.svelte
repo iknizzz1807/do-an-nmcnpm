@@ -6,7 +6,7 @@
   import type { CauThu } from "$lib/types";
   import { showOkToast, showErrorToast } from "$lib/components/Toast";
 
-  let danhSachCauThu = data.danhSachCauThuTraVe;
+  let danhSachCauThu: CauThu[] = $state(data.danhSachCauThu);
   const tenDoi = data.ten_doi;
 
   const columns = [
@@ -79,7 +79,7 @@
 
       // Đóng form và hiện toast thành công sau khi thành công
       closeForm();
-      showOkToast("Tạo cầu thủ mới thành cống");
+      showOkToast("Tạo cầu thủ mới thành công");
     } catch (error) {
       console.error("Error:", error);
       showErrorToast(String(error));

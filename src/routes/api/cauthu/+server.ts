@@ -2,6 +2,7 @@ import type { RequestHandler } from "./$types";
 import { insertCauThu, selectAllCauThu } from "$lib/server/db/functions/CauThu";
 import { insertThamGiaDB } from "$lib/server/db/functions/ThamGiaDB";
 import type { CauThu } from "$lib/types";
+import { selectDoiBongTenTrung } from "$lib/server/db/functions/DoiBong";
 
 export const GET: RequestHandler = async () => {
   const danhSachCauThu = await selectAllCauThu();
@@ -25,30 +26,36 @@ export const POST: RequestHandler = async ({
   const data = await request.json();
 
   const danhSachCauThu = data.danhSachCauThu;
-  const maDoi = data.Madoi;
+  const maDoi = await selectDoiBongTenTrung(data.ten_doi);
 
   const danhSachCauThuTraVe = []; // Cái này có tác dụng để cập nhật UI
 
   for (const cauThu of danhSachCauThu) {
-    const cauThuMoi : CauThu = {
+    // let maCT = -1;
+
+    const cauThuMoi: CauThu = {
       tenCT: cauThu.ten,
       ngaySinh: new Date(),
       loaiCT: cauThu.loai,
       ghiChu: cauThu.ghiChu,
       nuocNgoai: 0,
     };
-    let maCT = -1;
-
-    await insertCauThu(cauThuMoi).then(
-      (value) => maCT = value.at(0)?.id || 0,
-      (err) => { if(err) throw err; }
-    );
+    const returning = await insertCauThu(cauThuMoi);
+    const maCT = returning[0].id;
+    console.log(maCT);
     await insertThamGiaDB({
       maDoi: maDoi,
       maCT: maCT,
-      maMG: 1
-    })
-    danhSachCauThuTraVe.push(cauThuMoi);
+      maMG: 1,
+    });
+    danhSachCauThuTraVe.push({
+      maCT: maCT,
+      tenCT: cauThu.ten,
+      ngaySinh: new Date(),
+      loaiCT: cauThu.loai,
+      ghiChu: cauThu.ghiChu,
+      nuocNgoai: 0,
+    });
   }
 
   //Trả về response với danh sách cầu thủ vừa tạo và status 200 OK
