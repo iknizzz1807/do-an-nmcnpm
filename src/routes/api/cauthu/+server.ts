@@ -35,7 +35,7 @@ export const POST: RequestHandler = async ({
 
     const cauThuMoi: CauThu = {
       tenCT: cauThu.ten,
-      ngaySinh: new Date(),
+      ngaySinh: new Date().toJSON(),
       loaiCT: cauThu.loai,
       ghiChu: cauThu.ghiChu,
       nuocNgoai: 0,

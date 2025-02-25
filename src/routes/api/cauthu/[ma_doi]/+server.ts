@@ -3,11 +3,9 @@ import { selectCauThuDoiBong } from "$lib/server/db/functions/CauThu";
 import { insertCauThu } from "$lib/server/db/functions/CauThu";
 import { insertThamGiaDB } from "$lib/server/db/functions/ThamGiaDB";
 import type { CauThu } from "$lib/types";
-import { selectDoiBongTenTrung } from "$lib/server/db/functions/DoiBong";
-import type { ThamGiaDB } from "$lib/types";
 
 export const GET: RequestHandler = async ({ params }) => {
-  const danhSachCauThu = await selectCauThuDoiBong(0, params.ten_doi);
+  const danhSachCauThu = await selectCauThuDoiBong(0, params.ma_doi);
 
   return new Response(JSON.stringify(danhSachCauThu), {
     status: 200,
@@ -21,18 +19,17 @@ export const POST: RequestHandler = async ({ request, params }) => {
 
   const data: CauThu = await request.json();
   try {
-    const maCT = await insertCauThu(data);
-    if (maCT.length === 0)
+    const maCT = (await insertCauThu(data)).at(0);
+    if (maCT === undefined || !Number.isFinite(maCT.id))
       throw new Error("Khong tim thay cau thu");
-
-    const maDoi = await selectDoiBongTenTrung(params.ten_doi);
-    console.log(params.ten_doi);
+  
+    const maDoi = parseInt(params.ma_doi);
     if (!Number.isFinite(maDoi))
       throw new Error("Khong tim thay doi");
     await insertThamGiaDB({
       maDoi: maDoi,
-      maCT: maCT.at(0)?.id || -1,
-      maMG: 0,
+      maCT: maCT.id,
+      maMG: 1,
     }); // Hardcoded mã mùa giải là 1
   } catch (error) {
     // throw new Error(String(error));

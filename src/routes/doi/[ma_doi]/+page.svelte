@@ -7,10 +7,10 @@
   import { showOkToast, showErrorToast } from "$lib/components/Toast";
 
   let danhSachCauThu: CauThu[] = $state(data.danhSachCauThu);
-  const tenDoi = data.ten_doi;
+  const ma_doi = data.ma_doi;
 
   const columns = [
-    { header: "Mã cầu thủ", accessor: "maCT" },
+    { header: "Mã cầu thủ", accessor: "maCT", hidden: true },
     { header: "Tên cầu thủ", accessor: "tenCT" },
     { header: "Ngày sinh", accessor: "ngaySinh" },
     { header: "Loại cầu thủ", accessor: "loaiCT" },
@@ -55,12 +55,12 @@
       loaiCT: loaiCTInput,
       ghiChu: ghiChuInput,
       nuocNgoai: nuocNgoaiInput,
-      ngaySinh: new Date(ngaySinhInput),
+      ngaySinh: ngaySinhInput,
     };
 
     try {
       // console.log(dataInput);
-      const response = await fetch("/api/cauthu/" + tenDoi, {
+      const response = await fetch("/api/cauthu/" + ma_doi, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

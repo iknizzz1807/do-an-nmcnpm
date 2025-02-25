@@ -9,6 +9,7 @@
   let danhSachDoiBong: DoiBong[] = $state(data.danhSachDoiBong);
 
   const columns = [
+    { header: "", accessor: "maDoi", hidden: true},
     { header: "Tên đội", accessor: "tenDoi" },
     { header: "Sân nhà", accessor: "sanNha" },
   ];
@@ -30,7 +31,6 @@
 
   const submitForm = async (e: Event) => {
     e.preventDefault();
-
     if (inputTenDoi.trim() === "" || inputSanNha.trim() === "") return;
 
     if (
@@ -81,7 +81,7 @@
   title="Danh sách các đội bóng"
   {columns}
   data={danhSachDoiBong}
-  redirectParam={"tenDoi"}
+  redirectParam={"maDoi"}
   tableType="doi"
 />
 <div class="flex justify-center">

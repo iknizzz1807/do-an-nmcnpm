@@ -14,7 +14,7 @@ export const load = (async ({ params, fetch }) => {
   // Cái này là data giả để mô phỏng data thật được get request từ danh sách các cầu thủ của một đội bóng
 
   try {
-    const response = await fetch("/api/cauthu/" + params.ten_doi, {
+    const response = await fetch("/api/cauthu/" + params.ma_doi, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -29,13 +29,13 @@ export const load = (async ({ params, fetch }) => {
 
     return {
       danhSachCauThu,
-      ten_doi: params.ten_doi,
+      ma_doi: params.ma_doi,
     };
   } catch (error) {
     console.error("Error fetching data:", error);
     return {
       danhSachCauThu: [],
-      ten_doi: params.ten_doi,
+      ma_doi: params.ma_doi,
     };
   }
 
