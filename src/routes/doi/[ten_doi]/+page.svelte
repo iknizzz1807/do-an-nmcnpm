@@ -50,15 +50,16 @@
       return;
     }
 
-    const dataInput = {
+    const dataInput : CauThu = {
       tenCT: tenCTInput,
       loaiCT: loaiCTInput,
       ghiChu: ghiChuInput,
       nuocNgoai: nuocNgoaiInput,
-      ngaySinh: ngaySinhInput,
+      ngaySinh: new Date(ngaySinhInput),
     };
 
     try {
+      // console.log(dataInput);
       const response = await fetch("/api/cauthu/" + tenDoi, {
         method: "POST",
         headers: {

@@ -19,9 +19,16 @@ export const GET: RequestHandler = async ({ params }) => {
 
 export const POST: RequestHandler = async ({ request, params }) => {
   const data: CauThu = await request.json();
-
+  const newCT : CauThu = {
+    tenCT: data.tenCT,
+    loaiCT: data.loaiCT,
+    ghiChu: data.ghiChu,
+    nuocNgoai: data.nuocNgoai,
+    ngaySinh: new Date(data.ngaySinh)
+  }
   try {
-    await insertCauThu(data);
+    console.log(newCT.ngaySinh);
+    await insertCauThu(newCT);
     // await insertThamGiaDB(params.);
   } catch (error) {
     throw new Error(String(error));
