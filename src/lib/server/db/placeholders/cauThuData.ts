@@ -10,7 +10,7 @@ export const generateCauThuData = async (count: number) : Promise<number[]> => {
             tenCT: randUserName(),
             loaiCT: randIntBetween(0, 2),
             ghiChu: randText(),
-            ngaySinh: randBetweenDate({ from: new Date(1980, 0, 1), to: new Date(2005, 12, 32)}),
+            ngaySinh: randBetweenDate({ from: new Date(1980, 0, 1), to: new Date(2005, 12, 32)}).toJSON(),
             nuocNgoai: randIntBetween(0, 1),
         }
     

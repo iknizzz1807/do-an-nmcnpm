@@ -18,29 +18,16 @@ export const GET: RequestHandler = async ({ params }) => {
 };
 
 export const POST: RequestHandler = async ({ request, params }) => {
-  // Request bao gồm
-  // const dataInput = {
-  //   tenCT: tenCTInput,
-  //   loaiCT: loaiCTInput,
-  //   ghiChu: ghiChuInput,
-  //   nuocNgoai: nuocNgoaiInput,
-  //   ngaySinh: ngaySinhInput,
-  // };
+
   const data: CauThu = await request.json();
-  const newCT : CauThu = {
-    tenCT: data.tenCT,
-    loaiCT: data.loaiCT,
-    ghiChu: data.ghiChu,
-    nuocNgoai: data.nuocNgoai,
-    ngaySinh: new Date(data.ngaySinh)
-  }
   try {
-    const maCT = await insertCauThu(newCT);
+    const maCT = await insertCauThu(data);
     if (maCT.length === 0)
       throw new Error("Khong tim thay cau thu");
 
     const maDoi = await selectDoiBongTenTrung(params.ten_doi);
-    if (maDoi === null || maDoi === undefined)
+    console.log(params.ten_doi);
+    if (!Number.isFinite(maDoi))
       throw new Error("Khong tim thay doi");
     await insertThamGiaDB({
       maDoi: maDoi,

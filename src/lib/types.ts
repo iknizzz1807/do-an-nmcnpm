@@ -3,7 +3,7 @@ export type KetQuaThiDau = {
     doiHai: DoiBong,
     tySo: string,
     san : string,
-    ngayGio: Date
+    ngayGio: string
 }
 
 export type KQTraCuuCauThu = {
@@ -40,7 +40,7 @@ export type CauThu = {
     loaiCT: number;
     ghiChu: string;
     nuocNgoai: number;
-    ngaySinh: Date;
+    ngaySinh: string;
 }
 
 export type ThamGiaDB = {
