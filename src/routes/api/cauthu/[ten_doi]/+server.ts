@@ -35,13 +35,16 @@ export const POST: RequestHandler = async ({ request, params }) => {
     ngaySinh: new Date(data.ngaySinh)
   }
   try {
-    const maCT = await insertCauThu(data);
+    const maCT = await insertCauThu(newCT);
+    if (maCT.length === 0)
+      throw new Error("Khong tim thay cau thu");
 
     const maDoi = await selectDoiBongTenTrung(params.ten_doi);
-
+    if (maDoi === null || maDoi === undefined)
+      throw new Error("Khong tim thay doi");
     await insertThamGiaDB({
-      maDoi,
-      maCT,
+      maDoi: maDoi,
+      maCT: maCT.at(0)?.id || -1,
       maMG: 0,
     }); // Hardcoded mã mùa giải là 1
   } catch (error) {
