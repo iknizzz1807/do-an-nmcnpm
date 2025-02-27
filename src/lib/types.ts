@@ -1,3 +1,17 @@
+// Auth
+export type User = {
+    id: number;
+    email: string;
+    username: string;
+}
+
+export type Session = {
+    id: string;
+    userId: number;
+    expiresAt: Date;
+}
+
+// Query Results
 export type KetQuaThiDau = {
     doiMot: DoiBong,
     doiHai: DoiBong,
@@ -23,6 +37,7 @@ export type BangXepHangNgay = {
     hang: number
 }
 
+// Database
 export type DSMuaGiai = {
     maMG?: number | undefined;
     tenMG: string;

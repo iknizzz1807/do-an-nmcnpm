@@ -32,6 +32,9 @@
 	},
 	"dependencies": {
 		"@ngneat/falso": "^7.3.0",
+		"@oslojs/crypto": "^1.0.1",
+		"@oslojs/encoding": "^1.1.0",
+		"argon2": "^0.41.1",
 		"better-sqlite3": "^11.8.1",
 		"dotenv": "^16.4.7",
 		"drizzle-orm": "^0.39.3",
