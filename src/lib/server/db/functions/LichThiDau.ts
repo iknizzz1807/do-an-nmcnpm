@@ -1,10 +1,24 @@
 import { eq, and } from 'drizzle-orm';
 import { db } from '../client';
-import { LichThiDauTable } from '../schema/LichThiDau';
+import { LichThiDauTable, LichThiDauTableBackup, type InsertLichThiDauBackupParams } from '../schema/LichThiDau';
 import type { LichThiDau } from '$lib/types';
 
 export const insertLichThiDau = async (...lichThiDau: LichThiDau[]) => {
-    let returning = await db.insert(LichThiDauTable).values(lichThiDau).returning({ id: LichThiDauTable.maTD });
+    const returning = await db.transaction(async(tx) => {
+        const insertedValues = await tx.insert(LichThiDauTable).values(lichThiDau).returning();
+
+        const backUps = insertedValues.map((value) => {
+            return {
+                modifiedDate: new Date(),
+                ...value
+            } satisfies InsertLichThiDauBackupParams;
+        }); // Insert vo backup
+
+        return await tx
+            .insert(LichThiDauTableBackup) // Backup
+            .values(backUps)
+            .returning({ id: LichThiDauTableBackup.maMG });
+    });
     if (returning === null || returning.length === 0)
         throw new Error("Co gi do sai sot trong luc add vo LichThiDau: Insert khong duoc");
     return returning;

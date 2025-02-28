@@ -1,13 +1,25 @@
 import { ilike, eq } from "drizzle-orm";
 import { db } from "../client";
-import { DoiBongTable } from "../schema/DoiBong";
+import { DoiBongTable, DoiBongTableBackup, type InsertDoiBongBackupParams } from "../schema/DoiBong";
 import type { DoiBong } from "$lib/types";
+import { CauThuTableBackup, type InsertCauThuBackupParams } from "../schema/CauThu";
 
 export const insertDoiBong = async (...doiBong: DoiBong[]) => {
-  let returning = await db
-    .insert(DoiBongTable)
-    .values(doiBong)
-    .returning({ id: DoiBongTable.maDoi });
+  const returning = await db.transaction(async(tx) => {
+      const insertedValues = await tx.insert(DoiBongTable).values(doiBong).returning();
+
+      const backUps : InsertDoiBongBackupParams[] = insertedValues.map((value) => {
+          return {
+              modifiedDate: new Date(),
+              ...value
+          } satisfies InsertDoiBongBackupParams;
+      }); // Insert vo backup
+
+      return await tx
+          .insert(DoiBongTableBackup) // Backup
+          .values(backUps)
+          .returning({ id: DoiBongTableBackup.maDoi });
+  });
   if (returning === null || returning.length === 0)
     throw new Error("Lỗi thêm mới đội bóng: Không thể thêm mới");
   return returning;

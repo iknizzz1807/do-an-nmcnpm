@@ -7,7 +7,14 @@ export const DSMuaGiaiTable = sqliteTable('DSMuaGiai', {
     tenMG: text().notNull(),
 })
 
+export const DSMuaGiaiTableBackup = sqliteTable('DSMuaGiaiBackup', {
+    DSMGBackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
+    modifiedDate: integer({mode: "timestamp"}).notNull(),
+    maMG: integer().notNull(),
+    tenMG: text().notNull(),
+})
 export type InsertDSMuaGiaiParams = typeof DSMuaGiaiTable.$inferInsert;
+export type InsertDSMuaGiaiBackupParams = typeof DSMuaGiaiTableBackup.$inferInsert;
 
 const check : TypesAreEqual<InsertDSMuaGiaiParams, DSMuaGiai> = true;
 /*

@@ -1,6 +1,6 @@
 import { eq, and, ilike, getTableColumns } from "drizzle-orm";
 import { db } from "../client";
-import { CauThuTable } from "../schema/CauThu";
+import { CauThuTable, CauThuTableBackup, type InsertCauThuBackupParams } from "../schema/CauThu";
 import { ThamGiaDBTable } from "../schema/ThamGiaDB";
 import { DoiBongTable } from "../schema/DoiBong";
 import { BanThangTable } from "../schema/BanThang";
@@ -8,10 +8,21 @@ import { insertThamGiaDB } from "./ThamGiaDB";
 import type { CauThu, KQTraCuuCauThu } from "$lib/types";
 
 export const insertCauThu = async (...cauThu: CauThu[]) => {
-  let returning = await db
-    .insert(CauThuTable)
-    .values(cauThu)
-    .returning({ id: CauThuTable.maCT });
+  const returning = await db.transaction(async(tx) => {
+      const insertedValues = await tx.insert(CauThuTable).values(cauThu).returning();
+      
+      const backUps = insertedValues.map((value) => {
+          return {
+              modifiedDate: new Date(),
+              ...value
+          } satisfies InsertCauThuBackupParams;
+      }); // Insert vo backup
+
+      return await tx
+          .insert(CauThuTableBackup) // Backup
+          .values(backUps)
+          .returning({ id: CauThuTableBackup.maCT });
+  });
   if (returning === null || returning.length === 0)
     throw new Error("Đã có lỗi xảy ra: Không thể thêm mới cầu thủ");
   return returning;

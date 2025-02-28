@@ -13,7 +13,16 @@ export const ThamGiaDBTable = sqliteTable('ThamGiaDB', {
     primaryKey({ columns: [table.maDoi, table.maCT, table.maMG] }),
 ])
 
+export const ThamGiaDBTableBackup = sqliteTable('ThamGiaDBBackup', {
+    TGBackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
+    modifiedDate: integer({mode: "timestamp"}).notNull(),
+    maDoi: integer().notNull(),
+    maCT: integer().notNull(),
+    maMG: integer().notNull()
+})
+
 export type InsertThamGiaDBParams = typeof ThamGiaDBTable.$inferInsert;
+export type InsertThamGiaDBBackupParams = typeof ThamGiaDBTableBackup.$inferInsert;
 
 const check : TypesAreEqual<InsertThamGiaDBParams, ThamGiaDB> = true;
 /*

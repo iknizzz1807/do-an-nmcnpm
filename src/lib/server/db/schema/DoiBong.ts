@@ -8,8 +8,16 @@ export const DoiBongTable = sqliteTable('DoiBong', {
     tenDoi: text().notNull(),
     sanNha: text().notNull(),
 })
+export const DoiBongTableBackup = sqliteTable('DoiBongBackup', {
+    DBBackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
+    modifiedDate: integer({mode: "timestamp"}).notNull(),
+    maDoi: integer().notNull(),
+    tenDoi: text().notNull(),
+    sanNha: text().notNull(),
+})
 
 export type InsertDoiBongParams = typeof DoiBongTable.$inferInsert;
+export type InsertDoiBongBackupParams = typeof DoiBongTableBackup.$inferInsert;
 
 const check : TypesAreEqual<InsertDoiBongParams, DoiBong> = true;
 /*

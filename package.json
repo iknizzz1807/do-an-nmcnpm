@@ -15,6 +15,7 @@
 		"generate:db": "drizzle-kit generate --config=src/lib/server/db/drizzle.config.ts",
 		"push:db": "drizzle-kit push --config=src/lib/server/db/drizzle.config.ts",
 		"migrate:db": "tsx src/lib/server/db/migrate.ts",
+		"studio:db": "drizzle-kit studio --port 300 --verbose --config=src/lib/server/db/drizzle.config.ts",
 		"create-placeholder:db": "tsx src/lib/server/db/placeholders/seed.ts"
 	},
 	"devDependencies": {

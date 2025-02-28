@@ -4,6 +4,8 @@ import { CauThuTable } from './CauThu';
 import { DoiBongTable } from './DoiBong';
 import { type TypesAreEqual } from '$lib/server/utils';
 import { type BanThang } from '$lib/types';
+import { db } from '../client';
+import { sql } from 'drizzle-orm';
 
 export const BanThangTable = sqliteTable('BanThang', {
     maTD: integer().notNull().references(() => LichThiDauTable.maTD),
@@ -15,7 +17,17 @@ export const BanThangTable = sqliteTable('BanThang', {
     primaryKey({ columns: [table.maTD, table.maCT, table.thoiDiem] }),
 ])
 
+export const BanThangTableBackup = sqliteTable('BanThangBackup', {
+    BTBackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
+    modifiedDate: integer({mode: "timestamp"}).notNull(),
+    maTD: integer().notNull(),
+    maCT: integer().notNull(),
+    maDoi: integer().notNull(),
+    thoiDiem: real().notNull(),
+    loaiBanThang: text().notNull(),
+})
 export type InsertBanThangParams = typeof BanThangTable.$inferInsert;
+export type InsertBanThangBackupParams = typeof BanThangTableBackup.$inferInsert;
 
 const check : TypesAreEqual<InsertBanThangParams, BanThang> = true;
 

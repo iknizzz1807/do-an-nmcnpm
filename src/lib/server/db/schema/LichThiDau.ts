@@ -16,7 +16,20 @@ export const LichThiDauTable = sqliteTable('LichThiDau', {
     doiThang: integer().references(() => DoiBongTable.maDoi),
 })
 
+export const LichThiDauTableBackup = sqliteTable('LichThiDauBackup', {
+    LTDBackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
+    modifiedDate: integer({mode: "timestamp"}).notNull(),
+    maTD: integer().notNull(),
+    doiMot: integer().notNull(),
+    doiHai: integer().notNull(),
+    ngayGio: text().notNull(),
+    vongThiDau: integer().notNull(),
+    maMG: integer().notNull(),
+    doiThang: integer()
+})
+
 export type InsertLichThiDauParams = typeof LichThiDauTable.$inferInsert;
+export type InsertLichThiDauBackupParams = typeof LichThiDauTableBackup.$inferInsert;
 
 const check : TypesAreEqual<InsertLichThiDauParams, LichThiDau> = true;
 /*

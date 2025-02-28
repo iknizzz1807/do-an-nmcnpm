@@ -11,7 +11,19 @@ export const CauThuTable = sqliteTable('CauThu', {
     nuocNgoai: integer().notNull()
 })
 
+export const CauThuTableBackup = sqliteTable('CauThuBackup', {
+    CTBackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
+    modifiedDate: integer({mode: "timestamp"}).notNull(),
+    maCT: integer().notNull(),
+    tenCT: text().notNull(),
+    ngaySinh: text().notNull(),
+    loaiCT: integer().notNull(),
+    ghiChu: text().notNull(),
+    nuocNgoai: integer().notNull()
+})
+
 export type InsertCauThuParams = typeof CauThuTable.$inferInsert;
+export type InsertCauThuBackupParams = typeof CauThuTableBackup.$inferInsert;
 
 const check : TypesAreEqual<InsertCauThuParams, CauThu> = true;
 /*
