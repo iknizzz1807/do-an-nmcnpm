@@ -1,5 +1,6 @@
 import type { ThamGiaDB } from "$lib/types";
 import { db } from "../client";
+import { eq } from "drizzle-orm";
 import {
   ThamGiaDBTable,
   ThamGiaDBTableBackup,
@@ -30,6 +31,29 @@ export const insertThamGiaDB = async (...thamGiaDB: ThamGiaDB[]) => {
     );
   return returning;
 };
+
+// Todo: this is not the final version, there is something wrong with this
+export const updateThamGiaDB = async(thamGiaDB: ThamGiaDB) => {
+  return await db.transaction(async (tx) => {
+      const updated = await tx.update(ThamGiaDBTable).set({
+        maMG: thamGiaDB.maMG,
+        maDoi: thamGiaDB.maDoi,
+      }).where(eq(ThamGiaDBTable.maCT, thamGiaDB.maCT!!)).returning();
+      
+      if (updated.length == 0)
+        return;
+
+      await tx
+          .insert(ThamGiaDBTableBackup)
+          .values(updated.map((value) => {
+              return {
+                  modifiedDate: new Date(),
+                  ...value
+              } satisfies InsertThamGiaDBBackupParams;
+          }));
+      return updated;
+  });
+}
 
 export const selectAllThamGiaDB = async () => {
   return (await db.select().from(ThamGiaDBTable)) satisfies ThamGiaDB[];

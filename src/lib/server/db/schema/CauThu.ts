@@ -1,6 +1,8 @@
 import type { TypesAreEqual } from '$lib/server/utils';
 import type { CauThu } from '$lib/types';
+import { sql } from 'drizzle-orm';
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { db } from '../client';
 
 export const CauThuTable = sqliteTable('CauThu', {
     maCT: integer().notNull().unique().primaryKey({ autoIncrement: true }),
@@ -21,6 +23,29 @@ export const CauThuTableBackup = sqliteTable('CauThuBackup', {
     ghiChu: text().notNull(),
     nuocNgoai: integer().notNull()
 })
+
+const createCTBackupTrigger = async() => {
+    // CauThu
+    await db.transaction(async (tx) => {
+        tx.run(sql`
+        CREATE TRIGGER IF NOT EXISTS TRG_CT_INSERT_BACKUP
+        AFTER INSERT ON CauThu
+        BEGIN
+            INSERT INTO CauThuBackup(modifiedDate, maCT, tenCT, ngaySinh, loaiCT, ghiChu, nuocNgoai)
+            VALUES(datetime('now'), NEW.maCT, NEW.tenCT, NEW.ngaySinh, NEW.loaiCT, NEW.ghiChu, NEW.nuocNgoai);
+        END
+        `);
+        tx.run(sql`
+        CREATE TRIGGER IF NOT EXISTS TRG_CT_UPDATE_BACKUP
+        AFTER UPDATE ON CauThu
+        BEGIN
+            INSERT INTO CauThuBackup(modifiedDate, maCT, tenCT, ngaySinh, loaiCT, ghiChu, nuocNgoai)
+            VALUES(datetime('now'), OLD.maCT, OLD.tenCT, OLD.ngaySinh, OLD.loaiCT, OLD.ghiChu, OLD.nuocNgoai);
+        END
+        `);
+    });
+}
+createCTBackupTrigger()// .catch(console.error); // This may cause some horrible error in the future
 
 export type InsertCauThuParams = typeof CauThuTable.$inferInsert;
 export type InsertCauThuBackupParams = typeof CauThuTableBackup.$inferInsert;

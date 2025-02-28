@@ -6,7 +6,7 @@
 	"scripts": {
 		"dev": "vite dev",
 		"dev-resetdb": "npm run push:db && vite dev",
-		"dev-db": "npm run push:db && tsx src/lib/server/db/placeholders/seed.ts && vite dev",
+		"dev-seeddb": "npm run push:db && tsx src/lib/server/db/placeholders/seed.ts && vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
@@ -16,7 +16,8 @@
 		"push:db": "drizzle-kit push --config=src/lib/server/db/drizzle.config.ts",
 		"migrate:db": "tsx src/lib/server/db/migrate.ts",
 		"studio:db": "drizzle-kit studio --port 300 --verbose --config=src/lib/server/db/drizzle.config.ts",
-		"create-placeholder:db": "tsx src/lib/server/db/placeholders/seed.ts"
+		"seed:db": "npm run push:db && tsx src/lib/server/db/seed.ts",
+		"sandbox:db": "tsx src/lib/server/db/sandbox.ts"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^4.0.0",
@@ -28,19 +29,19 @@
 		"svelte": "^5.0.0",
 		"svelte-check": "^4.0.0",
 		"tailwindcss": "^4.0.0",
+		"tsx": "^4.19.3",
 		"typescript": "^5.0.0",
 		"vite": "^6.0.0"
 	},
 	"dependencies": {
-		"@ngneat/falso": "^7.3.0",
 		"@oslojs/crypto": "^1.0.1",
 		"@oslojs/encoding": "^1.1.0",
 		"argon2": "^0.41.1",
 		"better-sqlite3": "^11.8.1",
 		"dotenv": "^16.4.7",
 		"drizzle-orm": "^0.39.3",
+		"drizzle-seed": "^0.3.1",
 		"toastify-js": "^1.12.0",
-		"tsx": "^4.19.3",
 		"uuid": "^11.1.0"
 	}
 }

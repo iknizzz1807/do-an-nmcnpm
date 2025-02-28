@@ -26,6 +26,30 @@ export const BanThangTableBackup = sqliteTable('BanThangBackup', {
     thoiDiem: real().notNull(),
     loaiBanThang: text().notNull(),
 })
+
+const createBTBackupTrigger = async() => {
+    // BanThang
+    await db.transaction(async (tx) => {
+        tx.run(sql`
+        CREATE TRIGGER IF NOT EXISTS TRG_BT_INSERT_BACKUP
+        AFTER INSERT ON BanThang
+        BEGIN
+        INSERT INTO BanThangBackup(modifiedDate, maTD, maCT, maDoi, thoiDiem, loaiBanThang)
+        VALUES(datetime('now'), NEW.maTD, NEW.maCT, NEW.maDoi, NEW.thoiDiem, NEW.loaiBanThang);
+        END
+        `);
+        tx.run(sql`
+        CREATE TRIGGER IF NOT EXISTS TRG_BT_UPDATE_BACKUP
+        AFTER UPDATE ON BanThang
+        BEGIN
+        INSERT INTO BanThangBackup(modifiedDate, maTD, maCT, maDoi, thoiDiem, loaiBanThang)
+        VALUES(datetime('now'), OLD.maTD, OLD.maCT, OLD.maDoi, OLD.thoiDiem, OLD.loaiBanThang);
+        END
+        `);
+    });
+}
+createBTBackupTrigger()// .catch(console.error); // This may cause some horrible error in the future
+
 export type InsertBanThangParams = typeof BanThangTable.$inferInsert;
 export type InsertBanThangBackupParams = typeof BanThangTableBackup.$inferInsert;
 

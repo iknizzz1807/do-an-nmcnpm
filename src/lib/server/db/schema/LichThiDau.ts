@@ -3,6 +3,8 @@ import { DoiBongTable } from './DoiBong';
 import { DSMuaGiaiTable } from './DSMuaGiai';
 import type { LichThiDau } from '$lib/types';
 import type { TypesAreEqual } from '$lib/server/utils';
+import { db } from '../client';
+import { sql } from 'drizzle-orm';
 
 export const LichThiDauTable = sqliteTable('LichThiDau', {
     maTD: integer().notNull().unique().primaryKey({ autoIncrement: true }),
@@ -27,6 +29,29 @@ export const LichThiDauTableBackup = sqliteTable('LichThiDauBackup', {
     maMG: integer().notNull(),
     doiThang: integer()
 })
+
+const createLTDBackupTrigger = async() => {
+      // LichThiDau
+    await db.transaction(async (tx) => {
+        tx.run(sql`
+        CREATE TRIGGER IF NOT EXISTS TRG_LTD_INSERT_BACKUP
+        AFTER INSERT ON LichThiDau
+        BEGIN
+        INSERT INTO LichThiDauBackup(modifiedDate, maTD, doiMot, doiHai, ngayGio, vongThiDau, maMG, doiThang)
+        VALUES(datetime('now'), NEW.maTD, NEW.doiMot, NEW.doiHai, NEW.ngayGio, NEW.vongThiDau, NEW.maMG, NEW.doiThang);
+        END
+        `);
+        tx.run(sql`
+        CREATE TRIGGER IF NOT EXISTS TRG_LTD_UPDATE_BACKUP
+        AFTER UPDATE ON LichThiDau
+        BEGIN
+        INSERT INTO LichThiDauBackup(modifiedDate, maTD, doiMot, doiHai, ngayGio, vongThiDau, maMG, doiThang)
+        VALUES(datetime('now'), OLD.maTD, OLD.doiMot, OLD.doiHai, OLD.ngayGio, OLD.vongThiDau, OLD.maMG, OLD.doiThang);
+        END
+        `);
+    });
+}
+createLTDBackupTrigger()// .catch(console.error); // This may cause some horrible error in the future
 
 export type InsertLichThiDauParams = typeof LichThiDauTable.$inferInsert;
 export type InsertLichThiDauBackupParams = typeof LichThiDauTableBackup.$inferInsert;

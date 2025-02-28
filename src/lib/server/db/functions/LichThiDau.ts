@@ -24,6 +24,34 @@ export const insertLichThiDau = async (...lichThiDau: LichThiDau[]) => {
     return returning;
 }
 
+export const updateLichThiDau = async(lichThiDau: LichThiDau) => {
+  if ((lichThiDau.maTD ?? null) == null)
+    return;
+  return await db.transaction(async (tx) => {
+      const updated = await tx.update(LichThiDauTable).set({
+        doiMot: lichThiDau.doiMot,
+        doiHai: lichThiDau.doiHai,
+        vongThiDau: lichThiDau.vongThiDau,
+        maMG: lichThiDau.maMG,
+        doiThang: lichThiDau.doiThang,
+        ngayGio: lichThiDau.ngayGio
+      }).where(eq(LichThiDauTable.maMG, lichThiDau.maTD!!)).returning();
+      
+      if (updated.length == 0)
+        return;
+
+      await tx
+          .insert(LichThiDauTableBackup)
+          .values(updated.map((value) => {
+              return {
+                  modifiedDate: new Date(),
+                  ...value
+              } satisfies InsertLichThiDauBackupParams;
+          }));
+      return updated;
+  });
+}
+
 export const selectAllLichThiDau = async() => {
     return await db.select().from(LichThiDauTable) satisfies LichThiDau[];
 }

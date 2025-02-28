@@ -4,6 +4,8 @@ import { CauThuTable } from './CauThu';
 import { DSMuaGiaiTable } from './DSMuaGiai';
 import type { ThamGiaDB } from '$lib/types';
 import type { TypesAreEqual } from '$lib/server/utils';
+import { sql } from 'drizzle-orm';
+import { db } from '../client';
 
 export const ThamGiaDBTable = sqliteTable('ThamGiaDB', {
     maDoi: integer().notNull().references(() => DoiBongTable.maDoi),
@@ -20,6 +22,29 @@ export const ThamGiaDBTableBackup = sqliteTable('ThamGiaDBBackup', {
     maCT: integer().notNull(),
     maMG: integer().notNull()
 })
+
+const createTGDBBackupTrigger = async() => {
+    // ThamGiaDB
+    await db.transaction(async (tx) => {
+        tx.run(sql`
+        CREATE TRIGGER IF NOT EXISTS TRG_TGDB_INSERT_BACKUP
+        AFTER INSERT ON ThamGiaDB
+        BEGIN
+        INSERT INTO ThamGiaDBBackup(modifiedDate, maDoi, maCT, maMG)
+        VALUES(datetime('now'), NEW.maDoi, NEW.maCT, NEW.maMG);
+        END
+        `);
+        tx.run(sql`
+        CREATE TRIGGER IF NOT EXISTS TRG_TGDB_UPDATE_BACKUP
+        AFTER UPDATE ON ThamGiaDB
+        BEGIN
+        INSERT INTO ThamGiaDBBackup(modifiedDate, maDoi, maCT, maMG)
+        VALUES(datetime('now'), OLD.maDoi, OLD.maCT, OLD.maMG);
+        END
+        `);
+    });
+}
+createTGDBBackupTrigger()// .catch(console.error); // This may cause some horrible error in the future
 
 export type InsertThamGiaDBParams = typeof ThamGiaDBTable.$inferInsert;
 export type InsertThamGiaDBBackupParams = typeof ThamGiaDBTableBackup.$inferInsert;

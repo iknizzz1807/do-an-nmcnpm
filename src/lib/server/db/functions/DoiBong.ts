@@ -25,6 +25,30 @@ export const insertDoiBong = async (...doiBong: DoiBong[]) => {
   return returning;
 };
 
+export const updateDoiBong = async(doiBong: DoiBong) => {
+  if ((doiBong.maDoi ?? null) == null)
+    return;
+  return await db.transaction(async (tx) => {
+      const updated = await tx.update(DoiBongTable).set({
+        tenDoi: doiBong.tenDoi,
+        sanNha: doiBong.sanNha
+      }).where(eq(DoiBongTable.maDoi, doiBong.maDoi!!)).returning();
+      
+      if (updated.length == 0)
+        return;
+
+      await tx
+          .insert(DoiBongTableBackup)
+          .values(updated.map((value) => {
+              return {
+                  modifiedDate: new Date(),
+                  ...value
+              } satisfies InsertDoiBongBackupParams;
+          }));
+      return updated;
+  });
+}
+
 export const selectAllDoiBong = async () => {
   return (await db.select().from(DoiBongTable)) satisfies DoiBong[];
 };
