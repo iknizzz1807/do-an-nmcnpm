@@ -41,7 +41,11 @@ await seed(db, {
     count: 10
   },
 
-  ThamGiaDBTable: {},
+  ThamGiaDBTable: {
+    columns: {
+      maMG: f.number({ minValue: 1, maxValue: 1})
+    }
+  },
 
   LichThiDauTable: {
     columns: {

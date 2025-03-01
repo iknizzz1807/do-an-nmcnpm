@@ -5,48 +5,19 @@ import type { DoiBong } from "$lib/types";
 import { CauThuTableBackup, type InsertCauThuBackupParams } from "../schema/CauThu";
 
 export const insertDoiBong = async (...doiBong: DoiBong[]) => {
-  const returning = await db.transaction(async(tx) => {
-      const insertedValues = await tx.insert(DoiBongTable).values(doiBong).returning();
-
-      const backUps : InsertDoiBongBackupParams[] = insertedValues.map((value) => {
-          return {
-              modifiedDate: new Date(),
-              ...value
-          } satisfies InsertDoiBongBackupParams;
-      }); // Insert vo backup
-
-      return await tx
-          .insert(DoiBongTableBackup) // Backup
-          .values(backUps)
-          .returning({ id: DoiBongTableBackup.maDoi });
-  });
+  let returning = await db.insert(DoiBongTable).values(doiBong).returning({ id: DoiBongTable.maDoi });
   if (returning === null || returning.length === 0)
-    throw new Error("Lỗi thêm mới đội bóng: Không thể thêm mới");
+      throw new Error("Co gi do sai sot trong luc add vo DoiBong: Insert khong duoc");
   return returning;
 };
 
 export const updateDoiBong = async(doiBong: DoiBong) => {
   if ((doiBong.maDoi ?? null) == null)
     return;
-  return await db.transaction(async (tx) => {
-      const updated = await tx.update(DoiBongTable).set({
-        tenDoi: doiBong.tenDoi,
-        sanNha: doiBong.sanNha
-      }).where(eq(DoiBongTable.maDoi, doiBong.maDoi!!)).returning();
-      
-      if (updated.length == 0)
-        return;
-
-      await tx
-          .insert(DoiBongTableBackup)
-          .values(updated.map((value) => {
-              return {
-                  modifiedDate: new Date(),
-                  ...value
-              } satisfies InsertDoiBongBackupParams;
-          }));
-      return updated;
-  });
+  await db.update(DoiBongTable).set({
+    tenDoi: doiBong.tenDoi,
+    sanNha: doiBong.sanNha
+  }).where(eq(DoiBongTable.maDoi, doiBong.maDoi!!));
 }
 
 export const selectAllDoiBong = async () => {

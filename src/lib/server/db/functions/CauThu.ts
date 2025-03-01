@@ -8,54 +8,22 @@ import { insertThamGiaDB } from "./ThamGiaDB";
 import type { CauThu, KQTraCuuCauThu } from "$lib/types";
 
 export const insertCauThu = async (...cauThu: CauThu[]) => {
-  const returning = await db.transaction(async(tx) => {
-      const insertedValues = await tx.insert(CauThuTable).values(cauThu).returning();
-      
-      if (insertedValues.length == 0)
-        throw new Error("Đã có lỗi xảy ra: Hình như là xảy ra conflict khi insert. HOW?");
-
-      const backUps = insertedValues.map((value) => {
-          return {
-              modifiedDate: new Date(),
-              ...value
-          } satisfies InsertCauThuBackupParams;
-      }); // Insert vo backup
-
-      return await tx
-          .insert(CauThuTableBackup) // Backup
-          .values(backUps)
-          .returning({ id: CauThuTableBackup.maCT });
-  });
-  if (returning === null || returning.length === 0)
-    throw new Error("Đã có lỗi xảy ra: Không thể thêm mới cầu thủ");
-  return returning;
+  let returning = await db.insert(CauThuTable).values(cauThu).returning({ id: CauThuTable.maCT });
+    if (returning === null || returning.length === 0)
+        throw new Error("Co gi do sai sot trong luc add vo CauThu: Insert khong duoc");
+    return returning;
 };
 
 export const updateCauThu = async(cauThu: CauThu) => {
   if ((cauThu.maCT ?? null) == null)
     return null;
-  return await db.transaction(async (tx) => {
-      const updated = await tx.update(CauThuTable).set({
-          tenCT: cauThu.tenCT,
-          loaiCT: cauThu.loaiCT,
-          ghiChu: cauThu.ghiChu,
-          nuocNgoai: cauThu.nuocNgoai,
-          ngaySinh: cauThu.ngaySinh
-      }).where(eq(CauThuTable.maCT, cauThu.maCT!!)).returning();
-
-      if (updated.length == 0)
-        return null;
-      
-      await tx
-          .insert(CauThuTableBackup)
-          .values(updated.map((value) => {
-              return {
-                  modifiedDate: new Date(),
-                  ...value
-              } satisfies InsertCauThuBackupParams;
-          }));
-      return updated;
-  });
+  await db.update(CauThuTable).set({
+      tenCT: cauThu.tenCT,
+      loaiCT: cauThu.loaiCT,
+      ghiChu: cauThu.ghiChu,
+      nuocNgoai: cauThu.nuocNgoai,
+      ngaySinh: cauThu.ngaySinh
+  }).where(eq(CauThuTable.maCT, cauThu.maCT!!));
 }
 
 export const selectAllCauThu = async () => {

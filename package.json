@@ -6,7 +6,7 @@
 	"scripts": {
 		"dev": "vite dev",
 		"dev-resetdb": "npm run push:db && vite dev",
-		"dev-seeddb": "npm run push:db && tsx src/lib/server/db/placeholders/seed.ts && vite dev",
+		"dev-seeddb": "npm run seed:db && vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
