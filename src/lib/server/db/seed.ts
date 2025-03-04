@@ -24,6 +24,7 @@ await seed(db, {
       ngaySinh: f.date({ minDate: "1990-01-01", maxDate: "2005-12-31" }),
       loaiCT: f.int({ minValue: 0, maxValue: 5 }),
       ghiChu: f.loremIpsum(),
+      nuocNgoai: f.int({ minValue: 0, maxValue: 0 })
     },
     count: 200
   },
@@ -35,7 +36,9 @@ await seed(db, {
     },
     count: 10
   },
-})).catch(() => {
+})).catch((reason) => {
+  console.log("\n");
+  console.log(reason);
   console.log("\n\nPlease delete the db.sqlite before running seed:db. You gonna fucking panic because of the amount of shit printed");
 });
 

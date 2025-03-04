@@ -1,7 +1,7 @@
 import type { TypesAreEqual } from '$lib/server/utils';
 import type { CauThu } from '$lib/types';
 import { sql } from 'drizzle-orm';
-import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { check, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { db } from '../client';
 
 export const CauThuTable = sqliteTable('CauThu', {
@@ -11,7 +11,9 @@ export const CauThuTable = sqliteTable('CauThu', {
     loaiCT: integer().notNull(),
     ghiChu: text().notNull(),
     nuocNgoai: integer({ mode: "boolean" }).notNull()
-})
+}, (table) => [
+    check("CHK_CT_TUOI", sql`date('now') - date(${table.ngaySinh}) BETWEEN 16 AND 40`)
+])
 
 export const CauThuTableBackup = sqliteTable('CauThuBackup', {
     CTBackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
@@ -42,6 +44,29 @@ const createCTBackupTrigger = async() => {
             INSERT INTO CauThuBackup(modifiedDate, maCT, tenCT, ngaySinh, loaiCT, ghiChu, nuocNgoai)
             VALUES(datetime('now'), OLD.maCT, OLD.tenCT, OLD.ngaySinh, OLD.loaiCT, OLD.ghiChu, OLD.nuocNgoai);
         END
+        `);
+        // Check tuoi
+        tx.run(sql`
+        CREATE TRIGGER IF NOT EXISTS TRGI_CT_AGE
+        AFTER INSERT ON CauThu
+        WHEN NOT EXISTS(
+            SELECT 1 FROM CauThu
+            WHERE maCT=NEW.maCT AND date('now') - date(ngaySinh) BETWEEN 16 AND 40
+        )
+        BEGIN
+            SELECT RAISE(ABORT, 'Cau thu co do tuoi tu 16 den 40');
+        END;
+        `);
+        tx.run(sql`
+        CREATE TRIGGER IF NOT EXISTS TRGU_CT_AGE
+        AFTER UPDATE ON CauThu
+        WHEN NOT EXISTS(
+            SELECT 1 FROM CauThu
+            WHERE maCT=NEW.maCT AND date('now') - date(ngaySinh) BETWEEN 16 AND 40
+        )
+        BEGIN
+            SELECT RAISE(ABORT, 'Cau thu co do tuoi tu 16 den 40');
+        END;
         `);
     });
 }

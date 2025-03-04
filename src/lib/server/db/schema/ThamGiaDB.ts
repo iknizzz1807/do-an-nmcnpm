@@ -42,6 +42,37 @@ const createTGDBBackupTrigger = async() => {
         VALUES(datetime('now'), OLD.maDoi, OLD.maCT, OLD.maMG);
         END
         `);
+        // Trigger giới hạn cầu thủ tối đa và cầu thủ nước ngoài tối đa
+        tx.run(sql`
+        CREATE TRIGGER IF NOT EXISTS TRGI_TGDB_CT 
+        AFTER INSERT ON ThamGiaDB 
+        WHEN (
+            SELECT COUNT(*) FROM ThamGiaDB
+            WHERE maDoi = NEW.maDoi AND maMG = NEW.maMG
+        ) > 22 OR (
+            SELECT COUNT(*) FROM ThamGiaDB AS TGDB 
+            INNER JOIN CauThu AS CT ON CT.maCT = TGDB.maCT 
+            WHERE TGDB.maDoi = NEW.maDoi AND TGDB.maMG = NEW.maMG AND CT.nuocNgoai = 1
+        ) > 3
+        BEGIN 
+            SELECT RAISE(ABORT, 'Doi bong chi duoc co toi da 22 cau thu va toi da 3 cau thu nuoc ngoai'); 
+        END;
+        `);
+        tx.run(sql`
+        CREATE TRIGGER IF NOT EXISTS TRGU_TGDB_CT 
+        AFTER UPDATE ON ThamGiaDB 
+        WHEN (
+            SELECT COUNT(*) FROM ThamGiaDB
+            WHERE maDoi = NEW.maDoi AND maMG = NEW.maMG
+        ) > 22 OR (
+            SELECT COUNT(*) FROM ThamGiaDB AS TGDB 
+            INNER JOIN CauThu AS CT ON CT.maCT = TGDB.maCT 
+            WHERE TGDB.maDoi = NEW.maDoi AND TGDB.maMG = NEW.maMG AND CT.nuocNgoai = 1
+        ) > 3
+        BEGIN 
+            SELECT RAISE(ABORT, 'Doi bong chi duoc co toi da 22 cau thu va toi da 3 cau thu nuoc ngoai'); 
+        END;
+        `);
     });
 }
 createTGDBBackupTrigger()// .catch(console.error); // This may cause some horrible error in the future
