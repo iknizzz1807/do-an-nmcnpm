@@ -42,7 +42,7 @@ createDSMGBackupTrigger()// .catch(console.error); // This may cause some horrib
 export type InsertDSMuaGiaiParams = typeof DSMuaGiaiTable.$inferInsert;
 export type InsertDSMuaGiaiBackupParams = typeof DSMuaGiaiTableBackup.$inferInsert;
 
-const check : TypesAreEqual<InsertDSMuaGiaiParams, DSMuaGiai> = true;
+const checkType : TypesAreEqual<InsertDSMuaGiaiParams, DSMuaGiai> = true;
 /*
 export interface DSMuaGiai {
     maMG: number;

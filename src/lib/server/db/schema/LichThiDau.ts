@@ -1,4 +1,4 @@
-import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { integer, sqliteTable, text, check } from 'drizzle-orm/sqlite-core';
 import { DoiBongTable } from './DoiBong';
 import { DSMuaGiaiTable } from './DSMuaGiai';
 import type { LichThiDau } from '$lib/types';
@@ -16,7 +16,9 @@ export const LichThiDauTable = sqliteTable('LichThiDau', {
     vongThiDau: integer().notNull(),
     maMG: integer().notNull().references(() => DSMuaGiaiTable.maMG),
     doiThang: integer().references(() => DoiBongTable.maDoi),
-})
+}, (table) : any => [
+    check("CHK_LTD_DOIMOT_DOIHAI", sql`${table.doiMot} != ${table.doiHai}`)
+]);
 
 export const LichThiDauTableBackup = sqliteTable('LichThiDauBackup', {
     LTDBackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
@@ -56,7 +58,7 @@ createLTDBackupTrigger()// .catch(console.error); // This may cause some horribl
 export type InsertLichThiDauParams = typeof LichThiDauTable.$inferInsert;
 export type InsertLichThiDauBackupParams = typeof LichThiDauTableBackup.$inferInsert;
 
-const check : TypesAreEqual<InsertLichThiDauParams, LichThiDau> = true;
+const checkType : TypesAreEqual<InsertLichThiDauParams, LichThiDau> = true;
 /*
 export interface LichThiDau {
     maTD: string;

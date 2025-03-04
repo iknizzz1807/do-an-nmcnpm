@@ -43,7 +43,7 @@ createDBBackupTrigger()// .catch(console.error); // This may cause some horrible
 export type InsertDoiBongParams = typeof DoiBongTable.$inferInsert;
 export type InsertDoiBongBackupParams = typeof DoiBongTableBackup.$inferInsert;
 
-const check : TypesAreEqual<InsertDoiBongParams, DoiBong> = true;
+const checkType : TypesAreEqual<InsertDoiBongParams, DoiBong> = true;
 /*
 export interface DoiBong {
     maDoi: string;

@@ -54,7 +54,7 @@ export type CauThu = {
     tenCT: string;
     loaiCT: number;
     ghiChu: string;
-    nuocNgoai: number;
+    nuocNgoai: boolean;
     ngaySinh: string;
 }
 

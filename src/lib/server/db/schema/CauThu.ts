@@ -10,7 +10,7 @@ export const CauThuTable = sqliteTable('CauThu', {
     ngaySinh: text().notNull(),
     loaiCT: integer().notNull(),
     ghiChu: text().notNull(),
-    nuocNgoai: integer().notNull()
+    nuocNgoai: integer({ mode: "boolean" }).notNull()
 })
 
 export const CauThuTableBackup = sqliteTable('CauThuBackup', {
@@ -50,7 +50,7 @@ createCTBackupTrigger()// .catch(console.error); // This may cause some horrible
 export type InsertCauThuParams = typeof CauThuTable.$inferInsert;
 export type InsertCauThuBackupParams = typeof CauThuTableBackup.$inferInsert;
 
-const check : TypesAreEqual<InsertCauThuParams, CauThu> = true;
+const checkType : TypesAreEqual<InsertCauThuParams, CauThu> = true;
 /*
 export interface CauThu {
     maCT: string;

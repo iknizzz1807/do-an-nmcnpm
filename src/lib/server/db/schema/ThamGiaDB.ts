@@ -12,7 +12,7 @@ export const ThamGiaDBTable = sqliteTable('ThamGiaDB', {
     maCT: integer().notNull().references(() => CauThuTable.maCT),
     maMG: integer().notNull().references(() => DSMuaGiaiTable.maMG)
 }, (table) => [
-    primaryKey({ columns: [table.maDoi, table.maCT, table.maMG] }),
+    primaryKey({ columns: [table.maCT, table.maMG] }),
 ])
 
 export const ThamGiaDBTableBackup = sqliteTable('ThamGiaDBBackup', {
@@ -49,7 +49,7 @@ createTGDBBackupTrigger()// .catch(console.error); // This may cause some horrib
 export type InsertThamGiaDBParams = typeof ThamGiaDBTable.$inferInsert;
 export type InsertThamGiaDBBackupParams = typeof ThamGiaDBTableBackup.$inferInsert;
 
-const check : TypesAreEqual<InsertThamGiaDBParams, ThamGiaDB> = true;
+const checkType : TypesAreEqual<InsertThamGiaDBParams, ThamGiaDB> = true;
 /*
 export interface ThamGiaDB {
     maDoi: string;
