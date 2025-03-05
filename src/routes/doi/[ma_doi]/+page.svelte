@@ -24,6 +24,8 @@
   let ngaySinhInput: string = $state(new Date().toISOString().split("T")[0]);
 
   let formState: boolean = $state(false);
+  let updateIndex : number = $state(-1);
+  let maCT : number = $state(0);
 
   const resetInput = () => {
     tenCTInput = "";
@@ -31,6 +33,7 @@
     ghiChuInput = "";
     nuocNgoaiInput = false;
     ngaySinhInput = new Date().toISOString().split("T")[0];
+    updateIndex = -1;
   };
 
   const openForm = () => {
@@ -41,6 +44,19 @@
     formState = false;
     resetInput();
   };
+  
+  const onItemClick = (data : any, index : number) => {
+      if (data satisfies CauThu) {
+        updateIndex = index;
+        maCT = data.maCT;
+        tenCTInput = data.tenCT;
+        loaiCTInput = parseInt(data.loaiCT);
+        ghiChuInput = data.ghiChu;
+        nuocNgoaiInput = Boolean(parseInt(data.nuocNgoai));
+        ngaySinhInput = data.ngaySinh;
+        openForm();
+      }
+  }
 
   const addPlayer = async (e: Event) => {
     e.preventDefault();
@@ -85,14 +101,60 @@
       showErrorToast(String(error));
     }
   };
+
+  const updatePlayer = async (e: Event) => {
+    e.preventDefault();
+
+    if (tenCTInput.trim() === "" || ghiChuInput.trim() === "") {
+      showErrorToast("Vui lòng điền đầy đủ form");
+      return;
+    }
+
+    const dataInput : CauThu = {
+      maCT: maCT,
+      tenCT: tenCTInput,
+      loaiCT: loaiCTInput,
+      ghiChu: ghiChuInput,
+      nuocNgoai: nuocNgoaiInput,
+      ngaySinh: ngaySinhInput,
+    };
+
+    try {
+      console.log(dataInput);
+      const response = await fetch("/api/cauthu", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dataInput),
+      });
+
+      if (!response.ok) {
+        showErrorToast("Lỗi cập nhật cầu thủ");
+        throw new Error("Lỗi cập nhật cầu thủ");
+      }
+
+      const result = await response.json();
+
+      danhSachCauThu[updateIndex] = result satisfies CauThu;
+
+      // Đóng form và hiện toast thành công sau khi thành công
+      closeForm();
+      showOkToast("Cập nhật cầu thủ mới thành công");
+    } catch (error) {
+      console.error("Error:", error);
+      showErrorToast(String(error));
+    };
+  };
 </script>
 
 <Table
   title={"Danh sách các cầu thủ"}
   {columns}
   data={danhSachCauThu}
-  redirectParam={"maCauThu"}
+  redirectParam={""}
   tableType={"cauthu"}
+  onItemClick={onItemClick}
 />
 
 <div class="flex justify-center">
@@ -105,7 +167,7 @@
   >
     <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
       <h2 class="text-xl font-bold mb-4">Tạo cầu thủ mới</h2>
-      <form onsubmit={addPlayer}>
+      <form onsubmit={updateIndex >= 0 ? addPlayer : updatePlayer}>
         <div class="mb-4">
           <label
             class="block text-gray-700 text-sm font-bold mb-2"
@@ -199,13 +261,24 @@
           >
             Hủy
           </button>
-          <button
-            type="submit"
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onclick={addPlayer}
-          >
-            Tạo
-          </button>
+          {#if updateIndex != -1}
+            <button
+              type="submit"
+              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onclick={updatePlayer}
+            >
+              Cập nhật
+            </button>
+          {:else}
+          
+            <button
+              type="submit"
+              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onclick={addPlayer}
+            >
+              Tạo
+            </button>
+          {/if}
         </div>
       </form>
     </div>

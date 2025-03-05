@@ -33,14 +33,16 @@ export const POST: RequestHandler = async ({
   }
   else {
     const cauThu : CauThu = {
-      maCT: data.cauThu,
+      maCT: data.maCT,
       tenCT: data.tenCT,
       loaiCT: data.loaiCT,
       ghiChu: data.ghiChu,
       nuocNgoai: data.nuocNgoai,
       ngaySinh: data.ngaySinh
     };
-    await updateCauThu(cauThu);
+    await updateCauThu(cauThu).catch((err) => {
+      throw err;
+    });
     result = cauThu;
   }
 

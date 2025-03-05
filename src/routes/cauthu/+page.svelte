@@ -58,6 +58,7 @@
     ghiChuInput = "";
     nuocNgoaiInput = false;
     ngaySinhInput = new Date().toISOString().split("T")[0];
+    updateIndex = 0;
   };
 
   const closeForm = () => {
@@ -109,8 +110,8 @@
       });
 
       if (!response.ok) {
-        showErrorToast("Lỗi tạo cầu thủ");
-        throw new Error("Lỗi tạo cầu thủ");
+        showErrorToast("Lỗi cập nhật cầu thủ");
+        throw new Error("Lỗi cập nhật cầu thủ");
       }
 
       const result = await response.json();
@@ -119,7 +120,7 @@
 
       // Đóng form và hiện toast thành công sau khi thành công
       closeForm();
-      showOkToast("Tạo cầu thủ mới thành công");
+      showOkToast("Cập nhật cầu thủ mới thành công");
     } catch (error) {
       console.error("Error:", error);
       showErrorToast(String(error));

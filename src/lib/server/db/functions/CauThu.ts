@@ -15,8 +15,8 @@ export const insertCauThu = async (...cauThu: CauThu[]) => {
 };
 
 export const updateCauThu = async(cauThu: CauThu) => {
-  if ((cauThu.maCT ?? null) == null)
-    return null;
+  if ((cauThu.maCT ?? null) == null) 
+    throw new Error("maCT không tồn tại");
   await db.update(CauThuTable).set({
       tenCT: cauThu.tenCT,
       loaiCT: cauThu.loaiCT,
