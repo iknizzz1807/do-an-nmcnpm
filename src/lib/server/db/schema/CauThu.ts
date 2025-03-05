@@ -11,9 +11,7 @@ export const CauThuTable = sqliteTable('CauThu', {
     loaiCT: integer().notNull(),
     ghiChu: text().notNull(),
     nuocNgoai: integer({ mode: "boolean" }).notNull()
-}, (table) => [
-    check("CHK_CT_TUOI", sql`date('now') - date(${table.ngaySinh}) BETWEEN 16 AND 40`)
-])
+})
 
 export const CauThuTableBackup = sqliteTable('CauThuBackup', {
     CTBackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
