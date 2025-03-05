@@ -11,10 +11,11 @@
     data: T[];
     tableType: string;
     redirectParam: string;
+    onItemClick?: ((data: T, index : number) => void) | undefined;
   };
-  let { title, columns, data, redirectParam, tableType }: TableProps<any> =
+  let { title, columns, data, redirectParam, tableType, onItemClick }: TableProps<any> =
     $props();
-  const isNumber =  (num : any) => {
+  const isNumber = (num : any) => {
     if (typeof num === 'number') {
       return num - num === 0;
     }
@@ -47,20 +48,25 @@
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
-          {#each data as row}
+          {#each data as row, index}
               <!-- Click vào để vào giao diện xem chi tiết và chỉnh sửa đội bóng -->
               <tr
                 onclick={() => {
-                  let redirect = "";
-                  if (isNumber(row[redirectParam]))
-                    redirect = String(row[redirectParam]).trim().toLowerCase();
-                  else
-                    redirect = row[redirectParam].trim().toLowerCase();
-                  // console.log(row[redirectParam].trim().toLowerCase());
-                  console.log(`/${tableType}/` + redirect);
-                  goto(
-                    `/${tableType}/` + redirect
-                  );
+                  if ((onItemClick ?? null) !== null) {
+                    onItemClick!!(row, index);
+                  }
+                  else {
+
+                    let redirect = "";
+                    if (isNumber(row[redirectParam]))
+                      redirect = String(row[redirectParam]).trim().toLowerCase();
+                    else
+                      redirect = row[redirectParam].trim().toLowerCase();
+                    console.log(`/${tableType}/` + redirect);
+                    goto(
+                      `/${tableType}/` + redirect
+                    );
+                  }
                 }}
                 class="cursor-pointer hover:bg-gray-100"
               >

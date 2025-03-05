@@ -1,4 +1,4 @@
-import { integer, sqliteTable, text, primaryKey, real } from 'drizzle-orm/sqlite-core';
+import { integer, sqliteTable, text, primaryKey, real, check } from 'drizzle-orm/sqlite-core';
 import { LichThiDauTable } from './LichThiDau';
 import { CauThuTable } from './CauThu';
 import { DoiBongTable } from './DoiBong';
@@ -15,6 +15,8 @@ export const BanThangTable = sqliteTable('BanThang', {
     loaiBanThang: text().notNull(),
 }, (table) => [
     primaryKey({ columns: [table.maTD, table.maCT, table.thoiDiem] }),
+    check("CHK_BT_THOIDIEM", sql`${table.thoiDiem} BETWEEN 0 AND 90`),
+    check("CHK_BT_LOAIBT", sql`${table.loaiBanThang} IN ('A', 'B', 'C')`)
 ])
 
 export const BanThangTableBackup = sqliteTable('BanThangBackup', {

@@ -17,7 +17,8 @@ export const LichThiDauTable = sqliteTable('LichThiDau', {
     maMG: integer().notNull().references(() => DSMuaGiaiTable.maMG),
     doiThang: integer().references(() => DoiBongTable.maDoi),
 }, (table) : any => [
-    check("CHK_LTD_DOIMOT_DOIHAI", sql`${table.doiMot} != ${table.doiHai}`)
+    check("CHK_LTD_DOIMOT_DOIHAI", sql`${table.doiMot} != ${table.doiHai}`),
+    check("CHK_LTD_VONGTHIDAU", sql`${table.vongThiDau} IN (1, 2)`)
 ]);
 
 export const LichThiDauTableBackup = sqliteTable('LichThiDauBackup', {

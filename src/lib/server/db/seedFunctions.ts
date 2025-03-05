@@ -42,7 +42,7 @@ export const generateBanThang = async (maTD: number, soBTDoiMot: number = 5, soB
       maDoi: lichThiDau.doiMot,
       maCT: cauThu.maCT,
       thoiDiem: 90 * i / n1,
-      loaiBanThang: "CC"
+      loaiBanThang: choose(['A', 'B', 'C'])
     }
     await db.insert(BanThangTable).values(banThang);
   }
@@ -58,7 +58,7 @@ export const generateBanThang = async (maTD: number, soBTDoiMot: number = 5, soB
       maDoi: lichThiDau.doiHai,
       maCT: cauThu.maCT,
       thoiDiem: 90 * i / (n2 + 1),
-      loaiBanThang: "CC"
+      loaiBanThang: choose(['A', 'B', 'C'])
     }
     await db.insert(BanThangTable).values(banThang);
   }
@@ -107,7 +107,7 @@ export const generateLichThiDau = async (maMG: number) => {
             vongThiDau: randIntBetween(1, 2),
             maMG: maMG,
             doiThang: doiBongs[choose([doiMotIndex, doiHaiIndex])].maDoi,
-            ngayGio: new Date().toJSON()
+            ngayGio: new Date().toJSON(),
         }
         doiBongs.splice(doiMotIndex, 1);
         doiBongs.splice(doiHaiIndex, 1);

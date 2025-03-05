@@ -4,6 +4,8 @@ import { sql } from 'drizzle-orm';
 import { check, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { db } from '../client';
 
+
+// Thay đổi tuổi tối thiểu, tuổi tối đa của cầu thủ.
 export const CauThuTable = sqliteTable('CauThu', {
     maCT: integer().notNull().unique().primaryKey({ autoIncrement: true }),
     tenCT: text().notNull(),
@@ -43,29 +45,29 @@ const createCTBackupTrigger = async() => {
             VALUES(datetime('now'), OLD.maCT, OLD.tenCT, OLD.ngaySinh, OLD.loaiCT, OLD.ghiChu, OLD.nuocNgoai);
         END
         `);
-        // Check tuoi
-        tx.run(sql`
-        CREATE TRIGGER IF NOT EXISTS TRGI_CT_AGE
-        AFTER INSERT ON CauThu
-        WHEN NOT EXISTS(
-            SELECT 1 FROM CauThu
-            WHERE maCT=NEW.maCT AND date('now') - date(ngaySinh) BETWEEN 16 AND 40
-        )
-        BEGIN
-            SELECT RAISE(ABORT, 'Cau thu co do tuoi tu 16 den 40');
-        END;
-        `);
-        tx.run(sql`
-        CREATE TRIGGER IF NOT EXISTS TRGU_CT_AGE
-        AFTER UPDATE ON CauThu
-        WHEN NOT EXISTS(
-            SELECT 1 FROM CauThu
-            WHERE maCT=NEW.maCT AND date('now') - date(ngaySinh) BETWEEN 16 AND 40
-        )
-        BEGIN
-            SELECT RAISE(ABORT, 'Cau thu co do tuoi tu 16 den 40');
-        END;
-        `);
+        // // Check tuoi
+        // tx.run(sql`
+        // CREATE TRIGGER IF NOT EXISTS TRGI_CT_AGE
+        // AFTER INSERT ON CauThu
+        // WHEN NOT EXISTS(
+        //     SELECT 1 FROM CauThu
+        //     WHERE maCT=NEW.maCT AND date('now') - date(ngaySinh) BETWEEN 16 AND 40
+        // )
+        // BEGIN
+        //     SELECT RAISE(ABORT, 'Cau thu co do tuoi tu 16 den 40');
+        // END;
+        // `);
+        // tx.run(sql`
+        // CREATE TRIGGER IF NOT EXISTS TRGU_CT_AGE
+        // AFTER UPDATE ON CauThu
+        // WHEN NOT EXISTS(
+        //     SELECT 1 FROM CauThu
+        //     WHERE maCT=NEW.maCT AND date('now') - date(ngaySinh) BETWEEN 16 AND 40
+        // )
+        // BEGIN
+        //     SELECT RAISE(ABORT, 'Cau thu co do tuoi tu 16 den 40');
+        // END;
+        // `);
     });
 }
 createCTBackupTrigger()// .catch(console.error); // This may cause some horrible error in the future

@@ -12,7 +12,7 @@ export const selectKetQuaThiDau = async(maTD: number) : Promise<null | KetQuaThi
         return null;
 
     const doiMot = (await db.select().from(DoiBongTable).where(eq(DoiBongTable.maDoi, lichThiDau.doiMot))).at(0);
-    const doiHai = (await db.select().from(DoiBongTable).where(eq(DoiBongTable.maDoi, lichThiDau.doiMot))).at(0);
+    const doiHai = (await db.select().from(DoiBongTable).where(eq(DoiBongTable.maDoi, lichThiDau.doiHai))).at(0);
     if (doiMot === undefined)
         throw new Error("Doi mot khong ton tai");
     if (doiHai === undefined)

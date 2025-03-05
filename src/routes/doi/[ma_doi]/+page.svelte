@@ -20,7 +20,7 @@
   let tenCTInput: string = $state("");
   let loaiCTInput: number = $state(0);
   let ghiChuInput: string = $state("");
-  let nuocNgoaiInput: number = $state(0);
+  let nuocNgoaiInput: boolean = $state(false);
   let ngaySinhInput: string = $state(new Date().toISOString().split("T")[0]);
 
   let formState: boolean = $state(false);
@@ -29,7 +29,7 @@
     tenCTInput = "";
     loaiCTInput = 0;
     ghiChuInput = "";
-    nuocNgoaiInput = 0;
+    nuocNgoaiInput = false;
     ngaySinhInput = new Date().toISOString().split("T")[0];
   };
 
