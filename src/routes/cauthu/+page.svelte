@@ -22,7 +22,7 @@
   let ngaySinhInput: string = $state(new Date().toISOString().split("T")[0]);
   
   let formState: boolean = $state(false);
-  let updateIndex : number = $state(0);
+  let selectedIndex : number = $state(0);
 
   let searchTerm: string = $state("");
   let isOpen: boolean = $state(false);
@@ -58,7 +58,7 @@
     ghiChuInput = "";
     nuocNgoaiInput = false;
     ngaySinhInput = new Date().toISOString().split("T")[0];
-    updateIndex = 0;
+    selectedIndex = 0;
   };
 
   const closeForm = () => {
@@ -68,7 +68,7 @@
 
   const onItemClick = (data: any, index: number) => {
     if (data satisfies CauThu) {
-      updateIndex = index;
+      selectedIndex = index;
       maCT = data.maCT;
       tenCTInput = data.tenCT;
       loaiCTInput = parseInt(data.loaiCT);
@@ -76,6 +76,17 @@
       nuocNgoaiInput = Boolean(parseInt(data.nuocNgoai));
       ngaySinhInput = data.ngaySinh;
       openForm();
+    }
+    else {
+      console.error("Data không thỏa mãn loại CauThu");
+    }
+  }
+
+  const onDeleteClick = async (data : any, index: number) => {
+    if (data satisfies CauThu) {
+      selectedIndex = index;
+      maCT = data.maCT;
+      await deletePlayer();
     }
     else {
       console.error("Data không thỏa mãn loại CauThu");
@@ -116,7 +127,7 @@
 
       const result = await response.json();
 
-      danhSachCauThu[updateIndex] = result satisfies CauThu;
+      danhSachCauThu[selectedIndex] = result satisfies CauThu;
 
       // Đóng form và hiện toast thành công sau khi thành công
       closeForm();
@@ -126,6 +137,33 @@
       showErrorToast(String(error));
     };
   };
+
+  const deletePlayer = async () => {
+    try {
+      const response = await fetch("/api/cauthu", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ maCT: maCT }),
+      });
+
+      if (!response.ok) {
+        showErrorToast("Lỗi cập nhật cầu thủ");
+        throw new Error("Lỗi cập nhật cầu thủ");
+      }
+
+      danhSachCauThu.splice(selectedIndex, 1);
+
+      // Đóng form và hiện toast thành công sau khi thành công
+      closeForm();
+      showOkToast("Cập nhật cầu thủ mới thành công");
+    } catch (error) {
+      console.error("Error:", error);
+      showErrorToast(String(error));
+    };
+  };
+
 </script>
 
 <svelte:head>
@@ -193,6 +231,8 @@
   redirectParam={""}
   tableType="cauThu"
   onItemClick={onItemClick}
+  deleteButton={true}
+  onDeleteClick={onDeleteClick}
 />
 
 

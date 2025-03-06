@@ -80,4 +80,8 @@ export type LichThiDau = {
     doiThang?: number | null | undefined;
     maTD?: number | undefined;
     ngayGio?: string | undefined;
+    tenDoiMot?: string | undefined;
+    tenDoiHai?: string | undefined;
+    tenMG?: string | undefined;
+    tenDoiThang?: string | undefined;
 }

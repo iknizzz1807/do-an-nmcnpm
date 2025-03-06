@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
+  import ButtonPrimary from "./ButtonPrimary.svelte";
 
   type TableProps<T> = {
     title: string;
@@ -7,13 +8,16 @@
       header: string;
       accessor: keyof T;
       hidden?: boolean | undefined;
+      accessFunction?: ((data: T) => string) | undefined;
     }[];
     data: T[];
     tableType: string;
     redirectParam: string;
     onItemClick?: ((data: T, index : number) => void) | undefined;
+    deleteButton?: boolean;
+    onDeleteClick?: ((data: T, index : number) => void) | undefined;
   };
-  let { title, columns, data, redirectParam, tableType, onItemClick }: TableProps<any> =
+  let { title, columns, data, redirectParam, tableType, onItemClick, deleteButton, onDeleteClick }: TableProps<any> =
     $props();
   const isNumber = (num : any) => {
     if (typeof num === 'number') {
@@ -45,6 +49,12 @@
                 </th>
               {/if}
             {/each}
+            {#if deleteButton ?? null}
+              <th
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+              </th>
+            {/if}
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
@@ -77,6 +87,15 @@
                   </td>
                   {/if}
                 {/each}
+                {#if deleteButton ?? null}
+                  <td>
+                    <ButtonPrimary text="Delete" onclick={() => {
+                      if ((onDeleteClick ?? null) !== null) {
+                        onDeleteClick!!(row, index);
+                      }
+                    }}></ButtonPrimary>
+                  </td>
+                {/if}
               </tr>
           {/each}
         </tbody>

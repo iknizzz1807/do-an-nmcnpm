@@ -1,8 +1,7 @@
 import type { RequestHandler } from "./$types";
-import { insertCauThu, selectAllCauThu, updateCauThu } from "$lib/server/db/functions/CauThu";
+import { deleteCauThu, insertCauThu, selectAllCauThu, updateCauThu } from "$lib/server/db/functions/CauThu";
 import { insertThamGiaDB } from "$lib/server/db/functions/ThamGiaDB";
 import type { CauThu } from "$lib/types";
-import { selectDoiBongTenTrung } from "$lib/server/db/functions/DoiBong";
 import { error } from "@sveltejs/kit";
 
 export const GET: RequestHandler = async () => {
@@ -48,6 +47,31 @@ export const POST: RequestHandler = async ({
 
   //Trả về response với danh sách cầu thủ vừa tạo và status 200 OK
   return new Response(JSON.stringify(result), {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};
+
+// Delete cầu thủ
+export const DELETE: RequestHandler = async ({
+  request,
+}: {
+  request: Request;
+}) => {
+  const data = await request.json();
+  let result : number | null = null;
+
+  if ((data.maCT ?? null) === null) {
+    throw new Error("Không có mã cầu thủ sao xóa? bruh");
+  }
+  else {
+    result = data.maCT!!;
+    await deleteCauThu(data.maCT!!);
+  }
+
+  return new Response(JSON.stringify({ maCT: result!! }), {
     status: 200,
     headers: {
       "Content-Type": "application/json",

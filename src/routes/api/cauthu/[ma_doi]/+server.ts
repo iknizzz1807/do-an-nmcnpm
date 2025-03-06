@@ -36,7 +36,7 @@ export const POST: RequestHandler = async ({ request, params }) => {
       maMG: 1,
     }); // Hardcoded mã mùa giải là 1
   } catch (error) {
-    // throw new Error(String(error));
+    throw new Error(String(error));
     console.error(error);
   }
 
