@@ -47,12 +47,29 @@
     maMGInput = 0;
     ngayGioInput = new Date().toISOString().split("T")[0];
     selectedIndex = 0;
+    maTD = 0;
   };
 
   const closeForm = () => {
     formState = false;
     resetInput();
   };
+
+  const onItemClick = (data: any, index: number) => {
+    if (data satisfies LichThiDau) {
+      openForm();
+      selectedIndex = index;
+      maTD = data.maTD;
+      doiMotInput = data.doiMot;
+      doiHaiInput = data.doiHai;
+      vongThiDauInput = data.vongThiDauInput;
+      maMGInput = data.maMG;
+      ngayGioInput = data.ngayGio;
+    }
+    else {
+      console.error("Data không thỏa mãn LichThiDau");
+    }
+  }
 
   const submitForm = async (e: Event) => {
     e.preventDefault();
@@ -119,6 +136,7 @@
   data={danhSachLTD}
   redirectParam={"tenCT"}
   tableType="cauThu"
+  onItemClick={onItemClick}
 />
 
 <div class="flex justify-center">
@@ -224,7 +242,7 @@
         </label>
         <input
           id="ngayGio"
-          type="date"
+          type="datetime-local"
           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           required
           bind:value={ngayGioInput}
