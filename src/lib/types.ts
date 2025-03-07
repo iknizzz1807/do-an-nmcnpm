@@ -72,6 +72,14 @@ export type BanThang = {
     loaiBanThang: string,
 }
 
+export type ThePhat = {
+    maTD: number;
+    maDoi: number;
+    maCT: number;
+    thoiDiem: number;
+    loaiThe: string;
+}
+
 export type LichThiDau = {
     doiMot: number;
     doiHai: number;
