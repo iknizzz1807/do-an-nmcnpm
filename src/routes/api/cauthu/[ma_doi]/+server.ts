@@ -9,7 +9,7 @@ export const GET: RequestHandler = async ({ params }) => {
   if (!Number.isFinite(maDoi))
     throw new Error("Khong tim thay doi");
   const danhSachCauThu = await selectCauThuDoiBong(1, maDoi);
-  console.log(danhSachCauThu);
+  // console.log(danhSachCauThu);
 
   return new Response(JSON.stringify(danhSachCauThu), {
     status: 200,

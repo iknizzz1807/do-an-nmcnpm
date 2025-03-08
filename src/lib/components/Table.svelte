@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
+  import { isNumber } from "$lib";
   import ButtonPrimary from "./ButtonPrimary.svelte";
 
   type TableProps<T> = {
@@ -20,15 +21,6 @@
   let mouseHover = $state(false);
   let { title, columns, data, redirectParam, tableType, onItemClick, deleteButton, onDeleteClick }: TableProps<any> =
     $props();
-  const isNumber = (num : any) => {
-    if (typeof num === 'number') {
-      return num - num === 0;
-    }
-    if (typeof num === 'string' && num.trim() !== '') {
-      return Number.isFinite ? Number.isFinite(+num) : isFinite(+num);
-    }
-    return false;
-  };
 </script>
 
 <main class="flex justify-center items-center">
