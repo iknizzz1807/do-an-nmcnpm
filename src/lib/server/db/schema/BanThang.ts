@@ -34,15 +34,15 @@ const createBTBackupTrigger = async() => {
     await db.transaction(async (tx) => {
         // Trigger tạo backup
         tx.run(sql`
-        CREATE TRIGGER IF NOT EXISTS TRG_BT_INSERT_BACKUP
-        AFTER INSERT ON BanThang
+        CREATE TRIGGER IF NOT EXISTS TRGD_BT_BACKUP
+        AFTER DELETE ON BanThang
         BEGIN
         INSERT INTO BanThangBackup(modifiedDate, maTD, maCT, maDoi, thoiDiem, loaiBanThang)
-        VALUES(datetime('now'), NEW.maTD, NEW.maCT, NEW.maDoi, NEW.thoiDiem, NEW.loaiBanThang);
+        VALUES(datetime('now'), OLD.maTD, OLD.maCT, OLD.maDoi, OLD.thoiDiem, OLD.loaiBanThang);
         END
         `);
         tx.run(sql`
-        CREATE TRIGGER IF NOT EXISTS TRG_BT_UPDATE_BACKUP
+        CREATE TRIGGER IF NOT EXISTS TRGU_BT_BACKUP
         AFTER UPDATE ON BanThang
         BEGIN
         INSERT INTO BanThangBackup(modifiedDate, maTD, maCT, maDoi, thoiDiem, loaiBanThang)

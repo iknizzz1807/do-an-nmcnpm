@@ -2,7 +2,7 @@ import type { RequestHandler } from "./$types";
 import { db } from "$lib/server/db/client";
 import { DoiBongTable, type InsertDoiBongParams } from "$lib/server/db/schema/DoiBong";
 import { DSMuaGiaiTable } from "$lib/server/db/schema/DSMuaGiai";
-import { insertDoiBong, selectAllDoiBong } from "$lib/server/db/functions/DoiBong";
+import { deleteDoiBong, insertDoiBong, selectAllDoiBong } from "$lib/server/db/functions/DoiBong";
 import type { DoiBong } from "$lib/types";
 
 export const GET: RequestHandler = async () => {
@@ -39,6 +39,31 @@ export const POST: RequestHandler = async ({
 
   // Trả về response với đội bóng vừa tạo và status 200 OK
   return new Response(JSON.stringify(doiMoi), {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};
+
+// Delete DoiBong
+export const DELETE: RequestHandler = async ({
+  request,
+}: {
+  request: Request;
+}) => {
+  const data = await request.json();
+  let result : number | null = null;
+
+  if ((data.maDoi ?? null) === null) {
+    throw new Error("Không có mã đội sao xóa? bruh");
+  }
+  else {
+    result = data.maDoi!!;
+    await deleteDoiBong(data.maDoi!!);
+  }
+
+  return new Response(JSON.stringify({ maDoi: result!! }), {
     status: 200,
     headers: {
       "Content-Type": "application/json",

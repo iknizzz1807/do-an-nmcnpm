@@ -17,6 +17,7 @@
     deleteButton?: boolean;
     onDeleteClick?: ((data: T, index : number) => void) | undefined;
   };
+  let mouseHover = $state(false);
   let { title, columns, data, redirectParam, tableType, onItemClick, deleteButton, onDeleteClick }: TableProps<any> =
     $props();
   const isNumber = (num : any) => {
@@ -62,6 +63,8 @@
               <!-- Click vào để vào giao diện xem chi tiết và chỉnh sửa đội bóng -->
               <tr
                 onclick={() => {
+                  if (mouseHover)
+                    return;
                   if ((onItemClick ?? null) !== null) {
                     onItemClick!!(row, index);
                   }
@@ -89,11 +92,19 @@
                 {/each}
                 {#if deleteButton ?? null}
                   <td>
-                    <ButtonPrimary text="Delete" onclick={() => {
+                    <ButtonPrimary text="Delete" 
+                    onclick={() => {
                       if ((onDeleteClick ?? null) !== null) {
                         onDeleteClick!!(row, index);
                       }
-                    }}></ButtonPrimary>
+                    }}
+                    onmouseenter={() => {
+                      mouseHover = true;
+                    }}
+                    onmouseexit={() => {
+                      mouseHover = false;
+                    }}
+                    ></ButtonPrimary>
                   </td>
                 {/if}
               </tr>

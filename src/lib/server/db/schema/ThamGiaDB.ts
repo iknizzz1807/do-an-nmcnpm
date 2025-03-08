@@ -28,15 +28,15 @@ const createTGDBBackupTrigger = async() => {
     // ThamGiaDB
     await db.transaction(async (tx) => {
         tx.run(sql`
-        CREATE TRIGGER IF NOT EXISTS TRG_TGDB_INSERT_BACKUP
-        AFTER INSERT ON ThamGiaDB
+        CREATE TRIGGER IF NOT EXISTS TRGD_TGDB_BACKUP
+        AFTER DELETE ON ThamGiaDB
         BEGIN
         INSERT INTO ThamGiaDBBackup(modifiedDate, maDoi, maCT, maMG)
-        VALUES(datetime('now'), NEW.maDoi, NEW.maCT, NEW.maMG);
+        VALUES(datetime('now'), OLD.maDoi, OLD.maCT, OLD.maMG);
         END
         `);
         tx.run(sql`
-        CREATE TRIGGER IF NOT EXISTS TRG_TGDB_UPDATE_BACKUP
+        CREATE TRIGGER IF NOT EXISTS TRGU_TGDB_BACKUP
         AFTER UPDATE ON ThamGiaDB
         BEGIN
         INSERT INTO ThamGiaDBBackup(modifiedDate, maDoi, maCT, maMG)

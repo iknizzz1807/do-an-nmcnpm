@@ -16,6 +16,8 @@
 
   let inputTenDoi: string = $state("");
   let inputSanNha: string = $state("");
+  let selectedIndex : number = $state(0);
+  let maDoi : number = $state(0);
 
   let formState: boolean = $state(false);
 
@@ -28,6 +30,17 @@
     inputSanNha = "";
     inputTenDoi = "";
   };
+
+  const onDeleteClick = async (data : any, index: number) => {
+    if (data satisfies DoiBong) {
+      selectedIndex = index;
+      maDoi = data.maDoi;
+      await deleteDoiBong();
+    }
+    else {
+      console.error("Data không thỏa mãn loại CauThu");
+    }
+  }
 
   const submitForm = async (e: Event) => {
     e.preventDefault();
@@ -71,6 +84,32 @@
       showErrorToast(String(error));
     }
   };
+
+  const deleteDoiBong = async () => {
+    try {
+      const response = await fetch("/api/doibong", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ maDoi: maDoi }),
+      });
+
+      if (!response.ok) {
+        showErrorToast("Lỗi cập nhật đội bóng");
+        throw new Error("Lỗi cập nhật đội bóng");
+      }
+
+      danhSachDoiBong.splice(selectedIndex, 1);
+
+      // Đóng form và hiện toast thành công sau khi thành công
+      closeForm();
+      showOkToast("Cập nhật cầu thủ mới thành công");
+    } catch (error) {
+      console.error("Error:", error);
+      showErrorToast(String(error));
+    };
+  };
 </script>
 
 <svelte:head>
@@ -83,6 +122,8 @@
   data={danhSachDoiBong}
   redirectParam={"maDoi"}
   tableType="doi"
+  deleteButton={true}
+  onDeleteClick={onDeleteClick}
 />
 <div class="flex justify-center">
   <ButtonPrimary text="Tạo đội mới" onclick={openForm} />

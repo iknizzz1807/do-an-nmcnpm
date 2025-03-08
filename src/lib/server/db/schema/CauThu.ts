@@ -30,15 +30,15 @@ const createCTBackupTrigger = async() => {
     // CauThu
     await db.transaction(async (tx) => {
         tx.run(sql`
-        CREATE TRIGGER IF NOT EXISTS TRG_CT_INSERT_BACKUP
-        AFTER INSERT ON CauThu
+        CREATE TRIGGER IF NOT EXISTS TRGD_CT_BACKUP
+        AFTER DELETE ON CauThu
         BEGIN
             INSERT INTO CauThuBackup(modifiedDate, maCT, tenCT, ngaySinh, loaiCT, ghiChu, nuocNgoai)
-            VALUES(datetime('now'), NEW.maCT, NEW.tenCT, NEW.ngaySinh, NEW.loaiCT, NEW.ghiChu, NEW.nuocNgoai);
+            VALUES(datetime('now'), OLD.maCT, OLD.tenCT, OLD.ngaySinh, OLD.loaiCT, OLD.ghiChu, OLD.nuocNgoai);
         END
         `);
         tx.run(sql`
-        CREATE TRIGGER IF NOT EXISTS TRG_CT_UPDATE_BACKUP
+        CREATE TRIGGER IF NOT EXISTS TRGU_CT_BACKUP
         AFTER UPDATE ON CauThu
         BEGIN
             INSERT INTO CauThuBackup(modifiedDate, maCT, tenCT, ngaySinh, loaiCT, ghiChu, nuocNgoai)

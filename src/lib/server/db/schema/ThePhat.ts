@@ -33,15 +33,15 @@ const createTPBackupTrigger = async() => {
   await db.transaction(async (tx) => {
       // Trigger tạo backup
       tx.run(sql`
-      CREATE TRIGGER IF NOT EXISTS TRG_TP_INSERT_BACKUP
-      AFTER INSERT ON ThePhat
+      CREATE TRIGGER IF NOT EXISTS TRGD_TP_BACKUP
+      AFTER DELETE ON ThePhat
       BEGIN
       INSERT INTO ThePhatBackup(modifiedDate, maTD, maCT, maDoi, thoiDiem, loaiThe)
-      VALUES(datetime('now'), NEW.maTD, NEW.maCT, NEW.maDoi, NEW.thoiDiem, NEW.loaiThe);
+      VALUES(datetime('now'), OLD.maTD, OLD.maCT, OLD.maDoi, OLD.thoiDiem, OLD.loaiThe);
       END
       `);
       tx.run(sql`
-      CREATE TRIGGER IF NOT EXISTS TRG_TP_UPDATE_BACKUP
+      CREATE TRIGGER IF NOT EXISTS TRGU_TP_BACKUP
       AFTER UPDATE ON ThePhat
       BEGIN
       INSERT INTO ThePhatBackup(modifiedDate, maTD, maCT, maDoi, thoiDiem, loaiThe)

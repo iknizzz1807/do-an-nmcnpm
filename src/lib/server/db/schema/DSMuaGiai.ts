@@ -20,15 +20,15 @@ const createDSMGBackupTrigger = async() => {
     // DSMuaGiai
     await db.transaction(async (tx) => {
         tx.run(sql`
-        CREATE TRIGGER IF NOT EXISTS TRG_DSMG_INSERT_BACKUP
-        AFTER INSERT ON DSMuaGiai
+        CREATE TRIGGER IF NOT EXISTS TRGD_DSMG_BACKUP
+        AFTER DELETE ON DSMuaGiai
         BEGIN
             INSERT INTO DSMuaGiaiBackup(modifiedDate, maMG, tenMG)
-            VALUES(datetime('now'), NEW.maMG, NEW.tenMG);
+            VALUES(datetime('now'), OLD.maMG, OLD.tenMG);
         END
         `);
         tx.run(sql`
-        CREATE TRIGGER IF NOT EXISTS TRG_DSMG_UPDATE_BACKUP
+        CREATE TRIGGER IF NOT EXISTS TRGU_DSMG_BACKUP
         AFTER UPDATE ON DSMuaGiai
         BEGIN
             INSERT INTO DSMuaGiaiBackup(modifiedDate, maMG, tenMG)

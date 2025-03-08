@@ -4,7 +4,8 @@ import { CauThuTable } from "./schema/CauThu";
 import { DoiBongTable } from "./schema/DoiBong";
 import { DSMuaGiaiTable } from "./schema/DSMuaGiai";
 import { LichThiDauTable } from "./schema/LichThiDau";
-import { generateBanThang, generateLichThiDau, generateTGDB } from "./seedFunctions";
+import { generateBanThang, generateLichThiDau, generateTGDB, generateThePhat } from "./seedFunctions";
+import { randIntBetween } from "../utils";
 
 await seed(db, {
   DSMuaGiaiTable,
@@ -48,5 +49,6 @@ await generateLichThiDau(1);
 await generateTGDB();
 const lichThiDau = await db.select().from(LichThiDauTable);
 for (const lich of lichThiDau) {
-  await generateBanThang(lich.maTD, 2, 5);
+  await generateBanThang(lich.maTD, randIntBetween(0, 5), randIntBetween(0, 5));
+  await generateThePhat(lich.maTD, randIntBetween(0, 1), randIntBetween(0, 1));
 }

@@ -1,8 +1,11 @@
-import { ilike, eq } from "drizzle-orm";
+import { ilike, eq, or } from "drizzle-orm";
 import { db } from "../client";
 import { DoiBongTable, DoiBongTableBackup, type InsertDoiBongBackupParams } from "../schema/DoiBong";
 import type { DoiBong } from "$lib/types";
 import { CauThuTableBackup, type InsertCauThuBackupParams } from "../schema/CauThu";
+import { BanThangTable } from "../schema/BanThang";
+import { LichThiDauTable } from "../schema/LichThiDau";
+import { ThamGiaDBTable } from "../schema/ThamGiaDB";
 
 export const insertDoiBong = async (...doiBong: DoiBong[]) => {
   let returning = await db.insert(DoiBongTable).values(doiBong).returning({ id: DoiBongTable.maDoi });
@@ -18,6 +21,18 @@ export const updateDoiBong = async(doiBong: DoiBong) => {
     tenDoi: doiBong.tenDoi,
     sanNha: doiBong.sanNha
   }).where(eq(DoiBongTable.maDoi, doiBong.maDoi!!));
+}
+
+export const deleteDoiBong = async(maDoi: number) => {
+  const ltd = await db.select({ maTD: LichThiDauTable.maTD }).from(LichThiDauTable)
+      .where(or(eq(LichThiDauTable.doiMot, maDoi), eq(LichThiDauTable.doiHai, maDoi)));
+  console.log(ltd);
+  for (const lich of ltd) {
+    await db.delete(BanThangTable).where(eq(BanThangTable.maTD, lich.maTD));
+    await db.delete(LichThiDauTable).where(eq(LichThiDauTable.maTD, lich.maTD));
+  }
+  await db.delete(ThamGiaDBTable).where(eq(ThamGiaDBTable.maDoi, maDoi));
+  await db.delete(DoiBongTable).where(eq(DoiBongTable.maDoi, maDoi));
 }
 
 export const selectAllDoiBong = async () => {

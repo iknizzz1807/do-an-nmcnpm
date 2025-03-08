@@ -21,15 +21,15 @@ const createDBBackupTrigger = async() => {
     // DoiBong
     await db.transaction(async (tx) => {
         tx.run(sql`
-        CREATE TRIGGER IF NOT EXISTS TRG_DB_INSERT_BACKUP
-        AFTER INSERT ON DoiBong
+        CREATE TRIGGER IF NOT EXISTS TRGD_DB_BACKUP
+        AFTER DELETE ON DoiBong
         BEGIN
             INSERT INTO DoiBongBackup(modifiedDate, maDoi, tenDoi, sanNha)
-            VALUES(datetime('now'), NEW.maDoi, NEW.tenDoi, NEW.sanNha);
+            VALUES(datetime('now'), OLD.maDoi, OLD.tenDoi, OLD.sanNha);
         END
         `);
         tx.run(sql`
-        CREATE TRIGGER IF NOT EXISTS TRG_DB_UPDATE_BACKUP
+        CREATE TRIGGER IF NOT EXISTS TRGU_DB_BACKUP
         AFTER UPDATE ON DoiBong
         BEGIN
             INSERT INTO DoiBongBackup(modifiedDate, maDoi, tenDoi, sanNha)
