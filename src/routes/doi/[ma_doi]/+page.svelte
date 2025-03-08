@@ -24,8 +24,8 @@
   let ngaySinhInput: string = $state(new Date().toISOString().split("T")[0]);
 
   let formState: boolean = $state(false);
-  let updateIndex : number = $state(-1);
-  let maCT : number = $state(0);
+  let updateIndex: number = $state(-1);
+  let maCT: number = $state(0);
 
   const resetInput = () => {
     tenCTInput = "";
@@ -44,19 +44,19 @@
     formState = false;
     resetInput();
   };
-  
-  const onItemClick = (data : any, index : number) => {
-      if (data satisfies CauThu) {
-        updateIndex = index;
-        maCT = data.maCT;
-        tenCTInput = data.tenCT;
-        loaiCTInput = parseInt(data.loaiCT);
-        ghiChuInput = data.ghiChu;
-        nuocNgoaiInput = Boolean(parseInt(data.nuocNgoai));
-        ngaySinhInput = data.ngaySinh;
-        openForm();
-      }
-  }
+
+  const onItemClick = (data: any, index: number) => {
+    if (data satisfies CauThu) {
+      updateIndex = index;
+      maCT = data.maCT;
+      tenCTInput = data.tenCT;
+      loaiCTInput = parseInt(data.loaiCT);
+      ghiChuInput = data.ghiChu;
+      nuocNgoaiInput = Boolean(parseInt(data.nuocNgoai));
+      ngaySinhInput = data.ngaySinh;
+      openForm();
+    }
+  };
 
   const addPlayer = async (e: Event) => {
     e.preventDefault();
@@ -66,7 +66,7 @@
       return;
     }
 
-    const dataInput : CauThu = {
+    const dataInput: CauThu = {
       tenCT: tenCTInput,
       loaiCT: loaiCTInput,
       ghiChu: ghiChuInput,
@@ -110,7 +110,7 @@
       return;
     }
 
-    const dataInput : CauThu = {
+    const dataInput: CauThu = {
       maCT: maCT,
       tenCT: tenCTInput,
       loaiCT: loaiCTInput,
@@ -144,7 +144,7 @@
     } catch (error) {
       console.error("Error:", error);
       showErrorToast(String(error));
-    };
+    }
   };
 </script>
 
@@ -154,7 +154,7 @@
   data={danhSachCauThu}
   redirectParam={""}
   tableType={"cauthu"}
-  onItemClick={onItemClick}
+  {onItemClick}
 />
 
 <div class="flex justify-center">
@@ -166,7 +166,7 @@
     class="fixed inset-0 flex items-center justify-center backdrop-blur-[1px] bg-white/30"
   >
     <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
-      <h2 class="text-xl font-bold mb-4">Tạo cầu thủ mới</h2>
+      <h2 class="text-xl font-bold mb-4">Cập nhật cầu thủ</h2>
       <form onsubmit={updateIndex >= 0 ? addPlayer : updatePlayer}>
         <div class="mb-4">
           <label
@@ -270,7 +270,6 @@
               Cập nhật
             </button>
           {:else}
-          
             <button
               type="submit"
               class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
