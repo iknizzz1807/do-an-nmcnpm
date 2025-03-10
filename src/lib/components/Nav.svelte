@@ -1,3 +1,42 @@
+<script lang="ts">
+  import type { DSMuaGiai } from "$lib/types";
+  import { getContext, hasContext, onMount, setContext } from "svelte";
+
+  let dsMuaGiai : DSMuaGiai[] = $state([]);
+  let selectedValue = $state(0);
+
+  $effect(() => {
+    const item = localStorage.getItem('maMGSelected');
+    if (item) selectedValue = parseInt(item);
+  })
+
+  $effect(() => {
+    if (selectedValue - 1 >= 0 && selectedValue - 1 < dsMuaGiai.length) {
+      localStorage.setItem('maMGSelected', selectedValue.toString());
+      console.log($state.snapshot(dsMuaGiai[selectedValue - 1]));
+    }
+  })
+
+  onMount(async () => {
+    try {
+      const data = await fetch("/api/muagiai", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      if (!data.ok) {
+        throw new Error("Không thể fetch data mùa giải");
+      }
+
+      dsMuaGiai = await data.json() satisfies DSMuaGiai[];
+
+    } catch (err) {
+      console.error(err);
+    }
+  });
+</script>
+
 <nav class="bg-green-800 text-white shadow-lg mb-6">
   <div class="max-w-7xl mx-auto px-4">
     <div class="flex justify-between h-16 items-center">
@@ -7,12 +46,12 @@
 
       <select
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-      >
-        <option selected>Choose a year</option>
-        <option value="2020">2020</option>
-        <option value="2021">2021</option>
-        <option value="2022">2022</option>
-        <option value="2023">2023</option>
+        bind:value={selectedValue}
+        >
+        <option value={0} selected>Choose a year</option>
+        {#each dsMuaGiai as muaGiai}
+          <option value={muaGiai.maMG}>{ muaGiai.tenMG }</option>
+        {/each}
       </select>
 
       <div class="flex items-center space-x-4">
