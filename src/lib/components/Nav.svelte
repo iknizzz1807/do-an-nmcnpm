@@ -1,23 +1,22 @@
 <script lang="ts">
   import type { DSMuaGiai } from "$lib/types";
-  import { getContext, hasContext, onMount, setContext } from "svelte";
+  import { onMount, untrack } from "svelte";
 
   let dsMuaGiai : DSMuaGiai[] = $state([]);
   let selectedValue = $state(0);
-
-  $effect(() => {
-    const item = localStorage.getItem('maMGSelected');
-    if (item) selectedValue = parseInt(item);
-  })
-
+  let selectedMuaGiai : DSMuaGiai = $state({ tenMG: "" });
   $effect(() => {
     if (selectedValue - 1 >= 0 && selectedValue - 1 < dsMuaGiai.length) {
-      localStorage.setItem('maMGSelected', selectedValue.toString());
-      console.log($state.snapshot(dsMuaGiai[selectedValue - 1]));
+      localStorage.setItem('selectedMuaGiai', JSON.stringify(dsMuaGiai[selectedValue - 1]));
     }
   })
 
   onMount(async () => {
+    const item = localStorage.getItem('selectedMuaGiai');
+    if (item) {
+      selectedMuaGiai = JSON.parse(item);
+      selectedValue = selectedMuaGiai.maMG ?? 0;
+    }
     try {
       const data = await fetch("/api/muagiai", {
         method: "GET",
@@ -30,7 +29,6 @@
       }
 
       dsMuaGiai = await data.json() satisfies DSMuaGiai[];
-
     } catch (err) {
       console.error(err);
     }
@@ -49,9 +47,13 @@
         bind:value={selectedValue}
         >
         <option value={0} selected>Choose a year</option>
-        {#each dsMuaGiai as muaGiai}
-          <option value={muaGiai.maMG}>{ muaGiai.tenMG }</option>
-        {/each}
+        <!-- {#if dsMuaGiai.length <= 0 && (selectedMuaGiai.maMG ?? null) !== null}
+          <option value={selectedMuaGiai.maMG}>{selectedMuaGiai.tenMG}</option>
+        {:else} -->
+          {#each dsMuaGiai as muaGiai}
+            <option value={muaGiai.maMG}>{ muaGiai.tenMG }</option>
+          {/each}
+        <!-- {/if} -->
       </select>
 
       <div class="flex items-center space-x-4">
