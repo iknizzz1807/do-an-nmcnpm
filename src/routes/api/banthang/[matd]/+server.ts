@@ -3,7 +3,7 @@ import type { RequestHandler } from "./$types";
 import { checkBanThangExists, deleteBanThang, insertBanThang, selectAllBanThang, selectBanThang, updateBanThang } from "$lib/server/db/functions/BanThang";
 import type { BanThang } from "$lib/types";
 
-export const GET: RequestHandler = async ({ params }) => {
+export const GET: RequestHandler = async ({ params, locals }) => {
   const maTD = parseInt(params.matd);
   if (!isNumber(maTD))
     throw new Error("MaTD phải là số");

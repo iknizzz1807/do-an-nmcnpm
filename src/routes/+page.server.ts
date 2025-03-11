@@ -17,7 +17,8 @@ export const load : PageServerLoad = async(event) => {
 	// 	return redirect(302, get2FARedirect(event.locals.user));
 	// }
 	return {
-		user: event.locals.user
+		user: event.locals.user,
+		muaGiai: event.locals.muaGiai
 	};
 }
 export const actions = {

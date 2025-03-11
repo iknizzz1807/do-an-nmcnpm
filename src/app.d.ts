@@ -9,6 +9,7 @@ declare global {
     interface Locals { // She is for the server
       user: User | null;
       session: Session | null;
+      muaGiai: DSMuaGiai | null;
     }
     // interface PageData {}
     // interface PageState {}

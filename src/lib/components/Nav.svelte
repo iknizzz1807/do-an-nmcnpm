@@ -1,22 +1,32 @@
+<script module lang="ts">
+  export let test = $state(0);
+  export const muaGiai = writable<DSMuaGiai | null>(null);
+</script>
+
 <script lang="ts">
   import type { DSMuaGiai } from "$lib/types";
-  import { onMount, untrack } from "svelte";
+  import { onMount, setContext, untrack } from "svelte";
+  import { showErrorToast } from "./Toast";
+  import { writable } from "svelte/store";
+  import { redirect } from "@sveltejs/kit";
+  import { goto, invalidateAll } from "$app/navigation";
 
-  let dsMuaGiai : DSMuaGiai[] = $state([]);
-  let selectedValue = $state(0);
-  let selectedMuaGiai : DSMuaGiai = $state({ tenMG: "" });
+  let { dsMuaGiai, selectedMuaGiai } : { dsMuaGiai: DSMuaGiai[], selectedMuaGiai: DSMuaGiai | null } = $props();
+  let selectedValue = $state(selectedMuaGiai?.maMG ?? 0);
+  // console.log(selectedMuaGiai);
+  let form : HTMLFormElement;
+
   $effect(() => {
     if (selectedValue - 1 >= 0 && selectedValue - 1 < dsMuaGiai.length) {
-      localStorage.setItem('selectedMuaGiai', JSON.stringify(dsMuaGiai[selectedValue - 1]));
+      selectedMuaGiai = dsMuaGiai[selectedValue - 1];
+      muaGiai.set(selectedMuaGiai);
+    }
+    else {
+      muaGiai.set(null);
     }
   })
 
   onMount(async () => {
-    const item = localStorage.getItem('selectedMuaGiai');
-    if (item) {
-      selectedMuaGiai = JSON.parse(item);
-      selectedValue = selectedMuaGiai.maMG ?? 0;
-    }
     try {
       const data = await fetch("/api/muagiai", {
         method: "GET",
@@ -33,6 +43,27 @@
       console.error(err);
     }
   });
+
+  const onSubmit = async (e : Event) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("/muagiai", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(selectedMuaGiai)
+      });
+      if (!response.ok) {
+        selectedValue = 0;
+        throw new Error("Không thể thay đổi mùa giải");
+      }
+      // invalidateAll();
+      window.location.reload();
+    } catch(err) {
+      showErrorToast(String(err));
+    }
+  }
 </script>
 
 <nav class="bg-green-800 text-white shadow-lg mb-6">
@@ -42,19 +73,18 @@
         <span class="text-xl font-bold">Football Championship</span>
       </div>
 
-      <select
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        bind:value={selectedValue}
-        >
-        <option value={0} selected>Choose a year</option>
-        <!-- {#if dsMuaGiai.length <= 0 && (selectedMuaGiai.maMG ?? null) !== null}
-          <option value={selectedMuaGiai.maMG}>{selectedMuaGiai.tenMG}</option>
-        {:else} -->
+      <form bind:this={form} onsubmit={onSubmit}>
+        <select
+          onchange={() => form.requestSubmit()}
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          bind:value={selectedValue}
+          >
+          <option value={0} selected>Choose a year</option>
           {#each dsMuaGiai as muaGiai}
             <option value={muaGiai.maMG}>{ muaGiai.tenMG }</option>
           {/each}
-        <!-- {/if} -->
-      </select>
+        </select>
+      </form>
 
       <div class="flex items-center space-x-4">
         <a

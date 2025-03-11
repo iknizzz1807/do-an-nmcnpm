@@ -17,16 +17,21 @@ export const GET: RequestHandler = async () => {
 
 export const POST: RequestHandler = async ({
   request,
+  locals
 }: {
   request: Request;
+  locals: App.Locals
 }) => {
+  if ((locals.muaGiai ?? null) === null)
+    throw new Error("Không tìm thấy mùa giải");
+
   // Cái post request này để tạo đội bóng, response ok sẽ tiến hành trả về đội bóng mới vừa tạo
   const data = await request.json();
   // console.log(data);
 
   await db
     .insert(DSMuaGiaiTable)
-    .values({ maMG: 1, tenMG: "2025-2026" })
+    .values({ maMG: locals.muaGiai!!.maMG!!, tenMG: locals.muaGiai!!.tenMG })
     .onConflictDoNothing(); // Hard coded type shit =))
 
   // Thêm đội bóng mới vào danh sách các đội bóng

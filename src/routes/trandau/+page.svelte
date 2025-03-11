@@ -4,18 +4,13 @@
   import type { DoiBong, DSMuaGiai, LichThiDau } from "$lib/types";
   import ButtonPrimary from "$lib/components/ButtonPrimary.svelte";
   import { showErrorToast, showOkToast } from "$lib/components/Toast";
+  import { muaGiai } from "$lib/components/Nav.svelte"
+  import { get } from "svelte/store";
   let { data }: PageProps = $props();
 
   let danhSachLTD: LichThiDau[] = $state(data.danhSachLTD);
   const danhSachDoi : DoiBong[] = $state(data.danhSachDoi);
   const danhSachMuaGiai : DSMuaGiai[] = $state(data.danhSachMuaGiai);
-  // for (const lich of danhSachLTD) {
-  //   lich.tenDoiMot = danhSachDoi.find((value) => value.maDoi === lich.doiMot)?.tenDoi;
-  //   lich.tenDoiHai = danhSachDoi.find((value) => value.maDoi === lich.doiHai)?.tenDoi;
-  //   const doiThang = danhSachDoi.find((value) => value.maDoi === lich.doiThang);
-  //   lich.tenDoiThang = (doiThang ?? null) !== null ? doiThang?.tenDoi : "Hòa";
-  //   lich.tenMG = danhSachMuaGiai.find((value) => value.maMG === lich.maMG)?.tenMG;
-  // }
 
   const columns = [
     { header: "Đội Một", accessor: "tenDoiMot" },
@@ -37,7 +32,14 @@
 
 
   const openForm = () => {
-    formState = true;
+    const selectedMuaGiai = get(muaGiai);
+    console.log(selectedMuaGiai);
+    if (selectedMuaGiai ?? null)
+      formState = true;
+    else {
+      showErrorToast("Vui lòng chọn mùa giải trước");
+      resetInput();
+    }
   };
 
   const resetInput = () => {

@@ -34,7 +34,7 @@ export const selectAllLichThiDau = async() => {
     return await db.select().from(LichThiDauTable) satisfies LichThiDau[];
 }
 
-export const selectAllLichThiDauWithName = async() => {
+export const selectAllLichThiDauWithName = async(maMG: number) => {
   const doiMot = alias(DoiBongTable, "doiMot");
   const doiHai = alias(DoiBongTable, "doiHai");
   const doiThang = alias(DoiBongTable, "doiThang");
@@ -50,6 +50,7 @@ export const selectAllLichThiDauWithName = async() => {
       .innerJoin(doiHai, eq(LichThiDauTable.doiHai, doiHai.maDoi)) 
       .innerJoin(doiThang, eq(LichThiDauTable.doiHai, doiHai.maDoi)) 
       .innerJoin(DSMuaGiaiTable, eq(LichThiDauTable.maMG, DSMuaGiaiTable.maMG))
+      .where(eq(LichThiDauTable.maMG, maMG))
       .groupBy(LichThiDauTable.maTD) satisfies LichThiDau[];
 }
 

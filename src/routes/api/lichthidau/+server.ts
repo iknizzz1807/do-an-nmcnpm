@@ -2,8 +2,10 @@ import { deleteLichThiDau, insertLichThiDau, selectAllLichThiDau, selectAllLichT
 import type { LichThiDau } from "$lib/types";
 import type { RequestHandler } from "@sveltejs/kit";
 
-export const GET : RequestHandler = async() => {
-  let dsLTD = await selectAllLichThiDauWithName();
+export const GET : RequestHandler = async({ locals }) => {
+  if ((locals.muaGiai ?? null) === null)
+    throw new Error("Không tìm thấy mùa giải");
+  let dsLTD = await selectAllLichThiDauWithName(locals.muaGiai!!.maMG!!);
   return new Response(JSON.stringify(dsLTD), {
     status: 200,
     headers: {

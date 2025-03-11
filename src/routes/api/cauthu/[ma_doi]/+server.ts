@@ -4,11 +4,13 @@ import { insertCauThu } from "$lib/server/db/functions/CauThu";
 import { insertThamGiaDB } from "$lib/server/db/functions/ThamGiaDB";
 import type { CauThu } from "$lib/types";
 
-export const GET: RequestHandler = async ({ params }) => {
+export const GET: RequestHandler = async ({ params, locals }) => {
   const maDoi = parseInt(params.ma_doi);
   if (!Number.isFinite(maDoi))
     throw new Error("Khong tim thay doi");
-  const danhSachCauThu = await selectCauThuDoiBong(1, maDoi);
+  if ((locals.muaGiai ?? null) === null)
+    throw new Error("Không tìm thấy mùa giải");
+  const danhSachCauThu = await selectCauThuDoiBong(locals.muaGiai!!.maMG!!, maDoi);
   // console.log(danhSachCauThu);
 
   return new Response(JSON.stringify(danhSachCauThu), {
@@ -19,13 +21,15 @@ export const GET: RequestHandler = async ({ params }) => {
   });
 };
 
-export const POST: RequestHandler = async ({ request, params }) => {
+export const POST: RequestHandler = async ({ request, params, locals }) => {
 
   const data: CauThu = await request.json();
   try {
     const maCT = (await insertCauThu(data)).at(0);
     if (maCT === undefined || !Number.isFinite(maCT.id))
       throw new Error("Khong tim thay cau thu");
+    if ((locals.muaGiai ?? null) === null)
+      throw new Error("Không tìm thấy mùa giải");
   
     const maDoi = parseInt(params.ma_doi);
     if (!Number.isFinite(maDoi))
@@ -33,7 +37,7 @@ export const POST: RequestHandler = async ({ request, params }) => {
     await insertThamGiaDB({
       maDoi: maDoi,
       maCT: maCT.id,
-      maMG: 1,
+      maMG: locals.muaGiai!!.maMG!!,
     }); // Hardcoded mã mùa giải là 1
   } catch (error) {
     throw new Error(String(error));
