@@ -5,11 +5,9 @@
 
 <script lang="ts">
   import type { DSMuaGiai } from "$lib/types";
-  import { onMount, setContext, untrack } from "svelte";
+  import { onMount } from "svelte";
   import { showErrorToast } from "./Toast";
   import { writable } from "svelte/store";
-  import { redirect } from "@sveltejs/kit";
-  import { goto, invalidateAll } from "$app/navigation";
 
   let { dsMuaGiai, selectedMuaGiai } : { dsMuaGiai: DSMuaGiai[], selectedMuaGiai: DSMuaGiai | null } = $props();
   let selectedValue = $state(selectedMuaGiai?.maMG ?? 0);

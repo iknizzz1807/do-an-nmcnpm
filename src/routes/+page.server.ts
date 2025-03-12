@@ -4,9 +4,9 @@ import { deleteSessionTokenCookie, invalidateSession } from "$lib/server/db/func
 
 
 export const load : PageServerLoad = async(event) => {
-	// if (event.locals.session === null || event.locals.user === null) {
-	// 	return redirect(302, "/login");
-	// }
+	if (event.locals.session === null || event.locals.user === null) {
+		return redirect(302, "/login");
+	}
 	// if (!event.locals.user.emailVerified) {
 	// 	return redirect(302, "/verify-email");
 	// }

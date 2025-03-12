@@ -1,10 +1,10 @@
 import type { TypesAreEqual } from "$lib/server/utils";
 import type { Session, User } from "$lib/types";
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { integer, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const UserTable = sqliteTable("User", {
 	id: integer().primaryKey({ autoIncrement: true }),
-	email: text().notNull(),
+	email: text().notNull().unique(),
 	username: text().notNull(),
 	passwordHash: text().notNull()
 	// emailVerifed: integer().$default(() => 0),

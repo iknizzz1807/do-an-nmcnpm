@@ -3,6 +3,7 @@ import type { User } from "$lib/types";
 import { eq } from "drizzle-orm";
 import { db } from "../client";
 import { UserTable, type UserSelect } from "../schema/User";
+import { error } from "@sveltejs/kit";
 
 export const verifyUsernameInput = (userName: string) : boolean => {
   return userName.length > 3 && userName.length < 32 && userName.trim() == userName;
@@ -26,7 +27,7 @@ export const createUser = async (email: string, username: string, password: stri
   }).returning({ id : UserTable.id });
   const userId = ids.at(0) ?? null;
   if (userId === null)
-    throw new Error("Error while creating User");
+    throw new Error("Không thể tạo user");
   return {
     id: userId.id,
     username: username,
@@ -40,12 +41,12 @@ export const updateUserPassword = async (userId: number, password: string) : Pro
 }
 
 export const selectUserPasswordHash = async (userId: number) => {
-  const user = (await db.select({ passwordHash: UserTable.passwordHash }).from(UserTable).where(eq(UserTable.id, userId))).at(0) ?? null;
+  const user = (await db.select({ passwordHash: UserTable.passwordHash }).from(UserTable).where(eq(UserTable.id, userId)).limit(1)).at(0) ?? null;
   if (user === null)
     throw new Error("Invalid userId");
   return user.passwordHash;
 }
 
 export const selectUserFromEmail = async (email : string) => {
-  return (await db.select().from(UserTable).where(eq(UserTable.email, email))).at(0) ?? null;
+  return (await db.select().from(UserTable).where(eq(UserTable.email, email)).limit(1)).at(0) ?? null;
 }
