@@ -17,7 +17,8 @@
 		"migrate:db": "tsx src/lib/server/db/migrate.ts",
 		"studio:db": "drizzle-kit studio --port 300 --verbose --config=src/lib/server/db/drizzle.config.ts",
 		"seed:db": "npm run push:db && tsx src/lib/server/db/seed.ts",
-		"sandbox:db": "tsx src/lib/server/db/sandbox.ts"
+		"sandbox:db": "tsx src/lib/server/db/sandbox.ts",
+		"setAdminPassword": "tsx src/lib/server/setAdminPassword.ts"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^4.0.0",
