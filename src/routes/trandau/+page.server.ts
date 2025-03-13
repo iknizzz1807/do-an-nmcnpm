@@ -10,6 +10,9 @@ export const load = (async ({ fetch }) => {
         "Content-Type": "application/json"
       }
     });
+    if (!response.ok) {
+      throw new Error("Failed to fetch data");
+    }
 
     const responseDB = await fetch("/api/doibong", {
       method: "GET",
@@ -17,16 +20,21 @@ export const load = (async ({ fetch }) => {
         "Content-Type": "application/json"
       }
     });
+    if (!responseDB.ok) {
+      throw new Error("Failed to fetch data");
+    }
+
     const responseMG = await fetch("/api/muagiai", {
       method: "GET",
       headers: {
         "Content-Type": "application/json"
       }
     });
-    if (!response.ok) {
+
+    if (!responseMG.ok) {
       throw new Error("Failed to fetch data");
     }
-
+    
     const danhSachLTD: LichThiDau[] = await response.json();
     const danhSachDoi: DoiBong[] = await responseDB.json();
     const danhSachMuaGiai: DSMuaGiai[] = await responseMG.json();

@@ -65,11 +65,14 @@ export type ThamGiaDB = {
 }
 
 export type BanThang = {
-    maTD: number,
-    maCT: number,
-    maDoi: number,
-    thoiDiem: number,
-    loaiBanThang: string,
+    maTD: number;
+    maCT: number;
+    maDoi: number;
+    thoiDiem: number;
+    loaiBanThang: string;
+    // Data display
+    tenCT?: string | undefined;
+    tenDoi?: string | undefined;
 }
 
 export type ThePhat = {
@@ -78,6 +81,9 @@ export type ThePhat = {
     maCT: number;
     thoiDiem: number;
     loaiThe: string;
+    // Data display
+    tenCT?: string | undefined;
+    tenDoi?: string | undefined;
 }
 
 export type LichThiDau = {
@@ -87,6 +93,7 @@ export type LichThiDau = {
     maMG: number;
     doiThang?: number | null | undefined;
     maTD?: number | undefined;
+    // Data display
     ngayGio?: string | undefined;
     tenDoiMot?: string | undefined;
     tenDoiHai?: string | undefined;

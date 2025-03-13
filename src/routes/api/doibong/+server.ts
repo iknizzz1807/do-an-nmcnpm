@@ -5,7 +5,7 @@ import { DSMuaGiaiTable } from "$lib/server/db/schema/DSMuaGiai";
 import { deleteDoiBong, insertDoiBong, selectAllDoiBong } from "$lib/server/db/functions/DoiBong";
 import type { DoiBong } from "$lib/types";
 
-export const GET: RequestHandler = async () => {
+export const GET: RequestHandler = async ({ locals }) => {
   let danhSachDoiBong = await selectAllDoiBong();
   return new Response(JSON.stringify(danhSachDoiBong), {
     status: 200,

@@ -60,3 +60,11 @@ export const selectDoiBongTenTrung = async (tenDoi: string) => {
   //     .where(eq(DoiBongTable.tenDoi, tenDoi))
   // ).at(0);
 };
+export const selectDoiBongTenDoi = async (maDoi: number) => {
+  return (await db
+    .select({ tenDoi: DoiBongTable.tenDoi })
+    .from(DoiBongTable)
+    .where(eq(DoiBongTable.maDoi, maDoi))
+    .limit(1)).at(0) satisfies { tenDoi: string } | undefined;
+};
+

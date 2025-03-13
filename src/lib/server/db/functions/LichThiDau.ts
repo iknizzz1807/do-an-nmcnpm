@@ -34,6 +34,13 @@ export const selectAllLichThiDau = async() => {
     return await db.select().from(LichThiDauTable) satisfies LichThiDau[];
 }
 
+export const selectLichThiDauMaTD = async(maTD: number) => {
+  return (await db.select()
+    .from(LichThiDauTable)
+    .where(eq(LichThiDauTable.maTD, maTD)).limit(1))
+    .at(0) satisfies LichThiDau | undefined;
+}
+
 export const selectAllLichThiDauWithName = async(maMG: number) => {
   const doiMot = alias(DoiBongTable, "doiMot");
   const doiHai = alias(DoiBongTable, "doiHai");
