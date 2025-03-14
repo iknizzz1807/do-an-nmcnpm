@@ -18,7 +18,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 				}
 			})
 		}
-		else if (event.url.pathname !== "/login") {
+		else if (event.url.pathname !== "/login" && event.url.pathname !== "/signup") {
 			return new Response(null, {
 				status: 302,
 				headers: { location: '/login' }
