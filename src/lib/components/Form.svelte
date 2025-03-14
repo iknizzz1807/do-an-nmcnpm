@@ -14,11 +14,13 @@
 </script>
 
 <script lang="ts">
+  import { onMount } from "svelte";
+
   
   type Props = {
     fields: FormField[],
     formState : Boolean,
-    submitForm: (e: Event) => void,
+    submitForm: (e: Event, data: any) => void,
     // Return empty to open form, another map to open edit form, null to ignore
     onOpenForm?: (() => FormInputMap | null),
     onCloseForm?: (() => void)
@@ -26,20 +28,22 @@
   let { formState = $bindable(), submitForm, onOpenForm, fields } : Props = $props();
   let inputValues : FormInputMap = $state(new Map());
 
-  for (const field of fields) {
-    switch(field.valueType) {
-      case "string":
-        inputValues.set(field.propertyName, "");
-        break;
-      case "number":
-        inputValues.set(field.propertyName, 0);
-        break;
-      case "Date":
-        inputValues.set(field.propertyName, new Date());  
-      break;
+  onMount(() => {
+    for (const field of fields) {
+      switch(field.valueType) {
+        case "string":
+          inputValues.set(field.propertyName, "");
+          break;
+        case "number":
+          inputValues.set(field.propertyName, 0);
+          break;
+        case "Date":
+          inputValues.set(field.propertyName, new Date());  
+          break;
+      }
     }
-  }
-
+  })
+          
   $effect(() => {
     if (formState)
       openForm();
@@ -75,7 +79,7 @@
   >
     <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
       <h2 class="text-xl font-bold mb-4">Tạo đội bóng mới</h2>
-      <form onsubmit={submitForm}>
+      <form onsubmit={ (e: Event ) => submitForm(e, Object.fromEntries(inputValues)) }>
         {#each fields as field}
           <div class="mb-4">
             {#if field.type === "input"}
@@ -156,7 +160,7 @@
           <button
             type="submit"
             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onclick={submitForm}
+            onclick={ (e: Event ) => submitForm(e, Object.fromEntries(inputValues)) }
           >
             Tạo
           </button>

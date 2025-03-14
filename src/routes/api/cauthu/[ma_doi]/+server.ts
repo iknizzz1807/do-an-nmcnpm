@@ -25,23 +25,29 @@ export const POST: RequestHandler = async ({ request, params, locals }) => {
 
   const data: CauThu = await request.json();
   try {
+    if ((data.maCT ?? null) !== null) 
+      throw new Error("Cầu thủ đã tồn tại");
+
     const maCT = (await insertCauThu(data)).at(0);
+
     if (maCT === undefined || !Number.isFinite(maCT.id))
       throw new Error("Khong tim thay cau thu");
+
     if ((locals.muaGiai ?? null) === null)
       throw new Error("Không tìm thấy mùa giải");
   
     const maDoi = parseInt(params.ma_doi);
+
     if (!Number.isFinite(maDoi))
       throw new Error("Khong tim thay doi");
+
     await insertThamGiaDB({
       maDoi: maDoi,
       maCT: maCT.id,
       maMG: locals.muaGiai!!.maMG!!,
-    }); // Hardcoded mã mùa giải là 1
+    });
   } catch (error) {
     throw new Error(String(error));
-    console.error(error);
   }
 
   return new Response(JSON.stringify(data), {

@@ -60,7 +60,8 @@ export const DELETE: RequestHandler = async ({
   const data = await request.json();
   let result : number | null = null;
 
-  if ((data.maDoi ?? null) === null) {
+  console.log(data.maDoi);
+  if ((data.maDoi) === null) {
     throw new Error("Không có mã đội sao xóa? bruh");
   }
   else {

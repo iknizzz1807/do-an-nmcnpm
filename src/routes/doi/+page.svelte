@@ -4,6 +4,7 @@
   import type { PageProps } from "./$types";
   import { showErrorToast, showOkToast } from "$lib/components/Toast";
   import type { DoiBong } from "$lib/types";
+  import Form, { type FormField } from "$lib/components/Form.svelte";
   let { data }: PageProps = $props();
 
   let danhSachDoiBong: DoiBong[] = $state(data.danhSachDoiBong);
@@ -14,22 +15,27 @@
     { header: "Sân nhà", accessor: "sanNha" },
   ];
 
-  let inputTenDoi: string = $state("");
-  let inputSanNha: string = $state("");
+  const formFields : FormField[] = [
+    { label: "Tên đội", propertyName: "tenDoi", type: "input", valueType: "string" },
+    { label: "Sân nhà", propertyName: "sanNha", type: "input", valueType: "string" }
+  ]
   let selectedIndex : number = $state(0);
   let maDoi : number = $state(0);
 
   let formState: boolean = $state(false);
+  let editData = $state(new Map());
 
-  const openForm = () => {
-    formState = true;
-  };
+  const onOpenForm = () => {
+    if (selectedIndex == -1) 
+      return null;
+    if (editData.size > 0)
+      return editData;
+    return new Map();
+  }
 
-  const closeForm = () => {
-    formState = false;
-    inputSanNha = "";
-    inputTenDoi = "";
-  };
+  const onCloseForm = () => {
+    editData.clear();
+  }
 
   const onDeleteClick = async (data : any, index: number) => {
     if (data satisfies DoiBong) {
@@ -42,21 +48,20 @@
     }
   }
 
-  const submitForm = async (e: Event) => {
+  const submitForm = async (e: Event, data : DoiBong) => {
     e.preventDefault();
-    if (inputTenDoi.trim() === "" || inputSanNha.trim() === "") return;
+    if (data.tenDoi.trim() === "" || data.sanNha.trim() === "") return;
 
     if (
       danhSachDoiBong.some(
         (doiBong) =>
           doiBong.tenDoi.trim().toLowerCase() ===
-          inputTenDoi.trim().toLowerCase()
+          data.tenDoi.trim().toLowerCase()
       )
     ) {
       showErrorToast("Tên đội bóng đã tồn tại");
       return;
     }
-    const data = { tenDoi: inputTenDoi, sanNha: inputSanNha };
 
     try {
       const response = await fetch("/api/doibong", {
@@ -77,7 +82,7 @@
       danhSachDoiBong.push(result);
 
       // Đóng form và hiện toast thành công sau khi thành công
-      closeForm();
+      formState = false;
       showOkToast("Tạo đội bóng mới thành công");
     } catch (error) {
       console.error("Error:", error);
@@ -103,7 +108,7 @@
       danhSachDoiBong.splice(selectedIndex, 1);
 
       // Đóng form và hiện toast thành công sau khi thành công
-      closeForm();
+      formState = false;
       showOkToast("Cập nhật cầu thủ mới thành công");
     } catch (error) {
       console.error("Error:", error);
@@ -126,63 +131,13 @@
   onDeleteClick={onDeleteClick}
 />
 <div class="flex justify-center">
-  <ButtonPrimary text="Tạo đội mới" onclick={openForm} />
+  <ButtonPrimary text="Tạo đội mới" onclick={() => formState = true} />
 </div>
 
-{#if formState}
-  <div
-    class="fixed inset-0 flex items-center justify-center backdrop-blur-[1px] bg-white/30"
-  >
-    <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
-      <h2 class="text-xl font-bold mb-4">Tạo đội bóng mới</h2>
-      <form onsubmit={submitForm}>
-        <div class="mb-4">
-          <label
-            class="block text-gray-700 text-sm font-bold mb-2"
-            for="tenDoi"
-          >
-            Tên đội
-          </label>
-          <input
-            id="tenDoi"
-            type="text"
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            required
-            bind:value={inputTenDoi}
-          />
-        </div>
-        <div class="mb-4">
-          <label
-            class="block text-gray-700 text-sm font-bold mb-2"
-            for="sanNha"
-          >
-            Sân nhà
-          </label>
-          <input
-            id="sanNha"
-            type="text"
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            required
-            bind:value={inputSanNha}
-          />
-        </div>
-        <div class="flex justify-end">
-          <button
-            type="button"
-            class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mr-2"
-            onclick={closeForm}
-          >
-            Hủy
-          </button>
-          <button
-            type="submit"
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onclick={submitForm}
-          >
-            Tạo
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-{/if}
+<Form 
+  bind:formState={formState}
+  fields={formFields}
+  submitForm={submitForm}
+  onCloseForm={onCloseForm}
+  onOpenForm={onOpenForm}
+/>

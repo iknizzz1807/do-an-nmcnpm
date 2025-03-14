@@ -9,6 +9,7 @@
   import { type FieldOption, type FormField, type FormInputMap } from "$lib/components/Form.svelte";
   import Form from "$lib/components/Form.svelte";
   import { validate } from "uuid";
+  import { getViewSelectedFields } from "drizzle-orm";
   let { data }: PageProps = $props();
 
   let danhSachLTD: LichThiDau[] = $state(data.danhSachLTD);
@@ -48,23 +49,14 @@
     { header: "Ngày giờ", accessor: "ngayGio" },
   ];
 
-  let maTD: number = $state(0);
-  let doiMotInput: number = $state(0);
-  let doiHaiInput: number = $state(0);
-  let vongThiDauInput: number = $state(0);
-  let maMGInput: number = $state(0);
-  let ngayGioInput: string = $state(new Date().toISOString().split("T")[0]);
-
   let selectedIndex : number = $state(0);
 
   let formState : boolean = $state(false);
   let editData = $state(new Map());
 
   const onOpenForm = () => {
-    if (selectedIndex == -1) {
-
+    if (selectedIndex == -1) 
       return null;
-    }
     if (editData.size > 0)
       return editData;
     return new Map();
@@ -84,7 +76,6 @@
       editData.set("doiThang", data.doiThang);
       editData.set("maMG", data.maMG);
       editData.set("ngayGio", data.ngayGio);
-      console.log(editData);
       selectedIndex = index;
       formState = true;
     }
@@ -94,22 +85,17 @@
     }
   }
 
-  const submitForm = async (e: Event) => {
+  const submitForm = async (e: Event, data: any) => {
     e.preventDefault();
-    if (doiMotInput === 0 || doiHaiInput === 0 ||
-        vongThiDauInput === 0 || maMGInput === 0 ||
-        ngayGioInput.trim() === ""
-    ) return;
-    const data : LichThiDau = { 
-      maTD: maTD === 0 ? undefined : maTD,
-      doiMot: doiMotInput, 
-      doiHai: doiHaiInput,
-      vongThiDau: vongThiDauInput,
-      maMG: maMGInput,
-      ngayGio: ngayGioInput,
-    };
-    console.log(data);
+    if (!(data satisfies LichThiDau)) {
+      console.error("Không nhập đúng dữ liệu");
+      return;
+    }
 
+    if (data.doiMot === 0 || data.doiHai === 0 ||
+        data.vongThiDau === 0 || data.maMG === 0
+    ) return;
+    
     try {
       const response = await fetch("/api/lichthidau", {
         method: "POST",
@@ -126,9 +112,19 @@
       const result = await response.json();
 
       // Cập nhật danh sách đội bóng nếu cần thiết
-      danhSachLTD.push(result);
+
+      result.tenDoiMot = danhSachDoi.find((value) => value.maDoi == result.doiMot)?.tenDoi ?? "";
+      result.tenDoiHai = danhSachDoi.find((value) => value.maDoi == result.doiHai)?.tenDoi ?? "";
+      result.tenDoiThang = danhSachDoi.find((value) => value.maDoi == result.doiThang)?.tenDoi ?? "";
+      result.tenMG = danhSachMuaGiai.find((value) => value.maMG == result.maMG)?.tenMG ?? "";
+      
+      if (selectedIndex === -1)
+        danhSachLTD.push(result);
+      else
+        danhSachLTD[selectedIndex] = result;
 
       // Đóng form và hiện toast thành công sau khi thành công
+      formState = false;
       showOkToast("Tạo đội bóng mới thành công");
     } catch (error) {
       console.error("Error:", error);

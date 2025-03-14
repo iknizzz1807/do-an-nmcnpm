@@ -23,7 +23,7 @@ export const updateLichThiDau = async(lichThiDau: LichThiDau) => {
     maMG: lichThiDau.maMG,
     doiThang: lichThiDau.doiThang,
     ngayGio: lichThiDau.ngayGio
-  }).where(eq(LichThiDauTable.maMG, lichThiDau.maTD!!))
+  }).where(eq(LichThiDauTable.maTD, lichThiDau.maTD!!))
 }
 
 export const deleteLichThiDau = async (maTD: number) => {

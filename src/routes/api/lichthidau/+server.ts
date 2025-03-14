@@ -14,23 +14,28 @@ export const GET : RequestHandler = async({ locals }) => {
   });
 }
 
-export const POST : RequestHandler = async ({ request } : { request: Request }) => {
+export const POST : RequestHandler = async ({ request, locals } : { request: Request, locals: App.Locals }) => {
   const data = await request.json();
-  console.log(data);
+  if ((locals.muaGiai ?? null) === null) 
+    throw new Error("Mùa giải là null");
   let lichThiDau : LichThiDau = {
     doiMot: parseInt(data.doiMot),
     doiHai: parseInt(data.doiHai),
     vongThiDau: parseInt(data.vongThiDau),
-    maMG: parseInt(data.maMG),
+    doiThang: parseInt(data.doiThang),
+    maMG: locals.muaGiai!!.maMG!!,
+    maTD: data.maTD,
     ngayGio: new Date(data.ngayGio).toJSON(),
   };
-  if ((data.maTD ?? null) === null) {
+
+
+  if ((lichThiDau.maTD ?? null) === null) {
     await insertLichThiDau(lichThiDau).catch((err) => {
       throw err;
     });
   }
   else {
-    lichThiDau.maTD = parseInt(data.maTD!!);
+    console.log(lichThiDau.maTD);
     await updateLichThiDau(lichThiDau).catch((err) => {
       throw err;
     });
