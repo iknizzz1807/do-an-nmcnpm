@@ -141,9 +141,8 @@
   title="Danh sách các trận đấu"
   {columns}
   data={danhSachLTD}
-  redirectParam={"tenCT"}
-  tableType="cauThu"
-  onItemClick={onItemClick}
+  redirectParam={"maTD"}
+  tableType="trandau"
 />
 
 <div class="flex justify-center">
