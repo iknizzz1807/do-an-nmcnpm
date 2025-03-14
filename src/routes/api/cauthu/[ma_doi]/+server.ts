@@ -22,7 +22,6 @@ export const GET: RequestHandler = async ({ params, locals }) => {
 };
 
 export const POST: RequestHandler = async ({ request, params, locals }) => {
-
   const data: CauThu = await request.json();
   try {
     if ((data.maCT ?? null) !== null) 

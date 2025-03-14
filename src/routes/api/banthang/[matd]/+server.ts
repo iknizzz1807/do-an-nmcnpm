@@ -17,7 +17,7 @@ export const GET: RequestHandler = async ({ params, locals }) => {
   });
 };
 
-export const POST : RequestHandler = async({ request } : { request: Request }) => {
+export const POST : RequestHandler = async({ request, locals } : { request: Request, locals: App.Locals }) => {
   const data = await request.json();
   console.log(data);
   if (!(data satisfies BanThang))
@@ -49,7 +49,7 @@ export const POST : RequestHandler = async({ request } : { request: Request }) =
   })
 }
 
-export const DELETE : RequestHandler = async({ request } : { request: Request }) => {
+export const DELETE : RequestHandler = async({ request, locals } : { request: Request, locals: App.Locals }) => {
   const data = await request.json();
   if (!(data satisfies BanThang)) {
     let banThang : BanThang = {

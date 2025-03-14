@@ -4,6 +4,7 @@ import { DoiBongTable, type InsertDoiBongParams } from "$lib/server/db/schema/Do
 import { DSMuaGiaiTable } from "$lib/server/db/schema/DSMuaGiai";
 import { deleteDoiBong, insertDoiBong, selectAllDoiBong } from "$lib/server/db/functions/DoiBong";
 import type { DoiBong } from "$lib/types";
+import { fail } from "@sveltejs/kit";
 
 export const GET: RequestHandler = async ({ locals }) => {
   let danhSachDoiBong = await selectAllDoiBong();

@@ -3,7 +3,7 @@ import type { RequestHandler } from "./$types";
 import { checkThePhatExists, deleteThePhat, insertThePhat, selectThePhat, updateThePhat } from "$lib/server/db/functions/ThePhat";
 import type { ThePhat } from "$lib/types";
 
-export const GET: RequestHandler = async ({ params }) => {
+export const GET: RequestHandler = async ({ params, locals }) => {
   const maTD = parseInt(params.matd);
   if (!isNumber(maTD))
     throw new Error("MaTD phải là số");
@@ -17,7 +17,7 @@ export const GET: RequestHandler = async ({ params }) => {
   });
 };
 
-export const POST : RequestHandler = async({ request } : { request: Request }) => {
+export const POST : RequestHandler = async({ request, locals } : { request: Request, locals: App.Locals }) => {
   const data = await request.json();
   console.log(data);
   if (!(data satisfies ThePhat))

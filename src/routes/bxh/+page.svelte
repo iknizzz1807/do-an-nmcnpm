@@ -35,7 +35,7 @@
     </select>
   </div> -->
   <LeagueTable
-    title="Bảng xếp hạng ngày 24/02/2025"
+    title={"Bảng xếp hạng ngày " + new Date().toDateString()}
     {columns}
     data={bangXepHangNgay}
     redirectParam={"bangXepHang/ngay"}

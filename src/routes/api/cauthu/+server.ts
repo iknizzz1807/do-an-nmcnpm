@@ -2,9 +2,9 @@ import type { RequestHandler } from "./$types";
 import { deleteCauThu, insertCauThu, selectAllCauThu, updateCauThu } from "$lib/server/db/functions/CauThu";
 import { insertThamGiaDB } from "$lib/server/db/functions/ThamGiaDB";
 import type { CauThu } from "$lib/types";
-import { error } from "@sveltejs/kit";
+import { error, fail, redirect } from "@sveltejs/kit";
 
-export const GET: RequestHandler = async () => {
+export const GET: RequestHandler = async ({locals}) => {
   const danhSachCauThu = await selectAllCauThu();
   return new Response(JSON.stringify(danhSachCauThu), {
     status: 200,
@@ -16,8 +16,10 @@ export const GET: RequestHandler = async () => {
 
 export const POST: RequestHandler = async ({
   request,
+  locals
 }: {
   request: Request;
+  locals: App.Locals
 }) => {
   // Phần body của post request được gửi tới có bao gồm:
   // - danhSachCauThu là danh sách của các cầu thủ

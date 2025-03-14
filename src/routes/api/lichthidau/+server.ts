@@ -1,6 +1,6 @@
 import { deleteLichThiDau, insertLichThiDau, selectAllLichThiDau, selectAllLichThiDauWithName, updateLichThiDau } from "$lib/server/db/functions/LichThiDau";
 import type { LichThiDau } from "$lib/types";
-import type { RequestHandler } from "@sveltejs/kit";
+import { fail, type RequestHandler } from "@sveltejs/kit";
 
 export const GET : RequestHandler = async({ locals }) => {
   if ((locals.muaGiai ?? null) === null)
