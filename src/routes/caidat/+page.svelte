@@ -1,169 +1,65 @@
 <script lang="ts">
+  import SettingNumberInput from "./SettingNumberInput.svelte";
+  import type { Settings } from "$lib/types";
+  import type { PageProps } from "./$types";
+  import SettingSection from "./SettingSection.svelte";
+
+  const { data } : PageProps = $props();
+  let setting : Settings = $state(data.setting);
+  console.log(setting);
 </script>
 
 <main class="max-w-7xl mx-auto py-6 px-4">
   <h1 class="text-3xl font-bold text-gray-800 mb-6">System Settings</h1>
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+    <SettingSection sectionName="Player Settings">
+      <SettingNumberInput min={16} max={40} bind:bindValue={setting.tuoiMin} label="Minimum Player Age" unit="years"/>
+      <SettingNumberInput min={16} max={60} bind:bindValue={setting.tuoiMax} label="Maximum Player Age" unit="years"/>
+    </SettingSection>
+      
+    <SettingSection sectionName="Team Settings">
+      <SettingNumberInput min={11} max={30} 
+      bind:bindValue={setting.soCauThuMin} label="Minimum Players per Team" unit=""/>
+      <SettingNumberInput min={15} max={40} 
+        bind:bindValue={setting.soCauThuMax} label="Maximum Players per Team" unit=""/>
+      <SettingNumberInput min={0} max={20} 
+        bind:bindValue={setting.soCauThuNuocNgoaiToiDa} label="Maximum Foreign Players per Team" unit=""/>
+    </SettingSection>
 
-  <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-    <div class="mb-8">
-      <h2 class="text-2xl font-bold text-gray-800 mb-4">Player Settings</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2"
-            >Minimum Player Age</label
-          >
-          <div class="flex items-center">
-            <input
-              type="number"
-              value="16"
-              min="5"
-              max="40"
-              class="block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
-            />
-            <span class="ml-2 text-gray-500">years</span>
-          </div>
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2"
-            >Maximum Player Age</label
-          >
-          <div class="flex items-center">
-            <input
-              type="number"
-              value="40"
-              min="16"
-              max="60"
-              class="block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
-            />
-            <span class="ml-2 text-gray-500">years</span>
-          </div>
-        </div>
+    
+    <SettingSection sectionName="Match Settings">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2"
+          >Number of Goal Types</label
+        >
+        <select
+          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+        >
+          <option value="1">1 (Standard)</option>
+          <option value="2">2 (Standard + Penalty)</option>
+          <option value="3">3 (Standard + Penalty + Own Goal)</option>
+          <option value="4">
+            4 (Standard + Penalty + Own Goal + Free Kick)
+          </option>
+        </select>
       </div>
-    </div>
+      
+      <SettingNumberInput min={45} max={120} 
+        bind:bindValue={setting.thoiDiemGhiBanToiDa} label="Maximum Time for Goal Scoring" unit="minutes"/>
+    </SettingSection>
 
-    <div class="mb-8">
-      <h2 class="text-2xl font-bold text-gray-800 mb-4">Team Settings</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2"
-            >Minimum Players per Team</label
-          >
-          <input
-            type="number"
-            value="15"
-            min="11"
-            max="30"
-            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
-          />
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2"
-            >Maximum Players per Team</label
-          >
-          <input
-            type="number"
-            value="25"
-            min="15"
-            max="40"
-            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
-          />
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2"
-            >Maximum Foreign Players per Team</label
-          >
-          <input
-            type="number"
-            value="5"
-            min="0"
-            max="20"
-            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
-          />
-        </div>
-      </div>
-    </div>
-
-    <div class="mb-8">
-      <h2 class="text-2xl font-bold text-gray-800 mb-4">Match Settings</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2"
-            >Number of Goal Types</label
-          >
-          <select
-            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
-          >
-            <option value="1">1 (Standard)</option>
-            <option value="2">2 (Standard + Penalty)</option>
-            <option value="3">3 (Standard + Penalty + Own Goal)</option>
-            <option value="4">
-              4 (Standard + Penalty + Own Goal + Free Kick)
-            </option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2"
-            >Maximum Time for Goal Scoring</label
-          >
-          <div class="flex items-center">
-            <input
-              type="number"
-              value="90"
-              min="45"
-              max="120"
-              class="block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
-            />
-            <span class="ml-2 text-gray-500">minutes</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="mb-8">
-      <h2 class="text-2xl font-bold text-gray-800 mb-4">Point System</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2"
-            >Points for Win</label
-          >
-          <input
-            type="number"
-            value="3"
-            min="1"
-            max="10"
-            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
-          />
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2"
-            >Points for Draw</label
-          >
-          <input
-            type="number"
-            value="1"
-            min="0"
-            max="5"
-            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
-          />
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2"
-            >Points for Loss</label
-          >
-          <input
-            type="number"
-            value="0"
-            min="0"
-            max="2"
-            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
-          />
-        </div>
-      </div>
+    <SettingSection sectionName="Point System">
+      <SettingNumberInput min={1} max={10} 
+        bind:bindValue={setting.diemThang} label="Points for Win" unit=""/>
+      <SettingNumberInput min={0} max={5} 
+        bind:bindValue={setting.diemHoa} label="Points for Draw" unit=""/>
+      <SettingNumberInput min={0} max={2} 
+        bind:bindValue={setting.diemThua} label="Points for Loss" unit=""/>
       <p class="text-sm text-gray-500 mt-2">
         Note: Points for a win must be greater than points for a draw, which
         must be greater than points for a loss.
       </p>
-    </div>
+    </SettingSection>
 
     <div class="mb-8">
       <h2 class="text-2xl font-bold text-gray-800 mb-4">Ranking Priority</h2>

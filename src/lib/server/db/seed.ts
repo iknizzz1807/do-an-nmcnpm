@@ -6,6 +6,9 @@ import { DSMuaGiaiTable } from "./schema/DSMuaGiai";
 import { LichThiDauTable } from "./schema/LichThiDau";
 import { generateBanThang, generateLichThiDau, generateTGDB, generateThePhat } from "./seedFunctions";
 import { randIntBetween } from "../utils";
+import { createDefaultSetting } from "./schema/UserSettings";
+
+await createDefaultSetting();
 
 await seed(db, {
   DSMuaGiaiTable,
