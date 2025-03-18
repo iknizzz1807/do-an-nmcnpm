@@ -45,7 +45,7 @@
   const onSubmit = async (e : Event) => {
     e.preventDefault();
     try {
-      const response = await fetch("/muagiai", {
+      const response = await fetch("api/selectmuagiai", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -66,7 +66,7 @@
     resetInput();
   };
 
-  const onItemClick = (data: any, index: number) => {
+  const onEditClick = (data: any, index: number) => {
     if (data satisfies CauThu) {
       selectedIndex = index;
       maCT = data.maCT;
@@ -230,9 +230,10 @@
   data={danhSachCauThu}
   redirectParam={""}
   tableType="cauThu"
-  onItemClick={onItemClick}
   deleteButton={true}
   onDeleteClick={onDeleteClick}
+  editButton={true}
+  onEditClick={onEditClick}
 />
 
 

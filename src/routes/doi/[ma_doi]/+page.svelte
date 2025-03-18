@@ -46,7 +46,7 @@
     editData.clear();
   }
 
-  const onItemClick = (data: any, index: number) => {
+  const onEditClick = (data: any, index: number) => {
     if (data satisfies CauThu) {
       editData.clear();
       editData.set("maCT", data.maCT);
@@ -68,8 +68,13 @@
     e.preventDefault();
     if (updateIndex === -1)
       addPlayer(data);
-  else
+    else
       updatePlayer(data);
+  }
+  
+  const onDeleteClick = async (e: Event) => {
+    e.preventDefault();
+
   }
 
 
@@ -141,6 +146,7 @@
       showErrorToast(String(error));
     }
   };
+
 </script>
 
 <Table
@@ -149,7 +155,8 @@
   data={danhSachCauThu}
   redirectParam={""}
   tableType={"cauthu"}
-  {onItemClick}
+  editButton={true}
+  onEditClick={onEditClick}
 />
 
 <div class="flex justify-center">

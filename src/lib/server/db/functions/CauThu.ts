@@ -6,6 +6,7 @@ import { DoiBongTable } from "../schema/DoiBong";
 import { BanThangTable } from "../schema/BanThang";
 import { insertThamGiaDB } from "./ThamGiaDB";
 import type { CauThu, KQTraCuuCauThu } from "$lib/types";
+import { ThePhatTable } from "../schema/ThePhat";
 
 export const insertCauThu = async (...cauThu: CauThu[]) => {
   let returning = await db.insert(CauThuTable).values(cauThu).returning({ id: CauThuTable.maCT });
@@ -28,6 +29,7 @@ export const updateCauThu = async(cauThu: CauThu) => {
 
 export const deleteCauThu = async(maCT: number) => {
   await db.delete(BanThangTable).where(eq(BanThangTable.maCT, maCT));
+  await db.delete(ThePhatTable).where(eq(ThePhatTable.maCT, maCT));
   await db.delete(ThamGiaDBTable).where(eq(ThamGiaDBTable.maCT, maCT));
   await db.delete(CauThuTable).where(eq(CauThuTable.maCT, maCT));
 }

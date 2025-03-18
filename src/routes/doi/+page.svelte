@@ -26,8 +26,6 @@
   let editData = $state(new Map());
 
   const onOpenForm = () => {
-    if (selectedIndex == -1) 
-      return null;
     if (editData.size > 0)
       return editData;
     return new Map();
@@ -35,6 +33,21 @@
 
   const onCloseForm = () => {
     editData.clear();
+  }
+
+  const onEditClick =  (data: DoiBong, index: number) => {
+    if (data satisfies DoiBong) {
+      editData.clear();
+      editData.set("maDoi", data.maDoi);
+      editData.set("tenDoi", data.tenDoi);
+      editData.set("sanNha", data.sanNha);
+      selectedIndex = index;
+      formState = true;
+    }
+    else {
+      console.error("Data không thỏa mãn LichThiDau");
+      selectedIndex = -1;
+    }
   }
 
   const onDeleteClick = async (data : any, index: number) => {
@@ -48,7 +61,52 @@
     }
   }
 
-  const submitForm = async (e: Event, data : DoiBong) => {
+  const addDoiBong = async (e: Event, data : DoiBong) => {
+    e.preventDefault();
+    if (data.tenDoi.trim() === "" || data.sanNha.trim() === "") return;
+
+    if (
+      danhSachDoiBong.some(
+        (doiBong) =>
+          doiBong.tenDoi.trim().toLowerCase() ===
+          data.tenDoi.trim().toLowerCase()
+      )
+    ) {
+      showErrorToast("Tên đội bóng đã tồn tại");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/doibong", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error("Lỗi tạo đội bóng");
+      }
+
+      const result = await response.json();
+
+      // Cập nhật danh sách đội bóng nếu cần thiết
+      if (selectedIndex === -1) 
+        danhSachDoiBong.push(result);
+      else
+        danhSachDoiBong[selectedIndex] = result;
+
+      // Đóng form và hiện toast thành công sau khi thành công
+      formState = false;
+      showOkToast("Tạo đội bóng mới thành công");
+    } catch (error) {
+      console.error("Error:", error);
+      showErrorToast(String(error));
+    }
+  };
+
+  const updateDoiBong = async (e: Event, data : DoiBong) => {
     e.preventDefault();
     if (data.tenDoi.trim() === "" || data.sanNha.trim() === "") return;
 
@@ -127,6 +185,8 @@
   data={danhSachDoiBong}
   redirectParam={"maDoi"}
   tableType="doi"
+  editButton={true}
+  onEditClick={onEditClick}
   deleteButton={true}
   onDeleteClick={onDeleteClick}
 />
@@ -137,7 +197,7 @@
 <Form 
   bind:formState={formState}
   fields={formFields}
-  submitForm={submitForm}
+  submitForm={addDoiBong}
   onCloseForm={onCloseForm}
   onOpenForm={onOpenForm}
 />

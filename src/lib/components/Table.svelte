@@ -17,9 +17,11 @@
     onItemClick?: ((data: T, index : number) => void) | undefined;
     deleteButton?: boolean;
     onDeleteClick?: ((data: T, index : number) => void) | undefined;
+    editButton?: boolean;
+    onEditClick?: ((data: T, index : number) => void) | undefined;
   };
   let mouseHover = $state(false);
-  let { title, columns, data, redirectParam, tableType, onItemClick, deleteButton, onDeleteClick }: TableProps<any> =
+  let { title, columns, data, redirectParam, tableType, onItemClick, deleteButton, onDeleteClick, editButton, onEditClick }: TableProps<any> =
     $props();
 </script>
 
@@ -42,10 +44,11 @@
                 </th>
               {/if}
             {/each}
-            {#if deleteButton ?? null}
+            {#if deleteButton || editButton}
               <th
                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
+              >
+                Actions
               </th>
             {/if}
           </tr>
@@ -82,21 +85,24 @@
                   </td>
                   {/if}
                 {/each}
-                {#if deleteButton ?? null}
-                  <td>
-                    <ButtonPrimary text="Delete" 
-                    onclick={() => {
-                      if ((onDeleteClick ?? null) !== null) {
-                        onDeleteClick!!(row, index);
-                      }
-                    }}
-                    onmouseenter={() => {
-                      mouseHover = true;
-                    }}
-                    onmouseexit={() => {
-                      mouseHover = false;
-                    }}
-                    ></ButtonPrimary>
+                {#if deleteButton || editButton}
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    {#if editButton}
+                      <button class="text-green-600 hover:text-green-900 mr-3" 
+                        onclick={() => {if ((onEditClick ?? null) !== null) onEditClick!!(row, index)}}
+                        onmouseenter={()=> mouseHover = true}
+                        onmouseleave={()=> mouseHover = false}>
+                        Edit
+                      </button>
+                    {/if}
+                    {#if deleteButton}
+                      <button class="text-red-600 hover:text-red-900"
+                        onclick={() => { if ((onDeleteClick ?? null) !== null) onDeleteClick!!(row, index); }}
+                        onmouseenter={()=> mouseHover = true}
+                        onmouseleave={()=> mouseHover = false}>
+                        Delete
+                      </button>
+                    {/if}
                   </td>
                 {/if}
               </tr>

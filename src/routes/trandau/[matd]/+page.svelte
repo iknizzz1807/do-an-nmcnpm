@@ -95,7 +95,7 @@
     resetInput();
   };
 
-  const onItemClick = (data: any, index: number) => {
+  const onEditClick = (data: any, index: number) => {
     if (data satisfies LichThiDau) {
       openForm();
       selectedIndex = index;
@@ -176,7 +176,8 @@
   data={danhSachBanThang}
   redirectParam={""}
   tableType=""
-  onItemClick={onItemClick}
+  editButton={true}
+  onEditClick={onEditClick}
 />
 <Table
   title="Danh sách các thẻ phạt"
@@ -184,7 +185,7 @@
   data={danhSachThePhat}
   redirectParam={""}
   tableType=""
-  onItemClick={onItemClick}
+  onItemClick={onEditClick}
 />
 
 <div class="flex justify-center">

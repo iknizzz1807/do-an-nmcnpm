@@ -2,7 +2,7 @@ import type { RequestHandler } from "./$types";
 import { db } from "$lib/server/db/client";
 import { DoiBongTable, type InsertDoiBongParams } from "$lib/server/db/schema/DoiBong";
 import { DSMuaGiaiTable } from "$lib/server/db/schema/DSMuaGiai";
-import { deleteDoiBong, insertDoiBong, selectAllDoiBong } from "$lib/server/db/functions/DoiBong";
+import { deleteDoiBong, insertDoiBong, selectAllDoiBong, updateDoiBong } from "$lib/server/db/functions/DoiBong";
 import type { DoiBong } from "$lib/types";
 import { fail } from "@sveltejs/kit";
 
@@ -30,21 +30,15 @@ export const POST: RequestHandler = async ({
   const data = await request.json();
   // console.log(data);
 
-  await db
-    .insert(DSMuaGiaiTable)
-    .values({ maMG: locals.muaGiai!!.maMG!!, tenMG: locals.muaGiai!!.tenMG })
-    .onConflictDoNothing(); // Hard coded type shit =))
-
-  // Thêm đội bóng mới vào danh sách các đội bóng
-  const doiMoi : DoiBong = {
-    tenDoi: data.tenDoi,
-    sanNha: data.sanNha,
-  };
-
-  await insertDoiBong(doiMoi)
+  if (data.maDoi ?? null) {
+    await updateDoiBong(data);
+  }
+  else{
+    await insertDoiBong(data)
+  }
 
   // Trả về response với đội bóng vừa tạo và status 200 OK
-  return new Response(JSON.stringify(doiMoi), {
+  return new Response(JSON.stringify(data), {
     status: 200,
     headers: {
       "Content-Type": "application/json",

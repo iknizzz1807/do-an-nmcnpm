@@ -3,17 +3,16 @@
     min: number,
     max: number,
     bindValue: number,
+    forValue: string
     label: string,
     unit: string,
   }
-  let { min, max, bindValue = $bindable(), label, unit } : Props = $props();  
+  let { min, max, forValue, bindValue = $bindable(), label, unit } : Props = $props();  
 </script>
 
 
 <div>
-  <label class="block text-sm font-medium text-gray-700 mb-2"
-    >{label}</label
-  >
+  <label class="block text-sm font-medium text-gray-700 mb-2" for={forValue}>{label}</label>
   <div class="flex items-center">
     <input
       type="number"

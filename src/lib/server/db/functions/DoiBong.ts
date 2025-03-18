@@ -16,8 +16,9 @@ export const insertDoiBong = async (...doiBong: DoiBong[]) => {
 };
 
 export const updateDoiBong = async(doiBong: DoiBong) => {
-  if ((doiBong.maDoi ?? null) == null)
-    return;
+  if ((doiBong.maDoi ?? null) == null) {
+    throw new Error("Không có mã đội bóng sao update bruh");
+  }
   await db.update(DoiBongTable).set({
     tenDoi: doiBong.tenDoi,
     sanNha: doiBong.sanNha
