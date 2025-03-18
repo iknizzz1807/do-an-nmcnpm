@@ -7,7 +7,7 @@
   import { SvelteMap } from "svelte/reactivity";
 
   type Props = {
-    danhSachBanThang: BanThang[],
+    dsBanThang: BanThang[],
     cauThuDoiMot : CauThu[],
     cauThuDoiHai : CauThu[],
     maDoiMot: number, 
@@ -19,11 +19,11 @@
     doiOption: FieldOption[]
   }
 
-  const { fromParent } : { fromParent: () => Props } = $props();
-  const { danhSachBanThang, cauThuDoiMot, cauThuDoiHai, maDoiMot, 
+  const { dsBanThang, cauThuDoiMot, cauThuDoiHai, maDoiMot, 
       maDoiHai, tenDoiMot, tenDoiHai, cauThuDoiMotOption, cauThuDoiHaiOption,
-      doiOption } : Props = fromParent();
+      doiOption } : Props = $props();
 
+  let danhSachBanThang = $state(dsBanThang.concat());
   let formState: boolean = $state(false);
   let selectedIndex : number = $state(0);
   let editData : FormInputMap = $state(new SvelteMap());

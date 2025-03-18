@@ -15,8 +15,8 @@
   const cauThuDoiHai : CauThu[] = $state(data.cauThuDoiHai);
   const maDoiMot = $state(data.maDoiMot);
   const maDoiHai = $state(data.maDoiHai);
-  let danhSachBanThang: BanThang[] = $state(data.danhSachBanThang);
-  let danhSachThePhat : ThePhat[] = $state(data.danhSachThePhat);
+  const danhSachBanThang: BanThang[] = $state(data.danhSachBanThang);
+  const danhSachThePhat : ThePhat[] = $state(data.danhSachThePhat);
   const cauThuDoiMotOption : FieldOption[] = cauThuDoiMot.filter((val) => val.maCT ?? null).map((value) => {
     return { optionValue: value.maCT!!, optionName: value.tenCT } satisfies FieldOption;
   });
@@ -30,31 +30,6 @@
     { optionValue: maDoiHai, optionName: data.tenDoiHai },
   ]
 
-  // Process data
-
-  for (let thePhat of danhSachThePhat) {
-    let cauThu : CauThu | null;
-    if (thePhat.maDoi === maDoiMot) {
-      cauThu = cauThuDoiMot.find((val) => val.maCT === thePhat.maCT) ?? null;
-      thePhat.tenDoi = data.tenDoiMot;
-    }
-    else {
-      cauThu = cauThuDoiHai.find((val) => val.maCT === thePhat.maCT) ?? null;
-      thePhat.tenDoi = data.tenDoiHai;
-    }
-    if (cauThu === null)
-      continue;
-    thePhat.tenCT = cauThu.tenCT;
-  }
-  const columnsThePhat = [
-    { header: "Cầu thủ", accessor: "tenCT" },
-    { header: "Đội", accessor: "tenDoi" },
-    { header: "Thời điểm", accessor: "thoiDiem" },
-    { header: "Loại thẻ phạt", accessor: "loaiThe" },
-  ];
-  
-
-
 </script>
 
 <svelte:head>
@@ -62,37 +37,29 @@
 </svelte:head>
 
 <BanThangTable 
-  fromParent={() => {
-    return {
-      danhSachBanThang: danhSachBanThang,
-      cauThuDoiMot: cauThuDoiMot,
-      cauThuDoiHai: cauThuDoiHai,
-      maDoiMot: maDoiMot,
-      maDoiHai: maDoiHai,
-      tenDoiMot: data.tenDoiMot,
-      tenDoiHai: data.tenDoiHai,
-      cauThuDoiMotOption: cauThuDoiMotOption,
-      cauThuDoiHaiOption: cauThuDoiHaiOption,
-      doiOption: doiOption,
-    }
-  }}/>
+  dsBanThang={danhSachBanThang}
+  cauThuDoiMot={cauThuDoiMot}
+  cauThuDoiHai={cauThuDoiHai}
+  maDoiMot={maDoiMot}
+  maDoiHai={maDoiHai}
+  tenDoiMot={data.tenDoiMot}
+  tenDoiHai={data.tenDoiHai}
+  cauThuDoiMotOption={cauThuDoiMotOption}
+  cauThuDoiHaiOption={cauThuDoiHaiOption}
+  doiOption={doiOption}/>
 
   
 <ThePhatTable 
-  fromParent={ () => {
-    return {
-      danhSachThePhat: danhSachThePhat,
-      cauThuDoiMot: cauThuDoiMot,
-      cauThuDoiHai: cauThuDoiHai,
-      maDoiMot: maDoiMot,
-      maDoiHai: maDoiHai,
-      tenDoiMot: data.tenDoiMot,
-      tenDoiHai: data.tenDoiHai,
-      cauThuDoiMotOption: cauThuDoiMotOption,
-      cauThuDoiHaiOption: cauThuDoiHaiOption,
-      doiOption: doiOption,
-    }
-  }}/>
+  dsThePhat={danhSachThePhat}
+  cauThuDoiMot={cauThuDoiMot}
+  cauThuDoiHai={cauThuDoiHai}
+  maDoiMot={maDoiMot}
+  maDoiHai={maDoiHai}
+  tenDoiMot={data.tenDoiMot}
+  tenDoiHai={data.tenDoiHai}
+  cauThuDoiMotOption={cauThuDoiMotOption}
+  cauThuDoiHaiOption={cauThuDoiHaiOption}
+  doiOption={doiOption}/>
 
 <!-- <Table
   title="Danh sách các thẻ phạt"

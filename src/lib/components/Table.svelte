@@ -64,7 +64,8 @@
                     onItemClick!!(row, index);
                   }
                   else {
-
+                    if (redirectParam === "")
+                      return;
                     let redirect = "";
                     if (isNumber(row[redirectParam]))
                       redirect = String(row[redirectParam]).trim().toLowerCase();
