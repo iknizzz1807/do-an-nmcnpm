@@ -5,24 +5,24 @@
 
   type TableProps<T> = {
     title: string;
-    columns: {
+    columns: { // Data specifier
       header: string;
       accessor: keyof T;
       hidden?: boolean | undefined;
       accessFunction?: ((data: T) => string) | undefined;
     }[];
-    data: T[];
-    tableType: string;
-    redirectParam: string;
-    onItemClick?: ((data: T, index : number) => void) | undefined;
-    deleteButton?: boolean;
+    data: T[]; // Data holder
+    tableType: string; // It's like current page. Used to redirect
+    redirectParam: string; // Redirect to
+    onItemClick?: ((data: T, index : number) => void) | undefined; // DEPRECATED
     onDeleteClick?: ((data: T, index : number) => void) | undefined;
-    editButton?: boolean;
     onEditClick?: ((data: T, index : number) => void) | undefined;
   };
   let mouseHover = $state(false);
-  let { title, columns, data, redirectParam, tableType, onItemClick, deleteButton, onDeleteClick, editButton, onEditClick }: TableProps<any> =
+  let { title, columns, data, redirectParam, tableType, onItemClick, onDeleteClick, onEditClick }: TableProps<any> =
     $props();
+  const deleteButton = $state((onDeleteClick ?? null) !== null);
+  const editButton = $state((onEditClick ?? null) !== null);
 </script>
 
 <main class="flex justify-center items-center">

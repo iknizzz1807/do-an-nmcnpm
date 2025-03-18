@@ -10,6 +10,7 @@
   import Form from "$lib/components/Form.svelte";
   import { validate } from "uuid";
   import { getViewSelectedFields } from "drizzle-orm";
+  import { SvelteMap } from "svelte/reactivity";
   let { data }: PageProps = $props();
 
   let danhSachLTD: LichThiDau[] = $state(data.danhSachLTD);
@@ -52,30 +53,28 @@
   let selectedIndex : number = $state(0);
 
   let formState : boolean = $state(false);
-  let editData = $state(new Map());
+  let editData : FormInputMap = $state(new SvelteMap());
 
-  const onOpenForm = () => {
-    if (selectedIndex == -1) 
-      return null;
+  const onOpenForm = () : FormInputMap | null => {
     if (editData.size > 0)
       return editData;
-    return new Map();
+    return new SvelteMap();
   }
 
   const onCloseForm = () => {
     editData.clear();
   }
 
-  const onItemClick = (data: any, index: number) => {
+  const onEditClick = (data: LichThiDau, index: number) => {
     if (data satisfies LichThiDau) {
       editData.clear();
-      editData.set("maTD", data.maTD);
+      editData.set("maTD", data.maTD ?? null);
       editData.set("doiMot", data.doiMot);
       editData.set("doiHai", data.doiHai);
       editData.set("vongThiDau", data.vongThiDau);
-      editData.set("doiThang", data.doiThang);
+      editData.set("doiThang", data.doiThang ?? null);
       editData.set("maMG", data.maMG);
-      editData.set("ngayGio", data.ngayGio);
+      editData.set("ngayGio", new Date(data.ngayGio ?? ""));
       selectedIndex = index;
       formState = true;
     }
@@ -85,7 +84,52 @@
     }
   }
 
-  const submitForm = async (e: Event, data: any) => {
+  const onDeleteClick = async (data : LichThiDau, index: number) => {
+    if (data satisfies LichThiDau) {
+      selectedIndex = index;
+      await deleteTranDau(data);
+    }
+    else {
+      console.error("Data không thỏa mãn loại CauThu");
+    }
+    
+  }
+
+  const deleteTranDau = async (data: LichThiDau) => {
+    if (!(data satisfies LichThiDau)) {
+      console.error("Không nhập đúng dữ liệu");
+      return;
+    }
+
+    if (data.doiMot === 0 || data.doiHai === 0 ||
+        data.vongThiDau === 0 || data.maMG === 0
+    ) return;
+    
+    try {
+      const response = await fetch("/api/lichthidau", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error("Lỗi xóa lịch thi đấu");
+      }
+    
+      danhSachLTD.splice(selectedIndex, 1);
+
+      // Đóng form và hiện toast thành công sau khi thành công
+      formState = false;
+      showOkToast("Xóa lịch thi đấu thành công");
+    } catch (error) {
+      console.error("Error:", error);
+      showErrorToast(String(error));
+    }
+  };
+
+  const submitForm = async (e: Event, data: LichThiDau) => {
     e.preventDefault();
     if (!(data satisfies LichThiDau)) {
       console.error("Không nhập đúng dữ liệu");
@@ -106,12 +150,10 @@
       });
 
       if (!response.ok) {
-        throw new Error("Lỗi tạo đội bóng");
+        throw new Error("Lỗi tạo lịch thi đấu");
       }
 
       const result = await response.json();
-
-      // Cập nhật danh sách đội bóng nếu cần thiết
 
       result.tenDoiMot = danhSachDoi.find((value) => value.maDoi == result.doiMot)?.tenDoi ?? "";
       result.tenDoiHai = danhSachDoi.find((value) => value.maDoi == result.doiHai)?.tenDoi ?? "";
@@ -125,7 +167,7 @@
 
       // Đóng form và hiện toast thành công sau khi thành công
       formState = false;
-      showOkToast("Tạo đội bóng mới thành công");
+      showOkToast("Tạo lịch thi đấu mới thành công");
     } catch (error) {
       console.error("Error:", error);
       showErrorToast(String(error));
@@ -143,6 +185,8 @@
   data={danhSachLTD}
   redirectParam={"maTD"}
   tableType="trandau"
+  onEditClick={onEditClick}
+  onDeleteClick={onDeleteClick}
 />
 
 <div class="flex justify-center">

@@ -20,7 +20,7 @@ export const load = (async ({ fetch, params, locals }) => {
     if (doiMot === null)
       throw new Error("Không tồn tại đội bóng. Thats sus");
 
-    const doiHai = await selectDoiBongTenDoi(tranDau.doiMot) ?? null;
+    const doiHai = await selectDoiBongTenDoi(tranDau.doiHai) ?? null;
     if (doiHai === null)
       throw new Error("Không tồn tại đội bóng. Thats sus");
 
@@ -53,7 +53,6 @@ export const load = (async ({ fetch, params, locals }) => {
     const danhSachThePhat : ThePhat[] = await responseTP.json();
     danhSachBanThang.sort((a, b) => a.thoiDiem - b.thoiDiem);
     danhSachThePhat.sort((a, b) => a.thoiDiem - b.thoiDiem);
-
     return {
       maDoiMot: tranDau.doiMot,
       maDoiHai: tranDau.doiHai,

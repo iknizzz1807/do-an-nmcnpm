@@ -5,8 +5,9 @@
   import ButtonPrimary from "$lib/components/ButtonPrimary.svelte";
   import type { CauThu } from "$lib/types";
   import { showOkToast, showErrorToast } from "$lib/components/Toast";
-  import type { FormField } from "$lib/components/Form.svelte";
+  import type { FormField, FormInputMap } from "$lib/components/Form.svelte";
   import Form from "$lib/components/Form.svelte";
+  import { SvelteMap } from "svelte/reactivity";
 
   let danhSachCauThu: CauThu[] = $state(data.danhSachCauThu);
   const ma_doi = data.ma_doi;
@@ -30,16 +31,16 @@
     { header: "Ghi chú", accessor: "ghiChu" },
   ];
   let formState : boolean = $state(false);
-  let editData = $state(new Map());
+  let editData : FormInputMap = $state(new SvelteMap());
   $inspect(formState);
 
   let updateIndex: number = $state(-1);
   let maCT: number = $state(0);
 
-  const onOpenForm = () => {
+  const onOpenForm = () : FormInputMap | null => {
     if (editData.size > 0)
       return editData;
-    return new Map();
+    return new SvelteMap();
   }
 
   const onCloseForm = () => {
@@ -53,7 +54,7 @@
       editData.set("tenCT", data.tenCT);
       editData.set("loaiCT", parseInt(data.loaiCT));
       editData.set("ghiChu", data.ghiChu);
-      editData.set("nuocNgoai", Boolean(parseInt(data.nuocNgoai)));
+      editData.set("nuocNgoai", parseInt(data.nuocNgoai));
       editData.set("ngaySinh", new Date(data.ngaySinh));
       updateIndex = index;
       formState = true;
@@ -155,7 +156,6 @@
   data={danhSachCauThu}
   redirectParam={""}
   tableType={"cauthu"}
-  editButton={true}
   onEditClick={onEditClick}
 />
 

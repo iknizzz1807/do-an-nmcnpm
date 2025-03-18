@@ -230,9 +230,7 @@
   data={danhSachCauThu}
   redirectParam={""}
   tableType="cauThu"
-  deleteButton={true}
   onDeleteClick={onDeleteClick}
-  editButton={true}
   onEditClick={onEditClick}
 />
 

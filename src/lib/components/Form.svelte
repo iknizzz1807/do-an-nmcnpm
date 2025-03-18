@@ -1,32 +1,33 @@
 <script lang="ts" module>
+  // For option
   export type FieldOption =  {
-    optionValue: string | number,
+    optionValue: string | number, 
     optionName: string
   }
   export type FormField = {
     label : string,
-    propertyName: string,
-    type: "input" | "select" | "Date",
-    valueType: "string" | "number" | "Date",
-    options?: FieldOption[],
+    propertyName: string, // propertyName for map and data conversion to JSON
+    type: "input" | "select" | "Date", // Form type
+    valueType: "string" | "number" | "Date", // data type
+    options?:  FieldOption[] | ((data: any) => FieldOption[]), // for option
   }
-  export type FormInputMap = Map<string, string | number | Date>;
+  export type FormInputMap = SvelteMap<string, string | number | Date | null>;
 </script>
 
 <script lang="ts">
   import { onMount } from "svelte";
+  import { SvelteMap } from "svelte/reactivity";
 
   
   type Props = {
-    fields: FormField[],
+    fields: FormField[], // See above
     formState : Boolean,
     submitForm: (e: Event, data: any) => void,
-    // Return empty to open form, another map to open edit form, null to ignore
-    onOpenForm?: (() => FormInputMap | null),
+    onOpenForm?: (() => FormInputMap | null), // Return empty to open form, another map to open edit form, null to ignore
     onCloseForm?: (() => void)
   }
   let { formState = $bindable(), submitForm, onOpenForm, fields } : Props = $props();
-  let inputValues : FormInputMap = $state(new Map());
+  let inputValues : FormInputMap = $state(new SvelteMap());
 
   onMount(() => {
     for (const field of fields) {
@@ -122,9 +123,17 @@
                   }
                 }
               >
-                {#each field.options!! as option}
-                  <option value={option.optionValue}>{option.optionName}</option>
-                {/each}
+                {#if (field.options ?? null) !== null}
+                  {#if field.options instanceof Array}
+                    {#each field.options as option}
+                      <option value={option.optionValue}>{option.optionName}</option>
+                    {/each}
+                  {:else if field.options instanceof Function}
+                    {#each field.options!!(inputValues) as option}
+                      <option value={option.optionValue}>{option.optionName}</option>
+                    {/each}
+                  {/if}
+                {/if}
               </select>
             {:else if field.type === "Date"}
               <label

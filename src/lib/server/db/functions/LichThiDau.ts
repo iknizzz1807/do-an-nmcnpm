@@ -5,6 +5,8 @@ import type { LichThiDau } from '$lib/types';
 import { DoiBongTable } from '../schema/DoiBong';
 import { DSMuaGiaiTable } from '../schema/DSMuaGiai';
 import { alias } from 'drizzle-orm/sqlite-core';
+import { BanThangTable } from '../schema/BanThang';
+import { ThePhatTable } from '../schema/ThePhat';
 
 export const insertLichThiDau = async (...lichThiDau: LichThiDau[]) => {
     let returning = await db.insert(LichThiDauTable).values(lichThiDau).returning({ id: LichThiDauTable.maTD });
@@ -27,6 +29,8 @@ export const updateLichThiDau = async(lichThiDau: LichThiDau) => {
 }
 
 export const deleteLichThiDau = async (maTD: number) => {
+  await db.delete(BanThangTable).where(eq(BanThangTable.maTD, maTD));
+  await db.delete(ThePhatTable).where(eq(ThePhatTable.maTD, maTD));
   await db.delete(LichThiDauTable).where(eq(LichThiDauTable.maTD, maTD));
 }
 
