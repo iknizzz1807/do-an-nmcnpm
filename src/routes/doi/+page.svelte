@@ -4,7 +4,8 @@
   import type { PageProps } from "./$types";
   import { showErrorToast, showOkToast } from "$lib/components/Toast";
   import type { DoiBong } from "$lib/types";
-  import Form, { type FormField } from "$lib/components/Form.svelte";
+  import Form, { type FormField, type FormInputMap } from "$lib/components/Form.svelte";
+  import { SvelteMap } from "svelte/reactivity";
   let { data }: PageProps = $props();
 
   let danhSachDoiBong: DoiBong[] = $state(data.danhSachDoiBong);
@@ -23,12 +24,12 @@
   let maDoi : number = $state(0);
 
   let formState: boolean = $state(false);
-  let editData = $state(new Map());
+  let editData : FormInputMap = $state(new SvelteMap());
 
-  const onOpenForm = () => {
+  const onOpenForm = () : FormInputMap | null => {
     if (editData.size > 0)
       return editData;
-    return new Map();
+    return new SvelteMap();
   }
 
   const onCloseForm = () => {
@@ -38,7 +39,7 @@
   const onEditClick =  (data: DoiBong, index: number) => {
     if (data satisfies DoiBong) {
       editData.clear();
-      editData.set("maDoi", data.maDoi);
+      editData.set("maDoi", data.maDoi ?? null);
       editData.set("tenDoi", data.tenDoi);
       editData.set("sanNha", data.sanNha);
       selectedIndex = index;
@@ -185,9 +186,7 @@
   data={danhSachDoiBong}
   redirectParam={"maDoi"}
   tableType="doi"
-  editButton={true}
   onEditClick={onEditClick}
-  deleteButton={true}
   onDeleteClick={onDeleteClick}
 />
 <div class="flex justify-center">
