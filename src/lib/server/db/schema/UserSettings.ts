@@ -1,6 +1,8 @@
 import { sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { db } from "../client";
 import { sql } from "drizzle-orm";
+import type { TypesAreEqual } from "$lib/server/utils";
+import type { Settings } from "$lib/types";
 
 const DefaultSetting = {
   "tuoiMin": 16,
@@ -20,9 +22,15 @@ const DefaultSetting = {
   "diemThua": 0
 };
 
+const checkType : TypesAreEqual<typeof DefaultSetting, Settings> = true;
+
 export const UserSettingsTable = sqliteTable('UserSettings', {
   setting: text({ mode: "json" }).$defaultFn(() => DefaultSetting)
 })
+
+export const createDefaultSetting = async () => {
+  await db.insert(UserSettingsTable).values({ setting: DefaultSetting });
+}
 
 const createUserSettingTrigger = async () => {
   await db.transaction(async (tx) => {
@@ -42,8 +50,4 @@ const createUserSettingTrigger = async () => {
   })
 }
 
-createUserSettingTrigger().catch(console.error);
-
-export const createDefaultSetting = async () => {
-  await db.insert(UserSettingsTable).values({ setting: DefaultSetting });
-}
+createUserSettingTrigger()//.catch(console.error);

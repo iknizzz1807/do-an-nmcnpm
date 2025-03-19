@@ -11,7 +11,6 @@
 
   let { dsMuaGiai, selectedMuaGiai } : { dsMuaGiai: DSMuaGiai[], selectedMuaGiai: DSMuaGiai | null } = $props();
   let selectedValue = $state(selectedMuaGiai?.maMG ?? 0);
-  // console.log(selectedMuaGiai);
   let form : HTMLFormElement;
 
   $effect(() => {
@@ -109,6 +108,16 @@
           href="/bxh"
           class="px-3 py-2 rounded-md text-sm font-medium hover:bg-green-700"
           >Bảng xếp hạng</a
+        >
+        <a
+          href="/muagiai"
+          class="px-3 py-2 rounded-md text-sm font-medium hover:bg-green-700"
+          >Danh sách mùa giải</a
+        >
+        <a
+          href="/caidat"
+          class="px-3 py-2 rounded-md text-sm font-medium hover:bg-green-700"
+          >Cài đặt</a
         >
       </div>
     </div>

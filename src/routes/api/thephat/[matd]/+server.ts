@@ -1,6 +1,6 @@
 import { isNumber } from "$lib";
 import type { RequestHandler } from "./$types";
-import { checkThePhatExists, deleteThePhat, insertThePhat, selectThePhat, updateThePhat } from "$lib/server/db/functions/ThePhat";
+import { deleteThePhat, insertThePhat, selectAllThePhat, selectThePhat, updateThePhat } from "$lib/server/db/functions/ThePhat";
 import type { ThePhat } from "$lib/types";
 
 export const GET: RequestHandler = async ({ params, locals }) => {
@@ -17,31 +17,35 @@ export const GET: RequestHandler = async ({ params, locals }) => {
   });
 };
 
-export const POST : RequestHandler = async({ request, locals } : { request: Request, locals: App.Locals }) => {
+export const POST : RequestHandler = async({ request, locals, params } : { request: Request, locals: App.Locals, params: any }) => {
   const data = await request.json();
-  console.log(data);
   if (!(data satisfies ThePhat))
     throw new Error("Không thỏa mãn ThePhat");
-  let ThePhat : ThePhat = {
-    maTD: data.maTD,
+  if (params === "") 
+    throw new Error("Param hiện là rỗng");
+  console.log(params);
+  let thePhat : ThePhat = {
+    maTP: data.maTP,
+    maTD: parseInt(params.matd),
     maCT: data.maCT,
     maDoi: data.maDoi,
-    thoiDiem: data.thoiDiem,
+    thoiDiem: parseInt(data.thoiDiem),
     loaiThe: data.loaiThe
   };
+  console.log(thePhat);
   
-  if (await !checkThePhatExists(ThePhat)) {
-    await insertThePhat(ThePhat).catch((err) => {
+  if ((thePhat.maTP ?? null) === null) {
+    await insertThePhat(thePhat).catch((err) => {
       throw err;
     });
   }
   else {
-    await updateThePhat(ThePhat).catch((err) => {
+    await updateThePhat(thePhat).catch((err) => {
       throw err;
     });
   }
 
-  return new Response(JSON.stringify(ThePhat), {
+  return new Response(JSON.stringify(thePhat), {
     status: 200,
     headers: {
       "Content-Type": "application/json",
@@ -49,18 +53,18 @@ export const POST : RequestHandler = async({ request, locals } : { request: Requ
   })
 }
 
-export const DELETE : RequestHandler = async({ request } : { request: Request }) => {
+export const DELETE : RequestHandler = async({ request, locals } : { request: Request, locals: App.Locals }) => {
   const data = await request.json();
   if (!(data satisfies ThePhat)) {
-    let ThePhat : ThePhat = {
+    let thePhat : ThePhat = {
       maTD: data.maTD,
       maCT: data.maCT,
       maDoi: data.maDoi,
       thoiDiem: data.thoiDiem,
       loaiThe: data.loaiThe
     };
-    await deleteThePhat(ThePhat);
-    return new Response(JSON.stringify(ThePhat), {
+    await deleteThePhat(thePhat);
+    return new Response(JSON.stringify(thePhat), {
       status: 200,
       headers: {
         "Content-Type": "application/json",

@@ -8,19 +8,20 @@ import { db } from '../client';
 import { sql } from 'drizzle-orm';
 
 export const ThePhatTable = sqliteTable('ThePhat', {
+    maTP: integer().notNull().primaryKey({ autoIncrement: true }),
     maTD: integer().notNull().references(() => LichThiDauTable.maTD),
     maCT: integer().notNull().references(() => CauThuTable.maCT),
     maDoi: integer().notNull().references(() => DoiBongTable.maDoi),
     thoiDiem: real().notNull(),
     loaiThe: text().notNull(),
 }, (table) => [
-    primaryKey({ columns: [table.maTD, table.maCT, table.thoiDiem] }),
     check("CHK_TP_THOIDIEM", sql`${table.thoiDiem} BETWEEN 0 AND 90`)
 ])
 
 export const ThePhatTableBackup = sqliteTable('ThePhatBackup', {
   TPBackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
   modifiedDate: integer({mode: "timestamp"}).notNull(),
+  maTP: integer().notNull(),
   maTD: integer().notNull(),
   maCT: integer().notNull(),
   maDoi: integer().notNull(),
@@ -36,16 +37,16 @@ const createTPBackupTrigger = async() => {
       CREATE TRIGGER IF NOT EXISTS TRGD_TP_BACKUP
       AFTER DELETE ON ThePhat
       BEGIN
-      INSERT INTO ThePhatBackup(modifiedDate, maTD, maCT, maDoi, thoiDiem, loaiThe)
-      VALUES(datetime('now'), OLD.maTD, OLD.maCT, OLD.maDoi, OLD.thoiDiem, OLD.loaiThe);
+      INSERT INTO ThePhatBackup(modifiedDate, maTP, maTD, maCT, maDoi, thoiDiem, loaiThe)
+      VALUES(datetime('now'), OLD.maTP, OLD.maTD, OLD.maCT, OLD.maDoi, OLD.thoiDiem, OLD.loaiThe);
       END
       `);
       tx.run(sql`
       CREATE TRIGGER IF NOT EXISTS TRGU_TP_BACKUP
       AFTER UPDATE ON ThePhat
       BEGIN
-      INSERT INTO ThePhatBackup(modifiedDate, maTD, maCT, maDoi, thoiDiem, loaiThe)
-      VALUES(datetime('now'), OLD.maTD, OLD.maCT, OLD.maDoi, OLD.thoiDiem, OLD.loaiThe);
+      INSERT INTO ThePhatBackup(modifiedDate, maTP, maTD, maCT, maDoi, thoiDiem, loaiThe)
+      VALUES(datetime('now'), OLD.maTP, OLD.maTD, OLD.maCT, OLD.maDoi, OLD.thoiDiem, OLD.loaiThe);
       END
       `);
       // Trigger check Cầu thủ bị phạt có thuộc đội bị phạt không

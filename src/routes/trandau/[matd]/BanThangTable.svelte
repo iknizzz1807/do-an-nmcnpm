@@ -2,11 +2,13 @@
   import ButtonPrimary from "$lib/components/ButtonPrimary.svelte";
   import Form, { type FieldOption, type FormField, type FormInputMap } from "$lib/components/Form.svelte";
   import Table from "$lib/components/Table.svelte";
+  import { showErrorToast, showOkToast } from "$lib/components/Toast";
   import type { BanThang, CauThu, LichThiDau } from "$lib/types";
   import { onMount } from "svelte";
   import { SvelteMap } from "svelte/reactivity";
 
   type Props = {
+    maTD: number,
     dsBanThang: BanThang[],
     cauThuDoiMot : CauThu[],
     cauThuDoiHai : CauThu[],
@@ -19,13 +21,13 @@
     doiOption: FieldOption[]
   }
 
-  const { dsBanThang, cauThuDoiMot, cauThuDoiHai, maDoiMot, 
+  const { maTD, dsBanThang, cauThuDoiMot, cauThuDoiHai, maDoiMot, 
       maDoiHai, tenDoiMot, tenDoiHai, cauThuDoiMotOption, cauThuDoiHaiOption,
       doiOption } : Props = $props();
 
   let danhSachBanThang = $state(dsBanThang.concat());
   let formState: boolean = $state(false);
-  let selectedIndex : number = $state(0);
+  let selectedIndex : number = $state(-1);
   let editData : FormInputMap = $state(new SvelteMap());
 
   const columnsBanThang = [
@@ -40,7 +42,6 @@
     { label: "Cầu thủ", propertyName: "maCT", type: "select", valueType: "number", 
       options: 
         (data: FormInputMap) => {
-          console.log("called Map");
           if (data.get("maDoi") === maDoiMot)
             return cauThuDoiMotOption;
           else if (data.get("maDoi") === maDoiHai)
@@ -88,52 +89,42 @@
     }
     else {
       selectedIndex = -1;
-      console.error("Data không thỏa mãn LichThiDau");
+      console.error("Data không thỏa mãn BanThang");
     }
   }
 
-  const submitForm = async (e: Event) => {
+  const submitForm = async (e: Event, data: BanThang) => {
     e.preventDefault();
-    // if (doiMotInput === 0 || doiHaiInput === 0 ||
-    //     vongThiDauInput === 0 || maMGInput === 0 ||
-    //     ngayGioInput.trim() === ""
-    // ) return;
+    console.log(data);
 
-    // const data : LichThiDau = { 
-    //   maTD: maTD === 0 ? undefined : maTD,
-    //   doiMot: doiMotInput, 
-    //   doiHai: doiHaiInput,
-    //   vongThiDau: vongThiDauInput,
-    //   maMG: maMGInput,
-    //   ngayGio: ngayGioInput,
-    // };
-    // console.log(data);
+    try {
+      const response = await fetch("/api/banthang/" + maTD, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
-    // try {
-    //   const response = await fetch("/api/lichthidau", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(data),
-    //   });
+      if (!response.ok) {
+        throw new Error("Lỗi tạo Bàn thắng");
+      }
 
-    //   if (!response.ok) {
-    //     throw new Error("Lỗi tạo đội bóng");
-    //   }
+      const result = await response.json();
 
-    //   const result = await response.json();
+      // Cập nhật danh sách Bàn thắng nếu cần thiết
+      if (selectedIndex === -1)
+        danhSachBanThang.push(result);
+      else 
+        danhSachBanThang[selectedIndex] = result;
 
-    //   // Cập nhật danh sách đội bóng nếu cần thiết
-    //   danhSachBanThang.push(result);
-
-    //   // Đóng form và hiện toast thành công sau khi thành công
-    //   closeForm();
-    //   showOkToast("Tạo đội bóng mới thành công");
-    // } catch (error) {
-    //   console.error("Error:", error);
-    //   showErrorToast(String(error));
-    // }
+      // Đóng form và hiện toast thành công sau khi thành công
+      formState = false;
+      showOkToast("Tạo Bàn thắng mới thành công");
+    } catch (error) {
+      console.error("Error:", error);
+      showErrorToast(String(error));
+    }
   };
 
 </script>

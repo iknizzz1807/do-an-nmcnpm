@@ -54,6 +54,7 @@ export const load = (async ({ fetch, params, locals }) => {
     danhSachBanThang.sort((a, b) => a.thoiDiem - b.thoiDiem);
     danhSachThePhat.sort((a, b) => a.thoiDiem - b.thoiDiem);
     return {
+      maTD: maTD,
       maDoiMot: tranDau.doiMot,
       maDoiHai: tranDau.doiHai,
       tenDoiMot: doiMot.tenDoi,
