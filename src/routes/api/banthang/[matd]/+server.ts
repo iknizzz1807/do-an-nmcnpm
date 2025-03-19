@@ -1,6 +1,6 @@
 import { isNumber } from "$lib";
 import type { RequestHandler } from "./$types";
-import { checkBanThangExists, deleteBanThang, insertBanThang, selectAllBanThang, selectBanThang, updateBanThang } from "$lib/server/db/functions/BanThang";
+import { deleteBanThang, insertBanThang, selectAllBanThang, selectBanThang, updateBanThang } from "$lib/server/db/functions/BanThang";
 import type { BanThang } from "$lib/types";
 
 export const GET: RequestHandler = async ({ params, locals }) => {
@@ -17,20 +17,24 @@ export const GET: RequestHandler = async ({ params, locals }) => {
   });
 };
 
-export const POST : RequestHandler = async({ request, locals } : { request: Request, locals: App.Locals }) => {
+export const POST : RequestHandler = async({ request, locals, params } : { request: Request, locals: App.Locals, params: any }) => {
   const data = await request.json();
-  console.log(data);
   if (!(data satisfies BanThang))
     throw new Error("Không thỏa mãn BanThang");
+  if (params === "") 
+    throw new Error("Param hiện là rỗng");
+  console.log(params);
   let banThang : BanThang = {
-    maTD: data.maTD,
+    maBT: data.maBT,
+    maTD: parseInt(params.matd),
     maCT: data.maCT,
     maDoi: data.maDoi,
-    thoiDiem: data.thoiDiem,
+    thoiDiem: parseInt(data.thoiDiem),
     loaiBanThang: data.loaiBanThang
   };
+  console.log(banThang);
   
-  if (await !checkBanThangExists(banThang)) {
+  if ((banThang.maBT ?? null) === null) {
     await insertBanThang(banThang).catch((err) => {
       throw err;
     });

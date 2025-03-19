@@ -15,7 +15,7 @@ export type Settings = {
     doiDaTrenSanNha: number;
     
     // Bàn thắng
-    loaiBanThang: string[];
+    loaiBanThang: number;
     thoiDiemGhiBanToiDa: number;
     
     // Thẻ phạt
@@ -88,6 +88,7 @@ export type ThamGiaDB = {
 }
 
 export type BanThang = {
+    maBT?: number | undefined,
     maTD: number;
     maCT: number;
     maDoi: number;
@@ -99,6 +100,7 @@ export type BanThang = {
 }
 
 export type ThePhat = {
+    maTP?: number | undefined,
     maTD: number;
     maDoi: number;
     maCT: number;

@@ -37,6 +37,7 @@
 </svelte:head>
 
 <BanThangTable 
+  maTD={data.maTD!!}
   dsBanThang={danhSachBanThang}
   cauThuDoiMot={cauThuDoiMot}
   cauThuDoiHai={cauThuDoiHai}
@@ -50,6 +51,7 @@
 
   
 <ThePhatTable 
+  maTD={data.maTD!!}
   dsThePhat={danhSachThePhat}
   cauThuDoiMot={cauThuDoiMot}
   cauThuDoiHai={cauThuDoiHai}

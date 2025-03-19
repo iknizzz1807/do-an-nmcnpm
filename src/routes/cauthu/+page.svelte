@@ -111,7 +111,6 @@
     };
 
     try {
-      console.log(dataInput);
       const response = await fetch("/api/cauthu", {
         method: "POST",
         headers: {

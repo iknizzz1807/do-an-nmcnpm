@@ -2,11 +2,13 @@
   import ButtonPrimary from "$lib/components/ButtonPrimary.svelte";
   import Form, { type FieldOption, type FormField, type FormInputMap } from "$lib/components/Form.svelte";
   import Table from "$lib/components/Table.svelte";
+  import { showErrorToast, showOkToast } from "$lib/components/Toast";
   import type { ThePhat, CauThu, LichThiDau } from "$lib/types";
   import { onMount } from "svelte";
   import { SvelteMap } from "svelte/reactivity";
 
   type Props = {
+    maTD: number,
     dsThePhat: ThePhat[],
     cauThuDoiMot : CauThu[],
     cauThuDoiHai : CauThu[],
@@ -19,7 +21,7 @@
     doiOption: FieldOption[]
   }
 
-  const { dsThePhat, cauThuDoiMot, cauThuDoiHai, maDoiMot, 
+  const { maTD, dsThePhat, cauThuDoiMot, cauThuDoiHai, maDoiMot, 
       maDoiHai, tenDoiMot, tenDoiHai, cauThuDoiMotOption, cauThuDoiHaiOption,
       doiOption } : Props = $props();
 
@@ -40,7 +42,6 @@
     { label: "Đội", propertyName: "maDoi", type: "select", valueType: "number", options: doiOption },
     { label: "Cầu thủ", propertyName: "maCT", type: "select", valueType: "number", options: 
       (data: FormInputMap) => {
-        console.log("called Map");
         if (data.get("maDoi") === maDoiMot)
           return cauThuDoiMotOption;
         else if (data.get("maDoi") === maDoiHai)
@@ -49,8 +50,8 @@
       }
     },
     { label: "Thời điểm", propertyName: "thoiDiem", type: "input", valueType: "number" },
-    { label: "Loại bàn thắng", propertyName: "loaiThe", type: "select", valueType: "string", 
-      options: [ { optionValue: 2, optionName: "1" }, {optionValue: 1, optionName: "2"}]},
+    { label: "Loại thẻ phạt", propertyName: "loaiThe", type: "select", valueType: "string", 
+      options: [ { optionValue: "Vang", optionName: "Vàng" }, {optionValue: "Do", optionName: "Đỏ"}]},
   ];
 
   onMount(() => {
@@ -88,52 +89,42 @@
     }
     else {
       selectedIndex = -1;
-      console.error("Data không thỏa mãn LichThiDau");
+      console.error("Data không thỏa mãn ThePhat");
     }
   }
 
-  const submitForm = async (e: Event) => {
+  const submitForm = async (e: Event, data: ThePhat) => {
     e.preventDefault();
-    // if (doiMotInput === 0 || doiHaiInput === 0 ||
-    //     vongThiDauInput === 0 || maMGInput === 0 ||
-    //     ngayGioInput.trim() === ""
-    // ) return;
+    console.log(data);
 
-    // const data : LichThiDau = { 
-    //   maTD: maTD === 0 ? undefined : maTD,
-    //   doiMot: doiMotInput, 
-    //   doiHai: doiHaiInput,
-    //   vongThiDau: vongThiDauInput,
-    //   maMG: maMGInput,
-    //   ngayGio: ngayGioInput,
-    // };
-    // console.log(data);
+    try {
+      const response = await fetch("/api/thephat/" + maTD, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
-    // try {
-    //   const response = await fetch("/api/lichthidau", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(data),
-    //   });
+      if (!response.ok) {
+        throw new Error("Lỗi tạo Thẻ phạt");
+      }
 
-    //   if (!response.ok) {
-    //     throw new Error("Lỗi tạo đội bóng");
-    //   }
+      const result = await response.json();
 
-    //   const result = await response.json();
+      // Cập nhật danh sách Thẻ phạt nếu cần thiết
+      if (selectedIndex === -1)
+        danhSachThePhat.push(result);
+      else 
+        danhSachThePhat[selectedIndex] = result;
 
-    //   // Cập nhật danh sách đội bóng nếu cần thiết
-    //   danhSachThePhat.push(result);
-
-    //   // Đóng form và hiện toast thành công sau khi thành công
-    //   closeForm();
-    //   showOkToast("Tạo đội bóng mới thành công");
-    // } catch (error) {
-    //   console.error("Error:", error);
-    //   showErrorToast(String(error));
-    // }
+      // Đóng form và hiện toast thành công sau khi thành công
+      formState = false;
+      showOkToast("Tạo Thẻ phạt mới thành công");
+    } catch (error) {
+      console.error("Error:", error);
+      showErrorToast(String(error));
+    }
   };
 
 </script>

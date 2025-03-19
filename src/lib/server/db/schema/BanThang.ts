@@ -8,13 +8,13 @@ import { db } from '../client';
 import { sql } from 'drizzle-orm';
 
 export const BanThangTable = sqliteTable('BanThang', {
+    maBT: integer().notNull().primaryKey({ autoIncrement: true }),
     maTD: integer().notNull().references(() => LichThiDauTable.maTD),
     maCT: integer().notNull().references(() => CauThuTable.maCT),
     maDoi: integer().notNull().references(() => DoiBongTable.maDoi),
     thoiDiem: real().notNull(),
     loaiBanThang: text().notNull(),
 }, (table) => [
-    primaryKey({ columns: [table.maTD, table.maCT, table.thoiDiem] }),
     check("CHK_BT_THOIDIEM", sql`${table.thoiDiem} BETWEEN 0 AND 90`),
     check("CHK_BT_LOAIBT", sql`${table.loaiBanThang} IN ('A', 'B', 'C')`)
 ])
@@ -22,6 +22,7 @@ export const BanThangTable = sqliteTable('BanThang', {
 export const BanThangTableBackup = sqliteTable('BanThangBackup', {
     BTBackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
     modifiedDate: integer({mode: "timestamp"}).notNull(),
+    maBT: integer().notNull(),
     maTD: integer().notNull(),
     maCT: integer().notNull(),
     maDoi: integer().notNull(),
@@ -37,16 +38,16 @@ const createBTBackupTrigger = async() => {
         CREATE TRIGGER IF NOT EXISTS TRGD_BT_BACKUP
         AFTER DELETE ON BanThang
         BEGIN
-        INSERT INTO BanThangBackup(modifiedDate, maTD, maCT, maDoi, thoiDiem, loaiBanThang)
-        VALUES(datetime('now'), OLD.maTD, OLD.maCT, OLD.maDoi, OLD.thoiDiem, OLD.loaiBanThang);
+        INSERT INTO BanThangBackup(modifiedDate, maBT, maTD, maCT, maDoi, thoiDiem, loaiBanThang)
+        VALUES(datetime('now'), OLD.maBT, OLD.maTD, OLD.maCT, OLD.maDoi, OLD.thoiDiem, OLD.loaiBanThang);
         END
         `);
         tx.run(sql`
         CREATE TRIGGER IF NOT EXISTS TRGU_BT_BACKUP
         AFTER UPDATE ON BanThang
         BEGIN
-        INSERT INTO BanThangBackup(modifiedDate, maTD, maCT, maDoi, thoiDiem, loaiBanThang)
-        VALUES(datetime('now'), OLD.maTD, OLD.maCT, OLD.maDoi, OLD.thoiDiem, OLD.loaiBanThang);
+        INSERT INTO BanThangBackup(modifiedDate, maBT, maTD, maCT, maDoi, thoiDiem, loaiBanThang)
+        VALUES(datetime('now'), OLD.maBT, OLD.maTD, OLD.maCT, OLD.maDoi, OLD.thoiDiem, OLD.loaiBanThang);
         END
         `);
         // Trigger check Cầu thủ ghi bàn có thuộc đội ghi bàn không

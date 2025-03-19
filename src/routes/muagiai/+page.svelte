@@ -3,25 +3,22 @@
   import Table from "$lib/components/Table.svelte";
   import type { PageProps } from "./$types";
   import { showErrorToast, showOkToast } from "$lib/components/Toast";
-  import type { DoiBong } from "$lib/types";
+  import type { DSMuaGiai } from "$lib/types";
   import Form, { type FormField, type FormInputMap } from "$lib/components/Form.svelte";
   import { SvelteMap } from "svelte/reactivity";
   let { data }: PageProps = $props();
 
-  let danhSachDoiBong: DoiBong[] = $state(data.danhSachDoiBong);
+  let danhSachMuaGiai: DSMuaGiai[] = $state(data.danhSachMuaGiai);
 
   const columns = [
-    { header: "", accessor: "maDoi", hidden: true},
-    { header: "Tên đội", accessor: "tenDoi" },
-    { header: "Sân nhà", accessor: "sanNha" },
+    { header: "", accessor: "maMG", hidden: true},
+    { header: "Tên mùa giải", accessor: "tenMG" },
   ];
 
   const formFields : FormField[] = [
-    { label: "Tên đội", propertyName: "tenDoi", type: "input", valueType: "string" },
-    { label: "Sân nhà", propertyName: "sanNha", type: "input", valueType: "string" }
+    { label: "Tên mùa giải", propertyName: "tenMG", type: "input", valueType: "string" },
   ]
   let selectedIndex : number = $state(0);
-  let maDoi : number = $state(0);
 
   let formState: boolean = $state(false);
   let editData : FormInputMap = $state(new SvelteMap());
@@ -36,12 +33,11 @@
     editData.clear();
   }
 
-  const onEditClick =  (data: DoiBong, index: number) => {
-    if (data satisfies DoiBong) {
+  const onEditClick =  (data: DSMuaGiai, index: number) => {
+    if (data satisfies DSMuaGiai) {
       editData.clear();
-      editData.set("maDoi", data.maDoi ?? null);
-      editData.set("tenDoi", data.tenDoi);
-      editData.set("sanNha", data.sanNha);
+      editData.set("maMG", data.maMG ?? null);
+      editData.set("tenMG", data.tenMG);
       selectedIndex = index;
       formState = true;
     }
@@ -52,33 +48,32 @@
   }
 
   const onDeleteClick = async (data : any, index: number) => {
-    if (data satisfies DoiBong) {
+    if (data satisfies DSMuaGiai) {
       selectedIndex = index;
-      maDoi = data.maDoi;
-      await deleteDoiBong();
+      await deleteDSMuaGiai(data);
     }
     else {
       console.error("Data không thỏa mãn loại CauThu");
     }
   }
 
-  const addDoiBong = async (e: Event, data : DoiBong) => {
+  const submitDSMuaGiai = async (e: Event, data : DSMuaGiai) => {
     e.preventDefault();
-    if (data.tenDoi.trim() === "" || data.sanNha.trim() === "") return;
+    if (data.tenMG.trim() === "" ) return;
 
     if (
-      danhSachDoiBong.some(
-        (doiBong) =>
-          doiBong.tenDoi.trim().toLowerCase() ===
-          data.tenDoi.trim().toLowerCase()
+      danhSachMuaGiai.some(
+        (DSMuaGiai) =>
+          DSMuaGiai.tenMG.trim().toLowerCase() ===
+          data.tenMG.trim().toLowerCase()
       )
     ) {
-      showErrorToast("Tên đội bóng đã tồn tại");
+      showErrorToast("Tên Mùa giải đã tồn tại");
       return;
     }
 
     try {
-      const response = await fetch("/api/doibong", {
+      const response = await fetch("/api/muagiai", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -87,42 +82,47 @@
       });
 
       if (!response.ok) {
-        throw new Error("Lỗi tạo đội bóng");
+        throw new Error("Lỗi tạo Mùa giải");
       }
 
       const result = await response.json();
 
-      // Cập nhật danh sách đội bóng nếu cần thiết
+      // Cập nhật danh sách Mùa giải nếu cần thiết
       if (selectedIndex === -1) 
-        danhSachDoiBong.push(result);
+        danhSachMuaGiai.push(result);
       else
-        danhSachDoiBong[selectedIndex] = result;
+        danhSachMuaGiai[selectedIndex] = result;
 
       // Đóng form và hiện toast thành công sau khi thành công
       formState = false;
-      showOkToast("Tạo đội bóng mới thành công");
+      showOkToast("Tạo Mùa giải mới thành công");
     } catch (error) {
       console.error("Error:", error);
       showErrorToast(String(error));
     }
   };
 
-  const deleteDoiBong = async () => {
+  const deleteDSMuaGiai = async (data : DSMuaGiai) => {
+    if ((data.maMG ?? null) === null) {
+      showErrorToast("Không thể xóa tại -1");
+      return;
+    }
+
     try {
-      const response = await fetch("/api/doibong", {
+      const response = await fetch("/api/muagiai", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ maDoi: maDoi }),
+        body: JSON.stringify({ maMG: data.maMG }),
       });
 
       if (!response.ok) {
-        showErrorToast("Lỗi cập nhật đội bóng");
-        throw new Error("Lỗi cập nhật đội bóng");
+        showErrorToast("Lỗi cập nhật Mùa giải");
+        throw new Error("Lỗi cập nhật Mùa giải");
       }
 
-      danhSachDoiBong.splice(selectedIndex, 1);
+      danhSachMuaGiai.splice(selectedIndex, 1);
 
       // Đóng form và hiện toast thành công sau khi thành công
       formState = false;
@@ -135,13 +135,13 @@
 </script>
 
 <svelte:head>
-  <title>Các đội bóng</title>
+  <title>Các Mùa giải</title>
 </svelte:head>
 
 <Table
-  title="Danh sách các đội bóng"
+  title="Danh sách các Mùa giải"
   {columns}
-  data={danhSachDoiBong}
+  data={danhSachMuaGiai}
   redirectParam={"maDoi"}
   tableType="doi"
   onEditClick={onEditClick}
@@ -154,7 +154,7 @@
 <Form 
   bind:formState={formState}
   fields={formFields}
-  submitForm={addDoiBong}
+  submitForm={submitDSMuaGiai}
   onCloseForm={onCloseForm}
   onOpenForm={onOpenForm}
 />

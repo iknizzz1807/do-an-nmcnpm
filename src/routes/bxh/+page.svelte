@@ -6,7 +6,6 @@
   let { data }: PageProps = $props();
 
   let bangXepHangNgay: BangXepHangNgay[] = $state(data.bangXepHangNgay);
-  // console.log(bangXepHangNgay);
   const columns = [
     { header: "Tên đội", accessor: "tenDoi" },
     { header: "Số trận", accessor: "soTran" },

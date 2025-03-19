@@ -86,7 +86,6 @@
     }
 
     try {
-      console.log(data);
       const response = await fetch("/api/cauthu/" + ma_doi, {
         method: "POST",
         headers: {
@@ -121,7 +120,6 @@
     }
 
     try {
-      console.log(data);
       const response = await fetch("/api/cauthu", {
         method: "POST",
         headers: {
