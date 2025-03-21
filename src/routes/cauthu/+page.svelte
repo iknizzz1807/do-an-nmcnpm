@@ -7,6 +7,8 @@
 
   let danhSachCauThu: CauThu[] = $state(data.danhSachCauThu);
 
+  let danhSachCauThuCopy = danhSachCauThu;
+
   const columns = [
     { header: "Tên cầu thủ", accessor: "tenCT" },
     { header: "Loại cầu thủ", accessor: "loaiCT" },
@@ -20,9 +22,9 @@
   let ghiChuInput: string = $state("");
   let nuocNgoaiInput: boolean = $state(false);
   let ngaySinhInput: string = $state(new Date().toISOString().split("T")[0]);
-  
+
   let formState: boolean = $state(false);
-  let selectedIndex : number = $state(0);
+  let selectedIndex: number = $state(0);
 
   let searchTerm: string = $state("");
   let isOpen: boolean = $state(false);
@@ -32,7 +34,14 @@
     filteredResults = danhSachCauThu.filter((result) =>
       result.tenCT.toLowerCase().includes(searchTerm.toLowerCase())
     );
+    //
   });
+
+  const searchPlayer = () => {
+    danhSachCauThu = danhSachCauThuCopy.filter((result) =>
+      result.tenCT.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  };
 
   function handleInputChange() {
     isOpen = searchTerm.length > 0;
@@ -76,22 +85,20 @@
       nuocNgoaiInput = Boolean(parseInt(data.nuocNgoai));
       ngaySinhInput = data.ngaySinh;
       openForm();
-    }
-    else {
+    } else {
       console.error("Data không thỏa mãn loại CauThu");
     }
-  }
+  };
 
-  const onDeleteClick = async (data : any, index: number) => {
+  const onDeleteClick = async (data: any, index: number) => {
     if (data satisfies CauThu) {
       selectedIndex = index;
       maCT = data.maCT;
       await deletePlayer();
-    }
-    else {
+    } else {
       console.error("Data không thỏa mãn loại CauThu");
     }
-  }
+  };
 
   const updatePlayer = async (e: Event) => {
     e.preventDefault();
@@ -101,7 +108,7 @@
       return;
     }
 
-    const dataInput : CauThu = {
+    const dataInput: CauThu = {
       maCT: maCT,
       tenCT: tenCTInput,
       loaiCT: loaiCTInput,
@@ -134,7 +141,7 @@
     } catch (error) {
       console.error("Error:", error);
       showErrorToast(String(error));
-    };
+    }
   };
 
   const deletePlayer = async () => {
@@ -160,9 +167,8 @@
     } catch (error) {
       console.error("Error:", error);
       showErrorToast(String(error));
-    };
+    }
   };
-
 </script>
 
 <svelte:head>
@@ -198,6 +204,12 @@
       oninput={handleInputChange}
       onfocus={handleFocus}
       onblur={handleBlur}
+      onkeydown={(e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          searchPlayer();
+        }
+      }}
     />
   </div>
 
@@ -229,10 +241,9 @@
   data={danhSachCauThu}
   redirectParam={""}
   tableType="cauThu"
-  onDeleteClick={onDeleteClick}
-  onEditClick={onEditClick}
+  {onDeleteClick}
+  {onEditClick}
 />
-
 
 {#if formState}
   <div
