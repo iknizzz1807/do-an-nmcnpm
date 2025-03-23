@@ -1,11 +1,11 @@
 import type { RequestHandler } from "./$types";
-import { deleteCauThu, insertCauThu, selectAllCauThu, updateCauThu } from "$lib/server/db/functions/CauThu";
+import { deleteCauThu, insertCauThu, selectAllCauThu, selectAllCauThuWithBanThang, updateCauThu } from "$lib/server/db/functions/CauThu";
 import { insertThamGiaDB } from "$lib/server/db/functions/ThamGiaDB";
 import type { CauThu } from "$lib/types";
 import { error, fail, redirect } from "@sveltejs/kit";
 
 export const GET: RequestHandler = async ({locals}) => {
-  const danhSachCauThu = await selectAllCauThu();
+  const danhSachCauThu = await selectAllCauThuWithBanThang();
   return new Response(JSON.stringify(danhSachCauThu), {
     status: 200,
     headers: {

@@ -38,6 +38,13 @@ export const selectAllCauThu = async () => {
   return (await db.select().from(CauThuTable)) satisfies CauThu[];
 };
 
+export const selectAllCauThuWithBanThang = async () => {
+  return (await db.select({ 
+    ...getTableColumns(CauThuTable), 
+    banThang: db.$count(BanThangTable, eq(BanThangTable.maCT, CauThuTable.maCT))
+  }).from(CauThuTable)) satisfies CauThu[];
+};
+
 export const selectCauThuTen = async (tenCT: string) => {
   return (await db
     .select()

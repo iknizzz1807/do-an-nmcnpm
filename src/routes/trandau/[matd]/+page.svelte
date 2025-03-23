@@ -1,12 +1,7 @@
 <script lang="ts">
-  import Table from "$lib/components/Table.svelte";
   import type { PageProps } from "./$types";
-  import type { BanThang, CauThu, DoiBong, DSMuaGiai, LichThiDau, ThePhat } from "$lib/types";
-  import ButtonPrimary from "$lib/components/ButtonPrimary.svelte";
-  import { showErrorToast, showOkToast } from "$lib/components/Toast";
-  import { muaGiai } from "$lib/components/Nav.svelte"
-  import { get } from "svelte/store";
-  import Form, { type FieldOption } from "$lib/components/Form.svelte";
+  import type { BanThang, CauThu, ThePhat } from "$lib/types";
+  import { type FieldOption } from "$lib/components/Form.svelte";
   import BanThangTable from "./BanThangTable.svelte";
   import ThePhatTable from "./ThePhatTable.svelte";
   let { data }: PageProps = $props();

@@ -1,7 +1,7 @@
 <script lang="ts" module>
   // For option
   export type FieldOption = {
-    optionValue: string | number;
+    optionValue: string | number | null;
     optionName: string;
   };
   export type FormField = {
@@ -9,7 +9,7 @@
     propertyName: string; // propertyName for map and data conversion to JSON
     type: "input" | "select" | "Date"; // Form type
     valueType: "string" | "number" | "Date"; // data type
-    options?: FieldOption[] | ((data: any) => FieldOption[]); // for option
+    options?: FieldOption[] | ((data: FormInputMap) => FieldOption[]); // for option, data là object của cái mình đang dùng
   };
   export type FormInputMap = SvelteMap<string, string | number | Date | null>;
 </script>
@@ -117,7 +117,7 @@
                 bind:value={
                   () => inputValues.get(field.propertyName),
                   (val) => {
-                    if ((val ?? null) !== null)
+                    if ((val ?? null) !== null || val === null)
                       inputValues.set(field.propertyName, val!!);
                   }
                 }

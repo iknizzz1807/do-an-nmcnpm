@@ -32,9 +32,8 @@
   ];
   let formState : boolean = $state(false);
   let editData : FormInputMap = $state(new SvelteMap());
-  $inspect(formState);
 
-  let updateIndex: number = $state(-1);
+  let selectedIndex: number = $state(-1);
   let maCT: number = $state(0);
 
   const onOpenForm = () : FormInputMap | null => {
@@ -54,20 +53,20 @@
       editData.set("tenCT", data.tenCT);
       editData.set("loaiCT", parseInt(data.loaiCT));
       editData.set("ghiChu", data.ghiChu);
-      editData.set("nuocNgoai", parseInt(data.nuocNgoai));
+      editData.set("nuocNgoai", Number(data.nuocNgoai));
       editData.set("ngaySinh", new Date(data.ngaySinh));
-      updateIndex = index;
+      selectedIndex = index;
       formState = true;
     }
     else {
       formState = false;
-      updateIndex = -1;
+      selectedIndex = -1;
     }
   };
 
   const submitForm = async (e: Event, data: CauThu) => {
     e.preventDefault();
-    if (updateIndex === -1)
+    if (selectedIndex === -1)
       addPlayer(data);
     else
       updatePlayer(data);
@@ -135,7 +134,7 @@
 
       const result = await response.json();
 
-      danhSachCauThu[updateIndex] = result satisfies CauThu;
+      danhSachCauThu[selectedIndex] = result satisfies CauThu;
 
       // Đóng form và hiện toast thành công sau khi thành công
       formState = false;

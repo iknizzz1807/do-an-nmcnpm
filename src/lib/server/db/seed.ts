@@ -7,19 +7,33 @@ import { LichThiDauTable } from "./schema/LichThiDau";
 import { generateBanThang, generateLichThiDau, generateTGDB, generateThePhat } from "./seedFunctions";
 import { randIntBetween } from "../utils";
 import { createDefaultSetting } from "./schema/UserSettings";
+import { SanNhaTable } from "./schema/SanNha";
 
 await createDefaultSetting();
 
 await seed(db, {
+  SanNhaTable,
   DSMuaGiaiTable,
   CauThuTable,
   DoiBongTable,
 }).refine((f) => ({
+  
+  SanNhaTable: {
+    columns: {
+      tenSan: f.companyName(),
+      diaChi: f.streetAddress()
+    },
+    with: {
+      DoiBongTable: 1,
+    }
+  },
+
   DSMuaGiaiTable: {
     columns:{ 
-      tenMG: f.fullName()
+      tenMG: f.fullName(),
+      ngayDienRa: f.date(),
     },
-    count: 10
+    count: 3
   },
 
   CauThuTable: {
@@ -36,7 +50,6 @@ await seed(db, {
   DoiBongTable: {
     columns: {
       tenDoi: f.companyName(),
-      sanNha: f.city(),
     },
     count: 10
   },
@@ -48,8 +61,11 @@ await seed(db, {
 
 // Generate ban Thang
 
-await generateLichThiDau(1);
-await generateTGDB();
+const muaGiais = await db.select().from(DSMuaGiaiTable);
+for (const muaGiai of muaGiais) {
+  await generateLichThiDau(muaGiai.maMG);
+  await generateTGDB(muaGiai.maMG);
+}
 const lichThiDau = await db.select().from(LichThiDauTable);
 for (const lich of lichThiDau) {
   await generateBanThang(lich.maTD, randIntBetween(0, 5), randIntBetween(0, 5));

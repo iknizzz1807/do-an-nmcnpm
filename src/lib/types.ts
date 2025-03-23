@@ -64,12 +64,20 @@ export type BangXepHangNgay = {
 export type DSMuaGiai = {
     maMG?: number | undefined;
     tenMG: string;
+    ngayDienRa: string;
 }
 
 export type DoiBong = {
     maDoi?: number | undefined;
     tenDoi: string;
-    sanNha: string;
+    maSan: number;
+    tenSan?: string | undefined;
+}
+
+export type SanNha = {
+    maSan?: number | undefined;
+    tenSan: string;
+    diaChi: string;
 }
 
 export type CauThu = {
@@ -79,6 +87,7 @@ export type CauThu = {
     ghiChu: string;
     nuocNgoai: boolean;
     ngaySinh: string;
+    banThang?: number | undefined;
 }
 
 export type ThamGiaDB = {

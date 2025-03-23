@@ -1,4 +1,4 @@
-import { ilike, eq, or } from "drizzle-orm";
+import { ilike, eq, or, getTableColumns } from "drizzle-orm";
 import { db } from "../client";
 import { DoiBongTable, DoiBongTableBackup, type InsertDoiBongBackupParams } from "../schema/DoiBong";
 import type { DoiBong } from "$lib/types";
@@ -7,6 +7,7 @@ import { BanThangTable } from "../schema/BanThang";
 import { LichThiDauTable } from "../schema/LichThiDau";
 import { ThamGiaDBTable } from "../schema/ThamGiaDB";
 import { ThePhatTable } from "../schema/ThePhat";
+import { SanNhaTable } from "../schema/SanNha";
 
 export const insertDoiBong = async (...doiBong: DoiBong[]) => {
   let returning = await db.insert(DoiBongTable).values(doiBong).returning({ id: DoiBongTable.maDoi });
@@ -21,7 +22,7 @@ export const updateDoiBong = async(doiBong: DoiBong) => {
   }
   await db.update(DoiBongTable).set({
     tenDoi: doiBong.tenDoi,
-    sanNha: doiBong.sanNha
+    maSan: doiBong.maSan
   }).where(eq(DoiBongTable.maDoi, doiBong.maDoi!!));
 }
 
@@ -40,6 +41,16 @@ export const deleteDoiBong = async(maDoi: number) => {
 export const selectAllDoiBong = async () => {
   return (await db.select().from(DoiBongTable)) satisfies DoiBong[];
 };
+
+export const selectAllDoiBongWithTenSan = async () => {
+  return (await db.select({
+    ...getTableColumns(DoiBongTable),
+    tenSan: SanNhaTable.tenSan,
+  })
+    .from(DoiBongTable)
+    .innerJoin(SanNhaTable, eq(SanNhaTable.maSan, DoiBongTable.maSan))) satisfies DoiBong[];
+};
+
 
 export const selectDoiBongTen = async (tenDoi: string) => {
   return (await db

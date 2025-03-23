@@ -7,6 +7,7 @@ import { sql } from 'drizzle-orm';
 export const DSMuaGiaiTable = sqliteTable('DSMuaGiai', {
     maMG: integer().notNull().unique().primaryKey({ autoIncrement: true }),
     tenMG: text().notNull(),
+    ngayDienRa: text().notNull(),
 })
 
 export const DSMuaGiaiTableBackup = sqliteTable('DSMuaGiaiBackup', {
@@ -14,6 +15,7 @@ export const DSMuaGiaiTableBackup = sqliteTable('DSMuaGiaiBackup', {
     modifiedDate: integer({mode: "timestamp"}).notNull(),
     maMG: integer().notNull(),
     tenMG: text().notNull(),
+    ngayDienRa: text().notNull(),
 })
 
 const createDSMGBackupTrigger = async() => {
@@ -23,16 +25,16 @@ const createDSMGBackupTrigger = async() => {
         CREATE TRIGGER IF NOT EXISTS TRGD_DSMG_BACKUP
         AFTER DELETE ON DSMuaGiai
         BEGIN
-            INSERT INTO DSMuaGiaiBackup(modifiedDate, maMG, tenMG)
-            VALUES(datetime('now'), OLD.maMG, OLD.tenMG);
+            INSERT INTO DSMuaGiaiBackup(modifiedDate, maMG, tenMG, ngayDienRa)
+            VALUES(datetime('now'), OLD.maMG, OLD.tenMG, OLD.ngayDienRa);
         END
         `);
         tx.run(sql`
         CREATE TRIGGER IF NOT EXISTS TRGU_DSMG_BACKUP
         AFTER UPDATE ON DSMuaGiai
         BEGIN
-            INSERT INTO DSMuaGiaiBackup(modifiedDate, maMG, tenMG)
-            VALUES(datetime('now'), OLD.maMG, OLD.tenMG);
+            INSERT INTO DSMuaGiaiBackup(modifiedDate, maMG, tenMG, ngayDienRa)
+            VALUES(datetime('now'), OLD.maMG, OLD.tenMG, OLD.ngayDienRa);
         END
         `);
     });
@@ -40,7 +42,6 @@ const createDSMGBackupTrigger = async() => {
 createDSMGBackupTrigger()// .catch(console.error); // This may cause some horrible error in the future
 
 export type InsertDSMuaGiaiParams = typeof DSMuaGiaiTable.$inferInsert;
-export type InsertDSMuaGiaiBackupParams = typeof DSMuaGiaiTableBackup.$inferInsert;
 
 const checkType : TypesAreEqual<InsertDSMuaGiaiParams, DSMuaGiai> = true;
 /*

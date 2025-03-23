@@ -3,18 +3,19 @@ import { db } from '../client';
 import type { DoiBong } from '$lib/types';
 import type { TypesAreEqual } from '$lib/server/utils';
 import { sql } from 'drizzle-orm';
+import { SanNhaTable } from './SanNha';
 
 export const DoiBongTable = sqliteTable('DoiBong', {
     maDoi: integer().notNull().unique().primaryKey({ autoIncrement: true }),
     tenDoi: text().notNull(),
-    sanNha: text().notNull(),
+    maSan: integer().notNull().references(() => SanNhaTable.maSan),
 })
 export const DoiBongTableBackup = sqliteTable('DoiBongBackup', {
     DBBackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
     modifiedDate: integer({mode: "timestamp"}).notNull(),
     maDoi: integer().notNull(),
     tenDoi: text().notNull(),
-    sanNha: text().notNull(),
+    maSan: integer().notNull(),
 })
 
 const createDBBackupTrigger = async() => {
@@ -24,16 +25,16 @@ const createDBBackupTrigger = async() => {
         CREATE TRIGGER IF NOT EXISTS TRGD_DB_BACKUP
         AFTER DELETE ON DoiBong
         BEGIN
-            INSERT INTO DoiBongBackup(modifiedDate, maDoi, tenDoi, sanNha)
-            VALUES(datetime('now'), OLD.maDoi, OLD.tenDoi, OLD.sanNha);
+            INSERT INTO DoiBongBackup(modifiedDate, maDoi, tenDoi, maSan)
+            VALUES(datetime('now'), OLD.maDoi, OLD.tenDoi, OLD.maSan);
         END
         `);
         tx.run(sql`
         CREATE TRIGGER IF NOT EXISTS TRGU_DB_BACKUP
         AFTER UPDATE ON DoiBong
         BEGIN
-            INSERT INTO DoiBongBackup(modifiedDate, maDoi, tenDoi, sanNha)
-            VALUES(datetime('now'), OLD.maDoi, OLD.tenDoi, OLD.sanNha);
+            INSERT INTO DoiBongBackup(modifiedDate, maDoi, tenDoi, maSan)
+            VALUES(datetime('now'), OLD.maDoi, OLD.tenDoi, OLD.maSan);
         END
         `);
     });

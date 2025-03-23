@@ -32,7 +32,7 @@ export const generateBanThang = async (maTD: number, soBTDoiMot: number = 5, soB
       and(eq(ThamGiaDBTable.maCT, CauThuTable.maCT), 
         eq(ThamGiaDBTable.maDoi, lichThiDau.doiHai)));
 
-  console.log("Stage 1");
+  // console.log("Stage 1");
   const n1 = Math.min(soBTDoiMot, cauThusDoi1.length - 1);
   for (let i = 0; i < n1; i++) {
     const cauThu = cauThusDoi1.at(randIntBetween(0, cauThusDoi1.length - 1));
@@ -47,7 +47,7 @@ export const generateBanThang = async (maTD: number, soBTDoiMot: number = 5, soB
     }
     await db.insert(BanThangTable).values(banThang);
   }
-  console.log("Stage 2");
+  // console.log("Stage 2");
   const n2 = Math.min(soBTDoiHai, cauThusDoi2.length - 1);
   for (let i = 0; i < n2; i++) {
     const cauThu = cauThusDoi2.at(randIntBetween(0, cauThusDoi2.length - 1));
@@ -88,7 +88,7 @@ export const generateThePhat = async (maTD: number, soTPDoiMot: number = 5, soTP
       and(eq(ThamGiaDBTable.maCT, CauThuTable.maCT), 
         eq(ThamGiaDBTable.maDoi, lichThiDau.doiHai)));
 
-  console.log("Stage 1");
+  // console.log("Stage 1");
   const n1 = Math.min(soTPDoiMot, cauThusDoi1.length - 1);
   for (let i = 0; i < n1; i++) {
     const cauThu = cauThusDoi1.at(randIntBetween(0, cauThusDoi1.length - 1));
@@ -103,7 +103,7 @@ export const generateThePhat = async (maTD: number, soTPDoiMot: number = 5, soTP
     }
     await db.insert(ThePhatTable).values(thePhat);
   }
-  console.log("Stage 2");
+  // console.log("Stage 2");
   const n2 = Math.min(soTPDoiHai, cauThusDoi2.length - 1);
   for (let i = 0; i < n2; i++) {
     const cauThu = cauThusDoi2.at(randIntBetween(0, cauThusDoi2.length - 1));
@@ -120,7 +120,7 @@ export const generateThePhat = async (maTD: number, soTPDoiMot: number = 5, soTP
   }
 }
 
-export const generateTGDB = async(soCTPerDoi : number = 10) => {
+export const generateTGDB = async(maMG : number, soCTPerDoi : number = 10) => {
   const doiBongs = await db.select().from(DoiBongTable);
   let ctI = 0;
   const cauThu = await db.select().from(CauThuTable);
@@ -133,7 +133,7 @@ export const generateTGDB = async(soCTPerDoi : number = 10) => {
       await db.insert(ThamGiaDBTable).values({
         maCT: ct.maCT,
         maDoi: doi.maDoi,
-        maMG: 1,
+        maMG: maMG,
       } satisfies ThamGiaDB);
     }
   }

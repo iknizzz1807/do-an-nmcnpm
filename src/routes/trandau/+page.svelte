@@ -11,6 +11,7 @@
   import { validate } from "uuid";
   import { getViewSelectedFields } from "drizzle-orm";
   import { SvelteMap } from "svelte/reactivity";
+
   let { data }: PageProps = $props();
 
   let danhSachLTD: LichThiDau[] = $state(data.danhSachLTD);
@@ -37,7 +38,15 @@
     { label: "Đội hai", propertyName: "doiHai", type: "select", valueType: "number", options: doiOption},
     { label: "Vòng thi đấu", propertyName: "vongThiDau", type: "select", valueType: "number", 
       options: [ { optionValue: 1, optionName: "1" }, {optionValue: 2, optionName: "2"}]},
-    { label: "Đội thắng", propertyName: "doiThang", type: "select", valueType: "number", options: doiOption},
+    { label: "Đội thắng", propertyName: "doiThang", type: "select", valueType: "number", 
+      options: 
+      (data: FormInputMap) => {
+        return [
+          { optionValue: null, optionName: "Hòa" },
+          doiOption.find((val) => data.get("doiMot") === val.optionValue ) ?? { optionValue: "", optionName: "" },
+          doiOption.find((val) => data.get("doiHai") === val.optionValue ) ?? { optionValue: "", optionName: "" },
+        ] satisfies FieldOption[]
+      }},
     { label: "Ngày giờ", propertyName: "ngayGio", type: "Date", valueType: "Date"}
   ];
 
@@ -140,6 +149,7 @@
         data.vongThiDau === 0 || data.maMG === 0
     ) return;
     
+    console.log(editData);
     try {
       const response = await fetch("/api/lichthidau", {
         method: "POST",
@@ -157,8 +167,10 @@
 
       result.tenDoiMot = danhSachDoi.find((value) => value.maDoi == result.doiMot)?.tenDoi ?? "";
       result.tenDoiHai = danhSachDoi.find((value) => value.maDoi == result.doiHai)?.tenDoi ?? "";
-      result.tenDoiThang = danhSachDoi.find((value) => value.maDoi == result.doiThang)?.tenDoi ?? "";
+      result.tenDoiThang = danhSachDoi.find((value) => value.maDoi == result.doiThang)?.tenDoi ?? null;
       result.tenMG = danhSachMuaGiai.find((value) => value.maMG == result.maMG)?.tenMG ?? "";
+      if (result.tenDoiThang === null)
+        result.tenDoiThang = "Hòa";
       
       if (selectedIndex === -1)
         danhSachLTD.push(result);

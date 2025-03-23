@@ -1,4 +1,4 @@
-import type { CauThu } from "$lib/types";
+import type { CauThu, SanNha } from "$lib/types";
 import type { PageServerLoad } from "./$types";
 
 export const load = (async ({ fetch }) => {
@@ -15,9 +15,11 @@ export const load = (async ({ fetch }) => {
     }
 
     const danhSachCauThu: CauThu[] = await response.json();
+
+
     // console.log(danhSachCauThu);
     return {
-      danhSachCauThu,
+      danhSachCauThu
     };
   } catch (error) {
     console.error("Error fetching data:", error);

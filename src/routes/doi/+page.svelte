@@ -3,22 +3,29 @@
   import Table from "$lib/components/Table.svelte";
   import type { PageProps } from "./$types";
   import { showErrorToast, showOkToast } from "$lib/components/Toast";
-  import type { DoiBong } from "$lib/types";
-  import Form, { type FormField, type FormInputMap } from "$lib/components/Form.svelte";
+  import type { DoiBong, SanNha } from "$lib/types";
+  import Form, { type FieldOption, type FormField, type FormInputMap } from "$lib/components/Form.svelte";
   import { SvelteMap } from "svelte/reactivity";
   let { data }: PageProps = $props();
 
   let danhSachDoiBong: DoiBong[] = $state(data.danhSachDoiBong);
+  let danhSachSanNha: SanNha[] = $state(data.danhSachSanNha ?? []);
+
+  for (const doiBong of danhSachDoiBong) {
+    doiBong.tenSan = danhSachSanNha.find((val) => val.maSan === doiBong.maSan)?.tenSan ?? "";
+  }
+
+  const sanNhaOption : FieldOption[] = danhSachSanNha.map((val) => ({ optionValue: val.maSan ?? 0, optionName: val.tenSan }));
 
   const columns = [
     { header: "", accessor: "maDoi", hidden: true},
     { header: "Tên đội", accessor: "tenDoi" },
-    { header: "Sân nhà", accessor: "sanNha" },
+    { header: "Sân nhà", accessor: "tenSan" },
   ];
 
   const formFields : FormField[] = [
     { label: "Tên đội", propertyName: "tenDoi", type: "input", valueType: "string" },
-    { label: "Sân nhà", propertyName: "sanNha", type: "input", valueType: "string" }
+    { label: "Sân nhà", propertyName: "maSan", type: "select", valueType: "number", options: sanNhaOption }
   ]
   let selectedIndex : number = $state(0);
   let maDoi : number = $state(0);
@@ -41,7 +48,7 @@
       editData.clear();
       editData.set("maDoi", data.maDoi ?? null);
       editData.set("tenDoi", data.tenDoi);
-      editData.set("sanNha", data.sanNha);
+      editData.set("maSan", data.maSan);
       selectedIndex = index;
       formState = true;
     }
@@ -64,18 +71,7 @@
 
   const addDoiBong = async (e: Event, data : DoiBong) => {
     e.preventDefault();
-    if (data.tenDoi.trim() === "" || data.sanNha.trim() === "") return;
-
-    if (
-      danhSachDoiBong.some(
-        (doiBong) =>
-          doiBong.tenDoi.trim().toLowerCase() ===
-          data.tenDoi.trim().toLowerCase()
-      )
-    ) {
-      showErrorToast("Tên đội bóng đã tồn tại");
-      return;
-    }
+    if (data.tenDoi.trim() === "") return;
 
     try {
       const response = await fetch("/api/doibong", {
@@ -91,6 +87,7 @@
       }
 
       const result = await response.json();
+      result.tenSan = danhSachSanNha.find((val) => val.maSan === result.maSan)?.tenSan ?? "";
 
       // Cập nhật danh sách đội bóng nếu cần thiết
       if (selectedIndex === -1) 
