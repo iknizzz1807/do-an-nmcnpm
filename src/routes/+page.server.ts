@@ -1,21 +1,6 @@
 import { fail, redirect, type RequestEvent } from "@sveltejs/kit";
 import type { PageServerLoad } from "./bxh/$types";
 import { deleteSessionTokenCookie, invalidateSession } from "$lib/server/db/functions/Session";
-
-
-export const load : PageServerLoad = async(event) => {
-	// if (!event.locals.user.emailVerified) {
-	// 	return redirect(302, "/verify-email");
-	// }
-	// if (!event.locals.user.registered2FA) {
-	// 	return redirect(302, "/2fa/setup");
-	// }
-	// if (!event.locals.session.twoFactorVerified) {
-	// 	return redirect(302, get2FARedirect(event.locals.user));
-	// }
-	return {
-	};
-}
 export const actions = {
 	default: (event: RequestEvent) => {
 		if (event.locals.session === null) {

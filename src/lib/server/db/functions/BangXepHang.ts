@@ -1,8 +1,8 @@
 import { db } from "../client"
-import { and, eq, getTableColumns, ne, or, sql } from "drizzle-orm"
+import { and, eq, getTableColumns, gt, inArray, ne, or, sql } from "drizzle-orm"
 import { LichThiDauTable } from "../schema/LichThiDau"
 import { DoiBongTable } from "../schema/DoiBong";
-import type { BangXepHangNgay } from "$lib/types";
+import type { BangXepHangNgay, CauThuGhiBan } from "$lib/types";
 import { CauThuTable } from "../schema/CauThu";
 import { BanThangTable } from "../schema/BanThang";
 
@@ -20,7 +20,8 @@ export const selectBXHDoiNgay = async (ngay: Date) => {
   // Chuyen no thanh set
   const doiCoTranTrongNgay = new Set(selectDoi.flatMap((value) => [value.doiMot, value.doiHai]));
   for (const value of doiCoTranTrongNgay) {
-    const doi = (await db.select({tenDoi: DoiBongTable.tenDoi}).from(DoiBongTable).where(eq(DoiBongTable.maDoi, value))).at(0);
+    const doi = (await db.select({maDoi: DoiBongTable.maDoi, tenDoi: DoiBongTable.tenDoi})
+                  .from(DoiBongTable).where(eq(DoiBongTable.maDoi, value))).at(0);
     if (doi === undefined)
       throw new Error("Doi mot khong ton tai");
 
@@ -38,6 +39,7 @@ export const selectBXHDoiNgay = async (ngay: Date) => {
         ne(LichThiDauTable.doiThang, value))
       );
     const doiBXH = {
+      maDoi: doi.maDoi,
       tenDoi: doi.tenDoi,
       soTran: soTran,
       soTranThang: soTranThang,
@@ -52,15 +54,40 @@ export const selectBXHDoiNgay = async (ngay: Date) => {
   return result;
 }
 
-export const selectCauThuGhiBan = async (maTD : number) => {
-  return await db.select({
-    maCT: CauThuTable.maCT, 
-    tenCT: CauThuTable.tenCT, 
-    tenDoi: DoiBongTable.tenDoi, 
-    loaiCT: CauThuTable.loaiCT,
-    soBanThang: sql<number>`count(*)`
-  }).from(CauThuTable)
-  .innerJoin(BanThangTable, and(eq(BanThangTable.maTD, maTD), eq(BanThangTable.maCT, CauThuTable.maCT)))
-  .innerJoin(DoiBongTable, eq(DoiBongTable.maDoi, BanThangTable.maDoi))
-  .groupBy(CauThuTable.maCT, CauThuTable.tenCT, DoiBongTable.tenDoi, CauThuTable.loaiCT);
+export const selectCauThuGhiBan = async (ngay: Date, maDoi : number) => {
+  const lichThiDaus = (await db.select({ maTD: LichThiDauTable.maTD}).from(LichThiDauTable).where(and(
+      sql`date(${LichThiDauTable.ngayGio}) = date(${ngay.toJSON()})`,
+      or(
+        eq(LichThiDauTable.doiMot, maDoi), 
+        eq(LichThiDauTable.doiHai, maDoi)
+      )
+    ))).map((val => val.maTD));
+  const cauThus = await db.select({ maCT: BanThangTable.maCT }).from(BanThangTable)
+    .where(
+      and(
+        inArray(BanThangTable.maTD, lichThiDaus), 
+        eq(BanThangTable.maDoi, maDoi)
+      )
+    )
+    .groupBy(BanThangTable.maCT);
+  let result = [];
+  for (const cauThu of cauThus) {
+    let ct = (await db.select({
+      maCT: CauThuTable.maCT,
+      tenCT: CauThuTable.tenCT,
+      maDoi: DoiBongTable.maDoi,
+      tenDoi: DoiBongTable.maDoi,
+      loaiCT: CauThuTable.loaiCT,
+      soBanThang: db.$count(BanThangTable, 
+        and(eq(BanThangTable.maCT, cauThu.maCT), 
+            inArray(BanThangTable.maTD, lichThiDaus)
+          )
+        )
+    })
+      .from(CauThuTable)
+      .innerJoin(DoiBongTable, eq(DoiBongTable.maDoi, maDoi))
+      .where(eq(CauThuTable.maCT, cauThu.maCT)).limit(1)).at(0);
+    result.push(ct);
+  }
+  return result;
 }

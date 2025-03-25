@@ -9,7 +9,6 @@ export const load = (async ({ fetch }) => {
         "Content-Type": "application/json",
       },
     });
-
     if (!response.ok) {
       throw new Error("Failed to fetch data");
     }

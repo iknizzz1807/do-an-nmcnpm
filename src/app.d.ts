@@ -1,6 +1,6 @@
 // See https://svelte.dev/docs/kit/types#app.d.ts
 
-import type { DSMuaGiai, Session, User } from "$lib/types";
+import type { DSMuaGiai, Session, Settings, User } from "$lib/types";
 
 // for information about these interfaces
 declare global {
@@ -10,6 +10,7 @@ declare global {
       user: User | null;
       session: Session | null;
       muaGiai: DSMuaGiai | null;
+      setting: Settings;
     }
     // interface PageData {}
     // interface PageState {}

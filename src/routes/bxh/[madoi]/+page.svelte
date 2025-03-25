@@ -1,0 +1,26 @@
+<script lang="ts">
+  import type { PageProps } from "./$types";
+  import Table from "$lib/components/Table.svelte";
+  import type { CauThuGhiBan } from "$lib/types";
+
+  let { data }: PageProps = $props();
+
+  let danhSachCauThu: CauThuGhiBan[] = $state(data.dsCTGhiBan);
+
+  const columns = [
+    { header: "", accessor: "maCT" },
+    { header: "Tên cầu thủ", accessor: "tenCT" },
+    { header: "Tên đội", accessor: "tenDoi" },
+    { header: "Loại cầu thủ", accessor: "loaiCT" },
+    { header: "Số bàn thắng", accessor: "soBanThang" },
+  ];
+
+</script>
+
+<Table
+  title={"Danh sách các cầu thủ"}
+  {columns}
+  data={danhSachCauThu}
+  redirectParam={""}
+  tableType={""}
+/>

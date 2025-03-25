@@ -47,7 +47,7 @@
           doiOption.find((val) => data.get("doiHai") === val.optionValue ) ?? { optionValue: "", optionName: "" },
         ] satisfies FieldOption[]
       }},
-    { label: "Ngày giờ", propertyName: "ngayGio", type: "Date", valueType: "Date"}
+    { label: "Ngày giờ", propertyName: "ngayGio", type: "Date", valueType: "DateTime" }
   ];
 
   const columns = [
@@ -56,7 +56,10 @@
     { header: "Vòng thi đấu", accessor: "vongThiDau" },
     { header: "Mã mùa giải", accessor: "tenMG" },
     { header: "Đội thắng", accessor: "tenDoiThang" },
-    { header: "Ngày giờ", accessor: "ngayGio" },
+    { header: "Ngày giờ", accessor: "ngayGio", 
+      accessFunction: (data: LichThiDau) => {
+        return new Date(data.ngayGio!!).toLocaleString();
+      } },
   ];
 
   let selectedIndex : number = $state(0);

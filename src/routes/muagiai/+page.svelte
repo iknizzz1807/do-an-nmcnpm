@@ -6,6 +6,7 @@
   import type { DSMuaGiai } from "$lib/types";
   import Form, { type FormField, type FormInputMap } from "$lib/components/Form.svelte";
   import { SvelteMap } from "svelte/reactivity";
+  import { redirect } from "@sveltejs/kit";
   let { data }: PageProps = $props();
 
   let danhSachMuaGiai: DSMuaGiai[] = $state(data.danhSachMuaGiai);
@@ -13,10 +14,13 @@
   const columns = [
     { header: "", accessor: "maMG", hidden: true},
     { header: "Tên mùa giải", accessor: "tenMG" },
+    { header: "Ngày diễn ra", accessor: "ngayDienRa",
+      accessFunction: (data: DSMuaGiai) => new Date(data.ngayDienRa!!).toLocaleDateString() }
   ];
 
   const formFields : FormField[] = [
     { label: "Tên mùa giải", propertyName: "tenMG", type: "input", valueType: "string" },
+    { label: "Ngày diễn ra", propertyName: "ngayDienRa", type: "Date", valueType: "Date" },
   ]
   let selectedIndex : number = $state(0);
 
@@ -38,6 +42,7 @@
       editData.clear();
       editData.set("maMG", data.maMG ?? null);
       editData.set("tenMG", data.tenMG);
+      editData.set("ngayDienRa", data.ngayDienRa);
       selectedIndex = index;
       formState = true;
     }
@@ -54,6 +59,25 @@
     }
     else {
       console.error("Data không thỏa mãn loại CauThu");
+    }
+  }
+
+  const onItemClick = async (data: DSMuaGiai, index: number) => {
+    try {
+      
+      const response = await fetch('api/selectmuagiai', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok)
+        throw new Error("Không thể chọn mùa giải");
+      
+      window.location.href = '/';
+    } catch(e) {
+      showErrorToast(String(e));
     }
   }
 
@@ -142,8 +166,9 @@
   title="Danh sách các Mùa giải"
   {columns}
   data={danhSachMuaGiai}
-  redirectParam={"maDoi"}
-  tableType="doi"
+  redirectParam={""}
+  tableType=""
+  onItemClick={onItemClick}
   onEditClick={onEditClick}
   onDeleteClick={onDeleteClick}
 />

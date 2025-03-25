@@ -9,7 +9,6 @@ export const POST = async ({ locals, request, cookies }) => {
       sameSite: "lax",
     });
     locals.muaGiai = data;
-    redirect(303, '/');
   }
   catch (err) {
     throw err;

@@ -1,5 +1,6 @@
 import { validateSessionToken } from "$lib/server/db/functions/Session";
 import { deleteSessionTokenCookie, setSessionTokenCookie } from "$lib/server/db/functions/Session";
+import { SelectSettings } from "$lib/server/db/functions/UserSettings";
 import type { DSMuaGiai } from "$lib/types";
 import { redirect, type Handle } from "@sveltejs/kit";
 
@@ -19,11 +20,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 			})
 		}
 		else if (event.url.pathname !== "/login" && event.url.pathname !== "/signup") {
-			return new Response(null, {
-				status: 302,
-				headers: { location: '/login' }
-			})
+			return redirect(307, '/login');
 		}
+
+		return resolve(event);
 	}
 	else {
 		const { session, user } = await validateSessionToken(token);
@@ -37,12 +37,21 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.user = user;
 	}
 	const selectedMuaGiai = event.cookies.get("selectedMuaGiai") ?? null;
-	if (selectedMuaGiai == null) {
+	if (selectedMuaGiai === null) {
 		event.locals.muaGiai = null;
+		if (event.url.pathname !== "/muagiai" &&
+				!event.url.pathname.startsWith("/api")) {
+				return redirect(307, "/muagiai");		
+		}
+		return resolve(event);
 	}
 	else {
 		event.locals.muaGiai = JSON.parse(selectedMuaGiai) satisfies DSMuaGiai;
 	}
+
+	event.locals.setting = await SelectSettings();
+
+	console.log(event.locals);
 	
   return resolve(event);
 };

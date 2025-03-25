@@ -14,7 +14,7 @@
     data: T[]; // Data holder
     tableType: string; // It's like current page. Used to redirect
     redirectParam: string; // Redirect to
-    onItemClick?: ((data: T, index : number) => void) | undefined; // DEPRECATED
+    onItemClick?: ((data: T, index : number) => void) | undefined;
     onDeleteClick?: ((data: T, index : number) => void) | undefined;
     onEditClick?: ((data: T, index : number) => void) | undefined;
   };
@@ -80,12 +80,18 @@
                 class="cursor-pointer hover:bg-gray-100"
               >
                 {#each columns as column}
-                  {#if !column.hidden}
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    {row[column.accessor]}
-                  </td>
+                  {#if column.accessFunction ?? null}
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      {column.accessFunction!!(row)}
+                    </td>
+                  {:else if !column.hidden}
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      {row[column.accessor]}
+                    </td>
                   {/if}
                 {/each}
+
+                <!-- Delete/Edit -->
                 {#if deleteButton || editButton}
                   <td class="px-6 py-4 whitespace-nowrap">
                     {#if editButton}

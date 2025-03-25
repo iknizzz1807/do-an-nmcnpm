@@ -51,6 +51,7 @@ export type KQTraCuuCauThu = {
 }
 
 export type BangXepHangNgay = {
+    maDoi: number,
     tenDoi: string,
     soTran: number,
     soTranThang: number,
@@ -58,6 +59,15 @@ export type BangXepHangNgay = {
     soTranHoa: number,
     hieuSo: number,
     hang: number
+}
+
+export type CauThuGhiBan = {
+    maCT: number;
+    maDoi: number;
+    tenCT: string;
+    tenDoi: string;
+    loaiCT: number;
+    soBanThang: number;
 }
 
 // Database
