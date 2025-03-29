@@ -3,8 +3,8 @@ import { SelectSettings } from "$lib/server/db/functions/UserSettings";
 import type { RequestHandler } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
-export const load = (async () => {
+export const load = (async ({ locals }) => {
   return {
-    setting: await SelectSettings()
+    setting: locals.setting
   };
 }) satisfies PageServerLoad;

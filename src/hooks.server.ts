@@ -50,8 +50,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 	}
 
 	event.locals.setting = await SelectSettings();
-
-	console.log(event.locals);
 	
   return resolve(event);
 };

@@ -106,6 +106,13 @@ export type ThamGiaDB = {
     maMG: number;
 }
 
+export type ThamGiaTD = {
+    maTD: number;
+    maDoi: number;
+    maCT: number;
+    viTri: string;
+};
+
 export type BanThang = {
     maBT?: number | undefined,
     maTD: number;

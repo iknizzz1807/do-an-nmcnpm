@@ -10,15 +10,26 @@
   import { SvelteMap } from "svelte/reactivity";
 
   let danhSachCauThu: CauThu[] = $state(data.danhSachCauThu);
+  const tuoiMin : number = $state(data.tuoiMin);
+  const tuoiMax : number = $state(data.tuoiMax);
   const ma_doi = data.ma_doi;
+  const minDate = new Date();
+  minDate.setFullYear(minDate.getFullYear() - tuoiMax);
+  const maxDate = new Date();
+  maxDate.setFullYear(maxDate.getFullYear() - tuoiMin);
 
   const formFields: FormField[] = [
     { label: "Tên cầu thủ", propertyName: "tenCT", type: "input", valueType: "string"},
-    { label: "Ngày sinh", propertyName: "ngaySinh", type: "Date", valueType: "Date"},
+
+    { label: "Ngày sinh", propertyName: "ngaySinh", type: "Date", valueType: "Date", 
+      dateMin: minDate.toISOString().slice(0, 10), dateMax: maxDate.toISOString().slice(0, 10)},
+
     { label: "Loại cầu thủ", propertyName: "loaiCT", type: "select", valueType: "number", 
       options: [ { optionValue: 1, optionName: "1" }, {optionValue: 2, optionName: "2"}, {optionValue: 3, optionName: "3"}]},
+
     { label: "Nước ngoài", propertyName: "nuocNgoai", type: "select", valueType: "number", 
       options: [ { optionValue: 0, optionName: "Không" }, {optionValue: 1, optionName: "Có"}]},
+
     { label: "Ghi chú", propertyName: "ghiChu", type: "input", valueType: "string"},
   ];
 

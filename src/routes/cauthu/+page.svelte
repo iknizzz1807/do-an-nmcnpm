@@ -8,6 +8,12 @@
   let { data }: PageProps = $props();
 
   let danhSachCauThu: CauThu[] = $state(data.danhSachCauThu);
+  const tuoiMin : number = $state(data.tuoiMin);
+  const tuoiMax : number = $state(data.tuoiMax);
+  const minDate = new Date();
+  minDate.setFullYear(minDate.getFullYear() - tuoiMax);
+  const maxDate = new Date();
+  maxDate.setFullYear(maxDate.getFullYear() - tuoiMin);
 
   let danhSachCauThuCopy = danhSachCauThu;
 
@@ -23,6 +29,7 @@
 
   const formFields : FormField[] = [
     { label: "Tên cầu thủ", propertyName: "tenCT", type: "input", valueType: "string" },
+    
     { label: "Loại cầu thủ", propertyName: "loaiCT", type: "select", valueType: "number", options: [
       { optionValue: 1, optionName: "1" },
       { optionValue: 2, optionName: "2" },
@@ -30,12 +37,16 @@
       { optionValue: 4, optionName: "4" },
       { optionValue: 5, optionName: "5" },
     ]},
+
     { label: "Ghi chú", propertyName: "ghiChu", type: "input", valueType: "string" },
+
     { label: "Nước ngoài", propertyName: "nuocNgoai", type: "select", valueType: "number", options: [
       { optionValue: 0, optionName: "Không" },
       { optionValue: 1, optionName: "Có" },
     ]},
-    { label: "Ngày sinh", propertyName: "ngaySinh", type: "Date", valueType: "Date" }
+
+    { label: "Ngày sinh", propertyName: "ngaySinh", type: "Date", valueType: "Date",
+      dateMin: minDate.toISOString().slice(0, 10), dateMax: maxDate.toISOString().slice(0, 10) }
   ]
 
   let formState: boolean = $state(false);

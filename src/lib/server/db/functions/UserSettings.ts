@@ -13,5 +13,5 @@ export const SelectSettings : any = async ()  => {
 }
 
 export const UpdateSettings = async(setting: Settings) => {
-  db.update(UserSettingsTable).set({ setting: setting }).limit(1);
+  await db.update(UserSettingsTable).set({ setting: setting }).limit(1);
 }

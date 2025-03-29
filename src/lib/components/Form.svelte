@@ -10,6 +10,8 @@
     type: "input" | "select" | "Date"; // Form type
     valueType: "string" | "number" | "Date" | "DateTime"; // data type
     options?: FieldOption[] | ((data: FormInputMap) => FieldOption[]); // for option, data là object của cái mình đang dùng
+    dateMin?: string | undefined;
+    dateMax?: string | undefined;
   };
   export type FormInputMap = SvelteMap<string, string | number | Date | null>;
 </script>
@@ -145,51 +147,38 @@
               >
                 {field.label}
               </label>
-              {#if field.valueType === "DateTime"}
-                <input
-                  id={field.propertyName}
-                  type="datetime-local"
-                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  required
-                  bind:value={
-                    () => {
-                      const value = inputValues.get(field.propertyName);
-                      if (value instanceof Date) {
+              <input
+                id={field.propertyName}
+                { 
+                  ... 
+                  { 
+                    type: field.valueType === "DateTime" ? "datetime-local" : "date",
+                    // max: field.dateMax,
+                    // min: field.dateMin,
+                  } 
+                }
+                min={field.dateMin}
+                max={field.dateMax}
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                required
+                bind:value={
+                  () => {
+                    const value = inputValues.get(field.propertyName);
+                    if (value instanceof Date) {
+                      if (field.valueType  === "DateTime")
                         return value.toISOString().slice(0, 16);
-                      }
-                      return value;
-                    },
-                    (val) => {
-                      if (val !== undefined && val !== null) {
-                        inputValues.set(field.propertyName, new Date(val));
-                      }
-                    }
-                  }
-                />
-              {:else}
-                <input
-                  id={field.propertyName}
-                  type="date"
-                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  required
-                  bind:value={
-                    () => {
-                      const value = inputValues.get(field.propertyName);
-                      if (value instanceof Date) {
-                        console.log(value.toISOString().slice(0, 10));
+                      else
                         return value.toISOString().slice(0, 10);
-                      }
-                      return value;
-                    },
-                    (val) => {
-                      if (val !== undefined && val !== null) {
-                        inputValues.set(field.propertyName, new Date(val));
-                      }
+                    }
+                    return value;
+                  },
+                  (val) => {
+                    if (val !== undefined && val !== null) {
+                      inputValues.set(field.propertyName, new Date(val));
                     }
                   }
-                />
-              {/if}
-              
+                }
+              />
             {/if}
           </div>
         {/each}

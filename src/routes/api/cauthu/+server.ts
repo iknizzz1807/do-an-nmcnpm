@@ -3,6 +3,7 @@ import { deleteCauThu, insertCauThu, selectAllCauThu, selectAllCauThuWithBanThan
 import { insertThamGiaDB } from "$lib/server/db/functions/ThamGiaDB";
 import type { CauThu } from "$lib/types";
 import { error, fail, redirect } from "@sveltejs/kit";
+import { calculateAge, errorResponseJSON } from "$lib";
 
 export const GET: RequestHandler = async ({locals}) => {
   const danhSachCauThu = await selectAllCauThuWithBanThang();
@@ -25,6 +26,7 @@ export const POST: RequestHandler = async ({
   // - danhSachCauThu là danh sách của các cầu thủ
   // - maDoi là mã đội bóng mà các cầu thủ đó thuộc về
   // Data này là bao gồm danh sách các cầu thủ và mã đội mà những cầu thủ đó thuộc về
+
   const data = await request.json();
   let result: CauThu | null;
   // Hiện tại chỉ là sửa không có Thêm. U HEAR ME?
@@ -33,6 +35,11 @@ export const POST: RequestHandler = async ({
     throw new Error("Hiện tại /cauthu chỉ phục vụ update");
   }
   else {
+    const ctAge = calculateAge(new Date(data.ngaySinh));
+    if (!(ctAge >= locals.setting.tuoiMin && ctAge <= locals.setting.tuoiMax)) {
+      return errorResponseJSON(400, "Cầu thủ có tuổi không hợp lệ");
+    }
+
     const cauThu : CauThu = {
       maCT: data.maCT,
       tenCT: data.tenCT,

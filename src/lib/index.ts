@@ -9,3 +9,18 @@ export const isNumber = (num : any) => {
   }
   return false;
 };
+
+export const calculateAge = (birthday: Date) => {
+  var ageDifMs = Date.now() - birthday.getTime();
+  var ageDate = new Date(ageDifMs); // miliseconds from epoch
+  return Math.abs(ageDate.getFullYear() - 1970);
+}
+
+export const errorResponseJSON = (errorCode: number, message: string) => {
+  return new Response(JSON.stringify({ error: message }), {
+    status: errorCode,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+}

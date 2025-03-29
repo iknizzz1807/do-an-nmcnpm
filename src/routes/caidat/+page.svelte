@@ -4,7 +4,7 @@
   import type { PageProps } from "./$types";
   import SettingSection from "./SettingSection.svelte";
   import SettingMainSection from "./SettingMainSection.svelte";
-  import { showErrorToast } from "$lib/components/Toast";
+  import { showErrorToast, showOkToast } from "$lib/components/Toast";
 
   const { data } : PageProps = $props();
   let setting : Settings = $state(data.setting);
@@ -22,7 +22,8 @@
       });
 
       if (!response.ok)
-        showErrorToast("Không thể cập nhật. Có lỗi xảy ra");
+        throw new Error("Không thể cập nhật. Có lỗi xảy ra");
+      showOkToast("Thành công");
     } catch(err) {
       showErrorToast(String(err));
     }
@@ -78,7 +79,7 @@
           bind:bindValue={setting.diemThang} label="Points for Win" unit=""/>
         <SettingNumberInput min={0} max={5} forValue="diemHoa"
           bind:bindValue={setting.diemHoa} label="Points for Draw" unit=""/>
-        <SettingNumberInput min={0} max={2} forValue="diemThua"
+        <SettingNumberInput min={-10} max={10} forValue="diemThua"
           bind:bindValue={setting.diemThua} label="Points for Loss" unit=""/>
         <p class="text-sm text-gray-500 mt-2">
           Note: Points for a win must be greater than points for a draw, which
@@ -160,7 +161,7 @@
         
 
     <SettingMainSection sectionName="User Management">
-      <div class="mb-8">
+      <!-- <div class="mb-8">
         <h3 class="text-xl font-semibold text-gray-800 mb-4">User Types</h3>
         <div class="overflow-x-auto">
           <table class="min-w-full divide-y divide-gray-200">
@@ -252,7 +253,7 @@
             Add New User Type
           </button>
         </div>
-      </div>
+      </div> -->
 
       <div>
         <h3 class="text-xl font-semibold text-gray-800 mb-4">User Profiles</h3>

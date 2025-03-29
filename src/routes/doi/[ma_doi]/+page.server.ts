@@ -1,15 +1,7 @@
 import type { CauThu } from "$lib/types";
 import type { PageServerLoad } from "./$types";
 
-// function formatDate(date: Date): string {
-//   const day = date.getDate();
-//   const month = date.getMonth() + 1;
-//   const year = date.getFullYear();
-
-//   return `${day}/${month}/${year}`;
-// }
-
-export const load = (async ({ params, fetch }) => {
+export const load = (async ({ params, fetch, locals }) => {
   // const danhSachCauThu = await getDanhSachCauThu(params.ten_doi);
   // Cái này là data giả để mô phỏng data thật được get request từ danh sách các cầu thủ của một đội bóng
 
@@ -30,12 +22,16 @@ export const load = (async ({ params, fetch }) => {
     return {
       danhSachCauThu,
       ma_doi: params.ma_doi,
+      tuoiMin: locals.setting.tuoiMin,
+      tuoiMax: locals.setting.tuoiMax,
     };
   } catch (error) {
     console.error("Error fetching data:", error);
     return {
       danhSachCauThu: [],
       ma_doi: params.ma_doi,
+      tuoiMin: locals.setting.tuoiMin,
+      tuoiMax: locals.setting.tuoiMax,
     };
   }
 }) satisfies PageServerLoad;
