@@ -3,7 +3,7 @@
   import Table from "$lib/components/Table.svelte";
   let { data }: PageProps = $props();
   import ButtonPrimary from "$lib/components/ButtonPrimary.svelte";
-  import type { CauThu } from "$lib/types";
+  import type { CauThu } from "$lib/typesDatabase";
   import { showOkToast, showErrorToast } from "$lib/components/Toast";
   import type { FormField, FormInputMap } from "$lib/components/Form.svelte";
   import Form from "$lib/components/Form.svelte";

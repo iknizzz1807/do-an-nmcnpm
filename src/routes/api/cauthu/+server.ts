@@ -1,8 +1,6 @@
 import type { RequestHandler } from "./$types";
-import { deleteCauThu, insertCauThu, selectAllCauThu, selectAllCauThuWithBanThang, updateCauThu } from "$lib/server/db/functions/CauThu";
-import { insertThamGiaDB } from "$lib/server/db/functions/ThamGiaDB";
-import type { CauThu } from "$lib/types";
-import { error, fail, redirect } from "@sveltejs/kit";
+import { deleteCauThu, selectAllCauThuWithBanThang, updateCauThu } from "$lib/server/db/functions/CauThu";
+import type { CauThu } from "$lib/typesDatabase";
 import { calculateAge, errorResponseJSON } from "$lib";
 
 export const GET: RequestHandler = async ({locals}) => {

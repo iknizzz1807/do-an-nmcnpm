@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { PageProps } from "./$types";
-  import type { BanThang, CauThu, ThePhat } from "$lib/types";
+  import type { BanThang, CauThu, ThePhat } from "$lib/typesDatabase";
   import { type FieldOption } from "$lib/components/Form.svelte";
   import BanThangTable from "./BanThangTable.svelte";
   import ThePhatTable from "./ThePhatTable.svelte";

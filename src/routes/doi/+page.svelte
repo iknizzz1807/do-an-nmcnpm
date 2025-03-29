@@ -3,7 +3,7 @@
   import Table from "$lib/components/Table.svelte";
   import type { PageProps } from "./$types";
   import { showErrorToast, showOkToast } from "$lib/components/Toast";
-  import type { DoiBong, SanNha } from "$lib/types";
+  import type { DoiBong, SanNha } from "$lib/typesDatabase";
   import Form, { type FieldOption, type FormField, type FormInputMap } from "$lib/components/Form.svelte";
   import { SvelteMap } from "svelte/reactivity";
   let { data }: PageProps = $props();

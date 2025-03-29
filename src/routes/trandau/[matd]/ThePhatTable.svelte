@@ -3,7 +3,7 @@
   import Form, { type FieldOption, type FormField, type FormInputMap } from "$lib/components/Form.svelte";
   import Table from "$lib/components/Table.svelte";
   import { showErrorToast, showOkToast } from "$lib/components/Toast";
-  import type { ThePhat, CauThu, LichThiDau } from "$lib/types";
+  import type { ThePhat, CauThu } from "$lib/typesDatabase";
   import { onMount } from "svelte";
   import { SvelteMap } from "svelte/reactivity";
 

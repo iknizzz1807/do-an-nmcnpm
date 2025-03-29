@@ -1,15 +1,11 @@
 <script lang="ts">
   import Table from "$lib/components/Table.svelte";
   import type { PageProps } from "./$types";
-  import type { DoiBong, DSMuaGiai, LichThiDau } from "$lib/types";
+  import type { DoiBong, DSMuaGiai, LichThiDau } from "$lib/typesDatabase";
   import ButtonPrimary from "$lib/components/ButtonPrimary.svelte";
   import { showErrorToast, showOkToast } from "$lib/components/Toast";
-  import { muaGiai } from "$lib/components/Nav.svelte"
-  import { get } from "svelte/store";
   import { type FieldOption, type FormField, type FormInputMap } from "$lib/components/Form.svelte";
   import Form from "$lib/components/Form.svelte";
-  import { validate } from "uuid";
-  import { getViewSelectedFields } from "drizzle-orm";
   import { SvelteMap } from "svelte/reactivity";
 
   let { data }: PageProps = $props();

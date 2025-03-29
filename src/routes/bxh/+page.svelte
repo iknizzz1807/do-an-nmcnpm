@@ -1,9 +1,10 @@
 <script lang="ts">
   import Table from "$lib/components/Table.svelte";
   import { showErrorToast } from "$lib/components/Toast";
-  import type { BangXepHangNgay } from "$lib/types";
+  import type { BangXepHangNgay } from "$lib/typesResponse";
 
-  let date : String = $state("");
+  let dateBXH : string = $state(new Date().toISOString().slice(0, 10));
+  $inspect(dateBXH);
   let bangXepHangNgay: BangXepHangNgay[] = $state([]);
   const columns = [
     { header: "", accessor: "maDoi", hidden: true },
@@ -18,12 +19,12 @@
 
   const onDateChange = async () => {
     try {
-      const reponse = await fetch("/api/bangxephang/ngay", {
+      const reponse = await fetch("/api/bangxephang", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ date: date })
+        body: JSON.stringify({ dateBXH: dateBXH })
       })
       if (!reponse.ok)
         throw new Error("Failed to fetch dâta");
@@ -47,21 +48,21 @@
   <form>
     <label
       class="block text-gray-700 text-sm font-bold mb-2"
-      for="date"
+      for="dateBXH"
     >
     Ngày
     </label>
     <input
-      id="date"
+      id="dateBXH"
       type="date"
       onchange={onDateChange}
       class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
       required
-      bind:value={date}
+      bind:value={dateBXH}
     />
   </form>
   <Table
-    title={"Bảng xếp hạng ngày " + new Date().toDateString()}
+    title={ "Bảng xếp hạng ngày " + (dateBXH.trim() === "" ? new Date() : new Date(dateBXH)).toLocaleDateString()}
     {columns}
     data={bangXepHangNgay}
     redirectParam={"maDoi"}

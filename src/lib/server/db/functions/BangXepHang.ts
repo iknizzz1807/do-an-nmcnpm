@@ -1,10 +1,10 @@
 import { db } from "../client"
-import { and, eq, getTableColumns, gt, inArray, ne, or, sql } from "drizzle-orm"
+import { and, eq, inArray, ne, or, sql } from "drizzle-orm"
 import { LichThiDauTable } from "../schema/LichThiDau"
 import { DoiBongTable } from "../schema/DoiBong";
-import type { BangXepHangNgay, CauThuGhiBan } from "$lib/types";
 import { CauThuTable } from "../schema/CauThu";
 import { BanThangTable } from "../schema/BanThang";
+import type { BangXepHangNgay } from "$lib/typesResponse";
 
 export const selectBXHDoiNgay = async (ngay: Date) => {
   // Tat ca cac doi co tran co trung
@@ -76,7 +76,7 @@ export const selectCauThuGhiBan = async (ngay: Date, maDoi : number) => {
       maCT: CauThuTable.maCT,
       tenCT: CauThuTable.tenCT,
       maDoi: DoiBongTable.maDoi,
-      tenDoi: DoiBongTable.maDoi,
+      tenDoi: DoiBongTable.tenDoi,
       loaiCT: CauThuTable.loaiCT,
       soBanThang: db.$count(BanThangTable, 
         and(eq(BanThangTable.maCT, cauThu.maCT), 

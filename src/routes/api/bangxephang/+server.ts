@@ -1,11 +1,11 @@
 import type { RequestHandler } from "@sveltejs/kit";
 import { selectBXHDoiNgay } from "$lib/server/db/functions/BangXepHang";
-import type { BangXepHangNgay } from "$lib/types";
+import type { BangXepHangNgay } from "$lib/typesResponse";
 
 export const POST: RequestHandler = async ({ locals, request }) => {
   const data = await request.json();
 
-  const danhSachTranDau = await selectBXHDoiNgay(new Date(data.date));
+  const danhSachTranDau = await selectBXHDoiNgay(new Date(data.dateBXH));
   console.log(locals.setting);
   for (let tranDau of danhSachTranDau) {
     tranDau.hieuSo = locals.setting.diemThang * tranDau.soTranThang + 

@@ -1,4 +1,4 @@
-import type { DSMuaGiai } from "$lib/types.js";
+import type { DSMuaGiai } from "$lib/typesDatabase.js";
 import { redirect, type Actions } from "@sveltejs/kit";
 
 export const POST = async ({ locals, request, cookies }) => {

@@ -1,4 +1,4 @@
-import type { ThamGiaTD } from "$lib/types";
+import type { ThamGiaTD } from "$lib/typesDatabase";
 import { db } from "../client";
 import { eq, and, getTableColumns } from "drizzle-orm";
 import { ThamGiaTDTable } from "../schema/ThamGiaTD";

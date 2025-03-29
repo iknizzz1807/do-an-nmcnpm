@@ -2,8 +2,7 @@ import { sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { db } from "../client";
 import { sql } from "drizzle-orm";
 import type { TypesAreEqual } from "$lib/server/utils";
-import type { Settings } from "$lib/types";
-
+import type { Settings } from "$lib/typesAuth";
 const DefaultSetting = {
   "tuoiMin": 16,
   "tuoiMax": 40,

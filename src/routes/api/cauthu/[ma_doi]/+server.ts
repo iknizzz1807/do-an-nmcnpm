@@ -2,7 +2,7 @@ import type { RequestHandler } from "./$types";
 import { selectCauThuDoiBong } from "$lib/server/db/functions/CauThu";
 import { insertCauThu } from "$lib/server/db/functions/CauThu";
 import { insertThamGiaDB } from "$lib/server/db/functions/ThamGiaDB";
-import type { CauThu } from "$lib/types";
+import type { CauThu } from "$lib/typesDatabase";
 
 export const GET: RequestHandler = async ({ params, locals }) => {
   const maDoi = parseInt(params.ma_doi);

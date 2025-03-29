@@ -1,7 +1,7 @@
 import { eq, and, getTableColumns } from 'drizzle-orm';
 import { db } from '../client';
-import { LichThiDauTable, LichThiDauTableBackup, type InsertLichThiDauBackupParams } from '../schema/LichThiDau';
-import type { LichThiDau } from '$lib/types';
+import { LichThiDauTable } from '../schema/LichThiDau';
+import type { LichThiDau } from '$lib/typesDatabase';
 import { DoiBongTable } from '../schema/DoiBong';
 import { DSMuaGiaiTable } from '../schema/DSMuaGiai';
 import { alias } from 'drizzle-orm/sqlite-core';

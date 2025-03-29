@@ -1,11 +1,8 @@
-import type { ThamGiaDB } from "$lib/types";
+import type { ThamGiaDB } from "$lib/typesDatabase";
 import { db } from "../client";
 import { eq } from "drizzle-orm";
 import {
   ThamGiaDBTable,
-  ThamGiaDBTableBackup,
-  type InsertThamGiaDBBackupParams,
-  type InsertThamGiaDBParams,
 } from "../schema/ThamGiaDB";
 
 // Return maCT

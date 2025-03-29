@@ -1,4 +1,4 @@
-import type { DSMuaGiai } from '$lib/types';
+import type { DSMuaGiai } from '$lib/typesDatabase';
 import { db } from '../client';
 import { eq } from 'drizzle-orm';
 import { DSMuaGiaiTable } from '../schema/DSMuaGiai';

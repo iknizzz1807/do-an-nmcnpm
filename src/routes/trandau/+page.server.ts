@@ -1,4 +1,4 @@
-import type { DoiBong, DSMuaGiai, LichThiDau } from "$lib/types";
+import type { DoiBong, DSMuaGiai, LichThiDau } from "$lib/typesDatabase";
 import type { PageServerLoad } from "./$types";
 
 

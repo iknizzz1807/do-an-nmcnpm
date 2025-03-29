@@ -5,8 +5,9 @@ import { ThamGiaDBTable } from "../schema/ThamGiaDB";
 import { DoiBongTable } from "../schema/DoiBong";
 import { BanThangTable } from "../schema/BanThang";
 import { insertThamGiaDB } from "./ThamGiaDB";
-import type { CauThu, KQTraCuuCauThu } from "$lib/types";
 import { ThePhatTable } from "../schema/ThePhat";
+import type { CauThu } from "$lib/typesDatabase";
+import type { KQTraCuuCauThu } from "$lib/typesResponse";
 
 export const insertCauThu = async (...cauThu: CauThu[]) => {
   let returning = await db.insert(CauThuTable).values(cauThu).returning({ id: CauThuTable.maCT });

@@ -1,7 +1,7 @@
 import { integer, sqliteTable, text, check } from 'drizzle-orm/sqlite-core';
 import { DoiBongTable } from './DoiBong';
 import { DSMuaGiaiTable } from './DSMuaGiai';
-import type { LichThiDau } from '$lib/types';
+import type { LichThiDau } from '$lib/typesDatabase';
 import type { TypesAreEqual } from '$lib/server/utils';
 import { db } from '../client';
 import { sql } from 'drizzle-orm';

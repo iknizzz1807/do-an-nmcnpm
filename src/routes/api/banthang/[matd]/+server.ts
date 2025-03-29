@@ -1,7 +1,7 @@
 import { isNumber } from "$lib";
 import type { RequestHandler } from "./$types";
 import { deleteBanThang, insertBanThang, selectAllBanThang, selectBanThang, updateBanThang } from "$lib/server/db/functions/BanThang";
-import type { BanThang } from "$lib/types";
+import type { BanThang } from "$lib/typesDatabase";
 
 export const GET: RequestHandler = async ({ params, locals }) => {
   const maTD = parseInt(params.matd);

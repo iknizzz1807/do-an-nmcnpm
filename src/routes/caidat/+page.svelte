@@ -1,6 +1,6 @@
 <script lang="ts">
   import SettingNumberInput from "./SettingNumberInput.svelte";
-  import type { Settings } from "$lib/types";
+  import type { Settings } from "$lib/typesAuth";
   import type { PageProps } from "./$types";
   import SettingSection from "./SettingSection.svelte";
   import SettingMainSection from "./SettingMainSection.svelte";

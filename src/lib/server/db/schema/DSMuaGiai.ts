@@ -1,5 +1,5 @@
 import type { TypesAreEqual } from '$lib/server/utils';
-import type { DSMuaGiai } from '$lib/types';
+import type { DSMuaGiai } from '$lib/typesDatabase';
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { db } from '../client';
 import { sql } from 'drizzle-orm';

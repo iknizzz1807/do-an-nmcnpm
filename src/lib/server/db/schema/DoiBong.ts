@@ -1,6 +1,6 @@
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { db } from '../client';
-import type { DoiBong } from '$lib/types';
+import type { DoiBong } from '$lib/typesDatabase';
 import type { TypesAreEqual } from '$lib/server/utils';
 import { sql } from 'drizzle-orm';
 import { SanNhaTable } from './SanNha';

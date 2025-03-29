@@ -1,7 +1,7 @@
 <script lang="ts">
   import Table from "$lib/components/Table.svelte";
   import type { PageProps } from "./$types";
-  import type { CauThu } from "$lib/types";
+  import type { CauThu } from "$lib/typesDatabase";
   import { showErrorToast, showOkToast } from "$lib/components/Toast";
   import Form, { type FormField, type FormInputMap } from "$lib/components/Form.svelte";
   import { SvelteMap } from "svelte/reactivity";

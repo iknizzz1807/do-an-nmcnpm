@@ -2,7 +2,7 @@ import { isNumber } from "$lib";
 import { selectCauThuDoiBong } from "$lib/server/db/functions/CauThu";
 import { selectDoiBongTenDoi } from "$lib/server/db/functions/DoiBong";
 import { selectLichThiDauMaTD } from "$lib/server/db/functions/LichThiDau";
-import type { BanThang, DoiBong, DSMuaGiai, LichThiDau, ThePhat } from "$lib/types";
+import type { BanThang, ThePhat } from "$lib/typesDatabase";
 import type { PageServerLoad } from "./$types";
 
 

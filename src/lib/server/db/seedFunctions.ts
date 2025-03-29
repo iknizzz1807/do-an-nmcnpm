@@ -4,7 +4,7 @@ import { BanThangTable } from "./schema/BanThang";
 import { DoiBongTable } from "./schema/DoiBong";
 import { LichThiDauTable } from "./schema/LichThiDau";
 import { ThamGiaDBTable } from "./schema/ThamGiaDB";
-import type { BanThang, LichThiDau, ThamGiaDB, ThePhat } from "$lib/types";
+import type { BanThang, LichThiDau, ThamGiaDB, ThePhat } from "$lib/typesDatabase";
 import { eq, and, getTableColumns } from "drizzle-orm";
 import { choose, randIntBetween } from "../utils";
 import { insertLichThiDau } from "./functions/LichThiDau";

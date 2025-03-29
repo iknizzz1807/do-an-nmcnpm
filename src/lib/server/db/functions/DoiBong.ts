@@ -1,8 +1,7 @@
 import { ilike, eq, or, getTableColumns } from "drizzle-orm";
 import { db } from "../client";
-import { DoiBongTable, DoiBongTableBackup, type InsertDoiBongBackupParams } from "../schema/DoiBong";
-import type { DoiBong } from "$lib/types";
-import { CauThuTableBackup, type InsertCauThuBackupParams } from "../schema/CauThu";
+import { DoiBongTable } from "../schema/DoiBong";
+import type { DoiBong } from "$lib/typesDatabase";
 import { BanThangTable } from "../schema/BanThang";
 import { LichThiDauTable } from "../schema/LichThiDau";
 import { ThamGiaDBTable } from "../schema/ThamGiaDB";

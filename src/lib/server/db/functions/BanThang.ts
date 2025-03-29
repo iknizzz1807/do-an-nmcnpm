@@ -1,4 +1,4 @@
-import type { BanThang } from '$lib/types';
+import type { BanThang } from '$lib/typesDatabase';
 import { db } from '../client';
 import { and, eq } from 'drizzle-orm';
 import { BanThangTable } from '../schema/BanThang';

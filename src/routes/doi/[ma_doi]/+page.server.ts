@@ -1,4 +1,4 @@
-import type { CauThu } from "$lib/types";
+import type { CauThu } from "$lib/typesDatabase";
 import type { PageServerLoad } from "./$types";
 
 export const load = (async ({ params, fetch, locals }) => {

@@ -3,7 +3,7 @@ import { LichThiDauTable } from './LichThiDau';
 import { CauThuTable } from './CauThu';
 import { DoiBongTable } from './DoiBong';
 import { type TypesAreEqual } from '$lib/server/utils';
-import { type BanThang } from '$lib/types';
+import { type BanThang } from '$lib/typesDatabase';
 import { db } from '../client';
 import { sql } from 'drizzle-orm';
 

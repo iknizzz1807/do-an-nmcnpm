@@ -1,8 +1,5 @@
 import type { RequestHandler } from "./$types";
-import { selectCauThuDoiBong } from "$lib/server/db/functions/CauThu";
-import { insertCauThu } from "$lib/server/db/functions/CauThu";
-import { insertThamGiaDB } from "$lib/server/db/functions/ThamGiaDB";
-import type { CauThu, ThamGiaTD } from "$lib/types";
+import type { ThamGiaTD } from "$lib/typesDatabase";
 import { insertThamGiaTD, selectCauThuTranDau } from "$lib/server/db/functions/ThamGiaTD";
 
 export const GET: RequestHandler = async ({ params, locals }) => {

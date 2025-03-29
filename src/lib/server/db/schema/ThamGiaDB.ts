@@ -2,7 +2,7 @@ import { integer, sqliteTable, text, primaryKey } from 'drizzle-orm/sqlite-core'
 import { DoiBongTable } from './DoiBong';
 import { CauThuTable } from './CauThu';
 import { DSMuaGiaiTable } from './DSMuaGiai';
-import type { ThamGiaDB } from '$lib/types';
+import type { ThamGiaDB } from '$lib/typesDatabase';
 import type { TypesAreEqual } from '$lib/server/utils';
 import { sql } from 'drizzle-orm';
 import { db } from '../client';

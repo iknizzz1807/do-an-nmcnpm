@@ -1,5 +1,5 @@
 import type { TypesAreEqual } from '$lib/server/utils';
-import type { CauThu } from '$lib/types';
+import type { CauThu } from '$lib/typesDatabase';
 import { sql } from 'drizzle-orm';
 import { check, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { db } from '../client';

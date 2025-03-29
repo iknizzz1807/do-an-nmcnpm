@@ -1,7 +1,7 @@
 import { validateSessionToken } from "$lib/server/db/functions/Session";
 import { deleteSessionTokenCookie, setSessionTokenCookie } from "$lib/server/db/functions/Session";
 import { SelectSettings } from "$lib/server/db/functions/UserSettings";
-import type { DSMuaGiai } from "$lib/types";
+import type { DSMuaGiai } from "$lib/typesDatabase";
 import { redirect, type Handle } from "@sveltejs/kit";
 
 export const handle: Handle = async ({ event, resolve }) => {
@@ -36,6 +36,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.session = session;
 		event.locals.user = user;
 	}
+
 	const selectedMuaGiai = event.cookies.get("selectedMuaGiai") ?? null;
 	if (selectedMuaGiai === null) {
 		event.locals.muaGiai = null;
@@ -50,6 +51,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 	}
 
 	event.locals.setting = await SelectSettings();
-	
+
   return resolve(event);
 };

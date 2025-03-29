@@ -1,4 +1,4 @@
-import type { ThePhat } from '$lib/types';
+import type { ThePhat } from '$lib/typesDatabase';
 import { db } from '../client';
 import { and, eq } from 'drizzle-orm';
 import { ThePhatTable } from '../schema/ThePhat';

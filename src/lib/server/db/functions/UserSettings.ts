@@ -1,4 +1,4 @@
-import type { Settings } from "$lib/types";
+import type { Settings } from "$lib/typesAuth";
 import { db } from "../client";
 import { createDefaultSetting, UserSettingsTable } from "../schema/UserSettings"
 

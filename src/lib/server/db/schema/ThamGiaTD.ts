@@ -6,7 +6,7 @@ import type { TypesAreEqual } from '$lib/server/utils';
 import { sql } from 'drizzle-orm';
 import { db } from '../client';
 import { LichThiDauTable } from './LichThiDau';
-import type { ThamGiaTD } from '$lib/types';
+import type { ThamGiaTD } from '$lib/typesDatabase';
 
 // Số lượng cầu thủ tối thiểu, tối đa của đội, số cầu thủ nước ngoài tối đa.
 export const ThamGiaTDTable = sqliteTable('ThamGiaTD', {

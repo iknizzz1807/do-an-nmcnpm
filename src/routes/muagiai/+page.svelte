@@ -3,10 +3,9 @@
   import Table from "$lib/components/Table.svelte";
   import type { PageProps } from "./$types";
   import { showErrorToast, showOkToast } from "$lib/components/Toast";
-  import type { DSMuaGiai } from "$lib/types";
+  import type { DSMuaGiai } from "$lib/typesDatabase";
   import Form, { type FormField, type FormInputMap } from "$lib/components/Form.svelte";
   import { SvelteMap } from "svelte/reactivity";
-  import { redirect } from "@sveltejs/kit";
   let { data }: PageProps = $props();
 
   let danhSachMuaGiai: DSMuaGiai[] = $state(data.danhSachMuaGiai);

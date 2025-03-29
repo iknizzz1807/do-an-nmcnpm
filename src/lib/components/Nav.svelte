@@ -4,7 +4,7 @@
 </script>
 
 <script lang="ts">
-  import type { DSMuaGiai } from "$lib/types";
+  import type { DSMuaGiai } from "$lib/typesDatabase";
   import { onMount } from "svelte";
   import { showErrorToast } from "./Toast";
   import { writable } from "svelte/store";
@@ -25,17 +25,18 @@
 
   onMount(async () => {
     try {
-      const data = await fetch("/api/muagiai", {
+      const response = await fetch("/api/muagiai", {
         method: "GET",
         headers: {
           "Content-Type": "application/json"
         }
       })
-      if (!data.ok) {
+      console.log(response);
+      if (!response.ok) {
         throw new Error("Không thể fetch data mùa giải");
       }
 
-      dsMuaGiai = await data.json() satisfies DSMuaGiai[];
+      dsMuaGiai = await response.json() satisfies DSMuaGiai[];
     } catch (err) {
       console.error(err);
     }

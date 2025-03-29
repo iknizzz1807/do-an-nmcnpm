@@ -1,4 +1,4 @@
-import type { DoiBong, DSMuaGiai } from "$lib/types";
+import type { DSMuaGiai } from "$lib/typesDatabase";
 import type { PageServerLoad } from "./$types";
 
 export const load = (async ({ fetch }) => {

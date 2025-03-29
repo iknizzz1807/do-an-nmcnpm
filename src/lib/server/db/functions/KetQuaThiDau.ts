@@ -1,9 +1,10 @@
 import { eq, and } from "drizzle-orm"
 import { db } from "../client"
-import { DoiBongTable, type InsertDoiBongParams } from "../schema/DoiBong"
+import { DoiBongTable } from "../schema/DoiBong"
 import { LichThiDauTable } from "../schema/LichThiDau"
 import { BanThangTable } from "../schema/BanThang"
-import type { KetQuaThiDau } from "$lib/types"
+import type { KetQuaThiDau } from "$lib/typesResponse"
+import { SanNhaTable } from "../schema/SanNha"
 
 
 export const selectKetQuaThiDau = async(maTD: number) : Promise<null | KetQuaThiDau> => {
@@ -20,11 +21,14 @@ export const selectKetQuaThiDau = async(maTD: number) : Promise<null | KetQuaThi
 
     const tySoDoiMot = await db.$count(BanThangTable, and(eq(BanThangTable.maTD, maTD), eq(BanThangTable.maDoi, lichThiDau.doiMot)));
     const tySoDoiHai = await db.$count(BanThangTable, and(eq(BanThangTable.maTD, maTD), eq(BanThangTable.maDoi, lichThiDau.doiHai)));
+
+    const sanNha = (await db.select().from(SanNhaTable).where(eq(SanNhaTable.maSan, doiMot.maSan))).at(0)?.tenSan ?? "";
+
     return {
         doiMot: doiMot,
         doiHai: doiHai,
         tySo: tySoDoiMot.toString() + '-' + tySoDoiHai.toString(),
-        san: doiMot.sanNha,
+        san: sanNha,
         ngayGio: lichThiDau.ngayGio
     };
 }

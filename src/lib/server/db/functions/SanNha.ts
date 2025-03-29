@@ -1,4 +1,4 @@
-import type {  SanNha } from "$lib/types";
+import type {  SanNha } from "$lib/typesDatabase";
 import { eq } from "drizzle-orm";
 import { db } from "../client";
 import { SanNhaTable } from "../schema/SanNha";
