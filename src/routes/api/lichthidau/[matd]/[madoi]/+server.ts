@@ -39,7 +39,7 @@ export const POST: RequestHandler = async ({ request, params, locals }) => {
       viTri: data.viTri,
     });
   } catch (error) {
-    throw new Error(String(error));
+    throw error;
   }
 
   return new Response(JSON.stringify(data), {

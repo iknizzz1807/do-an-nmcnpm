@@ -17,7 +17,8 @@ export const calculateAge = (birthday: Date) => {
 }
 
 export const errorResponseJSON = (errorCode: number, message: string) => {
-  return new Response(JSON.stringify({ error: message }), {
+  console.error(new Error(message));
+  return new Response(JSON.stringify({ message: message }), {
     status: errorCode,
     headers: {
       "Content-Type": "application/json",

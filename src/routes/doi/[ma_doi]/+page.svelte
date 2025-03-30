@@ -22,7 +22,7 @@
     { label: "Tên cầu thủ", propertyName: "tenCT", type: "input", valueType: "string"},
 
     { label: "Ngày sinh", propertyName: "ngaySinh", type: "Date", valueType: "Date", 
-      dateMin: minDate.toISOString().slice(0, 10), dateMax: maxDate.toISOString().slice(0, 10)},
+      min: minDate.toISOString().slice(0, 10), max: maxDate.toISOString().slice(0, 10)},
 
     { label: "Loại cầu thủ", propertyName: "loaiCT", type: "select", valueType: "number", 
       options: [ { optionValue: 1, optionName: "1" }, {optionValue: 2, optionName: "2"}, {optionValue: 3, optionName: "3"}]},
@@ -105,8 +105,8 @@
       });
 
       if (!response.ok) {
-        showErrorToast("Lỗi tạo cầu thủ");
-        throw new Error("Lỗi tạo cầu thủ");
+        const error = await response.json();
+        throw new Error(error.message);
       }
 
       const result = await response.json();

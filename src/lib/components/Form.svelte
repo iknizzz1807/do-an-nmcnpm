@@ -10,8 +10,8 @@
     type: "input" | "select" | "Date"; // Form type
     valueType: "string" | "number" | "Date" | "DateTime"; // data type
     options?: FieldOption[] | ((data: FormInputMap) => FieldOption[]); // for option, data là object của cái mình đang dùng
-    dateMin?: string | undefined;
-    dateMax?: string | undefined;
+    min?: string | number | undefined;
+    max?: string | number | undefined;
   };
   export type FormInputMap = SvelteMap<string, string | number | Date | null>;
 </script>
@@ -93,7 +93,14 @@
               </label>
               <input
                 id={field.propertyName}
-                type="text"
+                { 
+                  ... 
+                  { 
+                    type: field.valueType === "string" ? "text" : "number",
+                    max: field.max,
+                    min: field.min,
+                  } 
+                }
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
                 bind:value={
@@ -157,8 +164,8 @@
                     // min: field.dateMin,
                   } 
                 }
-                min={field.dateMin}
-                max={field.dateMax}
+                min={field.min}
+                max={field.max}
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
                 bind:value={

@@ -40,7 +40,6 @@ export const POST: RequestHandler = async ({
   });
 };
 
-// Delete DoiBong
 // export const DELETE: RequestHandler = async ({
 //   request,
 // }: {

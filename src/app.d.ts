@@ -1,6 +1,7 @@
 // See https://svelte.dev/docs/kit/types#app.d.ts
 
-import type { DSMuaGiai, Session, Settings, User } from "$lib/typesDatabase";
+import type { Session, Settings, User } from "$lib/typesAuth";
+import type { DSMuaGiai } from "$lib/typesDatabase";
 
 // for information about these interfaces
 declare global {

@@ -12,6 +12,7 @@
     dsBanThang: BanThang[],
     cauThuDoiMot : CauThu[],
     cauThuDoiHai : CauThu[],
+    thoiDiemGhiBanToiDa: number,
     maDoiMot: number, 
     maDoiHai: number,
     tenDoiMot: string,
@@ -21,10 +22,11 @@
     doiOption: FieldOption[]
   }
 
-  const { maTD, dsBanThang, cauThuDoiMot, cauThuDoiHai, maDoiMot, 
+  const { maTD, dsBanThang, cauThuDoiMot, cauThuDoiHai, maDoiMot, thoiDiemGhiBanToiDa,
       maDoiHai, tenDoiMot, tenDoiHai, cauThuDoiMotOption, cauThuDoiHaiOption,
       doiOption } : Props = $props();
 
+  const sortDSBT = (a: BanThang, b : BanThang) => a.thoiDiem - b.thoiDiem;
   let danhSachBanThang = $state(dsBanThang.concat());
   let formState: boolean = $state(false);
   let selectedIndex : number = $state(-1);
@@ -49,7 +51,7 @@
           return [];
         }
     },
-    { label: "Thời điểm", propertyName: "thoiDiem", type: "input", valueType: "number" },
+    { label: "Thời điểm", propertyName: "thoiDiem", type: "input", valueType: "number", max: thoiDiemGhiBanToiDa },
     { label: "Loại bàn thắng", propertyName: "loaiBanThang", type: "select", valueType: "string", 
       options: [ { optionValue: "A", optionName: "A" }, {optionValue: "B", optionName: "B"}]},
   ];
@@ -110,11 +112,25 @@
         throw new Error("Lỗi tạo Bàn thắng");
       }
 
-      const result = await response.json();
+      let result = await response.json();
 
       // Cập nhật danh sách Bàn thắng nếu cần thiết
-      if (selectedIndex === -1)
+      if (selectedIndex === -1) {
+        let cauThu : CauThu | null;
+        if (result.maDoi === maDoiMot) {
+          cauThu = cauThuDoiMot.find((val) => val.maCT === result.maCT) ?? null;
+          result.tenDoi = tenDoiMot;
+        }
+        else {
+          cauThu = cauThuDoiHai.find((val) => val.maCT === result.maCT) ?? null;
+          result.tenDoi = tenDoiHai;
+        }
+        if (cauThu === null)
+          throw new Error("WTF tại sao lại không tìm thấy cầu thủ???");
+        result.tenCT = cauThu.tenCT;
         danhSachBanThang.push(result);
+        danhSachBanThang.sort(sortDSBT);
+      }
       else 
         danhSachBanThang[selectedIndex] = result;
 

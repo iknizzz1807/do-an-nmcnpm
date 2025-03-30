@@ -23,7 +23,6 @@ export const POST: RequestHandler = async ({
 
   // Cái post request này để tạo đội bóng, response ok sẽ tiến hành trả về đội bóng mới vừa tạo
   const data = await request.json();
-  // console.log(data);
 
   if (data.maDoi ?? null) {
     await updateDoiBong(data);

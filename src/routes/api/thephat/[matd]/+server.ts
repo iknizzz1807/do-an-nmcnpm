@@ -23,7 +23,7 @@ export const POST : RequestHandler = async({ request, locals, params } : { reque
     throw new Error("Không thỏa mãn ThePhat");
   if (params === "") 
     throw new Error("Param hiện là rỗng");
-  console.log(params);
+
   let thePhat : ThePhat = {
     maTP: data.maTP,
     maTD: parseInt(params.matd),
@@ -32,7 +32,6 @@ export const POST : RequestHandler = async({ request, locals, params } : { reque
     thoiDiem: parseInt(data.thoiDiem),
     loaiThe: data.loaiThe
   };
-  console.log(thePhat);
   
   if ((thePhat.maTP ?? null) === null) {
     await insertThePhat(thePhat).catch((err) => {

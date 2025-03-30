@@ -28,15 +28,12 @@ export const POST : RequestHandler = async ({ request, locals } : { request: Req
     ngayGio: new Date(data.ngayGio).toJSON(),
   };
 
-  console.log(lichThiDau);
-
   if ((lichThiDau.maTD ?? null) === null) {
     await insertLichThiDau(lichThiDau).catch((err) => {
       throw err;
     });
   }
   else {
-    console.log(lichThiDau.maTD);
     await updateLichThiDau(lichThiDau).catch((err) => {
       throw err;
     });

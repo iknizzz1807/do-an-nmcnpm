@@ -23,7 +23,6 @@ export const POST : RequestHandler = async({ request, locals, params } : { reque
     throw new Error("Không thỏa mãn BanThang");
   if (params === "") 
     throw new Error("Param hiện là rỗng");
-  console.log(params);
   let banThang : BanThang = {
     maBT: data.maBT,
     maTD: parseInt(params.matd),
@@ -32,7 +31,6 @@ export const POST : RequestHandler = async({ request, locals, params } : { reque
     thoiDiem: parseInt(data.thoiDiem),
     loaiBanThang: data.loaiBanThang
   };
-  console.log(banThang);
   
   if ((banThang.maBT ?? null) === null) {
     await insertBanThang(banThang).catch((err) => {

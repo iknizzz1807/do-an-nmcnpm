@@ -12,6 +12,7 @@ export const load = (async ({ fetch, params, locals }) => {
     const maTD = parseInt(params.matd);
     if (!isNumber(maTD))
       throw new Error("MaTD phải là một số");
+    
     const tranDau = await selectLichThiDauMaTD(maTD) ?? null;
     if (tranDau === null)
       throw new Error("Không tồn tại trận đấu");
@@ -59,6 +60,7 @@ export const load = (async ({ fetch, params, locals }) => {
       maDoiHai: tranDau.doiHai,
       tenDoiMot: doiMot.tenDoi,
       tenDoiHai: doiHai.tenDoi,
+      thoiDiemGhiBanToiDa: locals.setting.thoiDiemGhiBanToiDa,
       cauThuDoiMot: cauThuDoiMot,
       cauThuDoiHai: cauThuDoiHai,
       danhSachBanThang: danhSachBanThang,
@@ -71,6 +73,7 @@ export const load = (async ({ fetch, params, locals }) => {
       maDoiHai: 0,
       tenDoiMot: "",
       tenDoiHai: "",
+      thoiDiemGhiBanToiDa: locals.setting.thoiDiemGhiBanToiDa,
       cauThuDoiMot: [],
       cauThuDoiHai: [],
       danhSachBanThang: [],

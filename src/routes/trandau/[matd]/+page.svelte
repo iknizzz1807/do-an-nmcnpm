@@ -33,6 +33,7 @@
 
 <BanThangTable 
   maTD={data.maTD!!}
+  thoiDiemGhiBanToiDa={data.thoiDiemGhiBanToiDa}
   dsBanThang={danhSachBanThang}
   cauThuDoiMot={cauThuDoiMot}
   cauThuDoiHai={cauThuDoiHai}
