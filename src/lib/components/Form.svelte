@@ -19,6 +19,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { SvelteMap } from "svelte/reactivity";
+  import dateFormat from "dateformat";
 
   type Props = {
     fields: FormField[]; // See above
@@ -172,10 +173,14 @@
                   () => {
                     const value = inputValues.get(field.propertyName);
                     if (value instanceof Date) {
-                      if (field.valueType  === "DateTime")
-                        return value.toISOString().slice(0, 16);
-                      else
-                        return value.toISOString().slice(0, 10);
+                      if (field.valueType  === "DateTime") {
+                        const date = dateFormat(value, "isoDateTime").slice(0, 19);
+                        return date;
+                      }
+                      else {
+                        const date = dateFormat(value, "isoDate");
+                        return date;
+                      }
                     }
                     return value;
                   },
