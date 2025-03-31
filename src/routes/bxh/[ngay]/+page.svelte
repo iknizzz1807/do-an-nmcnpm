@@ -2,10 +2,12 @@
   import Table from "$lib/components/Table.svelte";
   import { showErrorToast } from "$lib/components/Toast";
   import type { BangXepHangNgay } from "$lib/typesResponse";
+  import dateFormat from "dateformat";
 
-  let dateBXH : string = $state(new Date().toISOString().slice(0, 10));
+  const { data } = $props();
+  let dateBXH : string = $state(data.dateBXH);
   $inspect(dateBXH);
-  let bangXepHangNgay: BangXepHangNgay[] = $state([]);
+  let bangXepHangNgay: BangXepHangNgay[] = $state(data.bangXepHangNgay);
   const columns = [
     { header: "", accessor: "maDoi", hidden: true },
     { header: "Tên đội", accessor: "tenDoi" },
@@ -17,14 +19,13 @@
     { header: "Hạng", accessor: "hang" },
   ];
 
-  const onDateChange = async () => {
+  const onDateChange = async (e: Event) => {
     try {
-      const reponse = await fetch("/api/bangxephang", {
-        method: "POST",
+      const reponse = await fetch("/api/bangxephang/" + dateFormat(dateBXH, "isoDate"), {
+        method: "GET",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ dateBXH: dateBXH })
       })
       if (!reponse.ok)
         throw new Error("Failed to fetch dâta");
@@ -66,6 +67,6 @@
     {columns}
     data={bangXepHangNgay}
     redirectParam={"maDoi"}
-    tableType="bxh"
+    tableType={ "bxh/" + dateFormat(dateBXH, "isoDate") }
   />
 </div>

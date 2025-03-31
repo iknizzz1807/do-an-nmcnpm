@@ -8,6 +8,7 @@
   import { onMount } from "svelte";
   import { showErrorToast } from "./Toast";
   import { writable } from "svelte/store";
+  import dateFormat from "dateformat";
 
   let { dsMuaGiai, selectedMuaGiai } : { dsMuaGiai: DSMuaGiai[], selectedMuaGiai: DSMuaGiai | null } = $props();
   let selectedValue = $state(selectedMuaGiai?.maMG ?? 0);
@@ -106,7 +107,7 @@
           >Trận đấu</a
         >
         <a
-          href="/bxh"
+          href={ "/bxh/" + dateFormat(new Date(), "isoDate") }
           class="px-3 py-2 rounded-md text-sm font-medium hover:bg-green-700"
           >Bảng xếp hạng</a
         >
