@@ -46,7 +46,7 @@
     ]},
 
     { label: "Ngày sinh", propertyName: "ngaySinh", type: "Date", valueType: "Date",
-      dateMin: minDate.toISOString().slice(0, 10), dateMax: maxDate.toISOString().slice(0, 10) }
+      min: minDate.toISOString().slice(0, 10), max: maxDate.toISOString().slice(0, 10) }
   ]
 
   let formState: boolean = $state(false);

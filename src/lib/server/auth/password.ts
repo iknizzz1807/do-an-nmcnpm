@@ -2,7 +2,7 @@ import { sha1 } from "@oslojs/crypto/sha1";
 import { hash, verify } from "argon2";
 import { encodeHexLowerCase } from "@oslojs/encoding";
 
-export async function hashPassword(password: string): Promise<string> {
+export function hashPassword(password: string): string {
   return encodeHexLowerCase(sha1(new TextEncoder().encode(password)));
   // return await hash(password, {
 	// 	memoryCost: 19456,

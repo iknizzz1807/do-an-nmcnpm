@@ -19,7 +19,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 				}
 			})
 		}
-		else if (event.url.pathname !== "/login" && event.url.pathname !== "/signup") {
+		else if (!event.url.pathname.includes("/login") && event.url.pathname !== "/signup") {
 			return redirect(307, '/login');
 		}
 

@@ -96,7 +96,7 @@
                   <td class="px-6 py-4 whitespace-nowrap">
                     {#if editButton}
                       <button class="text-green-600 hover:text-green-900 mr-3" 
-                        onclick={() => {if ((onEditClick ?? null) !== null) onEditClick!!(row, index)}}
+                        onclick={(e: Event) => {e.preventDefault(); if ((onEditClick ?? null) !== null) onEditClick!!(row, index)}}
                         onmouseenter={()=> mouseHover = true}
                         onmouseleave={()=> mouseHover = false}>
                         Edit
@@ -104,7 +104,7 @@
                     {/if}
                     {#if deleteButton}
                       <button class="text-red-600 hover:text-red-900"
-                        onclick={() => { if ((onDeleteClick ?? null) !== null) onDeleteClick!!(row, index); }}
+                        onclick={(e: Event) => { e.preventDefault();  if ((onDeleteClick ?? null) !== null) onDeleteClick!!(row, index); }}
                         onmouseenter={()=> mouseHover = true}
                         onmouseleave={()=> mouseHover = false}>
                         Delete

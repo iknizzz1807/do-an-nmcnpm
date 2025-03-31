@@ -22,7 +22,7 @@ export const createUser = async (email: string, username: string, password: stri
   const ids = await db.insert(UserTable).values({
     email: email,
     username: username,
-    passwordHash: passwordHash
+    passwordHash: passwordHash,
   }).returning({ id : UserTable.id });
   const userId = ids.at(0) ?? null;
   if (userId === null)
@@ -31,12 +31,18 @@ export const createUser = async (email: string, username: string, password: stri
     id: userId.id,
     username: username,
     email: email,
+    isAdmin: false
   } satisfies User;
 }
 
 export const updateUserPassword = async (userId: number, password: string) : Promise<void> => {
   const passwordHash = await hashPassword(password);
   await db.update(UserTable).set({ passwordHash: passwordHash }).where(eq(UserTable.id, userId));
+}
+
+export const updateUser = async(user: User) => {
+  await db.update(UserTable)
+    .set({ username: user.username, email: user.email, isAdmin: user.isAdmin }).where(eq(UserTable.id, user.id));
 }
 
 export const selectUserPasswordHash = async (userId: number) => {
@@ -48,4 +54,9 @@ export const selectUserPasswordHash = async (userId: number) => {
 
 export const selectUserFromEmail = async (email : string) => {
   return (await db.select().from(UserTable).where(eq(UserTable.email, email)).limit(1)).at(0) ?? null;
+}
+
+export const selectAllUser = async() => {
+  return (await db.select().from(UserTable))
+    .map((user) => ({ id: user.id, username: user.username, email: user.email, isAdmin: user.isAdmin ?? false} satisfies User));
 }

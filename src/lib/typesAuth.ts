@@ -3,6 +3,7 @@ export type User = {
     id: number;
     email: string;
     username: string;
+    isAdmin: boolean;
 }
 
 export type Settings = {

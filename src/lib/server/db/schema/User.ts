@@ -1,10 +1,13 @@
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { db } from "../client";
+import { eq } from "drizzle-orm";
 
 export const UserTable = sqliteTable("User", {
 	id: integer().primaryKey({ autoIncrement: true }),
 	email: text().notNull().unique(),
 	username: text().notNull(),
-	passwordHash: text().notNull()
+	passwordHash: text().notNull(),
+	isAdmin: integer({ mode: "boolean" }).notNull().default(false)
 	// emailVerifed: integer().$default(() => 0),
 	// registeredTOTP: integer().$default(() => 0),
 	// registeredPasskey: integer().$default(() => 0),

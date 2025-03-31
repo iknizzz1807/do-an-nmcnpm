@@ -1,13 +1,100 @@
 <script lang="ts">
   import SettingNumberInput from "./SettingNumberInput.svelte";
-  import type { Settings } from "$lib/typesAuth";
+  import type { Settings, User } from "$lib/typesAuth";
   import type { PageProps } from "./$types";
   import SettingSection from "./SettingSection.svelte";
   import SettingMainSection from "./SettingMainSection.svelte";
   import { showErrorToast, showOkToast } from "$lib/components/Toast";
+  import Table from "$lib/components/Table.svelte";
+  import Form, { type FormField, type FormInputMap } from "$lib/components/Form.svelte";
+  import { SvelteMap } from "svelte/reactivity";
 
   const { data } : PageProps = $props();
   let setting : Settings = $state(data.setting);
+  let users : User[] = $state(data.users);
+  let editData : FormInputMap = $state(new SvelteMap());
+
+  let formState = $state(false);
+  let selectedIndex = $state(-1);
+
+  const userFields : FormField[] = [
+    { label: "Username", propertyName: "username", type: "input", valueType: "string" },
+    { label: "Email", propertyName: "email", type: "input", valueType: "string" },
+    { label: "User Type", propertyName: "isAdmin", type: "select", valueType: "number", 
+      options: [ { optionName: "User", optionValue: 0 }, { optionName: "Admin", optionValue: 1 } ] },
+  ]
+
+  const columnsUser = [
+    { header: "ID", accessor: "id", hidden: true },
+    { header: "Username", accessor: "username" },
+    { header: "Email", accessor: "email" },
+    { header: "User Type", accessor: "isAdmin", accessFunction: (data: User) => data.isAdmin ? "Admin" : "User" },
+  ];
+
+  const onOpenForm = () : FormInputMap | null => {
+    if (editData.size > -1)
+      return editData;
+    return new SvelteMap();
+  }
+
+  const onCloseForm = () => {
+    editData.clear();
+    formState = false;
+  }
+
+  const onEditClick = async(data: User, index: number) => {
+    if (data satisfies User) {
+      editData.clear();
+      editData.set("id", data.id);
+      editData.set("username", data.username);
+      editData.set("email", data.email);
+      editData.set("isAdmin", Number(data.isAdmin));
+      formState = true;
+      selectedIndex = index;
+    }
+    else {
+      console.error("Data không thỏa mãn LichThiDau");
+      selectedIndex = -1;
+    }
+  }
+
+  const submitForm = async (e: Event, data: User) => {
+    e.preventDefault();
+    
+    if (data.username.trim() === "" || data.email.trim() === "") {
+      showErrorToast("Username/Email không thể trống"); 
+      return;
+    }
+
+    try {
+      const response = await fetch("api/user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data)
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        if (response.status !== 500)
+          throw new Error(error.message);
+        throw new Error("Không thể update");
+      }
+
+      const responseData = await response.json();
+
+      console.log(responseData);
+      users[selectedIndex] = responseData;
+
+      showOkToast("Cập nhật thành công");
+      formState = false;
+      
+    } catch(err) {
+      if (err instanceof Error)
+        showErrorToast(err.message);
+    }
+  }
 
   const onSubmit = async (e: Event) => {
     e.preventDefault();
@@ -29,6 +116,14 @@
     }
   }
 </script>
+
+<Form
+  fields={userFields}
+  bind:formState={formState}
+  submitForm={submitForm}
+  onOpenForm={onOpenForm}
+  onCloseForm={onCloseForm}
+/>
 
 <main class="max-w-7xl mx-auto py-6 px-4">
   <form onsubmit={onSubmit}>
@@ -254,7 +349,15 @@
           </button>
         </div>
       </div> -->
-
+      
+      <Table
+        title="User Profiles"
+        columns={columnsUser}
+        data={users}
+        redirectParam={""}
+        tableType=""
+        onEditClick={onEditClick}
+      />
       <div>
         <h3 class="text-xl font-semibold text-gray-800 mb-4">User Profiles</h3>
         <div class="overflow-x-auto">
