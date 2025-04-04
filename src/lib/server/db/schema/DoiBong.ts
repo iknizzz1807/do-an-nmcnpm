@@ -1,4 +1,4 @@
-import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { integer, sqliteTable, text, uniqueIndex } from 'drizzle-orm/sqlite-core';
 import { db } from '../client';
 import type { DoiBong } from '$lib/typesDatabase';
 import type { TypesAreEqual } from '$lib/server/utils';
@@ -9,7 +9,10 @@ export const DoiBongTable = sqliteTable('DoiBong', {
     maDoi: integer().notNull().unique().primaryKey({ autoIncrement: true }),
     tenDoi: text().notNull(),
     maSan: integer().notNull().references(() => SanNhaTable.maSan, { onDelete: "cascade" }),
-})
+}, (table) => [
+    uniqueIndex("DoiBong_maDoi").on(table.maDoi)
+])
+
 export const DoiBongTableBackup = sqliteTable('DoiBongBackup', {
     DBBackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
     modifiedDate: integer({mode: "timestamp"}).notNull(),
@@ -18,28 +21,6 @@ export const DoiBongTableBackup = sqliteTable('DoiBongBackup', {
     maSan: integer().notNull(),
 })
 
-const createDBBackupTrigger = async() => {
-    // DoiBong
-    await db.transaction(async (tx) => {
-        tx.run(sql`
-        CREATE TRIGGER IF NOT EXISTS TRGD_DB_BACKUP
-        AFTER DELETE ON DoiBong
-        BEGIN
-            INSERT INTO DoiBongBackup(modifiedDate, maDoi, tenDoi, maSan)
-            VALUES(datetime('now'), OLD.maDoi, OLD.tenDoi, OLD.maSan);
-        END
-        `);
-        tx.run(sql`
-        CREATE TRIGGER IF NOT EXISTS TRGU_DB_BACKUP
-        AFTER UPDATE ON DoiBong
-        BEGIN
-            INSERT INTO DoiBongBackup(modifiedDate, maDoi, tenDoi, maSan)
-            VALUES(datetime('now'), OLD.maDoi, OLD.tenDoi, OLD.maSan);
-        END
-        `);
-    });
-}
-createDBBackupTrigger()// .catch(console.error); // This may cause some horrible error in the future
 
 export type InsertDoiBongParams = typeof DoiBongTable.$inferInsert;
 export type InsertDoiBongBackupParams = typeof DoiBongTableBackup.$inferInsert;

@@ -27,28 +27,6 @@ export const ThamGiaTDTableBackup = sqliteTable('ThamGiaTDBackup', {
     viTri: text().notNull(),
 })
 
-const createTGTDBackupTrigger = async() => {
-    // ThamGiaTD
-    await db.transaction(async (tx) => {
-        tx.run(sql`
-        CREATE TRIGGER IF NOT EXISTS TRGD_TGTD_BACKUP
-        AFTER DELETE ON ThamGiaTD
-        BEGIN
-        INSERT INTO ThamGiaTDBackup(modifiedDate, maTD, maCT, maDoi, viTri)
-        VALUES(datetime('now'), OLD.maTD, OLD.maCT, OLD.maDoi, OLD.viTri);
-        END
-        `);
-        tx.run(sql`
-        CREATE TRIGGER IF NOT EXISTS TRGU_TGTD_BACKUP
-        AFTER UPDATE ON ThamGiaTD
-        BEGIN
-        INSERT INTO ThamGiaTDBackup(modifiedDate, maTD, maCT, maDoi, viTri)
-        VALUES(datetime('now'), OLD.maTD, OLD.maCT, OLD.maDoi, OLD.viTri);
-        END
-        `);
-    });
-}
-createTGTDBackupTrigger()// .catch(console.error); // This may cause some horrible error in the future
 
 export type InsertThamGiaTDParams = typeof ThamGiaTDTable.$inferInsert;
 export type InsertThamGiaTDBackupParams = typeof ThamGiaTDTableBackup.$inferInsert;

@@ -1,4 +1,4 @@
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { integer, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 import { db } from "../client";
 import { eq } from "drizzle-orm";
 
@@ -13,7 +13,9 @@ export const UserTable = sqliteTable("User", {
 	// registeredPasskey: integer().$default(() => 0),
 	// registeredSecurityKey: integer().$default(() => 0),
 	// registered2FA: integer().$default(() => 0)
-});
+}, (table) => [
+	uniqueIndex("User_id").on(table.id)
+]);
 
 export const SessionTable = sqliteTable("Session", {
 	id: text().primaryKey(),

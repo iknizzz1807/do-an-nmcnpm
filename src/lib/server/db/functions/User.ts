@@ -57,6 +57,13 @@ export const selectUserFromEmail = async (email : string) => {
 }
 
 export const selectAllUser = async() => {
-  return (await db.select().from(UserTable))
-    .map((user) => ({ id: user.id, username: user.username, email: user.email, isAdmin: user.isAdmin ?? false} satisfies User));
+  let result = (await db.select().from(UserTable))
+    .map((user) => { 
+      return ({ id: user.id, username: user.username, email: user.email, isAdmin: user.isAdmin ?? false} satisfies User) 
+    });
+  // Remove admin from Profile edit
+  const first = result.at(0) ?? null;
+  if (first !== null && first.id === 0)
+    result.splice(0, 1);
+  return result;
 }

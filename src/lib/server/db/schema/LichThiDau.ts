@@ -1,4 +1,4 @@
-import { integer, sqliteTable, text, check } from 'drizzle-orm/sqlite-core';
+import { integer, sqliteTable, text, check, uniqueIndex } from 'drizzle-orm/sqlite-core';
 import { DoiBongTable } from './DoiBong';
 import { DSMuaGiaiTable } from './DSMuaGiai';
 import type { LichThiDau } from '$lib/typesDatabase';
@@ -18,7 +18,8 @@ export const LichThiDauTable = sqliteTable('LichThiDau', {
     doiThang: integer().references(() => DoiBongTable.maDoi, { onDelete: "cascade" }),
 }, (table) : any => [
     check("CHK_LTD_DOIMOT_DOIHAI", sql`${table.doiMot} != ${table.doiHai}`),
-    check("CHK_LTD_VONGTHIDAU", sql`${table.vongThiDau} IN (1, 2)`)
+    check("CHK_LTD_VONGTHIDAU", sql`${table.vongThiDau} IN (1, 2)`),
+    uniqueIndex("LichThiDau_maTD").on(table.maTD)
 ]);
 
 export const LichThiDauTableBackup = sqliteTable('LichThiDauBackup', {
@@ -33,28 +34,6 @@ export const LichThiDauTableBackup = sqliteTable('LichThiDauBackup', {
     doiThang: integer()
 })
 
-const createLTDBackupTrigger = async() => {
-      // LichThiDau
-    await db.transaction(async (tx) => {
-        tx.run(sql`
-        CREATE TRIGGER IF NOT EXISTS TRGD_LTD_BACKUP
-        AFTER DELETE ON LichThiDau
-        BEGIN
-        INSERT INTO LichThiDauBackup(modifiedDate, maTD, doiMot, doiHai, ngayGio, vongThiDau, maMG, doiThang)
-        VALUES(datetime('now'), OLD.maTD, OLD.doiMot, OLD.doiHai, OLD.ngayGio, OLD.vongThiDau, OLD.maMG, OLD.doiThang);
-        END
-        `);
-        tx.run(sql`
-        CREATE TRIGGER IF NOT EXISTS TRGU_LTD_BACKUP
-        AFTER UPDATE ON LichThiDau
-        BEGIN
-        INSERT INTO LichThiDauBackup(modifiedDate, maTD, doiMot, doiHai, ngayGio, vongThiDau, maMG, doiThang)
-        VALUES(datetime('now'), OLD.maTD, OLD.doiMot, OLD.doiHai, OLD.ngayGio, OLD.vongThiDau, OLD.maMG, OLD.doiThang);
-        END
-        `);
-    });
-}
-createLTDBackupTrigger()// .catch(console.error); // This may cause some horrible error in the future
 
 export type InsertLichThiDauParams = typeof LichThiDauTable.$inferInsert;
 export type InsertLichThiDauBackupParams = typeof LichThiDauTableBackup.$inferInsert;

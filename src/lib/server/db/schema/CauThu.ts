@@ -1,7 +1,7 @@
 import type { TypesAreEqual } from '$lib/server/utils';
 import type { CauThu } from '$lib/typesDatabase';
 import { sql } from 'drizzle-orm';
-import { check, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { check, integer, sqliteTable, text, uniqueIndex } from 'drizzle-orm/sqlite-core';
 import { db } from '../client';
 
 
@@ -13,7 +13,9 @@ export const CauThuTable = sqliteTable('CauThu', {
     loaiCT: integer().notNull(),
     ghiChu: text().notNull(),
     nuocNgoai: integer({ mode: "boolean" }).notNull()
-})
+}, (table) => [
+    uniqueIndex("CauThu_maCT").on(table.maCT)
+])
 
 export const CauThuTableBackup = sqliteTable('CauThuBackup', {
     CTBackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
@@ -25,52 +27,6 @@ export const CauThuTableBackup = sqliteTable('CauThuBackup', {
     ghiChu: text().notNull(),
     nuocNgoai: integer().notNull()
 })
-
-const createCTBackupTrigger = async() => {
-    // CauThu
-    await db.transaction(async (tx) => {
-        tx.run(sql`
-        CREATE TRIGGER IF NOT EXISTS TRGD_CT_BACKUP
-        AFTER DELETE ON CauThu
-        BEGIN
-            INSERT INTO CauThuBackup(modifiedDate, maCT, tenCT, ngaySinh, loaiCT, ghiChu, nuocNgoai)
-            VALUES(datetime('now'), OLD.maCT, OLD.tenCT, OLD.ngaySinh, OLD.loaiCT, OLD.ghiChu, OLD.nuocNgoai);
-        END
-        `);
-        tx.run(sql`
-        CREATE TRIGGER IF NOT EXISTS TRGU_CT_BACKUP
-        AFTER UPDATE ON CauThu
-        BEGIN
-            INSERT INTO CauThuBackup(modifiedDate, maCT, tenCT, ngaySinh, loaiCT, ghiChu, nuocNgoai)
-            VALUES(datetime('now'), OLD.maCT, OLD.tenCT, OLD.ngaySinh, OLD.loaiCT, OLD.ghiChu, OLD.nuocNgoai);
-        END
-        `);
-        // // Check tuoi
-        // tx.run(sql`
-        // CREATE TRIGGER IF NOT EXISTS TRGI_CT_AGE
-        // AFTER INSERT ON CauThu
-        // WHEN NOT EXISTS(
-        //     SELECT 1 FROM CauThu
-        //     WHERE maCT=NEW.maCT AND date('now') - date(ngaySinh) BETWEEN 16 AND 40
-        // )
-        // BEGIN
-        //     SELECT RAISE(ABORT, 'Cau thu co do tuoi tu 16 den 40');
-        // END;
-        // `);
-        // tx.run(sql`
-        // CREATE TRIGGER IF NOT EXISTS TRGU_CT_AGE
-        // AFTER UPDATE ON CauThu
-        // WHEN NOT EXISTS(
-        //     SELECT 1 FROM CauThu
-        //     WHERE maCT=NEW.maCT AND date('now') - date(ngaySinh) BETWEEN 16 AND 40
-        // )
-        // BEGIN
-        //     SELECT RAISE(ABORT, 'Cau thu co do tuoi tu 16 den 40');
-        // END;
-        // `);
-    });
-}
-createCTBackupTrigger()// .catch(console.error); // This may cause some horrible error in the future
 
 export type InsertCauThuParams = typeof CauThuTable.$inferInsert;
 export type InsertCauThuBackupParams = typeof CauThuTableBackup.$inferInsert;

@@ -21,10 +21,21 @@ export const countThamGiaDBNuocNgoai = async (maMG: number, maDoi: number) => {
 
 export const insertThamGiaDB = async (...thamGiaDB: ThamGiaDB[]) => {
   let returning = await db.insert(ThamGiaDBTable).values(thamGiaDB).returning({ id: ThamGiaDBTable.maCT });
-    if (returning === null || returning.length === 0)
-        throw new Error("Co gi do sai sot trong luc add vo ThamGiaDB: Insert khong duoc");
-    return returning;
+  if (returning === null || returning.length === 0)
+      throw new Error("Co gi do sai sot trong luc add vo ThamGiaDB: Insert khong duoc");
+  return returning;
 };
+
+export const deleteThamGiaDB = async (thamGiaDB: ThamGiaDB) => {
+  await db.delete(ThamGiaDBTable)
+    .where(
+      and(
+        eq(ThamGiaDBTable.maCT, thamGiaDB.maCT), 
+        eq(ThamGiaDBTable.maDoi, thamGiaDB.maDoi), 
+        eq(ThamGiaDBTable.maMG, thamGiaDB.maMG)
+      )
+    );
+}
 
 // Todo: this is not the final version, there is something wrong with this
 export const updateThamGiaDB = async(thamGiaDB: ThamGiaDB) => {

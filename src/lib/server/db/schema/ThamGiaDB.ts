@@ -1,4 +1,4 @@
-import { integer, sqliteTable, text, primaryKey } from 'drizzle-orm/sqlite-core';
+import { integer, sqliteTable, text, primaryKey, uniqueIndex, index } from 'drizzle-orm/sqlite-core';
 import { DoiBongTable } from './DoiBong';
 import { CauThuTable } from './CauThu';
 import { DSMuaGiaiTable } from './DSMuaGiai';
@@ -14,6 +14,7 @@ export const ThamGiaDBTable = sqliteTable('ThamGiaDB', {
     maMG: integer().notNull().references(() => DSMuaGiaiTable.maMG, { onDelete: "cascade" })
 }, (table) => [
     primaryKey({ columns: [table.maCT, table.maMG] }),
+    index("ThamGiaDB_maCT_maMG").on(table.maCT, table.maMG)
 ])
 
 export const ThamGiaDBTableBackup = sqliteTable('ThamGiaDBBackup', {
@@ -24,59 +25,6 @@ export const ThamGiaDBTableBackup = sqliteTable('ThamGiaDBBackup', {
     maMG: integer().notNull()
 })
 
-const createTGDBBackupTrigger = async() => {
-    // ThamGiaDB
-    await db.transaction(async (tx) => {
-        tx.run(sql`
-        CREATE TRIGGER IF NOT EXISTS TRGD_TGDB_BACKUP
-        AFTER DELETE ON ThamGiaDB
-        BEGIN
-        INSERT INTO ThamGiaDBBackup(modifiedDate, maDoi, maCT, maMG)
-        VALUES(datetime('now'), OLD.maDoi, OLD.maCT, OLD.maMG);
-        END
-        `);
-        tx.run(sql`
-        CREATE TRIGGER IF NOT EXISTS TRGU_TGDB_BACKUP
-        AFTER UPDATE ON ThamGiaDB
-        BEGIN
-        INSERT INTO ThamGiaDBBackup(modifiedDate, maDoi, maCT, maMG)
-        VALUES(datetime('now'), OLD.maDoi, OLD.maCT, OLD.maMG);
-        END
-        `);
-        // // Trigger giới hạn cầu thủ tối đa và cầu thủ nước ngoài tối đa
-        // tx.run(sql`
-        // CREATE TRIGGER IF NOT EXISTS TRGI_TGDB_CT 
-        // AFTER INSERT ON ThamGiaDB 
-        // WHEN (
-        //     SELECT COUNT(*) FROM ThamGiaDB
-        //     WHERE maDoi = NEW.maDoi AND maMG = NEW.maMG
-        // ) > 22 OR (
-        //     SELECT COUNT(*) FROM ThamGiaDB AS TGDB 
-        //     INNER JOIN CauThu AS CT ON CT.maCT = TGDB.maCT 
-        //     WHERE TGDB.maDoi = NEW.maDoi AND TGDB.maMG = NEW.maMG AND CT.nuocNgoai = 1
-        // ) > 3
-        // BEGIN 
-        //     SELECT RAISE(ABORT, 'Doi bong chi duoc co toi da 22 cau thu va toi da 3 cau thu nuoc ngoai'); 
-        // END;
-        // `);
-        // tx.run(sql`
-        // CREATE TRIGGER IF NOT EXISTS TRGU_TGDB_CT 
-        // AFTER UPDATE ON ThamGiaDB 
-        // WHEN (
-        //     SELECT COUNT(*) FROM ThamGiaDB
-        //     WHERE maDoi = NEW.maDoi AND maMG = NEW.maMG
-        // ) > 22 OR (
-        //     SELECT COUNT(*) FROM ThamGiaDB AS TGDB 
-        //     INNER JOIN CauThu AS CT ON CT.maCT = TGDB.maCT 
-        //     WHERE TGDB.maDoi = NEW.maDoi AND TGDB.maMG = NEW.maMG AND CT.nuocNgoai = 1
-        // ) > 3
-        // BEGIN 
-        //     SELECT RAISE(ABORT, 'Doi bong chi duoc co toi da 22 cau thu va toi da 3 cau thu nuoc ngoai'); 
-        // END;
-        // `);
-    });
-}
-createTGDBBackupTrigger()// .catch(console.error); // This may cause some horrible error in the future
 
 export type InsertThamGiaDBParams = typeof ThamGiaDBTable.$inferInsert;
 export type InsertThamGiaDBBackupParams = typeof ThamGiaDBTableBackup.$inferInsert;
