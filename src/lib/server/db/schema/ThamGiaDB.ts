@@ -9,9 +9,9 @@ import { db } from '../client';
 
 // Số lượng cầu thủ tối thiểu, tối đa của đội, số cầu thủ nước ngoài tối đa.
 export const ThamGiaDBTable = sqliteTable('ThamGiaDB', {
-    maDoi: integer().notNull().references(() => DoiBongTable.maDoi),
-    maCT: integer().notNull().references(() => CauThuTable.maCT),
-    maMG: integer().notNull().references(() => DSMuaGiaiTable.maMG)
+    maDoi: integer().notNull().references(() => DoiBongTable.maDoi, { onDelete: "cascade" }),
+    maCT: integer().notNull().references(() => CauThuTable.maCT, { onDelete: "cascade" }),
+    maMG: integer().notNull().references(() => DSMuaGiaiTable.maMG, { onDelete: "cascade" })
 }, (table) => [
     primaryKey({ columns: [table.maCT, table.maMG] }),
 ])

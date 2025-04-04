@@ -27,12 +27,12 @@ export const selectAllDSMuaGiai = async() => {
 }
 
 export const deleteDSMuaGiai = async (maMG: number) => {
-  const tranDaus = await db.select({maTD: LichThiDauTable.maTD}).from(LichThiDauTable).where(eq(LichThiDauTable.maMG, maMG));
-  for (const tranDau of tranDaus) {
-    await db.delete(BanThangTable).where(eq(BanThangTable.maTD, tranDau.maTD));
-    await db.delete(ThePhatTable).where(eq(ThePhatTable.maTD, tranDau.maTD));
-    await db.delete(LichThiDauTable).where(eq(LichThiDauTable.maTD, tranDau.maTD));
-  }
-  await db.delete(ThamGiaDBTable).where(eq(ThamGiaDBTable.maMG, maMG));
+  // const tranDaus = await db.select({maTD: LichThiDauTable.maTD}).from(LichThiDauTable).where(eq(LichThiDauTable.maMG, maMG));
+  // for (const tranDau of tranDaus) {
+  //   await db.delete(BanThangTable).where(eq(BanThangTable.maTD, tranDau.maTD));
+  //   await db.delete(ThePhatTable).where(eq(ThePhatTable.maTD, tranDau.maTD));
+  //   await db.delete(LichThiDauTable).where(eq(LichThiDauTable.maTD, tranDau.maTD));
+  // }
+  // await db.delete(ThamGiaDBTable).where(eq(ThamGiaDBTable.maMG, maMG));
   await db.delete(DSMuaGiaiTable).where(eq(DSMuaGiaiTable.maMG, maMG));
 }

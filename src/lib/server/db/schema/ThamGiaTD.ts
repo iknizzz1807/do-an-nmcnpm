@@ -10,9 +10,9 @@ import type { ThamGiaTD } from '$lib/typesDatabase';
 
 // Số lượng cầu thủ tối thiểu, tối đa của đội, số cầu thủ nước ngoài tối đa.
 export const ThamGiaTDTable = sqliteTable('ThamGiaTD', {
-    maTD: integer().notNull().references(() => LichThiDauTable.maTD),
-    maCT: integer().notNull().references(() => CauThuTable.maCT),
-    maDoi: integer().notNull().references(() => DoiBongTable.maDoi),
+    maTD: integer().notNull().references(() => LichThiDauTable.maTD, { onDelete: "cascade" }),
+    maCT: integer().notNull().references(() => CauThuTable.maCT, { onDelete: "cascade" }),
+    maDoi: integer().notNull().references(() => DoiBongTable.maDoi, { onDelete: "cascade" }),
     viTri: text().notNull(),
 }, (table) => [
     primaryKey({ columns: [table.maTD, table.maCT] }),

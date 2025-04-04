@@ -29,8 +29,8 @@ export const updateLichThiDau = async(lichThiDau: LichThiDau) => {
 }
 
 export const deleteLichThiDau = async (maTD: number) => {
-  await db.delete(BanThangTable).where(eq(BanThangTable.maTD, maTD));
-  await db.delete(ThePhatTable).where(eq(ThePhatTable.maTD, maTD));
+  // await db.delete(BanThangTable).where(eq(BanThangTable.maTD, maTD));
+  // await db.delete(ThePhatTable).where(eq(ThePhatTable.maTD, maTD));
   await db.delete(LichThiDauTable).where(eq(LichThiDauTable.maTD, maTD));
 }
 

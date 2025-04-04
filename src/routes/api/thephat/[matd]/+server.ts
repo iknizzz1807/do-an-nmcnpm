@@ -56,13 +56,14 @@ export const DELETE : RequestHandler = async({ request, locals } : { request: Re
   const data = await request.json();
   if (!(data satisfies ThePhat)) {
     let thePhat : ThePhat = {
+      maTP: data.maTP,
       maTD: data.maTD,
       maCT: data.maCT,
       maDoi: data.maDoi,
       thoiDiem: data.thoiDiem,
       loaiThe: data.loaiThe
     };
-    await deleteThePhat(thePhat);
+    await deleteThePhat(data.maTP!!);
     return new Response(JSON.stringify(thePhat), {
       status: 200,
       headers: {

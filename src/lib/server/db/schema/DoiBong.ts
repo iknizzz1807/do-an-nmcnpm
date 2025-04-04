@@ -8,7 +8,7 @@ import { SanNhaTable } from './SanNha';
 export const DoiBongTable = sqliteTable('DoiBong', {
     maDoi: integer().notNull().unique().primaryKey({ autoIncrement: true }),
     tenDoi: text().notNull(),
-    maSan: integer().notNull().references(() => SanNhaTable.maSan),
+    maSan: integer().notNull().references(() => SanNhaTable.maSan, { onDelete: "cascade" }),
 })
 export const DoiBongTableBackup = sqliteTable('DoiBongBackup', {
     DBBackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),

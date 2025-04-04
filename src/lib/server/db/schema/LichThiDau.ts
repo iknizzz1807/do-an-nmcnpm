@@ -8,14 +8,14 @@ import { sql } from 'drizzle-orm';
 
 export const LichThiDauTable = sqliteTable('LichThiDau', {
     maTD: integer().notNull().unique().primaryKey({ autoIncrement: true }),
-    doiMot: integer().notNull().references(() => DoiBongTable.maDoi),
-    doiHai: integer().notNull().references(() => DoiBongTable.maDoi),
+    doiMot: integer().notNull().references(() => DoiBongTable.maDoi, { onDelete: "cascade" }),
+    doiHai: integer().notNull().references(() => DoiBongTable.maDoi, { onDelete: "cascade" }),
     ngayGio: text()
         .notNull()
         .$defaultFn(() => new Date().toJSON()),
     vongThiDau: integer().notNull(),
-    maMG: integer().notNull().references(() => DSMuaGiaiTable.maMG),
-    doiThang: integer().references(() => DoiBongTable.maDoi),
+    maMG: integer().notNull().references(() => DSMuaGiaiTable.maMG, { onDelete: "cascade" }),
+    doiThang: integer().references(() => DoiBongTable.maDoi, { onDelete: "cascade" }),
 }, (table) : any => [
     check("CHK_LTD_DOIMOT_DOIHAI", sql`${table.doiMot} != ${table.doiHai}`),
     check("CHK_LTD_VONGTHIDAU", sql`${table.vongThiDau} IN (1, 2)`)

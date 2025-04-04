@@ -29,9 +29,9 @@ export const updateCauThu = async(cauThu: CauThu) => {
 }
 
 export const deleteCauThu = async(maCT: number) => {
-  await db.delete(BanThangTable).where(eq(BanThangTable.maCT, maCT));
-  await db.delete(ThePhatTable).where(eq(ThePhatTable.maCT, maCT));
-  await db.delete(ThamGiaDBTable).where(eq(ThamGiaDBTable.maCT, maCT));
+  // await db.delete(BanThangTable).where(eq(BanThangTable.maCT, maCT));
+  // await db.delete(ThePhatTable).where(eq(ThePhatTable.maCT, maCT));
+  // await db.delete(ThamGiaDBTable).where(eq(ThamGiaDBTable.maCT, maCT));
   await db.delete(CauThuTable).where(eq(CauThuTable.maCT, maCT));
 }
 

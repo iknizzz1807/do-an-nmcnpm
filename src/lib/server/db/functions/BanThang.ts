@@ -21,11 +21,9 @@ export const updateBanThang = async(banThang: BanThang) => {
     }).where(eq(BanThangTable.maBT, banThang.maBT!!));
 }
 
-export const deleteBanThang = async(banThang: BanThang) => {
-    if ((banThang.maBT ?? null) === null)
-        throw new Error("Không có mã bàn thắng sao update");
+export const deleteBanThang = async(maBT : number) => {
     await db.delete(BanThangTable)
-        .where(eq(BanThangTable.maBT, banThang.maBT!!));
+        .where(eq(BanThangTable.maBT, maBT));
 }
 
 export const selectAllBanThang = async() => {

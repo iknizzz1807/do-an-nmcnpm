@@ -55,13 +55,14 @@ export const DELETE : RequestHandler = async({ request, locals } : { request: Re
   const data = await request.json();
   if (!(data satisfies BanThang)) {
     let banThang : BanThang = {
+      maBT: data.maBT,
       maTD: data.maTD,
       maCT: data.maCT,
       maDoi: data.maDoi,
       thoiDiem: data.thoiDiem,
       loaiBanThang: data.loaiBanThang
     };
-    await deleteBanThang(banThang);
+    await deleteBanThang(banThang.maBT!!);
     return new Response(JSON.stringify(banThang), {
       status: 200,
       headers: {

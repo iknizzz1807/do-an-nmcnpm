@@ -21,11 +21,9 @@ export const updateThePhat = async(thePhat: ThePhat) => {
     }).where(eq(ThePhatTable.maTP, thePhat.maTP!!));
 }
 
-export const deleteThePhat = async(thePhat: ThePhat) => {
-    if ((thePhat.maTP ?? null) === null)
-        throw new Error("Không có mã bàn thắng sao update");
+export const deleteThePhat = async(maTP : number) => {
     await db.delete(ThePhatTable)
-        .where(eq(ThePhatTable.maTP, thePhat.maTP!!));
+        .where(eq(ThePhatTable.maTP, maTP));
 }
 
 export const selectAllThePhat = async() => {

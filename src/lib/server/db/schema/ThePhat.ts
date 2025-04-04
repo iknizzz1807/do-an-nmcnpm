@@ -9,9 +9,9 @@ import { sql } from 'drizzle-orm';
 
 export const ThePhatTable = sqliteTable('ThePhat', {
     maTP: integer().notNull().primaryKey({ autoIncrement: true }),
-    maTD: integer().notNull().references(() => LichThiDauTable.maTD),
-    maCT: integer().notNull().references(() => CauThuTable.maCT),
-    maDoi: integer().notNull().references(() => DoiBongTable.maDoi),
+    maTD: integer().notNull().references(() => LichThiDauTable.maTD, { onDelete: "cascade" }),
+    maCT: integer().notNull().references(() => CauThuTable.maCT, { onDelete: "cascade" }),
+    maDoi: integer().notNull().references(() => DoiBongTable.maDoi, { onDelete: "cascade" }),
     thoiDiem: real().notNull(),
     loaiThe: text().notNull(),
 }, (table) => [

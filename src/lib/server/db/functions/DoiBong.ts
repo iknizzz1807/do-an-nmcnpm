@@ -26,14 +26,14 @@ export const updateDoiBong = async(doiBong: DoiBong) => {
 }
 
 export const deleteDoiBong = async(maDoi: number) => {
-  const ltd = await db.select({ maTD: LichThiDauTable.maTD }).from(LichThiDauTable)
-      .where(or(eq(LichThiDauTable.doiMot, maDoi), eq(LichThiDauTable.doiHai, maDoi)));
-  for (const lich of ltd) {
-    await db.delete(BanThangTable).where(eq(BanThangTable.maTD, lich.maTD));
-    await db.delete(ThePhatTable).where(eq(ThePhatTable.maTD, lich.maTD));
-    await db.delete(LichThiDauTable).where(eq(LichThiDauTable.maTD, lich.maTD));
-  }
-  await db.delete(ThamGiaDBTable).where(eq(ThamGiaDBTable.maDoi, maDoi));
+  // const ltd = await db.select({ maTD: LichThiDauTable.maTD }).from(LichThiDauTable)
+  //     .where(or(eq(LichThiDauTable.doiMot, maDoi), eq(LichThiDauTable.doiHai, maDoi)));
+  // for (const lich of ltd) {
+  //   await db.delete(BanThangTable).where(eq(BanThangTable.maTD, lich.maTD));
+  //   await db.delete(ThePhatTable).where(eq(ThePhatTable.maTD, lich.maTD));
+  //   await db.delete(LichThiDauTable).where(eq(LichThiDauTable.maTD, lich.maTD));
+  // }
+  // await db.delete(ThamGiaDBTable).where(eq(ThamGiaDBTable.maDoi, maDoi));
   await db.delete(DoiBongTable).where(eq(DoiBongTable.maDoi, maDoi));
 }
 
