@@ -31,7 +31,7 @@ export const createUser = async (email: string, username: string, password: stri
     id: userId.id,
     username: username,
     email: email,
-    isAdmin: false
+    role: 0
   } satisfies User;
 }
 
@@ -42,7 +42,7 @@ export const updateUserPassword = async (userId: number, password: string) : Pro
 
 export const updateUser = async(user: User) => {
   await db.update(UserTable)
-    .set({ username: user.username, email: user.email, isAdmin: user.isAdmin }).where(eq(UserTable.id, user.id));
+    .set({ username: user.username, email: user.email, role: user.role }).where(eq(UserTable.id, user.id));
 }
 
 export const selectUserPasswordHash = async (userId: number) => {
@@ -59,7 +59,7 @@ export const selectUserFromEmail = async (email : string) => {
 export const selectAllUser = async() => {
   let result = (await db.select().from(UserTable))
     .map((user) => { 
-      return ({ id: user.id, username: user.username, email: user.email, isAdmin: user.isAdmin ?? false} satisfies User) 
+      return ({ id: user.id, username: user.username, email: user.email, role: user.role } satisfies User) 
     });
   // Remove admin from Profile edit
   const first = result.at(0) ?? null;

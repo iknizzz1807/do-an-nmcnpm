@@ -7,7 +7,7 @@ export const UserTable = sqliteTable("User", {
 	email: text().notNull().unique(),
 	username: text().notNull(),
 	passwordHash: text().notNull(),
-	isAdmin: integer({ mode: "boolean" }).notNull().default(false)
+	role: integer().default(0).notNull() // Bitwise and với role UserRole (trong functions có hàm check)
 	// emailVerifed: integer().$default(() => 0),
 	// registeredTOTP: integer().$default(() => 0),
 	// registeredPasskey: integer().$default(() => 0),

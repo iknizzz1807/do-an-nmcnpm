@@ -1,5 +1,10 @@
 import { db } from "./client";
+import { createAdmin } from "./functions/Admin";
 import { ThamSoTable } from "./schema/ThamSo";
+import { UserRoleTable } from "./schema/UserRole";
+
+
+await createAdmin();
 
 const DefaultSettings = [
   { key: "tuoiMin", value: 16 },
@@ -16,7 +21,17 @@ const DefaultSettings = [
   { key: "diemThua", value: 0 }
 ];
 
-for (const setting of DefaultSettings)
-{
+for (const setting of DefaultSettings) {
   await db.insert(ThamSoTable).values({key: setting.key, value: setting.value});
+}
+
+const DefaultRoles = [
+  { roleId: 1, roleName: "View" },
+  { roleId: 2, roleName: "Edit" },
+  { roleId: 3, roleName: "Edit Settings" },
+  { roleId: 4, roleName: "" },
+];
+
+for (const role of DefaultRoles) {
+  await db.insert(UserRoleTable).values({ roleId: role.roleId, roleName: role.roleName });
 }
