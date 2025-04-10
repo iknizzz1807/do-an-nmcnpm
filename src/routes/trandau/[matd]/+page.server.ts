@@ -2,6 +2,7 @@ import { isNumber } from "$lib";
 import { selectCauThuDoiBong } from "$lib/server/db/functions/CauThu";
 import { selectDoiBongTenDoi } from "$lib/server/db/functions/DoiBong";
 import { selectLichThiDauMaTD } from "$lib/server/db/functions/LichThiDau";
+import { selectThamSo } from "$lib/server/db/functions/ThamSo";
 import type { BanThang, ThePhat } from "$lib/typesDatabase";
 import type { PageServerLoad } from "./$types";
 
@@ -54,13 +55,15 @@ export const load = (async ({ fetch, params, locals }) => {
     const danhSachThePhat : ThePhat[] = await responseTP.json();
     danhSachBanThang.sort((a, b) => a.thoiDiem - b.thoiDiem);
     danhSachThePhat.sort((a, b) => a.thoiDiem - b.thoiDiem);
+    const thoiDiemGhiBanToiDa = (await selectThamSo("thoiDiemGhiBanToiDa"))!!;
+    
     return {
       maTD: maTD,
       maDoiMot: tranDau.doiMot,
       maDoiHai: tranDau.doiHai,
       tenDoiMot: doiMot.tenDoi,
       tenDoiHai: doiHai.tenDoi,
-      thoiDiemGhiBanToiDa: locals.setting.thoiDiemGhiBanToiDa,
+      thoiDiemGhiBanToiDa: thoiDiemGhiBanToiDa,
       cauThuDoiMot: cauThuDoiMot,
       cauThuDoiHai: cauThuDoiHai,
       danhSachBanThang: danhSachBanThang,
@@ -73,7 +76,7 @@ export const load = (async ({ fetch, params, locals }) => {
       maDoiHai: 0,
       tenDoiMot: "",
       tenDoiHai: "",
-      thoiDiemGhiBanToiDa: locals.setting.thoiDiemGhiBanToiDa,
+      thoiDiemGhiBanToiDa: 0,
       cauThuDoiMot: [],
       cauThuDoiHai: [],
       danhSachBanThang: [],

@@ -2,6 +2,7 @@ import type { RequestHandler } from "@sveltejs/kit";
 import { selectBXHDoiNgay } from "$lib/server/db/functions/BangXepHang";
 import type { BangXepHangNgay } from "$lib/typesResponse";
 import { errorResponseJSON } from "$lib";
+import { selectThamSo } from "$lib/server/db/functions/ThamSo";
 
 export const GET: RequestHandler = async ({ locals, request, params }) => {
   
@@ -13,11 +14,13 @@ export const GET: RequestHandler = async ({ locals, request, params }) => {
     let date = new Date(ngay);
 
     const danhSachTranDau = await selectBXHDoiNgay(new Date(date));
-    console.log(locals.setting);
+    const diemThang = (await selectThamSo("diemThang"))!!;
+    const diemHoa = (await selectThamSo("diemHoa"))!!;
+    const diemThua = (await selectThamSo("diemThua"))!!;
     for (let tranDau of danhSachTranDau) {
-      tranDau.hieuSo = locals.setting.diemThang * tranDau.soTranThang + 
-        locals.setting.diemHoa * tranDau.soTranHoa + 
-        locals.setting.diemThua * tranDau.soTranThua;
+      tranDau.hieuSo = diemThang * tranDau.soTranThang + 
+        diemHoa * tranDau.soTranHoa + 
+        diemThua * tranDau.soTranThua;
     }
     danhSachTranDau.sort((a: BangXepHangNgay, b: BangXepHangNgay) => b.hieuSo - a.hieuSo);
     return new Response(JSON.stringify(danhSachTranDau), {

@@ -2,6 +2,7 @@ import type { RequestHandler } from "./$types";
 import { deleteCauThu, selectAllCauThuWithBanThang, updateCauThu } from "$lib/server/db/functions/CauThu";
 import type { CauThu } from "$lib/typesDatabase";
 import { calculateAge, errorResponseJSON } from "$lib";
+import { selectThamSo } from "$lib/server/db/functions/ThamSo";
 
 export const GET: RequestHandler = async ({locals}) => {
   const danhSachCauThu = await selectAllCauThuWithBanThang();
@@ -36,7 +37,10 @@ export const POST: RequestHandler = async ({
     }
     else {
       const ctAge = calculateAge(new Date(data.ngaySinh));
-      if (!(ctAge >= locals.setting.tuoiMin && ctAge <= locals.setting.tuoiMax)) {
+      const tuoiMin = (await selectThamSo("tuoiMin"))!!;
+      const tuoiMax = (await selectThamSo("tuoiMax"))!!;
+
+      if (!(ctAge >= tuoiMin && ctAge <= tuoiMax)) {
         throw new Error("Cầu thủ có tuổi không hợp lệ");
       }
       

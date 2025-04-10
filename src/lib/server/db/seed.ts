@@ -4,12 +4,9 @@ import { CauThuTable } from "./schema/CauThu";
 import { DoiBongTable } from "./schema/DoiBong";
 import { DSMuaGiaiTable } from "./schema/DSMuaGiai";
 import { LichThiDauTable } from "./schema/LichThiDau";
-import { generateBanThang, generateLichThiDau, generateTGDB, generateThePhat } from "./seedFunctions";
+import { generateBanThang, generateLichThiDau, generateTGDB, generateTGTD, generateThePhat } from "./seedFunctions";
 import { randIntBetween } from "../utils";
-import { createDefaultSetting } from "./schema/UserSettings";
 import { SanNhaTable } from "./schema/SanNha";
-
-await createDefaultSetting();
 
 await seed(db, {
   SanNhaTable,
@@ -44,7 +41,7 @@ await seed(db, {
       ghiChu: f.loremIpsum(),
       nuocNgoai: f.int({ minValue: 0, maxValue: 0 })
     },
-    count: 200
+    count: 550
   },
 
   DoiBongTable: {
@@ -68,6 +65,8 @@ for (const muaGiai of muaGiais) {
 }
 const lichThiDau = await db.select().from(LichThiDauTable);
 for (const lich of lichThiDau) {
+  await generateTGTD(lich.maTD, lich.doiMot);
+  await generateTGTD(lich.maTD, lich.doiHai);
   await generateBanThang(lich.maTD, randIntBetween(0, 5), randIntBetween(0, 5));
   await generateThePhat(lich.maTD, randIntBetween(0, 1), randIntBetween(0, 1));
 }

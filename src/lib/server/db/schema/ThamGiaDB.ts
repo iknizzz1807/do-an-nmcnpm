@@ -30,19 +30,3 @@ export type InsertThamGiaDBParams = typeof ThamGiaDBTable.$inferInsert;
 export type InsertThamGiaDBBackupParams = typeof ThamGiaDBTableBackup.$inferInsert;
 
 const checkType : TypesAreEqual<InsertThamGiaDBParams, ThamGiaDB> = true;
-/*
-export interface ThamGiaDB {
-    maDoi: string;
-    maCT: string;
-    maMG: number;
-}
-CREATE TABLE IF NOT EXISTS 'ThamGiaDB' (
-    'maDoi' TEXT NOT NULL,
-    'maCT' TEXT NOT NULL,
-    'maMG' INTEGER NOT NULL,
-PRIMARY KEY('maDoi', 'maCT', 'maMG'),
-FOREIGN KEY('maDoi') REFERENCES 'DoiBong'('maDoi'),
-FOREIGN KEY('maCT') REFERENCES 'CauThu'('maCT'),
-FOREIGN KEY('maMG') REFERENCES 'DSMuaGiai'('maMG')
-);
-*/

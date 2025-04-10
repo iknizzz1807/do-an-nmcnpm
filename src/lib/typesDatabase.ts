@@ -1,4 +1,9 @@
 // Database
+export type ThamSo = {
+    key: string,
+    value: number,
+}
+
 export type DSMuaGiai = {
     maMG?: number | undefined;
     tenMG: string;

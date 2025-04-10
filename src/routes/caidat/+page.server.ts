@@ -1,9 +1,11 @@
+import { selectSettings } from "$lib/server/db/functions/ThamSo";
 import { selectAllUser } from "$lib/server/db/functions/User";
 import type { PageServerLoad } from "./$types";
 
 export const load = (async ({ locals }) => {
+  
   return {
-    setting: locals.setting,
+    setting: await selectSettings(),
     users: await selectAllUser(),
   };
 }) satisfies PageServerLoad;

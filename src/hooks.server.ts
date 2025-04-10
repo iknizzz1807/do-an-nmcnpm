@@ -1,6 +1,5 @@
 import { validateSessionToken } from "$lib/server/db/functions/Session";
 import { deleteSessionTokenCookie, setSessionTokenCookie } from "$lib/server/db/functions/Session";
-import { SelectSettings } from "$lib/server/db/functions/UserSettings";
 import type { DSMuaGiai } from "$lib/typesDatabase";
 import { redirect, type Handle } from "@sveltejs/kit";
 
@@ -49,8 +48,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 	else {
 		event.locals.muaGiai = JSON.parse(selectedMuaGiai) satisfies DSMuaGiai;
 	}
-
-	event.locals.setting = await SelectSettings();
 
   return resolve(event);
 };

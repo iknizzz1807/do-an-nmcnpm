@@ -4,6 +4,7 @@ import { insertCauThu } from "$lib/server/db/functions/CauThu";
 import { countThamGiaDB, countThamGiaDBNuocNgoai, insertThamGiaDB } from "$lib/server/db/functions/ThamGiaDB";
 import type { CauThu } from "$lib/typesDatabase";
 import { calculateAge, errorResponseJSON } from "$lib";
+import { selectThamSo } from "$lib/server/db/functions/ThamSo";
 
 export const GET: RequestHandler = async ({ params, locals }) => {
   const maDoi = parseInt(params.ma_doi);
@@ -29,7 +30,9 @@ export const POST: RequestHandler = async ({ request, params, locals }) => {
       throw new Error("Cầu thủ đã tồn tại");
 
     const ctAge = calculateAge(new Date(data.ngaySinh));
-    if (!(ctAge >= locals.setting.tuoiMin && ctAge <= locals.setting.tuoiMax)) 
+    const tuoiMin = (await selectThamSo("tuoiMin"))!!;
+    const tuoiMax = (await selectThamSo("tuoiMax"))!!;
+    if (!(ctAge >= tuoiMin && ctAge <= tuoiMax)) 
       throw new Error("Cầu thủ có tuổi không hợp lệ")
     const maCT = (await insertCauThu(data)).at(0);
 
@@ -44,9 +47,11 @@ export const POST: RequestHandler = async ({ request, params, locals }) => {
     if (!Number.isFinite(maDoi))
       throw new Error("Khong tim thay doi");
 
-    if ((await countThamGiaDB(locals.muaGiai?.maMG!!, maDoi)) >= locals.setting.soCauThuMax)
+    const soCauThuMax = (await selectThamSo("soCauThuMax"))!!;
+    const soCauThuNuocNgoaiToiDa = (await selectThamSo("soCauThuNuocNgoaiToiDa"))!!;
+    if ((await countThamGiaDB(locals.muaGiai?.maMG!!, maDoi)) >= soCauThuMax)
       throw new Error("Đội bóng đã đạt đủ số cầu thủ tối đa");
-    if ((await countThamGiaDBNuocNgoai(locals.muaGiai?.maMG!!, maDoi)) >= locals.setting.soCauThuNuocNgoaiToiDa)
+    if ((await countThamGiaDBNuocNgoai(locals.muaGiai?.maMG!!, maDoi)) >= soCauThuNuocNgoaiToiDa)
       throw new Error("Đội bóng đã đạt đủ số cầu thủ nước ngoài tối đa");
 
 

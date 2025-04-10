@@ -1,3 +1,4 @@
+import { selectThamSo } from "$lib/server/db/functions/ThamSo";
 import type { CauThu } from "$lib/typesDatabase";
 import type { PageServerLoad } from "./$types";
 
@@ -19,19 +20,22 @@ export const load = (async ({ params, fetch, locals }) => {
 
     const danhSachCauThu: CauThu[] = await response.json();
 
+    const tuoiMin = (await selectThamSo("tuoiMin"))!!;
+    const tuoiMax = (await selectThamSo("tuoiMax"))!!;
+
     return {
       danhSachCauThu,
       ma_doi: params.ma_doi,
-      tuoiMin: locals.setting.tuoiMin,
-      tuoiMax: locals.setting.tuoiMax,
+      tuoiMin: tuoiMin,
+      tuoiMax: tuoiMax,
     };
   } catch (error) {
     console.error("Error fetching data:", error);
     return {
       danhSachCauThu: [],
       ma_doi: params.ma_doi,
-      tuoiMin: locals.setting.tuoiMin,
-      tuoiMax: locals.setting.tuoiMax,
+      tuoiMin: 0,
+      tuoiMax: 0,
     };
   }
 }) satisfies PageServerLoad;

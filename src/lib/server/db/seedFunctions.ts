@@ -9,8 +9,11 @@ import { eq, and, getTableColumns } from "drizzle-orm";
 import { choose, randIntBetween } from "../utils";
 import { insertLichThiDau } from "./functions/LichThiDau";
 import { ThePhatTable } from "./schema/ThePhat";
+import { ThamGiaTDTable } from "./schema/ThamGiaTD";
 
 export const generateBanThang = async (maTD: number, soBTDoiMot: number = 5, soBTDoiHai: number = 5) => {
+  console.log("BAN THANG !!!!!!!!!!!!!!!");
+
   // if (soBTDoiMot == 0 || soBTDoiHai == 0)
   //   throw new Error("soBT generate khong the bang 0");
   const lichThiDau = (await db.select().from(LichThiDauTable).where(eq(LichThiDauTable.maTD, maTD))).at(0);
@@ -20,17 +23,19 @@ export const generateBanThang = async (maTD: number, soBTDoiMot: number = 5, soB
     ...getTableColumns(CauThuTable)
   })
     .from(CauThuTable)
-    .innerJoin(ThamGiaDBTable, 
-      and(eq(ThamGiaDBTable.maCT, CauThuTable.maCT), 
-        eq(ThamGiaDBTable.maDoi, lichThiDau.doiMot)));
+    .innerJoin(ThamGiaTDTable, 
+      and(eq(ThamGiaTDTable.maCT, CauThuTable.maCT), 
+        eq(ThamGiaTDTable.maDoi, lichThiDau.doiMot),
+        eq(ThamGiaTDTable.maTD, maTD)));
 
   const cauThusDoi2 = await db.select({
     ...getTableColumns(CauThuTable)
   })
     .from(CauThuTable)
-    .innerJoin(ThamGiaDBTable, 
-      and(eq(ThamGiaDBTable.maCT, CauThuTable.maCT), 
-        eq(ThamGiaDBTable.maDoi, lichThiDau.doiHai)));
+    .innerJoin(ThamGiaTDTable, 
+      and(eq(ThamGiaTDTable.maCT, CauThuTable.maCT), 
+        eq(ThamGiaTDTable.maDoi, lichThiDau.doiHai),
+        eq(ThamGiaTDTable.maTD, maTD)));
 
   // console.log("Stage 1");
   const n1 = Math.min(soBTDoiMot, cauThusDoi1.length - 1);
@@ -67,6 +72,7 @@ export const generateBanThang = async (maTD: number, soBTDoiMot: number = 5, soB
 export const generateThePhat = async (maTD: number, soTPDoiMot: number = 5, soTPDoiHai: number = 5) => {
   // if (soTPDoiMot == 0 || soTPDoiHai == 0)
   //   throw new Error("soBT generate khong the bang 0");
+  console.log("THE PHAT !!!!!!!!!!!!!!!");
 
   const lichThiDau = (await db.select().from(LichThiDauTable).where(eq(LichThiDauTable.maTD, maTD))).at(0);
   if (lichThiDau === undefined)
@@ -76,17 +82,19 @@ export const generateThePhat = async (maTD: number, soTPDoiMot: number = 5, soTP
     ...getTableColumns(CauThuTable)
   })
     .from(CauThuTable)
-    .innerJoin(ThamGiaDBTable, 
-      and(eq(ThamGiaDBTable.maCT, CauThuTable.maCT), 
-        eq(ThamGiaDBTable.maDoi, lichThiDau.doiMot)));
+    .innerJoin(ThamGiaTDTable, 
+      and(eq(ThamGiaTDTable.maCT, CauThuTable.maCT), 
+        eq(ThamGiaTDTable.maDoi, lichThiDau.doiMot),
+        eq(ThamGiaTDTable.maTD, maTD)));
 
   const cauThusDoi2 = await db.select({
     ...getTableColumns(CauThuTable)
   })
     .from(CauThuTable)
-    .innerJoin(ThamGiaDBTable, 
-      and(eq(ThamGiaDBTable.maCT, CauThuTable.maCT), 
-        eq(ThamGiaDBTable.maDoi, lichThiDau.doiHai)));
+    .innerJoin(ThamGiaTDTable, 
+      and(eq(ThamGiaTDTable.maCT, CauThuTable.maCT), 
+        eq(ThamGiaTDTable.maDoi, lichThiDau.doiHai),
+        eq(ThamGiaTDTable.maTD, maTD)));
 
   // console.log("Stage 1");
   const n1 = Math.min(soTPDoiMot, cauThusDoi1.length - 1);
@@ -119,8 +127,20 @@ export const generateThePhat = async (maTD: number, soTPDoiMot: number = 5, soTP
     await db.insert(ThePhatTable).values(thePhat);
   }
 }
+export const generateTGTD = async (maTD: number, maDoi : number, soCauThu : number = 11) => {
+  console.log("THAM GIA TRAN DAU !!!!!!!!!!!!!!!");
+  const thiDau = (await db.select().from(LichThiDauTable).where(eq(LichThiDauTable.maTD, maTD))).at(0) ?? null;
+  if (thiDau == null)
+    throw new Error("Không tìm thấy thi đấu weird!!!!!!!!!!!!!!!!");
+  const ctTGDB = await db.select().from(ThamGiaDBTable).where(and(eq(ThamGiaDBTable.maMG, thiDau.maMG), eq(ThamGiaDBTable.maDoi, maDoi)));
+  for (let i = 0; i < Math.min(ctTGDB.length, soCauThu); i++)
+  {
+    await db.insert(ThamGiaTDTable).values({ maCT: ctTGDB[i].maCT, maTD: maTD, maDoi: maDoi, viTri: "Hello" });
+  }
+}
 
-export const generateTGDB = async(maMG : number, soCTPerDoi : number = 10) => {
+export const generateTGDB = async(maMG : number, soCTPerDoi : number = 20) => {
+  console.log("THAM GIA DOI BONG !!!!!!!!!!!!!!!");
   const doiBongs = await db.select().from(DoiBongTable);
   let ctI = 0;
   const cauThu = await db.select().from(CauThuTable);

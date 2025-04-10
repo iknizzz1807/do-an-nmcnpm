@@ -11,7 +11,6 @@ declare global {
       user: User | null;
       session: Session | null;
       muaGiai: DSMuaGiai | null;
-      setting: Settings;
     }
     // interface PageData {}
     // interface PageState {}
