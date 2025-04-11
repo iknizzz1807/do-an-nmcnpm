@@ -8,22 +8,20 @@ import { db } from '../client';
 import { sql } from 'drizzle-orm';
 
 export const BanThangTable = sqliteTable('BanThang', {
-    maBT: integer().notNull().primaryKey({ autoIncrement: true }),
     maTD: integer().notNull().references(() => LichThiDauTable.maTD, { onDelete: "cascade" }),
     maCT: integer().notNull().references(() => CauThuTable.maCT, { onDelete: "cascade" }),
     maDoi: integer().notNull().references(() => DoiBongTable.maDoi, { onDelete: "cascade" }),
     thoiDiem: real().notNull(),
     loaiBanThang: text().notNull(),
 }, (table) => [
+    primaryKey({ columns: [table.maTD, table.maCT, table.thoiDiem] }),
     check("CHK_BT_THOIDIEM", sql`${table.thoiDiem} BETWEEN 0 AND 90`),
-    check("CHK_BT_LOAIBT", sql`${table.loaiBanThang} IN ('A', 'B', 'C')`),
-    uniqueIndex("BanThang_maBT").on(table.maBT)
+    check("CHK_BT_LOAIBT", sql`${table.loaiBanThang} IN ('A', 'B', 'C')`)
 ])
 
 export const BanThangTableBackup = sqliteTable('BanThangBackup', {
     BTBackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
     modifiedDate: integer({mode: "timestamp"}).notNull(),
-    maBT: integer().notNull(),
     maTD: integer().notNull(),
     maCT: integer().notNull(),
     maDoi: integer().notNull(),

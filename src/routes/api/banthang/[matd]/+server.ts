@@ -2,6 +2,7 @@ import { isNumber } from "$lib";
 import type { RequestHandler } from "./$types";
 import { deleteBanThang, insertBanThang, selectAllBanThang, selectBanThang, updateBanThang } from "$lib/server/db/functions/BanThang";
 import type { BanThang } from "$lib/typesDatabase";
+import type { UpdateBanThang } from "$lib/typesResponse";
 
 export const GET: RequestHandler = async ({ params, locals }) => {
   const maTD = parseInt(params.matd);
@@ -19,31 +20,40 @@ export const GET: RequestHandler = async ({ params, locals }) => {
 
 export const POST : RequestHandler = async({ request, locals, params } : { request: Request, locals: App.Locals, params: any }) => {
   const data = await request.json();
-  if (!(data satisfies BanThang))
-    throw new Error("Không thỏa mãn BanThang");
+  if (!(data satisfies UpdateBanThang))
+    throw new Error("Không thỏa mãn UpdateBanThang");
   if (params === "") 
     throw new Error("Param hiện là rỗng");
-  let banThang : BanThang = {
-    maBT: data.maBT,
-    maTD: parseInt(params.matd),
-    maCT: data.maCT,
-    maDoi: data.maDoi,
-    thoiDiem: parseInt(data.thoiDiem),
-    loaiBanThang: data.loaiBanThang
+  console.log(data);
+  let banThang : UpdateBanThang = {
+    oldBanThang: (data.oldBanThang ?? null) === null ? null : {
+      maTD: parseInt(params.matd),
+      maCT: data.oldBanThang.maCT,
+      maDoi: data.oldBanThang.maDoi,
+      thoiDiem: data.oldBanThang.thoiDiem,
+      loaiBanThang: data.oldBanThang.loaiBanThang
+    },
+    newBanThang: {
+      maTD: parseInt(params.matd),
+      maCT: data.newBanThang.maCT,
+      maDoi: data.newBanThang.maDoi,
+      thoiDiem: data.newBanThang.thoiDiem,
+      loaiBanThang: data.newBanThang.loaiBanThang,
+    }
   };
   
-  if ((banThang.maBT ?? null) === null) {
-    await insertBanThang(banThang).catch((err) => {
+  if ((banThang.oldBanThang ?? null) === null) {
+    await insertBanThang(banThang.newBanThang).catch((err) => {
       throw err;
     });
   }
   else {
-    await updateBanThang(banThang).catch((err) => {
+    await updateBanThang(banThang.oldBanThang!!, banThang.newBanThang).catch((err) => {
       throw err;
     });
   }
 
-  return new Response(JSON.stringify(banThang), {
+  return new Response(JSON.stringify(data.newBanThang), {
     status: 200,
     headers: {
       "Content-Type": "application/json",
@@ -55,14 +65,13 @@ export const DELETE : RequestHandler = async({ request, locals } : { request: Re
   const data = await request.json();
   if (!(data satisfies BanThang)) {
     let banThang : BanThang = {
-      maBT: data.maBT,
       maTD: data.maTD,
       maCT: data.maCT,
       maDoi: data.maDoi,
       thoiDiem: data.thoiDiem,
       loaiBanThang: data.loaiBanThang
     };
-    await deleteBanThang(banThang.maBT!!);
+    await deleteBanThang(banThang);
     return new Response(JSON.stringify(banThang), {
       status: 200,
       headers: {

@@ -8,21 +8,19 @@ import { db } from '../client';
 import { sql } from 'drizzle-orm';
 
 export const ThePhatTable = sqliteTable('ThePhat', {
-    maTP: integer().notNull().primaryKey({ autoIncrement: true }),
     maTD: integer().notNull().references(() => LichThiDauTable.maTD, { onDelete: "cascade" }),
     maCT: integer().notNull().references(() => CauThuTable.maCT, { onDelete: "cascade" }),
     maDoi: integer().notNull().references(() => DoiBongTable.maDoi, { onDelete: "cascade" }),
     thoiDiem: real().notNull(),
     loaiThe: text().notNull(),
 }, (table) => [
-    check("CHK_TP_THOIDIEM", sql`${table.thoiDiem} BETWEEN 0 AND 90`),
-    uniqueIndex("ThePhat_maTP").on(table.maTP)
+  primaryKey({ columns: [table.maTD, table.maCT, table.thoiDiem] }),
+  check("CHK_TP_THOIDIEM", sql`${table.thoiDiem} BETWEEN 0 AND 90`),
 ])
 
 export const ThePhatTableBackup = sqliteTable('ThePhatBackup', {
   TPBackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
   modifiedDate: integer({mode: "timestamp"}).notNull(),
-  maTP: integer().notNull(),
   maTD: integer().notNull(),
   maCT: integer().notNull(),
   maDoi: integer().notNull(),

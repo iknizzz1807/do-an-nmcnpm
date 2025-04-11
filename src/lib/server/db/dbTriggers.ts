@@ -9,16 +9,16 @@ const createBTBackupTrigger = async() => {
       CREATE TRIGGER IF NOT EXISTS TRGD_BT_BACKUP
       AFTER DELETE ON BanThang
       BEGIN
-      INSERT INTO BanThangBackup(modifiedDate, maBT, maTD, maCT, maDoi, thoiDiem, loaiBanThang)
-      VALUES(datetime('now'), OLD.maBT, OLD.maTD, OLD.maCT, OLD.maDoi, OLD.thoiDiem, OLD.loaiBanThang);
+      INSERT INTO BanThangBackup(modifiedDate, maTD, maCT, maDoi, thoiDiem, loaiBanThang)
+      VALUES(datetime('now'), OLD.maTD, OLD.maCT, OLD.maDoi, OLD.thoiDiem, OLD.loaiBanThang);
       END
       `);
       tx.run(sql`
       CREATE TRIGGER IF NOT EXISTS TRGU_BT_BACKUP
       AFTER UPDATE ON BanThang
       BEGIN
-      INSERT INTO BanThangBackup(modifiedDate, maBT, maTD, maCT, maDoi, thoiDiem, loaiBanThang)
-      VALUES(datetime('now'), OLD.maBT, OLD.maTD, OLD.maCT, OLD.maDoi, OLD.thoiDiem, OLD.loaiBanThang);
+      INSERT INTO BanThangBackup(modifiedDate, maTD, maCT, maDoi, thoiDiem, loaiBanThang)
+      VALUES(datetime('now'), OLD.maTD, OLD.maCT, OLD.maDoi, OLD.thoiDiem, OLD.loaiBanThang);
       END
       `);
       // Trigger check Cầu thủ ghi bàn có thuộc đội ghi bàn không
@@ -292,16 +292,16 @@ const createTPBackupTrigger = async() => {
       CREATE TRIGGER IF NOT EXISTS TRGD_TP_BACKUP
       AFTER DELETE ON ThePhat
       BEGIN
-      INSERT INTO ThePhatBackup(modifiedDate, maTP, maTD, maCT, maDoi, thoiDiem, loaiThe)
-      VALUES(datetime('now'), OLD.maTP, OLD.maTD, OLD.maCT, OLD.maDoi, OLD.thoiDiem, OLD.loaiThe);
+      INSERT INTO ThePhatBackup(modifiedDate, maTD, maCT, maDoi, thoiDiem, loaiThe)
+      VALUES(datetime('now'), OLD.maTD, OLD.maCT, OLD.maDoi, OLD.thoiDiem, OLD.loaiThe);
       END
       `);
       tx.run(sql`
       CREATE TRIGGER IF NOT EXISTS TRGU_TP_BACKUP
       AFTER UPDATE ON ThePhat
       BEGIN
-      INSERT INTO ThePhatBackup(modifiedDate, maTP, maTD, maCT, maDoi, thoiDiem, loaiThe)
-      VALUES(datetime('now'), OLD.maTP, OLD.maTD, OLD.maCT, OLD.maDoi, OLD.thoiDiem, OLD.loaiThe);
+      INSERT INTO ThePhatBackup(modifiedDate, maTD, maCT, maDoi, thoiDiem, loaiThe)
+      VALUES(datetime('now'), OLD.maTD, OLD.maCT, OLD.maDoi, OLD.thoiDiem, OLD.loaiThe);
       END
       `);
       // Trigger check Cầu thủ bị phạt có thuộc đội bị phạt không

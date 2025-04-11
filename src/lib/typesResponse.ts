@@ -1,4 +1,4 @@
-import type { DoiBong } from "./typesDatabase"
+import type { BanThang, DoiBong, ThePhat } from "./typesDatabase"
 
 // Query Results
 export type KetQuaThiDau = {
@@ -34,4 +34,13 @@ export type CauThuGhiBan = {
   tenDoi: string;
   loaiCT: number;
   soBanThang: number;
+}
+
+export type UpdateBanThang = {
+  oldBanThang?: BanThang | null;
+  newBanThang: BanThang;
+}
+export type UpdateThePhat = {
+  oldThePhat?: ThePhat | null;
+  newThePhat: ThePhat;
 }

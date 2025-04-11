@@ -4,6 +4,7 @@
   import Table from "$lib/components/Table.svelte";
   import { showErrorToast, showOkToast } from "$lib/components/Toast";
   import type { BanThang, CauThu } from "$lib/typesDatabase";
+  import type { UpdateBanThang } from "$lib/typesResponse";
   import { onMount } from "svelte";
   import { SvelteMap } from "svelte/reactivity";
 
@@ -100,12 +101,17 @@
     console.log(data);
 
     try {
+      const body : UpdateBanThang = {
+        oldBanThang: selectedIndex == -1 ? null : danhSachBanThang[selectedIndex],
+        newBanThang: data
+      }
+
       const response = await fetch("/api/banthang/" + maTD, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(body),
       });
 
       if (!response.ok) {

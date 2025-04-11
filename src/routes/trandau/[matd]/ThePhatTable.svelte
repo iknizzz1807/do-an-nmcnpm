@@ -4,6 +4,7 @@
   import Table from "$lib/components/Table.svelte";
   import { showErrorToast, showOkToast } from "$lib/components/Toast";
   import type { ThePhat, CauThu } from "$lib/typesDatabase";
+  import type { UpdateThePhat } from "$lib/typesResponse";
   import { onMount } from "svelte";
   import { SvelteMap } from "svelte/reactivity";
 
@@ -95,15 +96,19 @@
 
   const submitForm = async (e: Event, data: ThePhat) => {
     e.preventDefault();
-    console.log(data);
 
     try {
+      const body : UpdateThePhat = {
+        oldThePhat: selectedIndex == -1 ? null : danhSachThePhat[selectedIndex],
+        newThePhat: data
+      }
+
       const response = await fetch("/api/thephat/" + maTD, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(body),
       });
 
       if (!response.ok) {
@@ -114,7 +119,9 @@
 
       // Cập nhật danh sách Thẻ phạt nếu cần thiết
       if (selectedIndex === -1)
+      {
         danhSachThePhat.push(result);
+      }
       else 
         danhSachThePhat[selectedIndex] = result;
 

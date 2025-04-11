@@ -47,7 +47,6 @@ export type ThamGiaTD = {
 };
 
 export type BanThang = {
-    maBT?: number | undefined,
     maTD: number;
     maCT: number;
     maDoi: number;
@@ -59,7 +58,6 @@ export type BanThang = {
 }
 
 export type ThePhat = {
-    maTP?: number | undefined,
     maTD: number;
     maDoi: number;
     maCT: number;
