@@ -98,7 +98,6 @@
 
   const submitForm = async (e: Event, data: BanThang) => {
     e.preventDefault();
-    console.log(data);
 
     try {
       const body : UpdateBanThang = {

@@ -25,7 +25,7 @@ export const POST : RequestHandler = async({ request, locals, params } : { reque
   if (params === "") 
     throw new Error("Param hiện là rỗng");
 
-  let thePhat : UpdateThePhat = {
+  const thePhat : UpdateThePhat = {
     oldThePhat: (data.oldThePhat ?? null) === null ? null : {
       maTD: parseInt(params.matd),
       maCT: data.oldThePhat.maCT,
@@ -41,7 +41,9 @@ export const POST : RequestHandler = async({ request, locals, params } : { reque
       loaiThe: data.newThePhat.loaiThe,
     }
   };
+  console.log(thePhat);
   
+
   if ((thePhat.oldThePhat ?? null) === null) {
     await insertThePhat(thePhat.newThePhat).catch((err) => {
       throw err;

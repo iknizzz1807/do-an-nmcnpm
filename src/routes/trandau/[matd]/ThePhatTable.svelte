@@ -73,6 +73,7 @@
   })
 
   const onOpenForm = () : FormInputMap | null => {
+    selectedIndex = -1;
     if (editData.size > 0)
       return editData;
     return new SvelteMap();
@@ -99,7 +100,7 @@
 
     try {
       const body : UpdateThePhat = {
-        oldThePhat: selectedIndex == -1 ? null : danhSachThePhat[selectedIndex],
+        oldThePhat: selectedIndex === -1 ? null : danhSachThePhat[selectedIndex],
         newThePhat: data
       }
 
