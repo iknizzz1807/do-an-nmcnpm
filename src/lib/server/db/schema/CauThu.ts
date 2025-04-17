@@ -13,7 +13,6 @@ export const CauThuTable = sqliteTable('CauThu', {
     ngaySinh: text().notNull(),
     maLCT: integer().notNull().references(() => LoaiCTTable.maLCT, { onDelete: "cascade" }),
     ghiChu: text().notNull(),
-    nuocNgoai: integer({ mode: "boolean" }).notNull()
 }, (table) => [
     uniqueIndex("CauThu_maCT").on(table.maCT)
 ])
@@ -26,7 +25,6 @@ export const CauThuTableBackup = sqliteTable('CauThuBackup', {
     ngaySinh: text().notNull(),
     maLCT: integer().notNull(),
     ghiChu: text().notNull(),
-    nuocNgoai: integer().notNull()
 })
 
 export type InsertCauThuParams = typeof CauThuTable.$inferInsert;

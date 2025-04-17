@@ -3,12 +3,12 @@ import { db } from "../client"
 import { ThamSoTable } from "../schema/ThamSo"
 import type { Settings } from "$lib/typesAuth";
 
-export const updateThamSo = async (key: string, value : number) => {
-  await db.update(ThamSoTable).set({ value: value }).where(eq(ThamSoTable.key, key));
+export const updateThamSo = async (tenThamSo: string, giaTri : number) => {
+  await db.update(ThamSoTable).set({ giaTri: giaTri }).where(eq(ThamSoTable.tenThamSo, tenThamSo));
 }
 
-export const selectThamSo = async(key : string) => {
-  return (await db.select().from(ThamSoTable).where(eq(ThamSoTable.key, key))).at(0)?.value ?? null;
+export const selectThamSo = async(tenThamSo : string) => {
+  return (await db.select().from(ThamSoTable).where(eq(ThamSoTable.tenThamSo, tenThamSo))).at(0)?.giaTri ?? null;
 }
 
 export const selectSettings = async() => {
@@ -17,7 +17,6 @@ export const selectSettings = async() => {
     tuoiMax: (await selectThamSo("tuoiMax"))!!,
     soCauThuMin: (await selectThamSo("soCauThuMin"))!!,
     soCauThuMax: (await selectThamSo("soCauThuMax"))!!,
-    soCauThuNuocNgoaiToiDa: (await selectThamSo("soCauThuNuocNgoaiToiDa"))!!,
     doiDaTrenSanNha: (await selectThamSo("doiDaTrenSanNha"))!!,
     loaiBanThang: (await selectThamSo("loaiBanThang"))!!,
     thoiDiemGhiBanToiDa: (await selectThamSo("thoiDiemGhiBanToiDa"))!!,
@@ -33,7 +32,6 @@ export const updateSettings = async(settings: Settings) => {
   await updateThamSo("tuoiMax", settings.tuoiMax);
   await updateThamSo("soCauThuMin", settings.soCauThuMin);
   await updateThamSo("soCauThuMax", settings.soCauThuMax);
-  await updateThamSo("soCauThuNuocNgoaiToiDa", settings.soCauThuNuocNgoaiToiDa);
   await updateThamSo("doiDaTrenSanNha", settings.doiDaTrenSanNha);
   await updateThamSo("loaiBanThang", settings.loaiBanThang);
   await updateThamSo("thoiDiemGhiBanToiDa", settings.thoiDiemGhiBanToiDa);

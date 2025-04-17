@@ -49,7 +49,6 @@ export const POST: RequestHandler = async ({
         tenCT: data.tenCT,
         maLCT: data.maLCT,
         ghiChu: data.ghiChu,
-        nuocNgoai: data.nuocNgoai,
         ngaySinh: data.ngaySinh
       };
       await updateCauThu(cauThu).catch((err) => {

@@ -1,6 +1,6 @@
 <script module lang="ts">
   export let test = $state(0);
-  export const muaGiai = writable<MuaGiai | null>(null);
+  export const currentMuaGiai = writable<MuaGiai | null>(null);
 </script>
 
 <script lang="ts">
@@ -10,17 +10,17 @@
   import { writable } from "svelte/store";
   import dateFormat from "dateformat";
 
-  let { MuaGiai, selectedMuaGiai } : { MuaGiai: MuaGiai[], selectedMuaGiai: MuaGiai | null } = $props();
+  let { dsMuaGiai, selectedMuaGiai } : { dsMuaGiai: MuaGiai[], selectedMuaGiai: MuaGiai | null } = $props();
   let selectedValue = $state(selectedMuaGiai?.maMG ?? 0);
   let form : HTMLFormElement;
 
   $effect(() => {
-    if (selectedValue - 1 >= 0 && selectedValue - 1 < MuaGiai.length) {
-      selectedMuaGiai = MuaGiai[selectedValue - 1];
-      muaGiai.set(selectedMuaGiai);
+    if (selectedValue - 1 >= 0 && selectedValue - 1 < dsMuaGiai.length) {
+      selectedMuaGiai = dsMuaGiai[selectedValue - 1];
+      currentMuaGiai.set(selectedMuaGiai);
     }
     else {
-      muaGiai.set(null);
+      currentMuaGiai.set(null);
     }
   })
 
@@ -37,7 +37,7 @@
         throw new Error("Không thể fetch data mùa giải");
       }
 
-      MuaGiai = await response.json() satisfies MuaGiai[];
+      dsMuaGiai = await response.json() satisfies MuaGiai[];
     } catch (err) {
       console.error(err);
     }
@@ -79,7 +79,7 @@
           bind:value={selectedValue}
           >
           <option value={0} selected>Choose a year</option>
-          {#each MuaGiai as muaGiai}
+          {#each dsMuaGiai as muaGiai}
             <option value={muaGiai.maMG}>{ muaGiai.tenMG }</option>
           {/each}
         </select>

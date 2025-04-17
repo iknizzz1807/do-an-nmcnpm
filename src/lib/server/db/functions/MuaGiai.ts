@@ -2,10 +2,6 @@ import type { MuaGiai } from '$lib/typesDatabase';
 import { db } from '../client';
 import { eq } from 'drizzle-orm';
 import { MuaGiaiTable } from '../schema/MuaGiai';
-import { BanThangTable } from '../schema/BanThang';
-import { LichThiDauTable } from '../schema/LichThiDau';
-import { ThePhatTable } from '../schema/ThePhat';
-import { ThamGiaDBTable } from '../schema/ThamGiaDB';
 
 export const insertMuaGiai = async (...muaGiai: MuaGiai[]) => {
     let returning = await db.insert(MuaGiaiTable).values(muaGiai).returning({ id: MuaGiaiTable.maMG });

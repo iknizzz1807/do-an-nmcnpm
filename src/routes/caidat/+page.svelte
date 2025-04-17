@@ -28,7 +28,7 @@
     { header: "ID", accessor: "id", hidden: true },
     { header: "Username", accessor: "username" },
     { header: "Email", accessor: "email" },
-    { header: "User Type", accessor: "isAdmin", accessFunction: (data: User) => data.isAdmin ? "Admin" : "User" },
+    // { header: "User Type", accessor: "isAdmin", accessFunction: (data: User) => data.isAdmin ? "Admin" : "User" },
   ];
 
   const onOpenForm = () : FormInputMap | null => {
@@ -48,7 +48,7 @@
       editData.set("id", data.id);
       editData.set("username", data.username);
       editData.set("email", data.email);
-      editData.set("isAdmin", Number(data.isAdmin));
+      // editData.set("isAdmin", Number(data.isAdmin));
       formState = true;
       selectedIndex = index;
     }
@@ -143,8 +143,8 @@
         <SettingNumberInput min={15} max={40} forValue="soCauThuMax"
           bind:bindValue={setting.soCauThuMax} label="Maximum Players per Team" unit=""/>
 
-        <SettingNumberInput min={0} max={20} forValue="soCauThuNuocNgoaiToiDa"
-          bind:bindValue={setting.soCauThuNuocNgoaiToiDa} label="Maximum Foreign Players per Team" unit=""/>
+        <!-- <SettingNumberInput min={0} max={20} forValue="soCauThuNuocNgoaiToiDa"
+          bind:bindValue={setting.soCauThuNuocNgoaiToiDa} label="Maximum Foreign Players per Team" unit=""/> -->
       </SettingSection>
 
       

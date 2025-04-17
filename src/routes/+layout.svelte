@@ -4,7 +4,7 @@
   let { children, data } = $props();
 </script>
 
-<Nav MuaGiai={data.MuaGiai} selectedMuaGiai={data.selectedMuaGiai} />
+<Nav dsMuaGiai={data.dsMuaGiai} selectedMuaGiai={data.selectedMuaGiai} />
 <div style="padding-left: 10%; padding-right: 10%;">
   {@render children()}
 </div>

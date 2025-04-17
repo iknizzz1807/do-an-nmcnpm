@@ -23,7 +23,6 @@ export const updateCauThu = async(cauThu: CauThu) => {
       tenCT: cauThu.tenCT,
       maLCT: cauThu.maLCT,
       ghiChu: cauThu.ghiChu,
-      nuocNgoai: cauThu.nuocNgoai,
       ngaySinh: cauThu.ngaySinh
   }).where(eq(CauThuTable.maCT, cauThu.maCT!!));
 }

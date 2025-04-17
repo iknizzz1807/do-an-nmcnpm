@@ -1,7 +1,7 @@
 // Database
 export type ThamSo = {
-    key: string,
-    value: number,
+    tenThamSo: string,
+    giaTri: number,
 }
 
 export type MuaGiai = {
@@ -23,7 +23,6 @@ export type CauThu = {
     tenCT: string;
     maLCT: number;
     ghiChu: string;
-    nuocNgoai: boolean;
     ngaySinh: string;
     banThang?: number | undefined;
 }
@@ -44,9 +43,9 @@ export type ThamGiaTD = {
 export type BanThang = {
     maTD: number;
     maCT: number;
-    maDoi: number;
+    //maDoi: number;
     thoiDiem: number;
-    loaiBanThang: string;
+    maLBT: number;
     // Data display
     tenCT?: string | undefined;
     tenDoi?: string | undefined;
@@ -54,10 +53,9 @@ export type BanThang = {
 
 export type ThePhat = {
     maTD: number;
-    maDoi: number;
     maCT: number;
     thoiDiem: number;
-    loaiThe: string;
+    maLTP: number;
     // Data display
     tenCT?: string | undefined;
     tenDoi?: string | undefined;
@@ -106,6 +104,7 @@ export type LoaiBT = {
 export type LoaiTP = {
     maLTP?: number | undefined;
     tenLTP: string;
+    soThePhatToiDa: number;
 }
 
 export type ViTri = {

@@ -27,8 +27,8 @@
     { label: "Loại cầu thủ", propertyName: "maLCT", type: "select", valueType: "number", 
       options: [ { optionValue: 1, optionName: "1" }, {optionValue: 2, optionName: "2"}, {optionValue: 3, optionName: "3"}]},
 
-    { label: "Nước ngoài", propertyName: "nuocNgoai", type: "select", valueType: "number", 
-      options: [ { optionValue: 0, optionName: "Không" }, {optionValue: 1, optionName: "Có"}]},
+    // { label: "Nước ngoài", propertyName: "nuocNgoai", type: "select", valueType: "number", 
+    //   options: [ { optionValue: 0, optionName: "Không" }, {optionValue: 1, optionName: "Có"}]},
 
     { label: "Ghi chú", propertyName: "ghiChu", type: "input", valueType: "string"},
   ];
@@ -38,7 +38,7 @@
     { header: "Tên cầu thủ", accessor: "tenCT" },
     { header: "Ngày sinh", accessor: "ngaySinh" },
     { header: "Loại cầu thủ", accessor: "maLCT" },
-    { header: "Nước ngoài", accessor: "nuocNgoai" },
+    //{ header: "Nước ngoài", accessor: "nuocNgoai" },
     { header: "Ghi chú", accessor: "ghiChu" },
   ];
   let formState : boolean = $state(false);
@@ -64,7 +64,7 @@
       editData.set("tenCT", data.tenCT);
       editData.set("maLCT", parseInt(data.maLCT));
       editData.set("ghiChu", data.ghiChu);
-      editData.set("nuocNgoai", Number(data.nuocNgoai));
+      //editData.set("nuocNgoai", Number(data.nuocNgoai));
       editData.set("ngaySinh", new Date(data.ngaySinh));
       selectedIndex = index;
       formState = true;

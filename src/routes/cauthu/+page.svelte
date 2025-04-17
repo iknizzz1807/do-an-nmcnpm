@@ -22,7 +22,7 @@
     { header: "Tên cầu thủ", accessor: "tenCT" },
     { header: "Loại cầu thủ", accessor: "maLCT" },
     { header: "Ghi chú", accessor: "ghiChu" },
-    { header: "Nước ngoài", accessor: "nuocNgoai" },
+    //{ header: "Nước ngoài", accessor: "nuocNgoai" },
     { header: "Ngày sinh", accessor: "ngaySinh" },
     { header: "Bàn thắng", accessor: "banThang" },
   ];
@@ -40,10 +40,10 @@
 
     { label: "Ghi chú", propertyName: "ghiChu", type: "input", valueType: "string" },
 
-    { label: "Nước ngoài", propertyName: "nuocNgoai", type: "select", valueType: "number", options: [
-      { optionValue: 0, optionName: "Không" },
-      { optionValue: 1, optionName: "Có" },
-    ]},
+    // { label: "Nước ngoài", propertyName: "nuocNgoai", type: "select", valueType: "number", options: [
+    //   { optionValue: 0, optionName: "Không" },
+    //   { optionValue: 1, optionName: "Có" },
+    // ]},
 
     { label: "Ngày sinh", propertyName: "ngaySinh", type: "Date", valueType: "Date",
       min: minDate.toISOString().slice(0, 10), max: maxDate.toISOString().slice(0, 10) }
@@ -101,7 +101,7 @@
       editData.set("tenCT", data.tenCT);
       editData.set("maLCT", parseInt(data.maLCT));
       editData.set("ghiChu", data.ghiChu);
-      editData.set("nuocNgoai", Number(data.nuocNgoai));
+      //editData.set("nuocNgoai", Number(data.nuocNgoai));
       editData.set("ngaySinh", new Date(data.ngaySinh));
       console.log(editData);
       formState = true;

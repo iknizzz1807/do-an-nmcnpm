@@ -45,10 +45,9 @@ export const generateBanThang = async (maTD: number, soBTDoiMot: number = 5, soB
       throw new Error("Khong the xac dinh duoc cau thu");
     const banThang : BanThang = {
       maTD: lichThiDau.maTD,
-      maDoi: lichThiDau.doiMot,
       maCT: cauThu.maCT,
       thoiDiem: 90 * i / n1,
-      loaiBanThang: choose(['A', 'B', 'C'])
+      maLBT: choose([1, 2, 3])
     }
     await db.insert(BanThangTable).values(banThang);
   }
@@ -60,10 +59,9 @@ export const generateBanThang = async (maTD: number, soBTDoiMot: number = 5, soB
       throw new Error("Khong the xac dinh duoc cau thu");
     const banThang : BanThang = {
       maTD: lichThiDau.maTD,
-      maDoi: lichThiDau.doiHai,
       maCT: cauThu.maCT,
       thoiDiem: 90 * i / (n2 + 1),
-      loaiBanThang: choose(['A', 'B', 'C'])
+      maLBT: choose([1, 2, 3])
     }
     await db.insert(BanThangTable).values(banThang);
   }
@@ -104,10 +102,9 @@ export const generateThePhat = async (maTD: number, soTPDoiMot: number = 5, soTP
       throw new Error("Khong the xac dinh duoc cau thu");
     const thePhat : ThePhat = {
       maTD: lichThiDau.maTD,
-      maDoi: lichThiDau.doiMot,
       maCT: cauThu.maCT,
       thoiDiem: 90 * i / n1,
-      loaiThe: choose(['Do', 'Vang'])
+      maLTP: choose([1, 2, 3])
     }
     await db.insert(ThePhatTable).values(thePhat);
   }
@@ -119,10 +116,9 @@ export const generateThePhat = async (maTD: number, soTPDoiMot: number = 5, soTP
       throw new Error("Khong the xac dinh duoc cau thu");
     const thePhat : ThePhat = {
       maTD: lichThiDau.maTD,
-      maDoi: lichThiDau.doiHai,
       maCT: cauThu.maCT,
       thoiDiem: 90 * i / (n2 + 1),
-      loaiThe: choose(['Do', 'Vang'])
+      maLTP: choose([1, 2, 3])
     }
     await db.insert(ThePhatTable).values(thePhat);
   }
@@ -135,7 +131,7 @@ export const generateTGTD = async (maTD: number, maDoi : number, soCauThu : numb
   const ctTGDB = await db.select().from(ThamGiaDBTable).where(and(eq(ThamGiaDBTable.maMG, thiDau.maMG), eq(ThamGiaDBTable.maDoi, maDoi)));
   for (let i = 0; i < Math.min(ctTGDB.length, soCauThu); i++)
   {
-    await db.insert(ThamGiaTDTable).values({ maCT: ctTGDB[i].maCT, maTD: maTD, maDoi: maDoi, viTri: "Hello" });
+    await db.insert(ThamGiaTDTable).values({ maCT: ctTGDB[i].maCT, maTD: maTD, maDoi: maDoi, maVT: choose([1, 2, 3]) });
   }
 }
 
@@ -174,7 +170,8 @@ export const generateLichThiDau = async (maMG: number) => {
             maVTD: randIntBetween(1, 2),
             maMG: maMG,
             doiThang: choose([doiBongs[doiMotIndex].maDoi, doiBongs[doiHaiIndex].maDoi, null]),
-            ngayGio: new Date().toJSON()
+            ngayGio: new Date().toJSON(),
+            maSan: doiBongs[doiMotIndex].maSan,
         }
         
         const lichThiDau2 : LichThiDau = {
@@ -184,6 +181,7 @@ export const generateLichThiDau = async (maMG: number) => {
             maMG: maMG,
             doiThang: doiBongs[choose([doiMotIndex, doiHaiIndex])].maDoi,
             ngayGio: new Date().toJSON(),
+            maSan: doiBongs[doiHaiIndex].maSan,
         }
         doiBongs.splice(doiMotIndex, 1);
         doiBongs.splice(doiHaiIndex, 1);

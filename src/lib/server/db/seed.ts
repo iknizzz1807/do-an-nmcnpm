@@ -7,10 +7,64 @@ import { LichThiDauTable } from "./schema/LichThiDau";
 import { generateBanThang, generateLichThiDau, generateTGDB, generateTGTD, generateThePhat } from "./seedFunctions";
 import { randIntBetween } from "../utils";
 import { SanNhaTable } from "./schema/Data/SanNha";
+import { ViTriTable } from "./schema/Data/ViTri";
+import { LoaiCTTable } from "./schema/Data/LoaiCT";
+import { LoaiBTTable } from "./schema/Data/LoaiBT";
+import { LoaiTPTable } from "./schema/Data/LoaiTP";
+import { VongTDTable } from "./schema/Data/VongTD";
+
+await seed(db, {
+  ViTriTable,
+  LoaiBTTable,
+  LoaiTPTable,
+  VongTDTable,
+  LoaiCTTable,
+}).refine((f) => ({
+  ViTriTable: {
+    columns: {
+      tenVT: f.firstName()
+    },
+    count: 3
+  },
+
+  LoaiBTTable: {
+    columns: {
+      tenLBT: f.firstName()
+    },
+    count: 3
+  },
+
+  LoaiTPTable: {
+    columns: {
+      tenLTP: f.firstName(),
+      soThePhatToiDa: f.default({ defaultValue: 0 }),
+    },
+    count: 3
+  },
+
+  VongTDTable: {
+    columns: {
+      tenVTD: f.firstName()
+    },
+    count: 3
+  },
+  LoaiCTTable: {
+    columns: {
+      tenLCT: f.firstName(),
+      soCauThuToiDa: f.default({ defaultValue: 0 }),
+    },
+    count: 2
+  },
+  
+})).catch((reason) => {
+  console.log("\n");
+  console.log(reason);
+  console.log("\n\nPlease delete the db.sqlite before running seed:db. You gonna fucking panic because of the amount of shit printed");
+});
 
 await seed(db, {
   SanNhaTable,
-  MuaGiaiTable: MuaGiaiTable,
+  MuaGiaiTable,
   CauThuTable,
   DoiBongTable,
 }).refine((f) => ({
@@ -38,11 +92,10 @@ await seed(db, {
     columns: {
       tenCT: f.fullName(),
       ngaySinh: f.date({ minDate: "1990-01-01", maxDate: "2005-12-31" }),
-      maLCT: f.int({ minValue: 0, maxValue: 5 }),
       ghiChu: f.loremIpsum(),
-      nuocNgoai: f.int({ minValue: 0, maxValue: 0 })
+      maLCT: f.int({minValue: 1, maxValue: 2}),
     },
-    count: 550
+    count: 550,
   },
 
   DoiBongTable: {

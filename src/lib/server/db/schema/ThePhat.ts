@@ -6,13 +6,13 @@ import { type TypesAreEqual } from '$lib/server/utils';
 import { type ThePhat } from '$lib/typesDatabase';
 import { db } from '../client';
 import { sql } from 'drizzle-orm';
+import { LoaiTPTable } from './Data/LoaiTP';
 
 export const ThePhatTable = sqliteTable('ThePhat', {
     maTD: integer().notNull().references(() => LichThiDauTable.maTD, { onDelete: "cascade" }),
     maCT: integer().notNull().references(() => CauThuTable.maCT, { onDelete: "cascade" }),
-    maDoi: integer().notNull().references(() => DoiBongTable.maDoi, { onDelete: "cascade" }),
     thoiDiem: real().notNull(),
-    loaiThe: text().notNull(),
+    maLTP: integer().notNull().references(() => LoaiTPTable.maLTP, { onDelete: "cascade" }),
 }, (table) => [
   primaryKey({ columns: [table.maTD, table.maCT, table.thoiDiem] }),
   check("CHK_TP_THOIDIEM", sql`${table.thoiDiem} BETWEEN 0 AND 90`),
@@ -23,9 +23,8 @@ export const ThePhatTableBackup = sqliteTable('ThePhatBackup', {
   modifiedDate: integer({mode: "timestamp"}).notNull(),
   maTD: integer().notNull(),
   maCT: integer().notNull(),
-  maDoi: integer().notNull(),
   thoiDiem: real().notNull(),
-  loaiThe: text().notNull(),
+  maLTP: integer().notNull(),
 })
 
 
