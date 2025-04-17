@@ -171,7 +171,7 @@ export const generateLichThiDau = async (maMG: number) => {
         const lichThiDau : LichThiDau = {
             doiMot: doiBongs[doiMotIndex].maDoi,
             doiHai: doiBongs[doiHaiIndex].maDoi,
-            vongThiDau: randIntBetween(1, 2),
+            maVTD: randIntBetween(1, 2),
             maMG: maMG,
             doiThang: choose([doiBongs[doiMotIndex].maDoi, doiBongs[doiHaiIndex].maDoi, null]),
             ngayGio: new Date().toJSON()
@@ -180,7 +180,7 @@ export const generateLichThiDau = async (maMG: number) => {
         const lichThiDau2 : LichThiDau = {
             doiMot: doiBongs[doiHaiIndex].maDoi,
             doiHai: doiBongs[doiMotIndex].maDoi,
-            vongThiDau: randIntBetween(1, 2),
+            maVTD: randIntBetween(1, 2),
             maMG: maMG,
             doiThang: doiBongs[choose([doiMotIndex, doiHaiIndex])].maDoi,
             ngayGio: new Date().toJSON(),

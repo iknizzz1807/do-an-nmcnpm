@@ -21,7 +21,7 @@ export const updateCauThu = async(cauThu: CauThu) => {
     throw new Error("maCT không tồn tại");
   await db.update(CauThuTable).set({
       tenCT: cauThu.tenCT,
-      loaiCT: cauThu.loaiCT,
+      maLCT: cauThu.maLCT,
       ghiChu: cauThu.ghiChu,
       nuocNgoai: cauThu.nuocNgoai,
       ngaySinh: cauThu.ngaySinh
@@ -85,7 +85,7 @@ export const traCuuCauThu = async (tenCT: string) => {
     ketQua.push({
       tenCT: value.CauThu.tenCT,
       tenDoi: value.DoiBong.tenDoi,
-      loaiCT: value.CauThu.loaiCT,
+      maLCT: value.CauThu.maLCT,
       tongSoBanThang: tongSoBanThang,
     });
   });

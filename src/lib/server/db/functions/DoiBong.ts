@@ -6,7 +6,7 @@ import { BanThangTable } from "../schema/BanThang";
 import { LichThiDauTable } from "../schema/LichThiDau";
 import { ThamGiaDBTable } from "../schema/ThamGiaDB";
 import { ThePhatTable } from "../schema/ThePhat";
-import { SanNhaTable } from "../schema/SanNha";
+import { SanNhaTable } from "../schema/Data/SanNha";
 
 export const insertDoiBong = async (...doiBong: DoiBong[]) => {
   let returning = await db.insert(DoiBongTable).values(doiBong).returning({ id: DoiBongTable.maDoi });

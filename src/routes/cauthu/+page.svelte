@@ -20,7 +20,7 @@
   const columns = [
     { header: "Mã cầu thủ", accessor: "maCT", hidden: true },
     { header: "Tên cầu thủ", accessor: "tenCT" },
-    { header: "Loại cầu thủ", accessor: "loaiCT" },
+    { header: "Loại cầu thủ", accessor: "maLCT" },
     { header: "Ghi chú", accessor: "ghiChu" },
     { header: "Nước ngoài", accessor: "nuocNgoai" },
     { header: "Ngày sinh", accessor: "ngaySinh" },
@@ -30,7 +30,7 @@
   const formFields : FormField[] = [
     { label: "Tên cầu thủ", propertyName: "tenCT", type: "input", valueType: "string" },
     
-    { label: "Loại cầu thủ", propertyName: "loaiCT", type: "select", valueType: "number", options: [
+    { label: "Loại cầu thủ", propertyName: "maLCT", type: "select", valueType: "number", options: [
       { optionValue: 1, optionName: "1" },
       { optionValue: 2, optionName: "2" },
       { optionValue: 3, optionName: "3" },
@@ -99,7 +99,7 @@
       editData.clear();
       editData.set("maCT", data.maCT);
       editData.set("tenCT", data.tenCT);
-      editData.set("loaiCT", parseInt(data.loaiCT));
+      editData.set("maLCT", parseInt(data.maLCT));
       editData.set("ghiChu", data.ghiChu);
       editData.set("nuocNgoai", Number(data.nuocNgoai));
       editData.set("ngaySinh", new Date(data.ngaySinh));

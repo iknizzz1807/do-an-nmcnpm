@@ -4,7 +4,7 @@ import { DoiBongTable } from "../schema/DoiBong"
 import { LichThiDauTable } from "../schema/LichThiDau"
 import { BanThangTable } from "../schema/BanThang"
 import type { KetQuaThiDau } from "$lib/typesResponse"
-import { SanNhaTable } from "../schema/SanNha"
+import { SanNhaTable } from "../schema/Data/SanNha"
 
 
 export const selectKetQuaThiDau = async(maTD: number) : Promise<null | KetQuaThiDau> => {

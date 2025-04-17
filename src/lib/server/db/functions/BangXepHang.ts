@@ -77,7 +77,7 @@ export const selectCauThuGhiBan = async (ngay: Date, maDoi : number) => {
       tenCT: CauThuTable.tenCT,
       maDoi: DoiBongTable.maDoi,
       tenDoi: DoiBongTable.tenDoi,
-      loaiCT: CauThuTable.loaiCT,
+      maLCT: CauThuTable.maLCT,
       soBanThang: db.$count(BanThangTable, 
         and(eq(BanThangTable.maCT, cauThu.maCT), 
             inArray(BanThangTable.maTD, lichThiDaus)

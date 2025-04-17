@@ -47,7 +47,7 @@ export const POST: RequestHandler = async ({
       const cauThu : CauThu = {
         maCT: data.maCT,
         tenCT: data.tenCT,
-        loaiCT: data.loaiCT,
+        maLCT: data.maLCT,
         ghiChu: data.ghiChu,
         nuocNgoai: data.nuocNgoai,
         ngaySinh: data.ngaySinh

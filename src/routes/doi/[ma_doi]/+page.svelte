@@ -24,7 +24,7 @@
     { label: "Ngày sinh", propertyName: "ngaySinh", type: "Date", valueType: "Date", 
       min: minDate.toISOString().slice(0, 10), max: maxDate.toISOString().slice(0, 10)},
 
-    { label: "Loại cầu thủ", propertyName: "loaiCT", type: "select", valueType: "number", 
+    { label: "Loại cầu thủ", propertyName: "maLCT", type: "select", valueType: "number", 
       options: [ { optionValue: 1, optionName: "1" }, {optionValue: 2, optionName: "2"}, {optionValue: 3, optionName: "3"}]},
 
     { label: "Nước ngoài", propertyName: "nuocNgoai", type: "select", valueType: "number", 
@@ -37,7 +37,7 @@
     { header: "Mã cầu thủ", accessor: "maCT", hidden: true },
     { header: "Tên cầu thủ", accessor: "tenCT" },
     { header: "Ngày sinh", accessor: "ngaySinh" },
-    { header: "Loại cầu thủ", accessor: "loaiCT" },
+    { header: "Loại cầu thủ", accessor: "maLCT" },
     { header: "Nước ngoài", accessor: "nuocNgoai" },
     { header: "Ghi chú", accessor: "ghiChu" },
   ];
@@ -62,7 +62,7 @@
       editData.clear();
       editData.set("maCT", data.maCT);
       editData.set("tenCT", data.tenCT);
-      editData.set("loaiCT", parseInt(data.loaiCT));
+      editData.set("maLCT", parseInt(data.maLCT));
       editData.set("ghiChu", data.ghiChu);
       editData.set("nuocNgoai", Number(data.nuocNgoai));
       editData.set("ngaySinh", new Date(data.ngaySinh));

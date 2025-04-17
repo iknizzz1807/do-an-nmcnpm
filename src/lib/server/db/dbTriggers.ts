@@ -70,16 +70,16 @@ const createCTBackupTrigger = async() => {
       CREATE TRIGGER IF NOT EXISTS TRGD_CT_BACKUP
       AFTER DELETE ON CauThu
       BEGIN
-          INSERT INTO CauThuBackup(modifiedDate, maCT, tenCT, ngaySinh, loaiCT, ghiChu, nuocNgoai)
-          VALUES(datetime('now'), OLD.maCT, OLD.tenCT, OLD.ngaySinh, OLD.loaiCT, OLD.ghiChu, OLD.nuocNgoai);
+          INSERT INTO CauThuBackup(modifiedDate, maCT, tenCT, ngaySinh, maLCT, ghiChu, nuocNgoai)
+          VALUES(datetime('now'), OLD.maCT, OLD.tenCT, OLD.ngaySinh, OLD.maLCT, OLD.ghiChu, OLD.nuocNgoai);
       END
       `);
       tx.run(sql`
       CREATE TRIGGER IF NOT EXISTS TRGU_CT_BACKUP
       AFTER UPDATE ON CauThu
       BEGIN
-          INSERT INTO CauThuBackup(modifiedDate, maCT, tenCT, ngaySinh, loaiCT, ghiChu, nuocNgoai)
-          VALUES(datetime('now'), OLD.maCT, OLD.tenCT, OLD.ngaySinh, OLD.loaiCT, OLD.ghiChu, OLD.nuocNgoai);
+          INSERT INTO CauThuBackup(modifiedDate, maCT, tenCT, ngaySinh, maLCT, ghiChu, nuocNgoai)
+          VALUES(datetime('now'), OLD.maCT, OLD.tenCT, OLD.ngaySinh, OLD.maLCT, OLD.ghiChu, OLD.nuocNgoai);
       END
       `);
       // // Check tuoi
@@ -135,22 +135,22 @@ createDBBackupTrigger()// .catch(console.error); // This may cause some horrible
 
 
 const createDSMGBackupTrigger = async() => {
-  // DSMuaGiai
+  // MuaGiai
   await db.transaction(async (tx) => {
       tx.run(sql`
       CREATE TRIGGER IF NOT EXISTS TRGD_DSMG_BACKUP
-      AFTER DELETE ON DSMuaGiai
+      AFTER DELETE ON MuaGiai
       BEGIN
-          INSERT INTO DSMuaGiaiBackup(modifiedDate, maMG, tenMG, ngayDienRa)
-          VALUES(datetime('now'), OLD.maMG, OLD.tenMG, OLD.ngayDienRa);
+          INSERT INTO MuaGiaiBackup(modifiedDate, maMG, tenMG, ngayDienRa, ngayKetThuc)
+          VALUES(datetime('now'), OLD.maMG, OLD.tenMG, OLD.ngayDienRa, OLD.ngayKetThuc);
       END
       `);
       tx.run(sql`
       CREATE TRIGGER IF NOT EXISTS TRGU_DSMG_BACKUP
-      AFTER UPDATE ON DSMuaGiai
+      AFTER UPDATE ON MuaGiai
       BEGIN
-          INSERT INTO DSMuaGiaiBackup(modifiedDate, maMG, tenMG, ngayDienRa)
-          VALUES(datetime('now'), OLD.maMG, OLD.tenMG, OLD.ngayDienRa);
+          INSERT INTO MuaGiaiBackup(modifiedDate, maMG, tenMG, ngayDienRa, ngayKetThuc)
+          VALUES(datetime('now'), OLD.maMG, OLD.tenMG, OLD.ngayDienRa, OLD.ngayKetThuc);
       END
       `);
   });
@@ -165,16 +165,16 @@ await db.transaction(async (tx) => {
     CREATE TRIGGER IF NOT EXISTS TRGD_LTD_BACKUP
     AFTER DELETE ON LichThiDau
     BEGIN
-    INSERT INTO LichThiDauBackup(modifiedDate, maTD, doiMot, doiHai, ngayGio, vongThiDau, maMG, doiThang)
-    VALUES(datetime('now'), OLD.maTD, OLD.doiMot, OLD.doiHai, OLD.ngayGio, OLD.vongThiDau, OLD.maMG, OLD.doiThang);
+    INSERT INTO LichThiDauBackup(modifiedDate, maTD, doiMot, doiHai, ngayGio, maVTD, maMG, maSan, doiThang)
+    VALUES(datetime('now'), OLD.maTD, OLD.doiMot, OLD.doiHai, OLD.ngayGio, OLD.maVTD, OLD.maMG, OLD.maSan, OLD.doiThang);
     END
     `);
     tx.run(sql`
     CREATE TRIGGER IF NOT EXISTS TRGU_LTD_BACKUP
     AFTER UPDATE ON LichThiDau
     BEGIN
-    INSERT INTO LichThiDauBackup(modifiedDate, maTD, doiMot, doiHai, ngayGio, vongThiDau, maMG, doiThang)
-    VALUES(datetime('now'), OLD.maTD, OLD.doiMot, OLD.doiHai, OLD.ngayGio, OLD.vongThiDau, OLD.maMG, OLD.doiThang);
+    INSERT INTO LichThiDauBackup(modifiedDate, maTD, doiMot, doiHai, ngayGio, maVTD, maMG, maSan, doiThang)
+    VALUES(datetime('now'), OLD.maTD, OLD.doiMot, OLD.doiHai, OLD.ngayGio, OLD.maVTD, OLD.maMG, OLD.maSan, OLD.doiThang);
     END
     `);
 });

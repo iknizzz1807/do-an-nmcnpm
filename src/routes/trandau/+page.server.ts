@@ -1,4 +1,4 @@
-import type { DoiBong, DSMuaGiai, LichThiDau } from "$lib/typesDatabase";
+import type { DoiBong, MuaGiai, LichThiDau } from "$lib/typesDatabase";
 import type { PageServerLoad } from "./$types";
 
 
@@ -37,7 +37,7 @@ export const load = (async ({ fetch }) => {
     
     const danhSachLTD: LichThiDau[] = await response.json();
     const danhSachDoi: DoiBong[] = await responseDB.json();
-    const danhSachMuaGiai: DSMuaGiai[] = await responseMG.json();
+    const danhSachMuaGiai: MuaGiai[] = await responseMG.json();
 
     return {
       danhSachLTD,

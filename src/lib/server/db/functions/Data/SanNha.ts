@@ -1,7 +1,7 @@
 import type {  SanNha } from "$lib/typesDatabase";
 import { eq } from "drizzle-orm";
 import { db } from "../client";
-import { SanNhaTable } from "../schema/SanNha";
+import { SanNhaTable } from "../schema/Data/SanNha";
 
 export const selectAllSanNha = async () => {
   return (await db.select().from(SanNhaTable)) satisfies SanNha[];

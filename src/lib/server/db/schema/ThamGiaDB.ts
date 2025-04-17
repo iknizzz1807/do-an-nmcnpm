@@ -1,7 +1,7 @@
 import { integer, sqliteTable, text, primaryKey, uniqueIndex, index } from 'drizzle-orm/sqlite-core';
 import { DoiBongTable } from './DoiBong';
 import { CauThuTable } from './CauThu';
-import { DSMuaGiaiTable } from './DSMuaGiai';
+import { MuaGiaiTable } from './MuaGiai';
 import type { ThamGiaDB } from '$lib/typesDatabase';
 import type { TypesAreEqual } from '$lib/server/utils';
 import { sql } from 'drizzle-orm';
@@ -11,7 +11,7 @@ import { db } from '../client';
 export const ThamGiaDBTable = sqliteTable('ThamGiaDB', {
     maDoi: integer().notNull().references(() => DoiBongTable.maDoi, { onDelete: "cascade" }),
     maCT: integer().notNull().references(() => CauThuTable.maCT, { onDelete: "cascade" }),
-    maMG: integer().notNull().references(() => DSMuaGiaiTable.maMG, { onDelete: "cascade" })
+    maMG: integer().notNull().references(() => MuaGiaiTable.maMG, { onDelete: "cascade" })
 }, (table) => [
     primaryKey({ columns: [table.maCT, table.maMG] }),
     index("ThamGiaDB_maCT_maMG").on(table.maCT, table.maMG)

@@ -3,7 +3,7 @@ import { db } from '../client';
 import type { DoiBong } from '$lib/typesDatabase';
 import type { TypesAreEqual } from '$lib/server/utils';
 import { sql } from 'drizzle-orm';
-import { SanNhaTable } from './SanNha';
+import { SanNhaTable } from './Data/SanNha';
 
 export const DoiBongTable = sqliteTable('DoiBong', {
     maDoi: integer().notNull().unique().primaryKey({ autoIncrement: true }),

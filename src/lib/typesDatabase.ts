@@ -4,10 +4,11 @@ export type ThamSo = {
     value: number,
 }
 
-export type DSMuaGiai = {
+export type MuaGiai = {
     maMG?: number | undefined;
     tenMG: string;
     ngayDienRa: string;
+    ngayKetThuc: string;
 }
 
 export type DoiBong = {
@@ -17,16 +18,10 @@ export type DoiBong = {
     tenSan?: string | undefined;
 }
 
-export type SanNha = {
-    maSan?: number | undefined;
-    tenSan: string;
-    diaChi: string;
-}
-
 export type CauThu = {
     maCT?: number | undefined;
     tenCT: string;
-    loaiCT: number;
+    maLCT: number;
     ghiChu: string;
     nuocNgoai: boolean;
     ngaySinh: string;
@@ -43,7 +38,7 @@ export type ThamGiaTD = {
     maTD: number;
     maDoi: number;
     maCT: number;
-    viTri: string;
+    maVT: number;
 };
 
 export type BanThang = {
@@ -71,8 +66,9 @@ export type ThePhat = {
 export type LichThiDau = {
     doiMot: number;
     doiHai: number;
-    vongThiDau: number;
+    maVTD: number;
     maMG: number;
+    maSan: number,
     doiThang?: number | null | undefined;
     maTD?: number | undefined;
     // Data display
@@ -81,4 +77,38 @@ export type LichThiDau = {
     tenDoiHai?: string | undefined;
     tenMG?: string | undefined;
     tenDoiThang?: string | undefined;
+}
+
+// DATA
+export type SanNha = {
+    maSan?: number | undefined;
+    tenSan: string;
+    diaChi: string;
+}
+
+export type LoaiCT = {
+    maLCT?: number | undefined;
+    tenLCT: string;
+    soCauThuToiDa: number;
+}
+
+export type VongTD = {
+    maVTD?: number | undefined;
+    tenVTD: string;
+
+}
+
+export type LoaiBT = {
+    maLBT?: number | undefined;
+    tenLBT: string;
+}
+
+export type LoaiTP = {
+    maLTP?: number | undefined;
+    tenLTP: string;
+}
+
+export type ViTri = {
+    maVT?: number | undefined;
+    tenVT: string;
 }

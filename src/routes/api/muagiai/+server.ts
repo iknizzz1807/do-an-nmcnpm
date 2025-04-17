@@ -1,9 +1,9 @@
-import { deleteDSMuaGiai, insertDSMuaGiai, selectAllDSMuaGiai, updateDSMuaGiai } from "$lib/server/db/functions/DSMuaGiai";
+import { deleteMuaGiai, insertMuaGiai, selectAllMuaGiai, updateMuaGiai } from "$lib/server/db/functions/MuaGiai";
 import type { RequestHandler } from "@sveltejs/kit";
 
 export const GET: RequestHandler = async ({locals}) => {
-  let dsMuaGiai = await selectAllDSMuaGiai();
-  return new Response(JSON.stringify(dsMuaGiai), {
+  let MuaGiai = await selectAllMuaGiai();
+  return new Response(JSON.stringify(MuaGiai), {
     status: 200,
     headers: {
       "Content-Type": "application/json",
@@ -25,10 +25,10 @@ export const POST: RequestHandler = async ({
   console.log(data);
 
   if (data.maMG ?? null) {
-    await updateDSMuaGiai(data);
+    await updateMuaGiai(data);
   }
   else{
-    await insertDSMuaGiai(data)
+    await insertMuaGiai(data)
   }
 
   // Trả về response với đội bóng vừa tạo và status 200 OK
@@ -55,7 +55,7 @@ export const DELETE: RequestHandler = async ({
   }
   else {
     result = data.maMG!!;
-    await deleteDSMuaGiai(data.maMG!!);
+    await deleteMuaGiai(data.maMG!!);
   }
 
   return new Response(JSON.stringify({ maMG: result!! }), {

@@ -2,15 +2,15 @@ import { seed } from "drizzle-seed";
 import { db } from "./client";
 import { CauThuTable } from "./schema/CauThu";
 import { DoiBongTable } from "./schema/DoiBong";
-import { DSMuaGiaiTable } from "./schema/DSMuaGiai";
+import { MuaGiaiTable } from "./schema/MuaGiai";
 import { LichThiDauTable } from "./schema/LichThiDau";
 import { generateBanThang, generateLichThiDau, generateTGDB, generateTGTD, generateThePhat } from "./seedFunctions";
 import { randIntBetween } from "../utils";
-import { SanNhaTable } from "./schema/SanNha";
+import { SanNhaTable } from "./schema/Data/SanNha";
 
 await seed(db, {
   SanNhaTable,
-  DSMuaGiaiTable,
+  MuaGiaiTable: MuaGiaiTable,
   CauThuTable,
   DoiBongTable,
 }).refine((f) => ({
@@ -25,10 +25,11 @@ await seed(db, {
     }
   },
 
-  DSMuaGiaiTable: {
+  MuaGiaiTable: {
     columns:{ 
       tenMG: f.fullName(),
       ngayDienRa: f.date(),
+      ngayKetThuc: f.date(),
     },
     count: 3
   },
@@ -37,7 +38,7 @@ await seed(db, {
     columns: {
       tenCT: f.fullName(),
       ngaySinh: f.date({ minDate: "1990-01-01", maxDate: "2005-12-31" }),
-      loaiCT: f.int({ minValue: 0, maxValue: 5 }),
+      maLCT: f.int({ minValue: 0, maxValue: 5 }),
       ghiChu: f.loremIpsum(),
       nuocNgoai: f.int({ minValue: 0, maxValue: 0 })
     },
@@ -58,7 +59,7 @@ await seed(db, {
 
 // Generate ban Thang
 
-const muaGiais = await db.select().from(DSMuaGiaiTable);
+const muaGiais = await db.select().from(MuaGiaiTable);
 for (const muaGiai of muaGiais) {
   await generateLichThiDau(muaGiai.maMG);
   await generateTGDB(muaGiai.maMG);

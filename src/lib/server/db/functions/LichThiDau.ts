@@ -3,7 +3,7 @@ import { db } from '../client';
 import { LichThiDauTable } from '../schema/LichThiDau';
 import type { LichThiDau } from '$lib/typesDatabase';
 import { DoiBongTable } from '../schema/DoiBong';
-import { DSMuaGiaiTable } from '../schema/DSMuaGiai';
+import { MuaGiaiTable } from '../schema/MuaGiai';
 import { alias } from 'drizzle-orm/sqlite-core';
 import { BanThangTable } from '../schema/BanThang';
 import { ThePhatTable } from '../schema/ThePhat';
@@ -21,7 +21,7 @@ export const updateLichThiDau = async(lichThiDau: LichThiDau) => {
   await db.update(LichThiDauTable).set({
     doiMot: lichThiDau.doiMot,
     doiHai: lichThiDau.doiHai,
-    vongThiDau: lichThiDau.vongThiDau,
+    maVTD: lichThiDau.maVTD,
     maMG: lichThiDau.maMG,
     doiThang: lichThiDau.doiThang,
     ngayGio: lichThiDau.ngayGio
@@ -54,20 +54,20 @@ export const selectAllLichThiDauWithName = async(maMG: number) => {
       ...getTableColumns(LichThiDauTable),
       tenDoiMot: doiMot.tenDoi,
       tenDoiHai: doiHai.tenDoi,
-      tenMG: DSMuaGiaiTable.tenMG,
+      tenMG: MuaGiaiTable.tenMG,
       tenDoiThang: doiThang.tenDoi,
     }).from(LichThiDauTable)
       .innerJoin(doiMot, eq(LichThiDauTable.doiMot, doiMot.maDoi)) 
       .innerJoin(doiHai, eq(LichThiDauTable.doiHai, doiHai.maDoi)) 
       .innerJoin(doiThang, eq(LichThiDauTable.doiHai, doiHai.maDoi)) 
-      .innerJoin(DSMuaGiaiTable, eq(LichThiDauTable.maMG, DSMuaGiaiTable.maMG))
+      .innerJoin(MuaGiaiTable, eq(LichThiDauTable.maMG, MuaGiaiTable.maMG))
       .where(eq(LichThiDauTable.maMG, maMG))
       .groupBy(LichThiDauTable.maTD) satisfies LichThiDau[];
 }
 
-export const selectLichThiDauVong = async (vongThiDau: number, maMG: number) => {
+export const selectLichThiDauVong = async (maVTD: number, maMG: number) => {
     return await db
         .select()
         .from(LichThiDauTable)
-        .where(and(eq(LichThiDauTable.maMG, maMG), eq(LichThiDauTable.vongThiDau, vongThiDau))) satisfies LichThiDau[];
+        .where(and(eq(LichThiDauTable.maMG, maMG), eq(LichThiDauTable.maVTD, maVTD))) satisfies LichThiDau[];
 }
