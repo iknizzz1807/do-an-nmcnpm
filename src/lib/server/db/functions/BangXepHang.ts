@@ -5,6 +5,7 @@ import { DoiBongTable } from "../schema/DoiBong";
 import { CauThuTable } from "../schema/CauThu";
 import { BanThangTable } from "../schema/BanThang";
 import type { BangXepHangNgay } from "$lib/typesResponse";
+import { ThamGiaTDTable } from "../schema/ThamGiaTD";
 
 export const selectBXHDoiNgay = async (ngay: Date) => {
   // Tat ca cac doi co tran co trung
@@ -63,10 +64,11 @@ export const selectCauThuGhiBan = async (ngay: Date, maDoi : number) => {
       )
     ))).map((val => val.maTD));
   const cauThus = await db.select({ maCT: BanThangTable.maCT }).from(BanThangTable)
+    .innerJoin(ThamGiaTDTable, and(eq(ThamGiaTDTable.maTD, BanThangTable.maTD), eq(ThamGiaTDTable.maCT, BanThangTable.maCT)))
     .where(
       and(
         inArray(BanThangTable.maTD, lichThiDaus), 
-        eq(BanThangTable.maDoi, maDoi)
+        eq(ThamGiaTDTable.maDoi, maDoi)
       )
     )
     .groupBy(BanThangTable.maCT);
