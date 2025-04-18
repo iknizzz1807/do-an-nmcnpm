@@ -9,6 +9,7 @@ export const DoiBongTable = sqliteTable('DoiBong', {
     maDoi: integer().notNull().unique().primaryKey({ autoIncrement: true }),
     tenDoi: text().notNull(),
     maSan: integer().notNull().references(() => SanNhaTable.maSan, { onDelete: "cascade" }),
+    deleted: integer({mode: "boolean"}).default(false),
 }, (table) => [
     uniqueIndex("DoiBong_maDoi").on(table.maDoi)
 ])

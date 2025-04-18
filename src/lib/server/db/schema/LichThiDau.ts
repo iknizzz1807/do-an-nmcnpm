@@ -18,6 +18,7 @@ export const LichThiDauTable = sqliteTable('LichThiDau', {
     maMG: integer().notNull().references(() => MuaGiaiTable.maMG, { onDelete: "cascade" }),
     maSan: integer().notNull().references(() => SanNhaTable.maSan, { onDelete: "cascade" }),
     doiThang: integer().references(() => DoiBongTable.maDoi, { onDelete: "cascade" }),
+    deleted: integer({mode: "boolean"}).default(false),
 }, (table) : any => [
     check("CHK_LTD_DOIMOT_DOIHAI", sql`${table.doiMot} != ${table.doiHai}`),
     uniqueIndex("LichThiDau_maTD").on(table.maTD)

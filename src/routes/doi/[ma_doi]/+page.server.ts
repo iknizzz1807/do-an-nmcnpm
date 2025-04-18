@@ -1,3 +1,4 @@
+import { selectLoaiCT } from "$lib/server/db/functions/Data/LoaiCT";
 import { selectThamSo } from "$lib/server/db/functions/ThamSo";
 import type { CauThu } from "$lib/typesDatabase";
 import type { PageServerLoad } from "./$types";
@@ -14,6 +15,7 @@ export const load = (async ({ params, fetch, locals }) => {
       },
     });
 
+
     if (!response.ok) {
       throw new Error("Failed to fetch data");
     }
@@ -22,12 +24,14 @@ export const load = (async ({ params, fetch, locals }) => {
 
     const tuoiMin = (await selectThamSo("tuoiMin"))!!;
     const tuoiMax = (await selectThamSo("tuoiMax"))!!;
+    const loaiCTs = await selectLoaiCT();
 
     return {
       danhSachCauThu,
       ma_doi: params.ma_doi,
       tuoiMin: tuoiMin,
       tuoiMax: tuoiMax,
+      loaiCTs: loaiCTs,
     };
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -36,6 +40,7 @@ export const load = (async ({ params, fetch, locals }) => {
       ma_doi: params.ma_doi,
       tuoiMin: 0,
       tuoiMax: 0,
+      loaiCTs: [],
     };
   }
 }) satisfies PageServerLoad;

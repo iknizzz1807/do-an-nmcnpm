@@ -13,6 +13,7 @@ export const BanThangTable = sqliteTable('BanThang', {
     maCT: integer().notNull().references(() => CauThuTable.maCT, { onDelete: "cascade" }),
     thoiDiem: real().notNull(),
     maLBT: integer().notNull().references(() => LoaiBTTable.maLBT, { onDelete: "cascade" }),
+    deleted: integer({mode: "boolean"}).default(false),
 }, (table) => [
     primaryKey({ columns: [table.maTD, table.maCT, table.thoiDiem] }),
     check("CHK_BT_THOIDIEM", sql`${table.thoiDiem} BETWEEN 0 AND 90`),

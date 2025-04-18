@@ -39,7 +39,7 @@ export const selectThePhat = async(maTD: number) => {
         maDoi: ThamGiaTDTable.maDoi,
     })
     .from(ThePhatTable)
-    .innerJoin(ThamGiaTDTable, eq(ThamGiaTDTable.maTD, ThePhatTable.maTD))
+    .innerJoin(ThamGiaTDTable, and(eq(ThamGiaTDTable.maCT, ThePhatTable.maCT), eq(ThamGiaTDTable.maTD, ThePhatTable.maTD)))
     .where(eq(ThePhatTable.maTD, maTD))
     .groupBy(ThePhatTable.maTD, ThePhatTable.maCT)) satisfies ThePhat[];
 }

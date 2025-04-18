@@ -12,6 +12,7 @@ export const GET: RequestHandler = async ({ params, locals }) => {
     throw new Error("Khong tim thay doi");
   if ((locals.muaGiai ?? null) === null)
     throw new Error("Không tìm thấy mùa giải");
+  
   const danhSachCauThu = await selectCauThuDoiBong(locals.muaGiai!!.maMG!!, maDoi);
   // console.log(danhSachCauThu);
 

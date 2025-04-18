@@ -13,6 +13,7 @@ export const ThePhatTable = sqliteTable('ThePhat', {
     maCT: integer().notNull().references(() => CauThuTable.maCT, { onDelete: "cascade" }),
     thoiDiem: real().notNull(),
     maLTP: integer().notNull().references(() => LoaiTPTable.maLTP, { onDelete: "cascade" }),
+    deleted: integer({mode: "boolean"}).default(false),
 }, (table) => [
   primaryKey({ columns: [table.maTD, table.maCT, table.thoiDiem] }),
   check("CHK_TP_THOIDIEM", sql`${table.thoiDiem} BETWEEN 0 AND 90`),

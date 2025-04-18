@@ -16,26 +16,27 @@ export const load = (async ({ fetch }) => {
 
     const danhSachDoiBong: DoiBong[] = await response.json();
 
-    // const responseSN = await fetch("api/sannha", {
-    //   method: "GET",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // });
-    // if (!responseSN.ok) {
-    //   throw new Error("Failed to fetch data");
-    // }
+    const responseSN = await fetch("api/sannha", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!responseSN.ok) {
+      throw new Error("Failed to fetch data");
+    }
 
-    // const danhSachSanNha : SanNha[] = await responseSN.json();
+    const danhSachSanNha : SanNha[] = await responseSN.json();
 
     return {
-      danhSachDoiBong,
-      danhSachSanNha: []
+      danhSachDoiBong: danhSachDoiBong,
+      danhSachSanNha: danhSachSanNha
     };
   } catch (error) {
     console.error("Error fetching data:", error);
     return {
       danhSachDoiBong: [],
+      danhSachSanNha: []
     };
   }
 }) satisfies PageServerLoad;

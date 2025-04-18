@@ -9,6 +9,7 @@ export const MuaGiaiTable = sqliteTable('MuaGiai', {
     tenMG: text().notNull(),
     ngayDienRa: text().notNull(),
     ngayKetThuc: text().notNull(),
+    deleted: integer({mode: "boolean"}).default(false),
 }, (table) => [
     uniqueIndex("MuaGiai_maMG").on(table.maMG)
 ])

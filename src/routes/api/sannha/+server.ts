@@ -1,4 +1,5 @@
-import { selectAllSanNha, updateSanNha, insertSanNha } from "$lib/server/db/functions/SanNha";
+
+import { insertSanNha, selectAllSanNha, updateSanNha } from "$lib/server/db/functions/Data/SanNha";
 import type { RequestHandler } from "./$types";
 
 export const GET: RequestHandler = async ({ locals }) => {

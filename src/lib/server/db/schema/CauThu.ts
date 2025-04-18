@@ -13,6 +13,7 @@ export const CauThuTable = sqliteTable('CauThu', {
     ngaySinh: text().notNull(),
     maLCT: integer().notNull().references(() => LoaiCTTable.maLCT, { onDelete: "cascade" }),
     ghiChu: text().notNull(),
+    deleted: integer({mode: "boolean"}).default(false),
 }, (table) => [
     uniqueIndex("CauThu_maCT").on(table.maCT)
 ])
