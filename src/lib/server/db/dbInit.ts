@@ -5,6 +5,7 @@ import { LoaiBTTable } from "./schema/Data/LoaiBT";
 import { LoaiCTTable } from "./schema/Data/LoaiCT";
 import { LoaiTPTable } from "./schema/Data/LoaiTP";
 import { ViTriTable } from "./schema/Data/ViTri";
+import { VongTDTable } from "./schema/Data/VongTD";
 import { ThamSoTable } from "./schema/ThamSo";
 import { UserRoleTable } from "./schema/UserRole";
 
@@ -40,10 +41,13 @@ for (const role of DefaultRoles) {
   await db.insert(UserRoleTable).values({ roleId: role.roleId, roleName: role.roleName });
 }
 
-// await db.insert(ViTriTable).values([{ tenVT: "1" }, { tenVT: "2" }, { tenVT: "3" }]);
-// await db.insert(LoaiBTTable).values([{ tenLBT: "1" }, { tenLBT: "2" }, { tenLBT: "3" }]);
-// await db.insert(LoaiCTTable)
-// .values([{ tenLCT: "1", soCauThuToiDa: 0 }, { tenLCT: "2", soCauThuToiDa: 0 }, { tenLCT: "3", soCauThuToiDa: 0 }]);
+await db.insert(ViTriTable).values([{ tenVT: "Tiền đạo" }, { tenVT: "Bla bla bla" }, { tenVT: "gì đó" }]);
+await db.insert(LoaiBTTable).values([{ tenLBT: "A" }, { tenLBT: "B" }, { tenLBT: "C" }]);
+await db.insert(LoaiCTTable)
+.values([{ tenLCT: "Trong nước", soCauThuToiDa: 0 }, { tenLCT: "Nước ngoài", soCauThuToiDa: 0 }]);
 
-// await db.insert(LoaiTPTable)
-// .values([{ tenLTP: "1", soThePhatToiDa: 0 }, { tenLTP: "2", soThePhatToiDa: 0 }, { tenLTP: "3", soThePhatToiDa: 0 }]);
+await db.insert(LoaiTPTable)
+.values([{ tenLTP: "Vàng", soThePhatToiDa: 0 }, { tenLTP: "Đỏ", soThePhatToiDa: 0 }]);
+
+
+await db.insert(VongTDTable).values([{ tenVTD: "Đi" }, { tenVTD: "Về" }]);

@@ -3,7 +3,7 @@ import { selectCauThuDoiBong } from "$lib/server/db/functions/CauThu";
 import { selectDoiBongTenDoi } from "$lib/server/db/functions/DoiBong";
 import { selectLichThiDauMaTD } from "$lib/server/db/functions/LichThiDau";
 import { selectThamSo } from "$lib/server/db/functions/ThamSo";
-import type { BanThang, ThePhat } from "$lib/typesDatabase";
+import type { BanThang, LichThiDau, ThePhat } from "$lib/typesDatabase";
 import type { PageServerLoad } from "./$types";
 
 
@@ -14,7 +14,7 @@ export const load = (async ({ fetch, params, locals }) => {
     if (!isNumber(maTD))
       throw new Error("MaTD phải là một số");
     
-    const tranDau = await selectLichThiDauMaTD(maTD) ?? null;
+    const tranDau : LichThiDau | null = await selectLichThiDauMaTD(maTD) ?? null;
     if (tranDau === null)
       throw new Error("Không tồn tại trận đấu");
 

@@ -345,3 +345,120 @@ const createTPBackupTrigger = async() => {
   });
 }
 createTPBackupTrigger()// .catch(console.error); // This may cause some horrible error in the future
+
+
+const createLBTBackupTrigger = async() => {
+  await db.transaction(async (tx) => {
+      // Trigger tạo backup
+      tx.run(sql`
+      CREATE TRIGGER IF NOT EXISTS TRGD_LBT_BACKUP
+      AFTER DELETE ON LoaiBT
+      BEGIN
+      INSERT INTO LoaiBTBackup(modifiedDate, maLBT, tenLBT)
+      VALUES(datetime('now'), OLD.maLBT, OLD.tenLBT);
+      END
+      `);
+      tx.run(sql`
+      CREATE TRIGGER IF NOT EXISTS TRGU_LBT_BACKUP
+      AFTER UPDATE ON LoaiBT
+      BEGIN
+      INSERT INTO LoaiBTBackup(modifiedDate, maLBT, tenLBT)
+      VALUES(datetime('now'), OLD.maLBT, OLD.tenLBT);
+      END
+      `);
+  });
+}
+createLBTBackupTrigger();
+
+const createLTPBackupTrigger = async() => {
+  await db.transaction(async (tx) => {
+      // Trigger tạo backup
+      tx.run(sql`
+      CREATE TRIGGER IF NOT EXISTS TRGD_LTP_BACKUP
+      AFTER DELETE ON LoaiTP
+      BEGIN
+      INSERT INTO LoaiTPBackup(modifiedDate, maLTP, tenLTP)
+      VALUES(datetime('now'), OLD.maLTP, OLD.tenLTP);
+      END
+      `);
+      tx.run(sql`
+      CREATE TRIGGER IF NOT EXISTS TRGU_LTP_BACKUP
+      AFTER UPDATE ON LoaiTP
+      BEGIN
+      INSERT INTO LoaiTPBackup(modifiedDate, maLTP, tenLTP)
+      VALUES(datetime('now'), OLD.maLTP, OLD.tenLTP);
+      END
+      `);
+  });
+}
+createLTPBackupTrigger();
+
+const createVTBackupTrigger = async() => {
+  await db.transaction(async (tx) => {
+      // Trigger tạo backup
+      tx.run(sql`
+      CREATE TRIGGER IF NOT EXISTS TRGD_VT_BACKUP
+      AFTER DELETE ON ViTri
+      BEGIN
+      INSERT INTO ViTriBackup(modifiedDate, maVT, tenVT)
+      VALUES(datetime('now'), OLD.maVT, OLD.tenVT);
+      END
+      `);
+      tx.run(sql`
+      CREATE TRIGGER IF NOT EXISTS TRGU_VT_BACKUP
+      AFTER UPDATE ON ViTri
+      BEGIN
+      INSERT INTO ViTriBackup(modifiedDate, maVT, tenVT)
+      VALUES(datetime('now'), OLD.maVT, OLD.tenVT);
+      END
+      `);
+  });
+}
+createVTBackupTrigger();
+
+const createLCTBackupTrigger = async() => {
+  await db.transaction(async (tx) => {
+      // Trigger tạo backup
+      tx.run(sql`
+      CREATE TRIGGER IF NOT EXISTS TRGD_LCT_BACKUP
+      AFTER DELETE ON LoaiCT
+      BEGIN
+      INSERT INTO LoaiCTBackup(modifiedDate, maLCT, tenLCT)
+      VALUES(datetime('now'), OLD.maLCT, OLD.tenLCT);
+      END
+      `);
+      tx.run(sql`
+      CREATE TRIGGER IF NOT EXISTS TRGU_LCT_BACKUP
+      AFTER UPDATE ON LoaiCT
+      BEGIN
+      INSERT INTO LoaiCTBackup(modifiedDate, maLCT, tenLCT)
+      VALUES(datetime('now'), OLD.maLCT, OLD.tenLCT);
+      END
+      `);
+  });
+}
+createLCTBackupTrigger();
+
+
+const createVTDBackupTrigger = async() => {
+  await db.transaction(async (tx) => {
+      // Trigger tạo backup
+      tx.run(sql`
+      CREATE TRIGGER IF NOT EXISTS TRGD_VTD_BACKUP
+      AFTER DELETE ON VongTD
+      BEGIN
+      INSERT INTO VongTDBackup(modifiedDate, maVTD, tenVTD)
+      VALUES(datetime('now'), OLD.maVTD, OLD.tenVTD);
+      END
+      `);
+      tx.run(sql`
+      CREATE TRIGGER IF NOT EXISTS TRGU_VTD_BACKUP
+      AFTER UPDATE ON VongTD
+      BEGIN
+      INSERT INTO VongTDBackup(modifiedDate, maVTD, tenVTD)
+      VALUES(datetime('now'), OLD.maVTD, OLD.tenVTD);
+      END
+      `);
+  });
+}
+createVTDBackupTrigger();

@@ -104,7 +104,7 @@ export const generateThePhat = async (maTD: number, soTPDoiMot: number = 5, soTP
       maTD: lichThiDau.maTD,
       maCT: cauThu.maCT,
       thoiDiem: 90 * i / n1,
-      maLTP: choose([1, 2, 3])
+      maLTP: choose([1, 2])
     }
     await db.insert(ThePhatTable).values(thePhat);
   }
@@ -118,7 +118,7 @@ export const generateThePhat = async (maTD: number, soTPDoiMot: number = 5, soTP
       maTD: lichThiDau.maTD,
       maCT: cauThu.maCT,
       thoiDiem: 90 * i / (n2 + 1),
-      maLTP: choose([1, 2, 3])
+      maLTP: choose([1, 2])
     }
     await db.insert(ThePhatTable).values(thePhat);
   }

@@ -14,55 +14,6 @@ import { LoaiTPTable } from "./schema/Data/LoaiTP";
 import { VongTDTable } from "./schema/Data/VongTD";
 
 await seed(db, {
-  ViTriTable,
-  LoaiBTTable,
-  LoaiTPTable,
-  VongTDTable,
-  LoaiCTTable,
-}).refine((f) => ({
-  ViTriTable: {
-    columns: {
-      tenVT: f.firstName()
-    },
-    count: 3
-  },
-
-  LoaiBTTable: {
-    columns: {
-      tenLBT: f.firstName()
-    },
-    count: 3
-  },
-
-  LoaiTPTable: {
-    columns: {
-      tenLTP: f.firstName(),
-      soThePhatToiDa: f.default({ defaultValue: 0 }),
-    },
-    count: 3
-  },
-
-  VongTDTable: {
-    columns: {
-      tenVTD: f.firstName()
-    },
-    count: 3
-  },
-  LoaiCTTable: {
-    columns: {
-      tenLCT: f.firstName(),
-      soCauThuToiDa: f.default({ defaultValue: 0 }),
-    },
-    count: 2
-  },
-  
-})).catch((reason) => {
-  console.log("\n");
-  console.log(reason);
-  console.log("\n\nPlease delete the db.sqlite before running seed:db. You gonna fucking panic because of the amount of shit printed");
-});
-
-await seed(db, {
   SanNhaTable,
   MuaGiaiTable,
   CauThuTable,

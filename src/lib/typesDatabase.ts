@@ -43,10 +43,10 @@ export type ThamGiaTD = {
 export type BanThang = {
     maTD: number;
     maCT: number;
-    //maDoi: number;
     thoiDiem: number;
     maLBT: number;
     // Data display
+    maDoi?: number | undefined;
     tenCT?: string | undefined;
     tenDoi?: string | undefined;
 }
@@ -57,6 +57,7 @@ export type ThePhat = {
     thoiDiem: number;
     maLTP: number;
     // Data display
+    maDoi?: number | undefined;
     tenCT?: string | undefined;
     tenDoi?: string | undefined;
 }
