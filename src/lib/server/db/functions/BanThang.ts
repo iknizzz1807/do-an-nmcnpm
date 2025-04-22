@@ -12,8 +12,6 @@ export const insertBanThang = async (...banThang: BanThang[]) => {
 }
 
 export const updateBanThang = async(oldBanThang : BanThang, banThang: BanThang) => {
-    console.log(oldBanThang);
-    console.log(banThang);
     await db.update(BanThangTable).set({
         maTD: banThang.maTD,
         maCT: banThang.maCT,

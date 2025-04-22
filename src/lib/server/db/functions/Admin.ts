@@ -1,9 +1,9 @@
 import { eq } from "drizzle-orm";
-import { UserTable } from "../schema/User";
 import { getRandomUUID } from "$lib/server/utils";
 import { db } from "../client";
 import { hashPassword } from "$lib/server/auth/password";
 import { password as adminPassword } from "$lib/server/secretPassword.json";
+import { UserTable } from "../schema/User/User";
 
 export const checkPasswordAdmin = async (password: string) => {
   const passwordHash = await hashPassword(password);

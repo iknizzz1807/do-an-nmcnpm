@@ -15,7 +15,7 @@ export const selectBXHDoiNgay = async (ngay: Date) => {
     doiMot: LichThiDauTable.doiMot,
     doiHai: LichThiDauTable.doiHai
     }).from(LichThiDauTable)
-    .where(sql`date(${LichThiDauTable.ngayGio}) = date(${ngay.toJSON()})`)
+    .where(sql`date(${LichThiDauTable.ngayGioThucTe}) = date(${ngay.toJSON()})`)
     .groupBy(LichThiDauTable.doiMot, LichThiDauTable.doiHai);
 
   // Chuyen no thanh set
@@ -57,7 +57,7 @@ export const selectBXHDoiNgay = async (ngay: Date) => {
 
 export const selectCauThuGhiBan = async (ngay: Date, maDoi : number) => {
   const lichThiDaus = (await db.select({ maTD: LichThiDauTable.maTD}).from(LichThiDauTable).where(and(
-      sql`date(${LichThiDauTable.ngayGio}) = date(${ngay.toJSON()})`,
+      sql`date(${LichThiDauTable.ngayGioThucTe}) = date(${ngay.toJSON()})`,
       or(
         eq(LichThiDauTable.doiMot, maDoi), 
         eq(LichThiDauTable.doiHai, maDoi)

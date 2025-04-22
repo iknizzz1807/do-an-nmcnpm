@@ -16,15 +16,27 @@ export type DoiBong = {
     tenDoi: string;
     maSan: number;
     tenSan?: string | undefined;
+    maMG: number;
 }
 
 export type CauThu = {
     maCT?: number | undefined;
     tenCT: string;
-    maLCT: number;
-    ghiChu: string;
     ngaySinh: string;
+    ghiChu: string;
+    soAo: number;
+    maLCT: number;
+    maDoi: number;
+
     banThang?: number | undefined;
+}
+
+
+export type TrongTai = {
+    maTT?: number | undefined;
+    tenTT: string;
+    ngaySinh: string;
+    maMG: number;
 }
 
 export type ThamGiaDB = {
@@ -63,15 +75,22 @@ export type ThePhat = {
 }
 
 export type LichThiDau = {
+    maTD?: number | undefined;
+    maMG: number;
+    maVTD: number;
+    maSan: number,
+
     doiMot: number;
     doiHai: number;
-    maVTD: number;
-    maMG: number;
-    maSan: number,
     doiThang?: number | null | undefined;
-    maTD?: number | undefined;
+    
+    ngayGioDuKien?: string | undefined;
+    ngayGioThucTe?: string | undefined;
+
+    ThoiGianDaThiDau: number;
+    maTT: number;
+    
     // Data display
-    ngayGio?: string | undefined;
     tenDoiMot?: string | undefined;
     tenDoiHai?: string | undefined;
     tenMG?: string | undefined;
@@ -83,6 +102,7 @@ export type SanNha = {
     maSan?: number | undefined;
     tenSan: string;
     diaChi: string;
+    maMG: number;
 }
 
 export type LoaiCT = {

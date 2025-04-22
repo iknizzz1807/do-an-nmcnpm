@@ -1,5 +1,5 @@
 import { integer, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
-import { db } from "../client";
+import { db } from "../../client";
 import { eq } from "drizzle-orm";
 
 export const UserTable = sqliteTable("User", {

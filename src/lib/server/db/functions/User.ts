@@ -1,8 +1,8 @@
 import { hashPassword } from "$lib/server/auth/password";
 import { eq } from "drizzle-orm";
 import { db } from "../client";
-import { UserTable } from "../schema/User";
 import type { User } from "$lib/typesAuth";
+import { UserTable } from "../schema/User/User";
 
 export const verifyUsernameInput = (userName: string) : boolean => {
   return userName.length > 3 && userName.length < 32 && userName.trim() == userName;

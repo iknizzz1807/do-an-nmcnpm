@@ -10,9 +10,11 @@ import { LoaiBTTable } from './Data/LoaiBT';
 
 export const BanThangTable = sqliteTable('BanThang', {
     maTD: integer().notNull().references(() => LichThiDauTable.maTD, { onDelete: "cascade" }),
-    maCT: integer().notNull().references(() => CauThuTable.maCT, { onDelete: "cascade" }),
     thoiDiem: real().notNull(),
+
+    maCT: integer().notNull().references(() => CauThuTable.maCT, { onDelete: "cascade" }),
     maLBT: integer().notNull().references(() => LoaiBTTable.maLBT, { onDelete: "cascade" }),
+
     deleted: integer({mode: "boolean"}).default(false),
 }, (table) => [
     primaryKey({ columns: [table.maTD, table.maCT, table.thoiDiem] }),
@@ -23,8 +25,9 @@ export const BanThangTableBackup = sqliteTable('BanThangBackup', {
     BTBackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
     modifiedDate: integer({mode: "timestamp"}).notNull(),
     maTD: integer().notNull(),
-    maCT: integer().notNull(),
     thoiDiem: real().notNull(),
+    
+    maCT: integer().notNull(),
     maLBT: integer().notNull(),
 })
 

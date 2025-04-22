@@ -2,7 +2,7 @@ import type { TypesAreEqual } from '$lib/server/utils';
 import type { MuaGiai as MuaGiai } from '$lib/typesDatabase';
 import { integer, sqliteTable, text, uniqueIndex } from 'drizzle-orm/sqlite-core';
 import { db } from '../client';
-import { sql } from 'drizzle-orm';
+import { getTableColumns, sql } from 'drizzle-orm';
 
 export const MuaGiaiTable = sqliteTable('MuaGiai', {
     maMG: integer().notNull().unique().primaryKey({ autoIncrement: true }),

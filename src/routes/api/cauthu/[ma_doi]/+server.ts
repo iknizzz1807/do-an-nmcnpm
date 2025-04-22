@@ -13,7 +13,7 @@ export const GET: RequestHandler = async ({ params, locals }) => {
   if ((locals.muaGiai ?? null) === null)
     throw new Error("Không tìm thấy mùa giải");
   
-  const danhSachCauThu = await selectCauThuDoiBong(locals.muaGiai!!.maMG!!, maDoi);
+  const danhSachCauThu = await selectCauThuDoiBong(maDoi);
   // console.log(danhSachCauThu);
 
   return new Response(JSON.stringify(danhSachCauThu), {

@@ -23,7 +23,8 @@ export const updateCauThu = async(cauThu: CauThu) => {
       tenCT: cauThu.tenCT,
       maLCT: cauThu.maLCT,
       ghiChu: cauThu.ghiChu,
-      ngaySinh: cauThu.ngaySinh
+      ngaySinh: cauThu.ngaySinh,
+      maDoi: cauThu.maDoi
   }).where(eq(CauThuTable.maCT, cauThu.maCT!!));
 }
 
@@ -52,20 +53,13 @@ export const selectCauThuTen = async (tenCT: string) => {
     .where(ilike(CauThuTable.maCT, tenCT))) satisfies CauThu[];
 };
 
-export const selectCauThuDoiBong = async (maMG: number, maDoi: number) => {
+export const selectCauThuDoiBong = async (maDoi: number) => {
   return await db
     .select({
       ...getTableColumns(CauThuTable)
     })
     .from(CauThuTable)
-    .innerJoin(
-      ThamGiaDBTable,
-      and(
-        eq(ThamGiaDBTable.maCT, CauThuTable.maCT),
-        eq(ThamGiaDBTable.maMG, maMG),
-        eq(ThamGiaDBTable.maDoi, maDoi)
-      )
-    )
+    .where(eq(CauThuTable.maDoi, maDoi))
 };
 
 export const traCuuCauThu = async (tenCT: string) => {

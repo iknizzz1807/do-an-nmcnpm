@@ -10,6 +10,7 @@ import { choose, randIntBetween } from "../utils";
 import { insertLichThiDau } from "./functions/LichThiDau";
 import { ThePhatTable } from "./schema/ThePhat";
 import { ThamGiaTDTable } from "./schema/ThamGiaTD";
+import { TrongTaiTable } from "./schema/TrongTai";
 
 export const generateBanThang = async (maTD: number, soBTDoiMot: number = 5, soBTDoiHai: number = 5) => {
   console.log("BAN THANG !!!!!!!!!!!!!!!");
@@ -45,8 +46,9 @@ export const generateBanThang = async (maTD: number, soBTDoiMot: number = 5, soB
       throw new Error("Khong the xac dinh duoc cau thu");
     const banThang : BanThang = {
       maTD: lichThiDau.maTD,
+      thoiDiem: 90.0 * i / n1,
+
       maCT: cauThu.maCT,
-      thoiDiem: 90 * i / n1,
       maLBT: choose([1, 2, 3])
     }
     await db.insert(BanThangTable).values(banThang);
@@ -59,8 +61,9 @@ export const generateBanThang = async (maTD: number, soBTDoiMot: number = 5, soB
       throw new Error("Khong the xac dinh duoc cau thu");
     const banThang : BanThang = {
       maTD: lichThiDau.maTD,
+      thoiDiem: 90.0 * i / (n2 + 1.0),
+
       maCT: cauThu.maCT,
-      thoiDiem: 90 * i / (n2 + 1),
       maLBT: choose([1, 2, 3])
     }
     await db.insert(BanThangTable).values(banThang);
@@ -128,10 +131,20 @@ export const generateTGTD = async (maTD: number, maDoi : number, soCauThu : numb
   const thiDau = (await db.select().from(LichThiDauTable).where(eq(LichThiDauTable.maTD, maTD))).at(0) ?? null;
   if (thiDau == null)
     throw new Error("Không tìm thấy thi đấu weird!!!!!!!!!!!!!!!!");
-  const ctTGDB = await db.select().from(ThamGiaDBTable).where(and(eq(ThamGiaDBTable.maMG, thiDau.maMG), eq(ThamGiaDBTable.maDoi, maDoi)));
+
+  const ctTGDB = await db.select()
+    .from(ThamGiaDBTable)
+    .where(and(eq(ThamGiaDBTable.maMG, thiDau.maMG), eq(ThamGiaDBTable.maDoi, maDoi)));
+
   for (let i = 0; i < Math.min(ctTGDB.length, soCauThu); i++)
   {
-    await db.insert(ThamGiaTDTable).values({ maCT: ctTGDB[i].maCT, maTD: maTD, maDoi: maDoi, maVT: choose([1, 2, 3]) });
+    await db.insert(ThamGiaTDTable)
+      .values({
+        maCT: ctTGDB[i].maCT, 
+        maTD: maTD, 
+        maDoi: maDoi, 
+        maVT: choose([1, 2, 3]) 
+      });
   }
 }
 
@@ -158,6 +171,9 @@ export const generateTGDB = async(maMG : number, soCTPerDoi : number = 20) => {
 export const generateLichThiDau = async (maMG: number) => {
     let ids : number[] = [];
     const doiBongs = await db.select().from(DoiBongTable);
+    const trongTais = await db.select().from(TrongTaiTable);
+    if (trongTais.length == 0)
+      throw new Error("Không có trọng tài nào hết");
     
     while(doiBongs.length >= 2) {
         const doiMotIndex = randIntBetween(0, doiBongs.length - 1);
@@ -165,23 +181,35 @@ export const generateLichThiDau = async (maMG: number) => {
         if (doiMotIndex == doiHaiIndex)
           continue;
         const lichThiDau : LichThiDau = {
-            doiMot: doiBongs[doiMotIndex].maDoi,
-            doiHai: doiBongs[doiHaiIndex].maDoi,
-            maVTD: randIntBetween(1, 2),
-            maMG: maMG,
-            doiThang: choose([doiBongs[doiMotIndex].maDoi, doiBongs[doiHaiIndex].maDoi, null]),
-            ngayGio: new Date().toJSON(),
-            maSan: doiBongs[doiMotIndex].maSan,
+          maMG: maMG,
+          maVTD: randIntBetween(1, 2),
+          maSan: doiBongs[doiMotIndex].maSan,
+
+          doiHai: doiBongs[doiHaiIndex].maDoi,
+          doiMot: doiBongs[doiMotIndex].maDoi,
+          doiThang: choose([doiBongs[doiMotIndex].maDoi, doiBongs[doiHaiIndex].maDoi, null]),
+          
+          ngayGioDuKien: new Date().toJSON(),
+          ngayGioThucTe: new Date().toJSON(),
+          
+          ThoiGianDaThiDau: 90,
+          maTT: trongTais[randIntBetween(0, trongTais.length - 1)].maTT
         }
         
         const lichThiDau2 : LichThiDau = {
-            doiMot: doiBongs[doiHaiIndex].maDoi,
-            doiHai: doiBongs[doiMotIndex].maDoi,
-            maVTD: randIntBetween(1, 2),
-            maMG: maMG,
-            doiThang: doiBongs[choose([doiMotIndex, doiHaiIndex])].maDoi,
-            ngayGio: new Date().toJSON(),
-            maSan: doiBongs[doiHaiIndex].maSan,
+          maVTD: randIntBetween(1, 2),
+          maMG: maMG,
+          maSan: doiBongs[doiHaiIndex].maSan,
+
+          doiMot: doiBongs[doiHaiIndex].maDoi,
+          doiHai: doiBongs[doiMotIndex].maDoi,
+          doiThang: doiBongs[choose([doiMotIndex, doiHaiIndex])].maDoi,
+          
+          ngayGioDuKien: new Date().toJSON(),
+          ngayGioThucTe: new Date().toJSON(),
+          
+          ThoiGianDaThiDau: 90,
+          maTT: trongTais[randIntBetween(0, trongTais.length - 1)].maTT
         }
         doiBongs.splice(doiMotIndex, 1);
         doiBongs.splice(doiHaiIndex, 1);

@@ -7,7 +7,7 @@ import { LoaiTPTable } from "./schema/Data/LoaiTP";
 import { ViTriTable } from "./schema/Data/ViTri";
 import { VongTDTable } from "./schema/Data/VongTD";
 import { ThamSoTable } from "./schema/ThamSo";
-import { UserRoleTable } from "./schema/UserRole";
+import { UserRoleTable } from "./schema/User/UserRole";
 
 
 await createAdmin();
@@ -30,16 +30,16 @@ for (const setting of DefaultSettings) {
   await db.insert(ThamSoTable).values({tenThamSo: setting.tenThamSo, giaTri: setting.giaTri});
 }
 
-const DefaultRoles = [
-  { roleId: 1, roleName: "View" },
-  { roleId: 2, roleName: "Edit" },
-  { roleId: 3, roleName: "Edit Settings" },
-  { roleId: 4, roleName: "" },
-];
+// const DefaultRoles = [
+//   { roleId: 1, roleName: "View" },
+//   { roleId: 2, roleName: "Edit" },
+//   { roleId: 3, roleName: "Edit Settings" },
+//   { roleId: 4, roleName: "" },
+// ];
 
-for (const role of DefaultRoles) {
-  await db.insert(UserRoleTable).values({ roleId: role.roleId, roleName: role.roleName });
-}
+// for (const role of DefaultRoles) {
+//   await db.insert(UserRoleTable).values({ roleId: role.roleId, roleName: role.roleName });
+// }
 
 await db.insert(ViTriTable).values([{ tenVT: "Tiền đạo" }, { tenVT: "Bla bla bla" }, { tenVT: "gì đó" }]);
 await db.insert(LoaiBTTable).values([{ tenLBT: "A" }, { tenLBT: "B" }, { tenLBT: "C" }]);

@@ -19,12 +19,19 @@ export const updateLichThiDau = async(lichThiDau: LichThiDau) => {
   if ((lichThiDau.maTD ?? null) == null)
     return;
   await db.update(LichThiDauTable).set({
+    maMG: lichThiDau.maMG,
+    maVTD: lichThiDau.maVTD,
+    
     doiMot: lichThiDau.doiMot,
     doiHai: lichThiDau.doiHai,
-    maVTD: lichThiDau.maVTD,
-    maMG: lichThiDau.maMG,
+    
     doiThang: lichThiDau.doiThang,
-    ngayGio: lichThiDau.ngayGio
+    
+    ngayGioDuKien: lichThiDau.ngayGioDuKien,
+    ngayGioThucTe: lichThiDau.ngayGioThucTe,
+
+    ThoiGianDaThiDau: lichThiDau.ThoiGianDaThiDau,
+    maTT: lichThiDau.maTT
   }).where(eq(LichThiDauTable.maTD, lichThiDau.maTD!!))
 }
 

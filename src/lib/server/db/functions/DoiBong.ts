@@ -37,6 +37,10 @@ export const deleteDoiBong = async(maDoi: number) => {
   await db.delete(DoiBongTable).where(eq(DoiBongTable.maDoi, maDoi));
 }
 
+export const selectDoiBongMuaGiai = async (maMG: number) => {
+  return (await db.select().from(DoiBongTable).where(eq(DoiBongTable.maMG, maMG))) satisfies DoiBong[];
+};
+
 export const selectAllDoiBong = async () => {
   return (await db.select().from(DoiBongTable)) satisfies DoiBong[];
 };

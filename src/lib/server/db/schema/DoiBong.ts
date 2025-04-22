@@ -4,11 +4,13 @@ import type { DoiBong } from '$lib/typesDatabase';
 import type { TypesAreEqual } from '$lib/server/utils';
 import { sql } from 'drizzle-orm';
 import { SanNhaTable } from './Data/SanNha';
+import { MuaGiaiTable } from './MuaGiai';
 
 export const DoiBongTable = sqliteTable('DoiBong', {
     maDoi: integer().notNull().unique().primaryKey({ autoIncrement: true }),
     tenDoi: text().notNull(),
     maSan: integer().notNull().references(() => SanNhaTable.maSan, { onDelete: "cascade" }),
+    maMG: integer().notNull().references(() => MuaGiaiTable.maMG, { onDelete: "cascade" }),
     deleted: integer({mode: "boolean"}).default(false),
 }, (table) => [
     uniqueIndex("DoiBong_maDoi").on(table.maDoi)
@@ -20,6 +22,7 @@ export const DoiBongTableBackup = sqliteTable('DoiBongBackup', {
     maDoi: integer().notNull(),
     tenDoi: text().notNull(),
     maSan: integer().notNull(),
+    maMG: integer().notNull(),
 })
 
 

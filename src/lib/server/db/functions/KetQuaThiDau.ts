@@ -1,10 +1,11 @@
-import { eq, and } from "drizzle-orm"
+import { eq, and, count, countDistinct } from "drizzle-orm"
 import { db } from "../client"
 import { DoiBongTable } from "../schema/DoiBong"
 import { LichThiDauTable } from "../schema/LichThiDau"
 import { BanThangTable } from "../schema/BanThang"
 import type { KetQuaThiDau } from "$lib/typesResponse"
 import { SanNhaTable } from "../schema/Data/SanNha"
+import { ThamGiaTDTable } from "../schema/ThamGiaTD"
 
 
 export const selectKetQuaThiDau = async(maTD: number) : Promise<null | KetQuaThiDau> => {
@@ -12,23 +13,36 @@ export const selectKetQuaThiDau = async(maTD: number) : Promise<null | KetQuaThi
     if (lichThiDau === undefined)
         return null;
 
-    const doiMot = (await db.select().from(DoiBongTable).where(eq(DoiBongTable.maDoi, lichThiDau.doiMot))).at(0);
-    const doiHai = (await db.select().from(DoiBongTable).where(eq(DoiBongTable.maDoi, lichThiDau.doiHai))).at(0);
+    const doiMot = (await db.select().from(DoiBongTable)
+        .where(eq(DoiBongTable.maDoi, lichThiDau.doiMot))).at(0);
+    const doiHai = (await db.select().from(DoiBongTable)
+        .where(eq(DoiBongTable.maDoi, lichThiDau.doiHai))).at(0);
     if (doiMot === undefined)
         throw new Error("Doi mot khong ton tai");
     if (doiHai === undefined)
         throw new Error("Doi hai khong ton tai");
 
-    const tySoDoiMot = await db.$count(BanThangTable, and(eq(BanThangTable.maTD, maTD), eq(BanThangTable.maDoi, lichThiDau.doiMot)));
-    const tySoDoiHai = await db.$count(BanThangTable, and(eq(BanThangTable.maTD, maTD), eq(BanThangTable.maDoi, lichThiDau.doiHai)));
+    // const tySoDoiMot = await db.$count(BanThangTable, 
+    //     and(eq(BanThangTable.maTD, maTD), eq(BanThangTable.maDoi, lichThiDau.doiMot)));
+    const tySoDoiMot = (await db.select({ tySo: countDistinct(BanThangTable.thoiDiem) })
+        .from(BanThangTable)
+        .innerJoin(ThamGiaTDTable, and(eq(ThamGiaTDTable.maTD, maTD), eq(ThamGiaTDTable.maDoi, doiMot.maDoi)))
+        .groupBy(BanThangTable.maTD, BanThangTable.thoiDiem)).at(0)!!;
+
+    // const tySoDoiHai = await db.$count(BanThangTable, 
+    //     and(eq(BanThangTable.maTD, maTD), eq(BanThangTable.maDoi, lichThiDau.doiHai)));
+    const tySoDoiHai = (await db.select({ tySo: countDistinct(BanThangTable.thoiDiem) })
+        .from(BanThangTable)
+        .innerJoin(ThamGiaTDTable, and(eq(ThamGiaTDTable.maTD, maTD), eq(ThamGiaTDTable.maDoi, doiHai.maDoi)))
+        .groupBy(BanThangTable.maTD, BanThangTable.thoiDiem)).at(0)!!;
 
     const sanNha = (await db.select().from(SanNhaTable).where(eq(SanNhaTable.maSan, doiMot.maSan))).at(0)?.tenSan ?? "";
 
     return {
         doiMot: doiMot,
         doiHai: doiHai,
-        tySo: tySoDoiMot.toString() + '-' + tySoDoiHai.toString(),
+        tySo: tySoDoiMot.tySo.toString() + '-' + tySoDoiHai.tySo.toString(),
         san: sanNha,
-        ngayGio: lichThiDau.ngayGio
+        ngayGio: lichThiDau.ngayGioThucTe
     };
 }
