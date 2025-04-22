@@ -12,31 +12,30 @@ import { ThePhatTable } from "./schema/ThePhat";
 import { ThamGiaTDTable } from "./schema/ThamGiaTD";
 import { TrongTaiTable } from "./schema/TrongTai";
 
-export const generateBanThang = async (maTD: number, soBTDoiMot: number = 5, soBTDoiHai: number = 5) => {
+export const generateBanThang = async (maTD: number, maDoi: number, offset : number = 0.0, soBTDoiMot: number = 5) => {
   console.log("BAN THANG !!!!!!!!!!!!!!!");
 
   // if (soBTDoiMot == 0 || soBTDoiHai == 0)
   //   throw new Error("soBT generate khong the bang 0");
-  const lichThiDau = (await db.select().from(LichThiDauTable).where(eq(LichThiDauTable.maTD, maTD))).at(0);
-  if (lichThiDau === undefined)
-    throw new Error("Khong tim thay lich thi dau");
+  // if (lichThiDau === undefined)
+  //   throw new Error("Khong tim thay lich thi dau");
   const cauThusDoi1 = await db.select({
     ...getTableColumns(CauThuTable)
   })
     .from(CauThuTable)
     .innerJoin(ThamGiaTDTable, 
       and(eq(ThamGiaTDTable.maCT, CauThuTable.maCT), 
-        eq(ThamGiaTDTable.maDoi, lichThiDau.doiMot),
+        eq(ThamGiaTDTable.maDoi, maDoi),
         eq(ThamGiaTDTable.maTD, maTD)));
 
-  const cauThusDoi2 = await db.select({
-    ...getTableColumns(CauThuTable)
-  })
-    .from(CauThuTable)
-    .innerJoin(ThamGiaTDTable, 
-      and(eq(ThamGiaTDTable.maCT, CauThuTable.maCT), 
-        eq(ThamGiaTDTable.maDoi, lichThiDau.doiHai),
-        eq(ThamGiaTDTable.maTD, maTD)));
+  // const cauThusDoi2 = await db.select({
+  //   ...getTableColumns(CauThuTable)
+  // })
+  //   .from(CauThuTable)
+  //   .innerJoin(ThamGiaTDTable, 
+  //     and(eq(ThamGiaTDTable.maCT, CauThuTable.maCT), 
+  //       eq(ThamGiaTDTable.maDoi, lichThiDau.doiHai),
+  //       eq(ThamGiaTDTable.maTD, lichThiDau.maTD!!)));
 
   // console.log("Stage 1");
   const n1 = Math.min(soBTDoiMot, cauThusDoi1.length - 1);
@@ -45,8 +44,8 @@ export const generateBanThang = async (maTD: number, soBTDoiMot: number = 5, soB
     if (cauThu === undefined)
       throw new Error("Khong the xac dinh duoc cau thu");
     const banThang : BanThang = {
-      maTD: lichThiDau.maTD,
-      thoiDiem: 90.0 * i / n1,
+      maTD: maTD,
+      thoiDiem: 90.0 * (i + 1 + offset) / (n1 + 1) + offset,
 
       maCT: cauThu.maCT,
       maLBT: choose([1, 2, 3])
@@ -54,20 +53,20 @@ export const generateBanThang = async (maTD: number, soBTDoiMot: number = 5, soB
     await db.insert(BanThangTable).values(banThang);
   }
   // console.log("Stage 2");
-  const n2 = Math.min(soBTDoiHai, cauThusDoi2.length - 1);
-  for (let i = 0; i < n2; i++) {
-    const cauThu = cauThusDoi2.at(randIntBetween(0, cauThusDoi2.length - 1));
-    if (cauThu === undefined)
-      throw new Error("Khong the xac dinh duoc cau thu");
-    const banThang : BanThang = {
-      maTD: lichThiDau.maTD,
-      thoiDiem: 90.0 * i / (n2 + 1.0),
+  // const n2 = Math.min(soBTDoiHai, cauThusDoi2.length - 1);
+  // for (let i = 0; i < n2; i++) {
+  //   const cauThu = cauThusDoi2.at(randIntBetween(0, cauThusDoi2.length - 1));
+  //   if (cauThu === undefined)
+  //     throw new Error("Khong the xac dinh duoc cau thu");
+  //   const banThang : BanThang = {
+  //     maTD: lichThiDau.maTD!!,
+  //     thoiDiem: 90.0 * (i + 0.5) / (n2 + 1.0),
 
-      maCT: cauThu.maCT,
-      maLBT: choose([1, 2, 3])
-    }
-    await db.insert(BanThangTable).values(banThang);
-  }
+  //     maCT: cauThu.maCT,
+  //     maLBT: choose([1, 2, 3])
+  //   }
+  //   await db.insert(BanThangTable).values(banThang);
+  // }
 }
 
 export const generateThePhat = async (maTD: number, soTPDoiMot: number = 5, soTPDoiHai: number = 5) => {
@@ -126,22 +125,21 @@ export const generateThePhat = async (maTD: number, soTPDoiMot: number = 5, soTP
     await db.insert(ThePhatTable).values(thePhat);
   }
 }
-export const generateTGTD = async (maTD: number, maDoi : number, soCauThu : number = 11) => {
+export const generateTGTD = async (lichThiDau: LichThiDau, maDoi : number, soCauThu : number = 11) => {
   console.log("THAM GIA TRAN DAU !!!!!!!!!!!!!!!");
-  const thiDau = (await db.select().from(LichThiDauTable).where(eq(LichThiDauTable.maTD, maTD))).at(0) ?? null;
-  if (thiDau == null)
-    throw new Error("Không tìm thấy thi đấu weird!!!!!!!!!!!!!!!!");
+  // if (lichThiDau == null)
+  //   throw new Error("Không tìm thấy thi đấu weird!!!!!!!!!!!!!!!!");
 
-  const ctTGDB = await db.select()
-    .from(ThamGiaDBTable)
-    .where(and(eq(ThamGiaDBTable.maMG, thiDau.maMG), eq(ThamGiaDBTable.maDoi, maDoi)));
+  const cauThus = await db.select()
+    .from(CauThuTable)
+    .where(eq(CauThuTable.maDoi, maDoi));
 
-  for (let i = 0; i < Math.min(ctTGDB.length, soCauThu); i++)
+  for (let i = 0; i < Math.min(cauThus.length, soCauThu); i++)
   {
     await db.insert(ThamGiaTDTable)
       .values({
-        maCT: ctTGDB[i].maCT, 
-        maTD: maTD, 
+        maCT: cauThus[i].maCT, 
+        maTD: lichThiDau.maTD!!, 
         maDoi: maDoi, 
         maVT: choose([1, 2, 3]) 
       });

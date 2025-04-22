@@ -1,13 +1,11 @@
 import { eq, and, ilike, getTableColumns } from "drizzle-orm";
 import { db } from "../client";
-import { CauThuTable, CauThuTableBackup, type InsertCauThuBackupParams } from "../schema/CauThu";
-import { ThamGiaDBTable } from "../schema/ThamGiaDB";
+import { CauThuTable } from "../schema/CauThu";
 import { DoiBongTable } from "../schema/DoiBong";
 import { BanThangTable } from "../schema/BanThang";
-import { insertThamGiaDB } from "./ThamGiaDB";
-import { ThePhatTable } from "../schema/ThePhat";
 import type { CauThu } from "$lib/typesDatabase";
 import type { KQTraCuuCauThu } from "$lib/typesResponse";
+import { ThamGiaTDTable } from "../schema/ThamGiaTD";
 
 export const insertCauThu = async (...cauThu: CauThu[]) => {
   let returning = await db.insert(CauThuTable).values(cauThu).returning({ id: CauThuTable.maCT });
@@ -53,6 +51,18 @@ export const selectCauThuTen = async (tenCT: string) => {
     .where(ilike(CauThuTable.maCT, tenCT))) satisfies CauThu[];
 };
 
+export const selectCauThuTGTD = async (maTD: number, maDoi: number) => {
+  return await db
+    .select(getTableColumns(CauThuTable))
+    .from(CauThuTable)
+    .innerJoin(ThamGiaTDTable, 
+      and(
+      eq(ThamGiaTDTable.maTD, maTD), 
+      eq(ThamGiaTDTable.maDoi, maDoi), 
+      eq(ThamGiaTDTable.maCT, CauThuTable.maCT)))
+    .groupBy(CauThuTable.maCT);
+}
+
 export const selectCauThuDoiBong = async (maDoi: number) => {
   return await db
     .select({
@@ -67,8 +77,7 @@ export const traCuuCauThu = async (tenCT: string) => {
   const cauThu = await db
     .select()
     .from(CauThuTable)
-    .innerJoin(ThamGiaDBTable, eq(ThamGiaDBTable.maCT, CauThuTable.maCT))
-    .innerJoin(DoiBongTable, eq(DoiBongTable.maDoi, ThamGiaDBTable.maDoi))
+    .innerJoin(DoiBongTable, eq(DoiBongTable.maDoi, CauThuTable.maDoi))
     .where(ilike(CauThuTable.tenCT, "%" + tenCT + "%"));
   cauThu.forEach(async (value) => {
     const tongSoBanThang = await db.$count(

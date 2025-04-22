@@ -12,14 +12,18 @@
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		
+		
 		"generate:db": "drizzle-kit generate --config=src/lib/server/db/drizzle.config.ts",
-		"push:db": "drizzle-kit push --config=src/lib/server/db/drizzle.config.ts && npm run init:db",
-		"createTrigger:db": "tsx src/lib/server/db/dbTriggers.ts",
-		"init:db": "tsx src/lib/server/db/dbInit.ts",
-		"migrate:db": "tsx src/lib/server/db/migrate.ts",
+		"push:db": "drizzle-kit push --config=src/lib/server/db/drizzle.config.ts && npm run createTrigger:db && npm run init:db",
 		"studio:db": "drizzle-kit studio --port 300 --verbose --config=src/lib/server/db/drizzle.config.ts",
-		"seed:db": "npm run push:db && tsx src/lib/server/db/seed.ts",
+		"seed:db": "npm run push:db && npm run seeder:db",
+		"migrate:db": "tsx src/lib/server/db/migrate.ts",
+		
+		"seeder:db": "tsx src/lib/server/db/seed.ts",
+		"init:db": "tsx src/lib/server/db/dbInit.ts",
 		"sandbox:db": "tsx src/lib/server/db/sandbox.ts",
+		"createTrigger:db": "tsx src/lib/server/db/dbTriggers.ts",
 		"setAdminPassword": "tsx src/lib/server/setAdminPassword.ts"
 	},
 	"devDependencies": {

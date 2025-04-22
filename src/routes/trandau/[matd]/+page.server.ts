@@ -1,5 +1,5 @@
 import { isNumber } from "$lib";
-import { selectCauThuDoiBong } from "$lib/server/db/functions/CauThu";
+import { selectCauThuDoiBong, selectCauThuTGTD } from "$lib/server/db/functions/CauThu";
 import { selectDoiBongTenDoi } from "$lib/server/db/functions/DoiBong";
 import { selectLichThiDauMaTD } from "$lib/server/db/functions/LichThiDau";
 import { selectThamSo } from "$lib/server/db/functions/ThamSo";
@@ -28,8 +28,8 @@ export const load = (async ({ fetch, params, locals }) => {
 
     if (locals.muaGiai === null)
       throw new Error("Chưa chọn mùa giải");
-    const cauThuDoiMot = await selectCauThuDoiBong(locals.muaGiai!!.maMG!!, tranDau.doiMot);
-    const cauThuDoiHai = await selectCauThuDoiBong(locals.muaGiai!!.maMG!!, tranDau.doiHai);
+    const cauThuDoiMot = await selectCauThuTGTD(tranDau.maTD!!, tranDau.doiMot);
+    const cauThuDoiHai = await selectCauThuTGTD(tranDau.maTD!!, tranDau.doiHai);
 
     const responseBT = await fetch("/api/banthang/" + maTD, {
       method: "GET",

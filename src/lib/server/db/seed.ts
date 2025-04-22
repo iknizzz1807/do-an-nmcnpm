@@ -87,8 +87,9 @@ for (const muaGiai of muaGiais) {
 }
 const lichThiDau = await db.select().from(LichThiDauTable);
 for (const lich of lichThiDau) {
-  await generateTGTD(lich.maTD, lich.doiMot);
-  await generateTGTD(lich.maTD, lich.doiHai);
-  await generateBanThang(lich.maTD, randIntBetween(0, 5), randIntBetween(0, 5));
+  await generateTGTD(lich, lich.doiMot);
+  await generateTGTD(lich, lich.doiHai);
+  await generateBanThang(lich.maTD!!, lich.doiMot, 0, randIntBetween(0, 5));
+  await generateBanThang(lich.maTD!!, lich.doiHai, 0.5, randIntBetween(0, 5));
   // await generateThePhat(lich.maTD, randIntBetween(0, 1), randIntBetween(0, 1));
 }

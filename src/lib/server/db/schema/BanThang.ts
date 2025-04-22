@@ -17,8 +17,7 @@ export const BanThangTable = sqliteTable('BanThang', {
 
     deleted: integer({mode: "boolean"}).default(false),
 }, (table) => [
-    primaryKey({ columns: [table.maTD, table.maCT, table.thoiDiem] }),
-    check("CHK_BT_THOIDIEM", sql`${table.thoiDiem} BETWEEN 0 AND 90`),
+    primaryKey({ columns: [table.maTD, table.thoiDiem] }),
 ])
 
 export const BanThangTableBackup = sqliteTable('BanThangBackup', {
