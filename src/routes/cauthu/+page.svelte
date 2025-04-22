@@ -9,6 +9,7 @@
 
   let danhSachLoaiCT : LoaiCT[] = $state(data.loaiCTs);
   let danhSachCauThu: CauThu[] = $state(data.danhSachCauThu);
+  const isEditable = $state(data.isEditable);
   const tuoiMin : number = $state(data.tuoiMin);
   const tuoiMax : number = $state(data.tuoiMax);
   const minDate = new Date();
@@ -248,8 +249,9 @@
   data={danhSachCauThu}
   redirectParam={""}
   tableType="cauThu"
-  {onDeleteClick}
-  {onEditClick}
+  onDeleteClick={onDeleteClick}
+  onEditClick={onEditClick}
+  isEditable={isEditable}
 />
 
 <Form 

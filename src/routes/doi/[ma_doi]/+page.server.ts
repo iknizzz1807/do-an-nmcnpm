@@ -1,9 +1,10 @@
 import { selectLoaiCT } from "$lib/server/db/functions/Data/LoaiCT";
 import { selectThamSo } from "$lib/server/db/functions/ThamSo";
+import { checkPageEditable } from "$lib/server/db/functions/User/UserRole";
 import type { CauThu } from "$lib/typesDatabase";
 import type { PageServerLoad } from "./$types";
 
-export const load = (async ({ params, fetch, locals }) => {
+export const load = (async ({ params, fetch, locals, route }) => {
   // const danhSachCauThu = await getDanhSachCauThu(params.ten_doi);
   // Cái này là data giả để mô phỏng data thật được get request từ danh sách các cầu thủ của một đội bóng
 
@@ -25,6 +26,7 @@ export const load = (async ({ params, fetch, locals }) => {
     const tuoiMin = (await selectThamSo("tuoiMin"))!!;
     const tuoiMax = (await selectThamSo("tuoiMax"))!!;
     const loaiCTs = await selectLoaiCT();
+    const isEditable = await checkPageEditable(locals.user!!.groupId, route.id);
 
     return {
       danhSachCauThu,
@@ -32,6 +34,7 @@ export const load = (async ({ params, fetch, locals }) => {
       tuoiMin: tuoiMin,
       tuoiMax: tuoiMax,
       loaiCTs: loaiCTs,
+      isEditable
     };
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -41,6 +44,7 @@ export const load = (async ({ params, fetch, locals }) => {
       tuoiMin: 0,
       tuoiMax: 0,
       loaiCTs: [],
+      isEditable: false
     };
   }
 }) satisfies PageServerLoad;

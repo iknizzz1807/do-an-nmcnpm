@@ -3,12 +3,13 @@ import { selectCauThuDoiBong, selectCauThuTGTD } from "$lib/server/db/functions/
 import { selectDoiBongTenDoi } from "$lib/server/db/functions/DoiBong";
 import { selectLichThiDauMaTD } from "$lib/server/db/functions/LichThiDau";
 import { selectThamSo } from "$lib/server/db/functions/ThamSo";
+import { checkPageEditable } from "$lib/server/db/functions/User/UserRole";
 import type { BanThang, LichThiDau, ThePhat } from "$lib/typesDatabase";
 import type { PageServerLoad } from "./$types";
 
 
 // TODO: rework this
-export const load = (async ({ fetch, params, locals }) => {
+export const load = (async ({ fetch, params, locals, route }) => {
   try {
     const maTD = parseInt(params.matd);
     if (!isNumber(maTD))
@@ -56,6 +57,7 @@ export const load = (async ({ fetch, params, locals }) => {
     danhSachBanThang.sort((a, b) => a.thoiDiem - b.thoiDiem);
     danhSachThePhat.sort((a, b) => a.thoiDiem - b.thoiDiem);
     const thoiDiemGhiBanToiDa = (await selectThamSo("thoiDiemGhiBanToiDa"))!!;
+    const isEditable = await checkPageEditable(locals.user!!.groupId, route.id);
     
     return {
       maTD: maTD,
@@ -68,6 +70,7 @@ export const load = (async ({ fetch, params, locals }) => {
       cauThuDoiHai: cauThuDoiHai,
       danhSachBanThang: danhSachBanThang,
       danhSachThePhat: danhSachThePhat,
+      isEditable: isEditable
     }
   } catch (err) {
     console.error(err);
@@ -81,6 +84,7 @@ export const load = (async ({ fetch, params, locals }) => {
       cauThuDoiHai: [],
       danhSachBanThang: [],
       danhSachThePhat: [],
+      isEditable: false
     }
   }
 }) satisfies PageServerLoad;

@@ -1,9 +1,10 @@
 import { selectLoaiCT } from "$lib/server/db/functions/Data/LoaiCT";
 import { selectThamSo } from "$lib/server/db/functions/ThamSo";
+import { checkPageEditable } from "$lib/server/db/functions/User/UserRole";
 import type { CauThu } from "$lib/typesDatabase";
 import type { PageServerLoad } from "./$types";
 
-export const load = (async ({ fetch, locals }) => {
+export const load = (async ({ fetch, locals, route }) => {
   try {
     const response = await fetch("api/cauthu", {
       method: "GET",
@@ -21,6 +22,7 @@ export const load = (async ({ fetch, locals }) => {
     const tuoiMin = (await selectThamSo("tuoiMin"))!!;
     const tuoiMax = (await selectThamSo("tuoiMax"))!!;
     const loaiCTs = await selectLoaiCT();
+    const isEditable = await checkPageEditable(locals.user!!.groupId, route.id);
 
     // console.log(danhSachCauThu);
     return {
@@ -28,6 +30,7 @@ export const load = (async ({ fetch, locals }) => {
       tuoiMin: tuoiMin,
       tuoiMax: tuoiMax,
       loaiCTs: loaiCTs,
+      isEditable
     };
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -36,6 +39,7 @@ export const load = (async ({ fetch, locals }) => {
       tuoiMin: 0,
       tuoiMax: 0,
       loaiCTs: [],
+      isEditable: false
     };
   }
 }) satisfies PageServerLoad;

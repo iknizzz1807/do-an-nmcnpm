@@ -13,6 +13,7 @@
   let danhSachLTD: LichThiDau[] = $state(data.danhSachLTD);
   const danhSachDoi : DoiBong[] = $state(data.danhSachDoi);
   const danhSachMuaGiai : MuaGiai[] = $state(data.danhSachMuaGiai);
+  const isEditable = $state(data.isEditable);
 
   for (const ltd of danhSachLTD) {
     let tenDoiThang = danhSachDoi.find((value) => value.maDoi == ltd.doiThang)?.tenDoi ?? null;
@@ -43,7 +44,8 @@
           doiOption.find((val) => data.get("doiHai") === val.optionValue ) ?? { optionValue: "", optionName: "" },
         ] satisfies FieldOption[]
       }},
-    { label: "Ngày giờ", propertyName: "ngayGio", type: "Date", valueType: "DateTime" }
+    { label: "Ngày giờ dự kiến", propertyName: "ngayGioDuKien", type: "Date", valueType: "DateTime" },
+    { label: "Ngày giờ thực tế", propertyName: "ngayGioThucTe", type: "Date", valueType: "DateTime" },
   ];
 
   const columns = [
@@ -52,9 +54,13 @@
     { header: "Vòng thi đấu", accessor: "maVTD" },
     { header: "Mã mùa giải", accessor: "tenMG" },
     { header: "Đội thắng", accessor: "tenDoiThang" },
-    { header: "Ngày giờ", accessor: "ngayGio", 
+    { header: "Ngày giờ dự kiến", accessor: "ngayGioDuKien", 
       accessFunction: (data: LichThiDau) => {
-        return new Date(data.ngayGio!!).toLocaleString();
+        return new Date(data.ngayGioDuKien!!).toLocaleString();
+      } },
+    { header: "Ngày giờ thực tế", accessor: "ngayGioThucTe", 
+      accessFunction: (data: LichThiDau) => {
+        return new Date(data.ngayGioThucTe!!).toLocaleString();
       } },
   ];
 
@@ -82,7 +88,8 @@
       editData.set("maVTD", data.maVTD);
       editData.set("doiThang", data.doiThang ?? null);
       editData.set("maMG", data.maMG);
-      editData.set("ngayGio", new Date(data.ngayGio ?? ""));
+      editData.set("ngayGioDuKien", new Date(data.ngayGioDuKien ?? ""));
+      editData.set("ngayGioThucTe", new Date(data.ngayGioThucTe ?? ""));
       selectedIndex = index;
       formState = true;
     }
@@ -196,13 +203,16 @@
   data={danhSachLTD}
   redirectParam={"maTD"}
   tableType="trandau"
+  isEditable={isEditable}
   onEditClick={onEditClick}
   onDeleteClick={onDeleteClick}
 />
 
-<div class="flex justify-center">
-  <ButtonPrimary text={"Thêm trận đấu mới"} onclick={() => {formState = true}} />
-</div>
+{#if isEditable}
+  <div class="flex justify-center">
+    <ButtonPrimary text={"Thêm trận đấu mới"} onclick={() => {formState = true}} />
+  </div>
+{/if}
 
 <!-- Form bao gồm: 
  - Đội 1 đội 2 là được select từ danh sách các đội hiện có
@@ -212,9 +222,9 @@
  - Ngày giờ tiếp tục chọn date and time dưới dạng input
   -->
 <Form 
-  onOpenForm={onOpenForm}
-  onCloseForm={onCloseForm}
-  submitForm={submitForm}
-  fields={formFields}
-  bind:formState={formState}
+onOpenForm={onOpenForm}
+onCloseForm={onCloseForm}
+submitForm={submitForm}
+fields={formFields}
+bind:formState={formState}
 />

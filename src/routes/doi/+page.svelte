@@ -10,6 +10,7 @@
 
   let danhSachDoiBong: DoiBong[] = $state(data.danhSachDoiBong);
   let danhSachSanNha: SanNha[] = $state(data.danhSachSanNha);
+  const isEditable = $state(data.isEditable);
 
   for (const doiBong of danhSachDoiBong) {
     doiBong.tenSan = danhSachSanNha.find((val) => val.maSan === doiBong.maSan)?.tenSan ?? "";
@@ -143,10 +144,15 @@
   tableType="doi"
   onEditClick={onEditClick}
   onDeleteClick={onDeleteClick}
+  isEditable={isEditable}
 />
-<div class="flex justify-center">
-  <ButtonPrimary text="Tạo đội mới" onclick={() => formState = true} />
-</div>
+
+
+{#if isEditable}
+  <div class="flex justify-center">
+    <ButtonPrimary text="Tạo đội mới" onclick={() => formState = true} />
+  </div>
+{/if}
 
 <Form 
   bind:formState={formState}

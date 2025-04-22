@@ -1,7 +1,8 @@
+import { checkPageEditable } from "$lib/server/db/functions/User/UserRole";
 import type { DoiBong, SanNha } from "$lib/typesDatabase";
 import type { PageServerLoad } from "./$types";
 
-export const load = (async ({ fetch }) => {
+export const load = (async ({ fetch, locals, route }) => {
   try {
     const response = await fetch("api/doibong", {
       method: "GET",
@@ -27,16 +28,19 @@ export const load = (async ({ fetch }) => {
     }
 
     const danhSachSanNha : SanNha[] = await responseSN.json();
+    const isEditable = await checkPageEditable(locals.user!!.groupId, route.id);
 
     return {
       danhSachDoiBong: danhSachDoiBong,
-      danhSachSanNha: danhSachSanNha
+      danhSachSanNha: danhSachSanNha,
+      isEditable
     };
   } catch (error) {
     console.error("Error fetching data:", error);
     return {
       danhSachDoiBong: [],
-      danhSachSanNha: []
+      danhSachSanNha: [],
+      isEditable: false
     };
   }
 }) satisfies PageServerLoad;

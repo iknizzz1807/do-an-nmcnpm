@@ -3,13 +3,13 @@ import { db } from "../../client";
 import { UserRoleTable } from "../../schema/User/UserRole";
 import { HasRoleTable } from "../../schema/User/HasRole";
 
-export const checkRoleViewable = async (groupId : number, pageName: string) => {
+export const checkPageViewable = async (groupId : number, pageName: string) => {
   return (await db.select().from(HasRoleTable)
     .innerJoin(UserRoleTable, eq(UserRoleTable.roleId, HasRoleTable.roleId))
     .where(and(eq(HasRoleTable.groupId, groupId), eq(UserRoleTable.viewablePage, pageName))).limit(1)).length != 0;
 }
 
-export const checkRoleEditable = async (groupId : number, pageName: string) => {
+export const checkPageEditable = async (groupId : number, pageName: string) => {
   const role = (await db.select(getTableColumns(UserRoleTable)).from(HasRoleTable)
     .innerJoin(UserRoleTable, eq(UserRoleTable.roleId, HasRoleTable.roleId))
     .where(and(eq(HasRoleTable.groupId, groupId), eq(UserRoleTable.viewablePage, pageName)))

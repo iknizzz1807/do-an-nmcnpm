@@ -1,9 +1,11 @@
+import { checkPageEditable } from "$lib/server/db/functions/User/UserRole";
 import type { DoiBong, MuaGiai, LichThiDau } from "$lib/typesDatabase";
 import type { PageServerLoad } from "./$types";
 
 
-export const load = (async ({ fetch }) => {
+export const load = (async ({ fetch, locals, route }) => {
   try {
+
     const response = await fetch("/api/lichthidau", {
       method: "GET",
       headers: {
@@ -39,17 +41,21 @@ export const load = (async ({ fetch }) => {
     const danhSachDoi: DoiBong[] = await responseDB.json();
     const danhSachMuaGiai: MuaGiai[] = await responseMG.json();
 
+    const isEditable = await checkPageEditable(locals.user!!.groupId, route.id);
+
     return {
       danhSachLTD,
       danhSachDoi,
-      danhSachMuaGiai
+      danhSachMuaGiai,
+      isEditable,
     };
   } catch (error) {
     console.error("Error fetching data:", error);
     return {
       danhSachLTD: [],
       danhSachDoi: [],
-      danhSachMuaGiai: []
+      danhSachMuaGiai: [],
+      isEditable: false
     };
   }
 }) satisfies PageServerLoad;

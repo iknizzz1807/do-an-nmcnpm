@@ -10,6 +10,7 @@
   import { SvelteMap } from "svelte/reactivity";
 
   let danhSachCauThu: CauThu[] = $state(data.danhSachCauThu);
+  const isEditable = $state(data.isEditable);
   const danhSachLoaiCT: LoaiCT[] = $state(data.loaiCTs);
   const tuoiMin : number = $state(data.tuoiMin);
   const tuoiMax : number = $state(data.tuoiMax);
@@ -165,11 +166,15 @@
   redirectParam={""}
   tableType={"cauthu"}
   onEditClick={onEditClick}
+  isEditable={isEditable}
 />
 
-<div class="flex justify-center">
-  <ButtonPrimary text={"Thêm cầu thủ"} onclick={() => formState = true} />
-</div>
+
+{#if isEditable}
+  <div class="flex justify-center">
+    <ButtonPrimary text={"Thêm cầu thủ"} onclick={() => formState = true} />
+  </div>
+{/if}
 
 <Form 
   fields={formFields}

@@ -1,8 +1,4 @@
-<script lang="ts">
-  import { goto } from "$app/navigation";
-  import { isNumber } from "$lib";
-  import ButtonPrimary from "./ButtonPrimary.svelte";
-
+<script module lang="ts">
   type TableProps<T> = {
     title: string;
     columns: { // Data specifier
@@ -14,12 +10,20 @@
     data: T[]; // Data holder
     tableType: string; // It's like current page. Used to redirect
     redirectParam: string; // Redirect to
+    isEditable?: boolean;
     onItemClick?: ((data: T, index : number) => void) | undefined;
     onDeleteClick?: ((data: T, index : number) => void) | undefined;
     onEditClick?: ((data: T, index : number) => void) | undefined;
   };
+
+</script>
+
+<script lang="ts">
+  import { goto } from "$app/navigation";
+  import { isNumber } from "$lib";
+  import ButtonPrimary from "./ButtonPrimary.svelte";
   let mouseHover = $state(false);
-  let { title, columns, data, redirectParam, tableType, onItemClick, onDeleteClick, onEditClick }: TableProps<any> =
+  let { title, columns, data, redirectParam, tableType, isEditable = true, onItemClick, onDeleteClick, onEditClick }: TableProps<any> =
     $props();
   const deleteButton = $state((onDeleteClick ?? null) !== null);
   const editButton = $state((onEditClick ?? null) !== null);
@@ -44,7 +48,7 @@
                 </th>
               {/if}
             {/each}
-            {#if deleteButton || editButton}
+            {#if (deleteButton || editButton) && isEditable}
               <th
                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
               >
@@ -92,7 +96,7 @@
                 {/each}
 
                 <!-- Delete/Edit -->
-                {#if deleteButton || editButton}
+                {#if (deleteButton || editButton) && isEditable}
                   <td class="px-6 py-4 whitespace-nowrap">
                     {#if editButton}
                       <button class="text-green-600 hover:text-green-900 mr-3" 

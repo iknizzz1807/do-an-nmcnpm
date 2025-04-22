@@ -1,7 +1,8 @@
 
 import { deleteSessionTokenCookie, setSessionTokenCookie, validateSessionToken } from "$lib/server/db/functions/User/Session";
+import { checkPageEditable, checkPageViewable } from "$lib/server/db/functions/User/UserRole";
 import type { MuaGiai } from "$lib/typesDatabase";
-import { redirect, type Handle } from "@sveltejs/kit";
+import { error, redirect, type Handle } from "@sveltejs/kit";
 
 export const handle: Handle = async ({ event, resolve }) => {
   // Handle session for user

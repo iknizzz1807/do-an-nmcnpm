@@ -11,6 +11,7 @@
   const maDoiMot = $state(data.maDoiMot);
   const maDoiHai = $state(data.maDoiHai);
   const danhSachBanThang: BanThang[] = $state(data.danhSachBanThang);
+  const isEditable = $state(data.isEditable);
   // const danhSachThePhat : ThePhat[] = $state(data.danhSachThePhat);
   const cauThuDoiMotOption : FieldOption[] = cauThuDoiMot.filter((val) => val.maCT ?? null).map((value) => {
     return { optionValue: value.maCT!!, optionName: value.tenCT } satisfies FieldOption;
@@ -43,7 +44,8 @@
   tenDoiHai={data.tenDoiHai}
   cauThuDoiMotOption={cauThuDoiMotOption}
   cauThuDoiHaiOption={cauThuDoiHaiOption}
-  doiOption={doiOption}/>
+  doiOption={doiOption}
+  isEditable={isEditable}/>
 
   
 <!-- <ThePhatTable 

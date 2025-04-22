@@ -10,6 +10,7 @@
 
   let danhSachMuaGiai: MuaGiai[] = $state(data.danhSachMuaGiai);
 
+  const isEditable = $state(data.isEditable);
   const columns = [
     { header: "", accessor: "maMG", hidden: true},
     { header: "Tên mùa giải", accessor: "tenMG" },
@@ -170,10 +171,15 @@
   onItemClick={onItemClick}
   onEditClick={onEditClick}
   onDeleteClick={onDeleteClick}
+  isEditable={isEditable}
 />
-<div class="flex justify-center">
-  <ButtonPrimary text="Tạo đội mới" onclick={() => formState = true} />
-</div>
+
+
+{#if isEditable}
+  <div class="flex justify-center">
+    <ButtonPrimary text="Tạo đội mới" onclick={() => formState = true} />
+  </div>
+{/if}
 
 <Form 
   bind:formState={formState}

@@ -1,7 +1,8 @@
+import { checkPageEditable } from "$lib/server/db/functions/User/UserRole";
 import type { MuaGiai } from "$lib/typesDatabase";
 import type { PageServerLoad } from "./$types";
 
-export const load = (async ({ fetch }) => {
+export const load = (async ({ fetch, route, locals }) => {
   try {
     const response = await fetch("api/muagiai", {
       method: "GET",
@@ -14,14 +15,17 @@ export const load = (async ({ fetch }) => {
     }
 
     const danhSachMuaGiai: MuaGiai[] = await response.json();
+    const isEditable = await checkPageEditable(locals.user!!.groupId, route.id);
 
     return {
       danhSachMuaGiai,
+      isEditable
     };
   } catch (error) {
     console.error("Error fetching data:", error);
     return {
       danhSachMuaGiai: [],
+      isEditable: false
     };
   }
 }) satisfies PageServerLoad;

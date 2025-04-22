@@ -33,26 +33,27 @@ for (const setting of DefaultSettings) {
 }
 
 const roles : UserRoleInsertParams[] = [
-  { roleId: 1, roleName: "Cầu thủ", viewablePage: "/cauthu", canEdit: false },
-  { roleId: 2, roleName: "Đội bóng", viewablePage: "/doi", canEdit: false },
-  { roleId: 3, roleName: "Lịch thi đấu", viewablePage: "/trandau", canEdit: false },
-  { roleId: 4, roleName: "Bảng xếp hạng", viewablePage: "/bxh", canEdit: false },
+  { roleId: 1, roleName: "Mùa giải", viewablePage: "/muagiai", canEdit: false },
+  { roleId: 2, roleName: "Cầu thủ", viewablePage: "/cauthu", canEdit: false },
+  { roleId: 3, roleName: "Đội bóng", viewablePage: "/doi", canEdit: false },
+  { roleId: 4, roleName: "Lịch thi đấu", viewablePage: "/trandau", canEdit: false },
+  { roleId: 5, roleName: "Bảng xếp hạng", viewablePage: "/bxh", canEdit: false },
   
   // Editable
-  { roleId: 5, roleName: "Sửa Cầu thủ", viewablePage: "/cauthu", canEdit: true },
-  { roleId: 6, roleName: "Sửa Đội bóng", viewablePage: "/doi", canEdit: true },
-  { roleId: 7, roleName: "Sửa Lịch thi đấu", viewablePage: "/trandau", canEdit: true },
-  { roleId: 8, roleName: "Sửa Cài đặt", viewablePage: "/caidat", canEdit: true },
+  { roleId: 51, roleName: "Sửa Cầu thủ", viewablePage: "/cauthu", canEdit: true },
+  { roleId: 52, roleName: "Sửa Đội bóng", viewablePage: "/doi", canEdit: true },
+  { roleId: 53, roleName: "Sửa Lịch thi đấu", viewablePage: "/trandau", canEdit: true },
+  { roleId: 54, roleName: "Sửa Mùa giải", viewablePage: "/muagiai", canEdit: true },
   { roleId: 9999, roleName: "Cài đặt", viewablePage: "/caidat", canEdit: true },
 ];
 
 await db.insert(UserRoleTable).values(roles);
 
 const groupsRoles: { group: UserGroupInsertParams, roles: number[] }[] = [
-  { group: { groupId: 0, groupName: "Admin" }, roles: [ 5, 6, 7, 8, 9999 ] },
-  { group: { groupId: 1, groupName: "Thường" }, roles: [ 1, 2, 3, 4 ] },
-  { group: { groupId: 3, groupName: "Quản lý đội bóng" }, roles: [ 5, 6, 3, 4 ] },
-  { group: { groupId: 4, groupName: "Quản lý giải đấu" }, roles: [ 5, 6, 7, 4 ] },
+  { group: { groupId: 0, groupName: "Admin" }, roles: [ 51, 52, 53, 54, 9999 ] },
+  { group: { groupId: 1, groupName: "Thường" }, roles: [ 1, 2, 3, 4, 5 ] },
+  { group: { groupId: 2, groupName: "Quản lý đội bóng" }, roles: [ 1, 51, 52, 4, 5 ] },
+  { group: { groupId: 3, groupName: "Quản lý giải đấu" }, roles: [ 51, 52, 53, 54, 5 ] },
 ]
 
 for (const groupRole of groupsRoles)

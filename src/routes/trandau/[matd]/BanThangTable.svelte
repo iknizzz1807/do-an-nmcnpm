@@ -20,12 +20,13 @@
     tenDoiHai: string,
     cauThuDoiMotOption: FieldOption[],
     cauThuDoiHaiOption: FieldOption[],
-    doiOption: FieldOption[]
+    doiOption: FieldOption[],
+    isEditable: boolean,
   }
 
   const { maTD, dsBanThang, cauThuDoiMot, cauThuDoiHai, maDoiMot, thoiDiemGhiBanToiDa,
       maDoiHai, tenDoiMot, tenDoiHai, cauThuDoiMotOption, cauThuDoiHaiOption,
-      doiOption } : Props = $props();
+      doiOption, isEditable } : Props = $props();
 
   const sortDSBT = (a: BanThang, b : BanThang) => a.thoiDiem - b.thoiDiem;
   let danhSachBanThang = $state(dsBanThang.concat());
@@ -158,11 +159,14 @@
   redirectParam={""}
   tableType=""
   onEditClick={onEditClick}
+  isEditable={isEditable}
 />
 
+{#if isEditable}
 <div class="flex justify-center">
   <ButtonPrimary text={"Thêm bàn thắng mới"} onclick={() => formState = true} />
 </div>
+{/if}
 
 <Form 
   onOpenForm={onOpenForm}
