@@ -1,5 +1,5 @@
-import { validateSessionToken } from "$lib/server/db/functions/Session";
-import { deleteSessionTokenCookie, setSessionTokenCookie } from "$lib/server/db/functions/Session";
+
+import { deleteSessionTokenCookie, setSessionTokenCookie, validateSessionToken } from "$lib/server/db/functions/User/Session";
 import type { MuaGiai } from "$lib/typesDatabase";
 import { redirect, type Handle } from "@sveltejs/kit";
 

@@ -1,8 +1,8 @@
 import { hashPassword } from "$lib/server/auth/password";
 import { eq } from "drizzle-orm";
-import { db } from "../client";
 import type { User } from "$lib/typesAuth";
-import { UserTable } from "../schema/User/User";
+import { UserTable } from "../../schema/User/User";
+import { db } from "../../client";
 
 export const verifyUsernameInput = (userName: string) : boolean => {
   return userName.length > 3 && userName.length < 32 && userName.trim() == userName;
@@ -23,16 +23,11 @@ export const createUser = async (email: string, username: string, password: stri
     email: email,
     username: username,
     passwordHash: passwordHash,
-  }).returning({ id : UserTable.id });
+  }).returning();
   const userId = ids.at(0) ?? null;
   if (userId === null)
     throw new Error("Không thể tạo user");
-  return {
-    id: userId.id,
-    username: username,
-    email: email,
-    role: 0
-  } satisfies User;
+  return userId satisfies User;
 }
 
 export const updateUserPassword = async (userId: number, password: string) : Promise<void> => {
@@ -42,11 +37,13 @@ export const updateUserPassword = async (userId: number, password: string) : Pro
 
 export const updateUser = async(user: User) => {
   await db.update(UserTable)
-    .set({ username: user.username, email: user.email, role: user.role }).where(eq(UserTable.id, user.id));
+    .set({ username: user.username, email: user.email, groupId: user.groupId }).where(eq(UserTable.id, user.id));
 }
 
 export const selectUserPasswordHash = async (userId: number) => {
-  const user = (await db.select({ passwordHash: UserTable.passwordHash }).from(UserTable).where(eq(UserTable.id, userId)).limit(1)).at(0) ?? null;
+  const user = (await db.select({ passwordHash: UserTable.passwordHash })
+    .from(UserTable)
+    .where(eq(UserTable.id, userId)).limit(1)).at(0) ?? null;
   if (user === null)
     throw new Error("Invalid userId");
   return user.passwordHash;
@@ -59,7 +56,7 @@ export const selectUserFromEmail = async (email : string) => {
 export const selectAllUser = async() => {
   let result = (await db.select().from(UserTable))
     .map((user) => { 
-      return ({ id: user.id, username: user.username, email: user.email, role: user.role } satisfies User) 
+      return ({ id: user.id, username: user.username, email: user.email, groupId: user.groupId } satisfies User) 
     });
   // Remove admin from Profile edit
   const first = result.at(0) ?? null;

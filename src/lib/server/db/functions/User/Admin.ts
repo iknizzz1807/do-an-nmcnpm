@@ -1,13 +1,12 @@
 import { eq } from "drizzle-orm";
 import { getRandomUUID } from "$lib/server/utils";
-import { db } from "../client";
-import { hashPassword } from "$lib/server/auth/password";
+import { verifyPasswordHash } from "$lib/server/auth/password";
 import { password as adminPassword } from "$lib/server/secretPassword.json";
-import { UserTable } from "../schema/User/User";
+import { UserTable } from "../../schema/User/User";
+import { db } from "../../client";
 
 export const checkPasswordAdmin = async (password: string) => {
-  const passwordHash = await hashPassword(password);
-  return (passwordHash === adminPassword);
+  return verifyPasswordHash(adminPassword, password);
 }
 
 export const loginAdmin = async () => {
@@ -27,7 +26,7 @@ export const createAdmin = async() => {
     email: getRandomUUID(), 
     username: "Admin", 
     passwordHash: getRandomUUID(), 
-    role: -1 
+    groupId: 0 
   });
   return (await db.select().from(UserTable).where(eq(UserTable.id, 0))).at(0)!!;
 

@@ -1,8 +1,8 @@
 import { verifyPasswordHash } from "$lib/server/auth/password";
 import { Throttler } from "$lib/server/auth/throttler";
 import { TokenBucketRateLimit } from "$lib/server/auth/tokenbucket";
-import { createSession, generateSessionToken, setSessionTokenCookie } from "$lib/server/db/functions/Session";
-import { selectUserFromEmail, selectUserPasswordHash, verifyEmailInput } from "$lib/server/db/functions/User";
+import { createSession, generateSessionToken, setSessionTokenCookie } from "$lib/server/db/functions/User/Session";
+import { selectUserFromEmail, selectUserPasswordHash, verifyEmailInput } from "$lib/server/db/functions/User/User";
 import { redirect } from "@sveltejs/kit";
 import { fail, type Actions } from "@sveltejs/kit"
 

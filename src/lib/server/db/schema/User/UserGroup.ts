@@ -4,3 +4,5 @@ export const UserGroupTable = sqliteTable("UserGroup", {
   groupId: integer().notNull().primaryKey({ autoIncrement: true }),
   groupName: text().notNull(),
 });
+
+export type UserGroupInsertParams = typeof UserGroupTable.$inferInsert;

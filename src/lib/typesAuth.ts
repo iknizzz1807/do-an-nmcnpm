@@ -3,7 +3,7 @@ export type User = {
     id: number;
     email: string;
     username: string;
-    role: number;
+    groupId: number;
 }
 
 export type UserRole = {

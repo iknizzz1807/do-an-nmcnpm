@@ -2,19 +2,27 @@ import { sha1 } from "@oslojs/crypto/sha1";
 import { hash, verify } from "argon2";
 import { encodeHexLowerCase } from "@oslojs/encoding";
 
-export function hashPassword(password: string): string {
-  return encodeHexLowerCase(sha1(new TextEncoder().encode(password)));
-  // return await hash(password, {
-	// 	memoryCost: 19456,
-	// 	timeCost: 2,
-	// 	hashLength: 32,
-	// 	parallelism: 1
-	// });
+export async function hashPassword(password: string): Promise<string> {
+  // return encodeHexLowerCase(sha1(new TextEncoder().encode(password)));
+  return await hash(password, {
+		memoryCost: 19456,
+		timeCost: 2,
+		hashLength: 32,
+		parallelism: 1
+	});
 }
 
+// Get the password hash compare it to the input raw password
+// Please don't do this
+/*
+const passwordHash = await hashPassword(password);
+verifyPasswordHash(passwordHash, password)
+
+this will always return true im stupid
+*/
 export async function verifyPasswordHash(hash: string, password: string): Promise<boolean> {
-	return true;
-  // return await verify(hash, password);
+	// return true;
+  return await verify(hash, password);
 }
 
 export async function verifyPasswordStrength(password: string): Promise<boolean> {
