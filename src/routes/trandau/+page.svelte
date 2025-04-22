@@ -1,7 +1,7 @@
 <script lang="ts">
   import Table from "$lib/components/Table.svelte";
   import type { PageProps } from "./$types";
-  import type { DoiBong, DSMuaGiai, LichThiDau } from "$lib/typesDatabase";
+  import type { DoiBong, MuaGiai, LichThiDau } from "$lib/typesDatabase";
   import ButtonPrimary from "$lib/components/ButtonPrimary.svelte";
   import { showErrorToast, showOkToast } from "$lib/components/Toast";
   import { type FieldOption, type FormField, type FormInputMap } from "$lib/components/Form.svelte";
@@ -12,7 +12,7 @@
 
   let danhSachLTD: LichThiDau[] = $state(data.danhSachLTD);
   const danhSachDoi : DoiBong[] = $state(data.danhSachDoi);
-  const danhSachMuaGiai : DSMuaGiai[] = $state(data.danhSachMuaGiai);
+  const danhSachMuaGiai : MuaGiai[] = $state(data.danhSachMuaGiai);
 
   for (const ltd of danhSachLTD) {
     let tenDoiThang = danhSachDoi.find((value) => value.maDoi == ltd.doiThang)?.tenDoi ?? null;
@@ -32,7 +32,7 @@
   const formFields: FormField[] = [
     { label: "Đội một", propertyName: "doiMot", type: "select", valueType: "number", options: doiOption},
     { label: "Đội hai", propertyName: "doiHai", type: "select", valueType: "number", options: doiOption},
-    { label: "Vòng thi đấu", propertyName: "vongThiDau", type: "select", valueType: "number", 
+    { label: "Vòng thi đấu", propertyName: "maVTD", type: "select", valueType: "number", 
       options: [ { optionValue: 1, optionName: "1" }, {optionValue: 2, optionName: "2"}]},
     { label: "Đội thắng", propertyName: "doiThang", type: "select", valueType: "number", 
       options: 
@@ -49,7 +49,7 @@
   const columns = [
     { header: "Đội Một", accessor: "tenDoiMot" },
     { header: "Đội Hai", accessor: "tenDoiHai" },
-    { header: "Vòng thi đấu", accessor: "vongThiDau" },
+    { header: "Vòng thi đấu", accessor: "maVTD" },
     { header: "Mã mùa giải", accessor: "tenMG" },
     { header: "Đội thắng", accessor: "tenDoiThang" },
     { header: "Ngày giờ", accessor: "ngayGio", 
@@ -79,7 +79,7 @@
       editData.set("maTD", data.maTD ?? null);
       editData.set("doiMot", data.doiMot);
       editData.set("doiHai", data.doiHai);
-      editData.set("vongThiDau", data.vongThiDau);
+      editData.set("maVTD", data.maVTD);
       editData.set("doiThang", data.doiThang ?? null);
       editData.set("maMG", data.maMG);
       editData.set("ngayGio", new Date(data.ngayGio ?? ""));
@@ -110,7 +110,7 @@
     }
 
     if (data.doiMot === 0 || data.doiHai === 0 ||
-        data.vongThiDau === 0 || data.maMG === 0
+        data.maVTD === 0 || data.maMG === 0
     ) return;
     
     try {
@@ -145,7 +145,7 @@
     }
 
     if (data.doiMot === 0 || data.doiHai === 0 ||
-        data.vongThiDau === 0 || data.maMG === 0
+        data.maVTD === 0 || data.maMG === 0
     ) return;
     
     console.log(editData);

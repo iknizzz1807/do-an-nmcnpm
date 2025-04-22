@@ -5,6 +5,7 @@ import { DoiBongTable } from "../schema/DoiBong";
 import { CauThuTable } from "../schema/CauThu";
 import { BanThangTable } from "../schema/BanThang";
 import type { BangXepHangNgay } from "$lib/typesResponse";
+import { ThamGiaTDTable } from "../schema/ThamGiaTD";
 
 export const selectBXHDoiNgay = async (ngay: Date) => {
   // Tat ca cac doi co tran co trung
@@ -14,7 +15,7 @@ export const selectBXHDoiNgay = async (ngay: Date) => {
     doiMot: LichThiDauTable.doiMot,
     doiHai: LichThiDauTable.doiHai
     }).from(LichThiDauTable)
-    .where(sql`date(${LichThiDauTable.ngayGio}) = date(${ngay.toJSON()})`)
+    .where(sql`date(${LichThiDauTable.ngayGioThucTe}) = date(${ngay.toJSON()})`)
     .groupBy(LichThiDauTable.doiMot, LichThiDauTable.doiHai);
 
   // Chuyen no thanh set
@@ -56,17 +57,18 @@ export const selectBXHDoiNgay = async (ngay: Date) => {
 
 export const selectCauThuGhiBan = async (ngay: Date, maDoi : number) => {
   const lichThiDaus = (await db.select({ maTD: LichThiDauTable.maTD}).from(LichThiDauTable).where(and(
-      sql`date(${LichThiDauTable.ngayGio}) = date(${ngay.toJSON()})`,
+      sql`date(${LichThiDauTable.ngayGioThucTe}) = date(${ngay.toJSON()})`,
       or(
         eq(LichThiDauTable.doiMot, maDoi), 
         eq(LichThiDauTable.doiHai, maDoi)
       )
     ))).map((val => val.maTD));
   const cauThus = await db.select({ maCT: BanThangTable.maCT }).from(BanThangTable)
+    .innerJoin(ThamGiaTDTable, and(eq(ThamGiaTDTable.maTD, BanThangTable.maTD), eq(ThamGiaTDTable.maCT, BanThangTable.maCT)))
     .where(
       and(
         inArray(BanThangTable.maTD, lichThiDaus), 
-        eq(BanThangTable.maDoi, maDoi)
+        eq(ThamGiaTDTable.maDoi, maDoi)
       )
     )
     .groupBy(BanThangTable.maCT);
@@ -77,7 +79,7 @@ export const selectCauThuGhiBan = async (ngay: Date, maDoi : number) => {
       tenCT: CauThuTable.tenCT,
       maDoi: DoiBongTable.maDoi,
       tenDoi: DoiBongTable.tenDoi,
-      loaiCT: CauThuTable.loaiCT,
+      maLCT: CauThuTable.maLCT,
       soBanThang: db.$count(BanThangTable, 
         and(eq(BanThangTable.maCT, cauThu.maCT), 
             inArray(BanThangTable.maTD, lichThiDaus)

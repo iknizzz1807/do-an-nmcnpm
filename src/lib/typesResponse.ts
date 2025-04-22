@@ -12,7 +12,7 @@ export type KetQuaThiDau = {
 export type KQTraCuuCauThu = {
   tenCT: string,
   tenDoi: string,
-  loaiCT: number,
+  maLCT: number,
   tongSoBanThang: number
 }
 
@@ -32,7 +32,7 @@ export type CauThuGhiBan = {
   maDoi: number;
   tenCT: string;
   tenDoi: string;
-  loaiCT: number;
+  maLCT: number;
   soBanThang: number;
 }
 

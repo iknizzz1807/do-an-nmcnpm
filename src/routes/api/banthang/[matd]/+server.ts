@@ -31,14 +31,14 @@ export const POST : RequestHandler = async({ request, locals, params } : { reque
       maCT: data.oldBanThang.maCT,
       maDoi: data.oldBanThang.maDoi,
       thoiDiem: data.oldBanThang.thoiDiem,
-      loaiBanThang: data.oldBanThang.loaiBanThang
+      maLBT: data.oldBanThang.maLBT
     },
     newBanThang: {
       maTD: parseInt(params.matd),
       maCT: data.newBanThang.maCT,
       maDoi: data.newBanThang.maDoi,
       thoiDiem: data.newBanThang.thoiDiem,
-      loaiBanThang: data.newBanThang.loaiBanThang,
+      maLBT: data.newBanThang.maLBT,
     }
   };
   
@@ -69,7 +69,7 @@ export const DELETE : RequestHandler = async({ request, locals } : { request: Re
       maCT: data.maCT,
       maDoi: data.maDoi,
       thoiDiem: data.thoiDiem,
-      loaiBanThang: data.loaiBanThang
+      maLBT: data.maLBT
     };
     await deleteBanThang(banThang);
     return new Response(JSON.stringify(banThang), {

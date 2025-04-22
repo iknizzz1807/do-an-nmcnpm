@@ -1,7 +1,8 @@
 import type { ThePhat } from '$lib/typesDatabase';
 import { db } from '../client';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, getTableColumns } from 'drizzle-orm';
 import { ThePhatTable } from '../schema/ThePhat';
+import { ThamGiaTDTable } from '../schema/ThamGiaTD';
 
 export const insertThePhat = async (...thePhat: ThePhat[]) => {
     await db.insert(ThePhatTable).values(thePhat);
@@ -14,9 +15,8 @@ export const updateThePhat = async(oldThePhat: ThePhat, thePhat: ThePhat) => {
     await db.update(ThePhatTable).set({
         maTD: thePhat.maTD,
         maCT: thePhat.maCT,
-        maDoi: thePhat.maDoi,
         thoiDiem: thePhat.thoiDiem,
-        loaiThe: thePhat.loaiThe
+        maLTP: thePhat.maLTP
     }).where(and(eq(ThePhatTable.maTD, oldThePhat.maTD!!), 
             eq(ThePhatTable.maCT, oldThePhat.maCT), 
             eq(ThePhatTable.thoiDiem, oldThePhat.thoiDiem)));
@@ -34,5 +34,12 @@ export const selectAllThePhat = async() => {
 }
 
 export const selectThePhat = async(maTD: number) => {
-    return (await db.select().from(ThePhatTable).where(eq(ThePhatTable.maTD, maTD))) satisfies ThePhat[];
+    return (await db.select({
+        ...getTableColumns(ThePhatTable),
+        maDoi: ThamGiaTDTable.maDoi,
+    })
+    .from(ThePhatTable)
+    .innerJoin(ThamGiaTDTable, and(eq(ThamGiaTDTable.maCT, ThePhatTable.maCT), eq(ThamGiaTDTable.maTD, ThePhatTable.maTD)))
+    .where(eq(ThePhatTable.maTD, maTD))
+    .groupBy(ThePhatTable.maTD, ThePhatTable.maCT)) satisfies ThePhat[];
 }

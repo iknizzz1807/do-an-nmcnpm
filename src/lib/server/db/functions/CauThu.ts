@@ -21,10 +21,10 @@ export const updateCauThu = async(cauThu: CauThu) => {
     throw new Error("maCT không tồn tại");
   await db.update(CauThuTable).set({
       tenCT: cauThu.tenCT,
-      loaiCT: cauThu.loaiCT,
+      maLCT: cauThu.maLCT,
       ghiChu: cauThu.ghiChu,
-      nuocNgoai: cauThu.nuocNgoai,
-      ngaySinh: cauThu.ngaySinh
+      ngaySinh: cauThu.ngaySinh,
+      maDoi: cauThu.maDoi
   }).where(eq(CauThuTable.maCT, cauThu.maCT!!));
 }
 
@@ -53,20 +53,13 @@ export const selectCauThuTen = async (tenCT: string) => {
     .where(ilike(CauThuTable.maCT, tenCT))) satisfies CauThu[];
 };
 
-export const selectCauThuDoiBong = async (maMG: number, maDoi: number) => {
+export const selectCauThuDoiBong = async (maDoi: number) => {
   return await db
     .select({
       ...getTableColumns(CauThuTable)
     })
     .from(CauThuTable)
-    .innerJoin(
-      ThamGiaDBTable,
-      and(
-        eq(ThamGiaDBTable.maCT, CauThuTable.maCT),
-        eq(ThamGiaDBTable.maMG, maMG),
-        eq(ThamGiaDBTable.maDoi, maDoi)
-      )
-    )
+    .where(eq(CauThuTable.maDoi, maDoi))
 };
 
 export const traCuuCauThu = async (tenCT: string) => {
@@ -85,7 +78,7 @@ export const traCuuCauThu = async (tenCT: string) => {
     ketQua.push({
       tenCT: value.CauThu.tenCT,
       tenDoi: value.DoiBong.tenDoi,
-      loaiCT: value.CauThu.loaiCT,
+      maLCT: value.CauThu.maLCT,
       tongSoBanThang: tongSoBanThang,
     });
   });

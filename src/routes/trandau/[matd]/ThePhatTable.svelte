@@ -36,7 +36,7 @@
     { header: "Cầu thủ", accessor: "tenCT" },
     { header: "Đội", accessor: "tenDoi" },
     { header: "Thời điểm", accessor: "thoiDiem" },
-    { header: "Loại thẻ", accessor: "loaiThe" },
+    { header: "Loại thẻ", accessor: "maLTP" },
   ];
   
   const formFields: FormField[] = [
@@ -51,8 +51,8 @@
       }
     },
     { label: "Thời điểm", propertyName: "thoiDiem", type: "input", valueType: "number" },
-    { label: "Loại thẻ phạt", propertyName: "loaiThe", type: "select", valueType: "string", 
-      options: [ { optionValue: "Vang", optionName: "Vàng" }, {optionValue: "Do", optionName: "Đỏ"}]},
+    { label: "Loại thẻ phạt", propertyName: "maLTP", type: "select", valueType: "number", 
+      options: [ { optionValue: 1, optionName: "Vàng" }, {optionValue: 2, optionName: "Đỏ"}]},
   ];
 
   onMount(() => {

@@ -3,18 +3,18 @@
   import Table from "$lib/components/Table.svelte";
   import type { PageProps } from "./$types";
   import { showErrorToast, showOkToast } from "$lib/components/Toast";
-  import type { DSMuaGiai } from "$lib/typesDatabase";
+  import type { MuaGiai } from "$lib/typesDatabase";
   import Form, { type FormField, type FormInputMap } from "$lib/components/Form.svelte";
   import { SvelteMap } from "svelte/reactivity";
   let { data }: PageProps = $props();
 
-  let danhSachMuaGiai: DSMuaGiai[] = $state(data.danhSachMuaGiai);
+  let danhSachMuaGiai: MuaGiai[] = $state(data.danhSachMuaGiai);
 
   const columns = [
     { header: "", accessor: "maMG", hidden: true},
     { header: "Tên mùa giải", accessor: "tenMG" },
     { header: "Ngày diễn ra", accessor: "ngayDienRa",
-      accessFunction: (data: DSMuaGiai) => new Date(data.ngayDienRa!!).toLocaleDateString() }
+      accessFunction: (data: MuaGiai) => new Date(data.ngayDienRa!!).toLocaleDateString() }
   ];
 
   const formFields : FormField[] = [
@@ -36,8 +36,8 @@
     editData.clear();
   }
 
-  const onEditClick =  (data: DSMuaGiai, index: number) => {
-    if (data satisfies DSMuaGiai) {
+  const onEditClick =  (data: MuaGiai, index: number) => {
+    if (data satisfies MuaGiai) {
       editData.clear();
       editData.set("maMG", data.maMG ?? null);
       editData.set("tenMG", data.tenMG);
@@ -52,16 +52,16 @@
   }
 
   const onDeleteClick = async (data : any, index: number) => {
-    if (data satisfies DSMuaGiai) {
+    if (data satisfies MuaGiai) {
       selectedIndex = index;
-      await deleteDSMuaGiai(data);
+      await deleteMuaGiai(data);
     }
     else {
       console.error("Data không thỏa mãn loại CauThu");
     }
   }
 
-  const onItemClick = async (data: DSMuaGiai, index: number) => {
+  const onItemClick = async (data: MuaGiai, index: number) => {
     try {
       
       const response = await fetch('api/selectmuagiai', {
@@ -80,14 +80,14 @@
     }
   }
 
-  const submitDSMuaGiai = async (e: Event, data : DSMuaGiai) => {
+  const submitMuaGiai = async (e: Event, data : MuaGiai) => {
     e.preventDefault();
     if (data.tenMG.trim() === "" ) return;
 
     if (
       danhSachMuaGiai.some(
-        (DSMuaGiai) =>
-          DSMuaGiai.tenMG.trim().toLowerCase() ===
+        (MuaGiai) =>
+          MuaGiai.tenMG.trim().toLowerCase() ===
           data.tenMG.trim().toLowerCase()
       )
     ) {
@@ -125,7 +125,7 @@
     }
   };
 
-  const deleteDSMuaGiai = async (data : DSMuaGiai) => {
+  const deleteMuaGiai = async (data : MuaGiai) => {
     if ((data.maMG ?? null) === null) {
       showErrorToast("Không thể xóa tại -1");
       return;
@@ -178,7 +178,7 @@
 <Form 
   bind:formState={formState}
   fields={formFields}
-  submitForm={submitDSMuaGiai}
+  submitForm={submitMuaGiai}
   onCloseForm={onCloseForm}
   onOpenForm={onOpenForm}
 />

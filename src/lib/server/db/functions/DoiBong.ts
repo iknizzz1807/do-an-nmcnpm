@@ -6,7 +6,7 @@ import { BanThangTable } from "../schema/BanThang";
 import { LichThiDauTable } from "../schema/LichThiDau";
 import { ThamGiaDBTable } from "../schema/ThamGiaDB";
 import { ThePhatTable } from "../schema/ThePhat";
-import { SanNhaTable } from "../schema/SanNha";
+import { SanNhaTable } from "../schema/Data/SanNha";
 
 export const insertDoiBong = async (...doiBong: DoiBong[]) => {
   let returning = await db.insert(DoiBongTable).values(doiBong).returning({ id: DoiBongTable.maDoi });
@@ -36,6 +36,10 @@ export const deleteDoiBong = async(maDoi: number) => {
   // await db.delete(ThamGiaDBTable).where(eq(ThamGiaDBTable.maDoi, maDoi));
   await db.delete(DoiBongTable).where(eq(DoiBongTable.maDoi, maDoi));
 }
+
+export const selectDoiBongMuaGiai = async (maMG: number) => {
+  return (await db.select().from(DoiBongTable).where(eq(DoiBongTable.maMG, maMG))) satisfies DoiBong[];
+};
 
 export const selectAllDoiBong = async () => {
   return (await db.select().from(DoiBongTable)) satisfies DoiBong[];

@@ -9,56 +9,56 @@ const createBTBackupTrigger = async() => {
       CREATE TRIGGER IF NOT EXISTS TRGD_BT_BACKUP
       AFTER DELETE ON BanThang
       BEGIN
-      INSERT INTO BanThangBackup(modifiedDate, maTD, maCT, maDoi, thoiDiem, loaiBanThang)
-      VALUES(datetime('now'), OLD.maTD, OLD.maCT, OLD.maDoi, OLD.thoiDiem, OLD.loaiBanThang);
+      INSERT INTO BanThangBackup(modifiedDate, maTD, maCT, maDoi, thoiDiem, maLBT)
+      VALUES(datetime('now'), OLD.maTD, OLD.maCT, OLD.maDoi, OLD.thoiDiem, OLD.maLBT);
       END
       `);
       tx.run(sql`
       CREATE TRIGGER IF NOT EXISTS TRGU_BT_BACKUP
       AFTER UPDATE ON BanThang
       BEGIN
-      INSERT INTO BanThangBackup(modifiedDate, maTD, maCT, maDoi, thoiDiem, loaiBanThang)
-      VALUES(datetime('now'), OLD.maTD, OLD.maCT, OLD.maDoi, OLD.thoiDiem, OLD.loaiBanThang);
+      INSERT INTO BanThangBackup(modifiedDate, maTD, maCT, maDoi, thoiDiem, maLBT)
+      VALUES(datetime('now'), OLD.maTD, OLD.maCT, OLD.maDoi, OLD.thoiDiem, OLD.maLBT);
       END
       `);
       // Trigger check Cầu thủ ghi bàn có thuộc đội ghi bàn không
-      tx.run(sql`
-      CREATE TRIGGER IF NOT EXISTS TRGI_BT_CTDOI
-      AFTER INSERT ON BanThang
-      WHEN NOT EXISTS(SELECT 1 FROM ThamGiaDB AS TGDB 
-                  WHERE NEW.maCT=TGDB.maCT AND NEW.maDoi=TGDB.maDoi)
-      BEGIN
-          SELECT RAISE(ABORT, 'Cau thu ghi ban thang phai thuoc doi do');
-      END;
-      `);
-      tx.run(sql`
-      CREATE TRIGGER IF NOT EXISTS TRGU_BT_CTDOI
-      AFTER UPDATE ON BanThang
-      WHEN NOT EXISTS(SELECT 1 FROM ThamGiaDB AS TGDB 
-                  WHERE NEW.maCT=TGDB.maCT AND NEW.maDoi=TGDB.maDoi)
-      BEGIN
-          SELECT RAISE(ABORT, 'Cau thu ghi ban thang phai thuoc doi do');
-      END;
-      `);
-      // Trigger cho đội ghi bàn thắng phải thuộc đội trong lịch thi đâu
-      tx.run(sql`
-      CREATE TRIGGER IF NOT EXISTS TRGI_BT_DOILTD
-      AFTER INSERT ON BanThang
-      WHEN NOT EXISTS(SELECT 1 FROM LichThiDau AS LTD
-          WHERE LTD.maTD=NEW.maTD AND (LTD.doiMot=NEW.maDoi OR LTD.doiHai=NEW.maDoi))
-      BEGIN
-          SELECT RAISE(ABORT, 'Doi ghi ban phai thuoc mot trong hai doi cua lich thi dau');
-      END;
-      `);
-      tx.run(sql`
-      CREATE TRIGGER IF NOT EXISTS TRGU_BT_DOILTD
-      AFTER UPDATE ON BanThang
-      WHEN NOT EXISTS(SELECT 1 FROM LichThiDau AS LTD
-          WHERE LTD.maTD=NEW.maTD AND (LTD.doiMot=NEW.maDoi OR LTD.doiHai=NEW.maDoi))
-      BEGIN
-          SELECT RAISE(ABORT, 'Doi ghi ban phai thuoc mot trong hai doi cua lich thi dau');
-      END;
-      `);
+    //   tx.run(sql`
+    //   CREATE TRIGGER IF NOT EXISTS TRGI_BT_CTDOI
+    //   AFTER INSERT ON BanThang
+    //   WHEN NOT EXISTS(SELECT 1 FROM ThamGiaDB AS TGDB 
+    //               WHERE NEW.maCT=TGDB.maCT AND NEW.maDoi=TGDB.maDoi)
+    //   BEGIN
+    //       SELECT RAISE(ABORT, 'Cau thu ghi ban thang phai thuoc doi do');
+    //   END;
+    //   `);
+    //   tx.run(sql`
+    //   CREATE TRIGGER IF NOT EXISTS TRGU_BT_CTDOI
+    //   AFTER UPDATE ON BanThang
+    //   WHEN NOT EXISTS(SELECT 1 FROM ThamGiaDB AS TGDB 
+    //               WHERE NEW.maCT=TGDB.maCT AND NEW.maDoi=TGDB.maDoi)
+    //   BEGIN
+    //       SELECT RAISE(ABORT, 'Cau thu ghi ban thang phai thuoc doi do');
+    //   END;
+    //   `);
+    //   // Trigger cho đội ghi bàn thắng phải thuộc đội trong lịch thi đâu
+    //   tx.run(sql`
+    //   CREATE TRIGGER IF NOT EXISTS TRGI_BT_DOILTD
+    //   AFTER INSERT ON BanThang
+    //   WHEN NOT EXISTS(SELECT 1 FROM LichThiDau AS LTD
+    //       WHERE LTD.maTD=NEW.maTD AND (LTD.doiMot=NEW.maDoi OR LTD.doiHai=NEW.maDoi))
+    //   BEGIN
+    //       SELECT RAISE(ABORT, 'Doi ghi ban phai thuoc mot trong hai doi cua lich thi dau');
+    //   END;
+    //   `);
+    //   tx.run(sql`
+    //   CREATE TRIGGER IF NOT EXISTS TRGU_BT_DOILTD
+    //   AFTER UPDATE ON BanThang
+    //   WHEN NOT EXISTS(SELECT 1 FROM LichThiDau AS LTD
+    //       WHERE LTD.maTD=NEW.maTD AND (LTD.doiMot=NEW.maDoi OR LTD.doiHai=NEW.maDoi))
+    //   BEGIN
+    //       SELECT RAISE(ABORT, 'Doi ghi ban phai thuoc mot trong hai doi cua lich thi dau');
+    //   END;
+    //   `);
   });
 }
 createBTBackupTrigger()// .catch(console.error); // This may cause some horrible error in the future
@@ -70,16 +70,16 @@ const createCTBackupTrigger = async() => {
       CREATE TRIGGER IF NOT EXISTS TRGD_CT_BACKUP
       AFTER DELETE ON CauThu
       BEGIN
-          INSERT INTO CauThuBackup(modifiedDate, maCT, tenCT, ngaySinh, loaiCT, ghiChu, nuocNgoai)
-          VALUES(datetime('now'), OLD.maCT, OLD.tenCT, OLD.ngaySinh, OLD.loaiCT, OLD.ghiChu, OLD.nuocNgoai);
+          INSERT INTO CauThuBackup(modifiedDate, maCT, tenCT, ngaySinh, maLCT, ghiChu)
+          VALUES(datetime('now'), OLD.maCT, OLD.tenCT, OLD.ngaySinh, OLD.maLCT, OLD.ghiChu);
       END
       `);
       tx.run(sql`
       CREATE TRIGGER IF NOT EXISTS TRGU_CT_BACKUP
       AFTER UPDATE ON CauThu
       BEGIN
-          INSERT INTO CauThuBackup(modifiedDate, maCT, tenCT, ngaySinh, loaiCT, ghiChu, nuocNgoai)
-          VALUES(datetime('now'), OLD.maCT, OLD.tenCT, OLD.ngaySinh, OLD.loaiCT, OLD.ghiChu, OLD.nuocNgoai);
+          INSERT INTO CauThuBackup(modifiedDate, maCT, tenCT, ngaySinh, maLCT, ghiChu)
+          VALUES(datetime('now'), OLD.maCT, OLD.tenCT, OLD.ngaySinh, OLD.maLCT, OLD.ghiChu);
       END
       `);
       // // Check tuoi
@@ -135,22 +135,22 @@ createDBBackupTrigger()// .catch(console.error); // This may cause some horrible
 
 
 const createDSMGBackupTrigger = async() => {
-  // DSMuaGiai
+  // MuaGiai
   await db.transaction(async (tx) => {
       tx.run(sql`
       CREATE TRIGGER IF NOT EXISTS TRGD_DSMG_BACKUP
-      AFTER DELETE ON DSMuaGiai
+      AFTER DELETE ON MuaGiai
       BEGIN
-          INSERT INTO DSMuaGiaiBackup(modifiedDate, maMG, tenMG, ngayDienRa)
-          VALUES(datetime('now'), OLD.maMG, OLD.tenMG, OLD.ngayDienRa);
+          INSERT INTO MuaGiaiBackup(modifiedDate, maMG, tenMG, ngayDienRa, ngayKetThuc)
+          VALUES(datetime('now'), OLD.maMG, OLD.tenMG, OLD.ngayDienRa, OLD.ngayKetThuc);
       END
       `);
       tx.run(sql`
       CREATE TRIGGER IF NOT EXISTS TRGU_DSMG_BACKUP
-      AFTER UPDATE ON DSMuaGiai
+      AFTER UPDATE ON MuaGiai
       BEGIN
-          INSERT INTO DSMuaGiaiBackup(modifiedDate, maMG, tenMG, ngayDienRa)
-          VALUES(datetime('now'), OLD.maMG, OLD.tenMG, OLD.ngayDienRa);
+          INSERT INTO MuaGiaiBackup(modifiedDate, maMG, tenMG, ngayDienRa, ngayKetThuc)
+          VALUES(datetime('now'), OLD.maMG, OLD.tenMG, OLD.ngayDienRa, OLD.ngayKetThuc);
       END
       `);
   });
@@ -165,16 +165,16 @@ await db.transaction(async (tx) => {
     CREATE TRIGGER IF NOT EXISTS TRGD_LTD_BACKUP
     AFTER DELETE ON LichThiDau
     BEGIN
-    INSERT INTO LichThiDauBackup(modifiedDate, maTD, doiMot, doiHai, ngayGio, vongThiDau, maMG, doiThang)
-    VALUES(datetime('now'), OLD.maTD, OLD.doiMot, OLD.doiHai, OLD.ngayGio, OLD.vongThiDau, OLD.maMG, OLD.doiThang);
+    INSERT INTO LichThiDauBackup(modifiedDate, maTD, doiMot, doiHai, ngayGio, maVTD, maMG, maSan, doiThang)
+    VALUES(datetime('now'), OLD.maTD, OLD.doiMot, OLD.doiHai, OLD.ngayGio, OLD.maVTD, OLD.maMG, OLD.maSan, OLD.doiThang);
     END
     `);
     tx.run(sql`
     CREATE TRIGGER IF NOT EXISTS TRGU_LTD_BACKUP
     AFTER UPDATE ON LichThiDau
     BEGIN
-    INSERT INTO LichThiDauBackup(modifiedDate, maTD, doiMot, doiHai, ngayGio, vongThiDau, maMG, doiThang)
-    VALUES(datetime('now'), OLD.maTD, OLD.doiMot, OLD.doiHai, OLD.ngayGio, OLD.vongThiDau, OLD.maMG, OLD.doiThang);
+    INSERT INTO LichThiDauBackup(modifiedDate, maTD, doiMot, doiHai, ngayGio, maVTD, maMG, maSan, doiThang)
+    VALUES(datetime('now'), OLD.maTD, OLD.doiMot, OLD.doiHai, OLD.ngayGio, OLD.maVTD, OLD.maMG, OLD.maSan, OLD.doiThang);
     END
     `);
 });
@@ -292,56 +292,173 @@ const createTPBackupTrigger = async() => {
       CREATE TRIGGER IF NOT EXISTS TRGD_TP_BACKUP
       AFTER DELETE ON ThePhat
       BEGIN
-      INSERT INTO ThePhatBackup(modifiedDate, maTD, maCT, maDoi, thoiDiem, loaiThe)
-      VALUES(datetime('now'), OLD.maTD, OLD.maCT, OLD.maDoi, OLD.thoiDiem, OLD.loaiThe);
+      INSERT INTO ThePhatBackup(modifiedDate, maTD, maCT, thoiDiem, maLTP)
+      VALUES(datetime('now'), OLD.maTD, OLD.maCT, OLD.thoiDiem, OLD.maLTP);
       END
       `);
       tx.run(sql`
       CREATE TRIGGER IF NOT EXISTS TRGU_TP_BACKUP
       AFTER UPDATE ON ThePhat
       BEGIN
-      INSERT INTO ThePhatBackup(modifiedDate, maTD, maCT, maDoi, thoiDiem, loaiThe)
-      VALUES(datetime('now'), OLD.maTD, OLD.maCT, OLD.maDoi, OLD.thoiDiem, OLD.loaiThe);
+      INSERT INTO ThePhatBackup(modifiedDate, maTD, maCT, thoiDiem, maLTP)
+      VALUES(datetime('now'), OLD.maTD, OLD.maCT, OLD.thoiDiem, OLD.maLTP);
       END
       `);
       // Trigger check Cầu thủ bị phạt có thuộc đội bị phạt không
-      tx.run(sql`
-      CREATE TRIGGER IF NOT EXISTS TRGI_TP_CTDOI
-      AFTER INSERT ON ThePhat
-      WHEN NOT EXISTS(SELECT 1 FROM ThamGiaDB AS TGDB 
-                  WHERE NEW.maCT=TGDB.maCT AND NEW.maDoi=TGDB.maDoi)
-      BEGIN
-          SELECT RAISE(ABORT, 'Cau thu ghi bi phat phai thuoc doi do');
-      END;
-      `);
-      tx.run(sql`
-      CREATE TRIGGER IF NOT EXISTS TRGU_TP_CTDOI
-      AFTER UPDATE ON ThePhat
-      WHEN NOT EXISTS(SELECT 1 FROM ThamGiaDB AS TGDB 
-                  WHERE NEW.maCT=TGDB.maCT AND NEW.maDoi=TGDB.maDoi)
-      BEGIN
-          SELECT RAISE(ABORT, 'Cau thu ghi bi phat phai thuoc doi do');
-      END;
-      `);
+    //   tx.run(sql`
+    //   CREATE TRIGGER IF NOT EXISTS TRGI_TP_CTDOI
+    //   AFTER INSERT ON ThePhat
+    //   WHEN NOT EXISTS(SELECT 1 FROM ThamGiaDB AS TGDB 
+    //               WHERE NEW.maCT=TGDB.maCT AND NEW.maDoi=TGDB.maDoi)
+    //   BEGIN
+    //       SELECT RAISE(ABORT, 'Cau thu ghi bi phat phai thuoc doi do');
+    //   END;
+    //   `);
+    //   tx.run(sql`
+    //   CREATE TRIGGER IF NOT EXISTS TRGU_TP_CTDOI
+    //   AFTER UPDATE ON ThePhat
+    //   WHEN NOT EXISTS(SELECT 1 FROM ThamGiaDB AS TGDB 
+    //               WHERE NEW.maCT=TGDB.maCT AND NEW.maDoi=TGDB.maDoi)
+    //   BEGIN
+    //       SELECT RAISE(ABORT, 'Cau thu ghi bi phat phai thuoc doi do');
+    //   END;
+    //   `);
       // Trigger cho đội bị phạt phải thuộc đội trong lịch thi đâu
-      tx.run(sql`
-      CREATE TRIGGER IF NOT EXISTS TRGI_TP_DOILTD
-      AFTER INSERT ON ThePhat
-      WHEN NOT EXISTS(SELECT 1 FROM LichThiDau AS LTD
-          WHERE LTD.maTD=NEW.maTD AND (LTD.doiMot=NEW.maDoi OR LTD.doiHai=NEW.maDoi))
-      BEGIN
-          SELECT RAISE(ABORT, 'Doi bi phat phai thuoc mot trong hai doi cua lich thi dau');
-      END;
-      `);
-      tx.run(sql`
-      CREATE TRIGGER IF NOT EXISTS TRGU_TP_DOILTD
-      AFTER UPDATE ON ThePhat
-      WHEN NOT EXISTS(SELECT 1 FROM LichThiDau AS LTD
-          WHERE LTD.maTD=NEW.maTD AND (LTD.doiMot=NEW.maDoi OR LTD.doiHai=NEW.maDoi))
-      BEGIN
-          SELECT RAISE(ABORT, 'Doi bi phat phai thuoc mot trong hai doi cua lich thi dau');
-      END;
-      `);
+    //   tx.run(sql`
+    //   CREATE TRIGGER IF NOT EXISTS TRGI_TP_DOILTD
+    //   AFTER INSERT ON ThePhat
+    //   WHEN NOT EXISTS(SELECT 1 FROM LichThiDau AS LTD
+    //       WHERE LTD.maTD=NEW.maTD AND (LTD.doiMot=NEW.maDoi OR LTD.doiHai=NEW.maDoi))
+    //   BEGIN
+    //       SELECT RAISE(ABORT, 'Doi bi phat phai thuoc mot trong hai doi cua lich thi dau');
+    //   END;
+    //   `);
+    //   tx.run(sql`
+    //   CREATE TRIGGER IF NOT EXISTS TRGU_TP_DOILTD
+    //   AFTER UPDATE ON ThePhat
+    //   WHEN NOT EXISTS(SELECT 1 FROM LichThiDau AS LTD
+    //       WHERE LTD.maTD=NEW.maTD AND (LTD.doiMot=NEW.maDoi OR LTD.doiHai=NEW.maDoi))
+    //   BEGIN
+    //       SELECT RAISE(ABORT, 'Doi bi phat phai thuoc mot trong hai doi cua lich thi dau');
+    //   END;
+    //   `);
   });
 }
 createTPBackupTrigger()// .catch(console.error); // This may cause some horrible error in the future
+
+
+const createLBTBackupTrigger = async() => {
+  await db.transaction(async (tx) => {
+      // Trigger tạo backup
+      tx.run(sql`
+      CREATE TRIGGER IF NOT EXISTS TRGD_LBT_BACKUP
+      AFTER DELETE ON LoaiBT
+      BEGIN
+      INSERT INTO LoaiBTBackup(modifiedDate, maLBT, tenLBT)
+      VALUES(datetime('now'), OLD.maLBT, OLD.tenLBT);
+      END
+      `);
+      tx.run(sql`
+      CREATE TRIGGER IF NOT EXISTS TRGU_LBT_BACKUP
+      AFTER UPDATE ON LoaiBT
+      BEGIN
+      INSERT INTO LoaiBTBackup(modifiedDate, maLBT, tenLBT)
+      VALUES(datetime('now'), OLD.maLBT, OLD.tenLBT);
+      END
+      `);
+  });
+}
+createLBTBackupTrigger();
+
+const createLTPBackupTrigger = async() => {
+  await db.transaction(async (tx) => {
+      // Trigger tạo backup
+      tx.run(sql`
+      CREATE TRIGGER IF NOT EXISTS TRGD_LTP_BACKUP
+      AFTER DELETE ON LoaiTP
+      BEGIN
+      INSERT INTO LoaiTPBackup(modifiedDate, maLTP, tenLTP)
+      VALUES(datetime('now'), OLD.maLTP, OLD.tenLTP);
+      END
+      `);
+      tx.run(sql`
+      CREATE TRIGGER IF NOT EXISTS TRGU_LTP_BACKUP
+      AFTER UPDATE ON LoaiTP
+      BEGIN
+      INSERT INTO LoaiTPBackup(modifiedDate, maLTP, tenLTP)
+      VALUES(datetime('now'), OLD.maLTP, OLD.tenLTP);
+      END
+      `);
+  });
+}
+createLTPBackupTrigger();
+
+const createVTBackupTrigger = async() => {
+  await db.transaction(async (tx) => {
+      // Trigger tạo backup
+      tx.run(sql`
+      CREATE TRIGGER IF NOT EXISTS TRGD_VT_BACKUP
+      AFTER DELETE ON ViTri
+      BEGIN
+      INSERT INTO ViTriBackup(modifiedDate, maVT, tenVT)
+      VALUES(datetime('now'), OLD.maVT, OLD.tenVT);
+      END
+      `);
+      tx.run(sql`
+      CREATE TRIGGER IF NOT EXISTS TRGU_VT_BACKUP
+      AFTER UPDATE ON ViTri
+      BEGIN
+      INSERT INTO ViTriBackup(modifiedDate, maVT, tenVT)
+      VALUES(datetime('now'), OLD.maVT, OLD.tenVT);
+      END
+      `);
+  });
+}
+createVTBackupTrigger();
+
+const createLCTBackupTrigger = async() => {
+  await db.transaction(async (tx) => {
+      // Trigger tạo backup
+      tx.run(sql`
+      CREATE TRIGGER IF NOT EXISTS TRGD_LCT_BACKUP
+      AFTER DELETE ON LoaiCT
+      BEGIN
+      INSERT INTO LoaiCTBackup(modifiedDate, maLCT, tenLCT)
+      VALUES(datetime('now'), OLD.maLCT, OLD.tenLCT);
+      END
+      `);
+      tx.run(sql`
+      CREATE TRIGGER IF NOT EXISTS TRGU_LCT_BACKUP
+      AFTER UPDATE ON LoaiCT
+      BEGIN
+      INSERT INTO LoaiCTBackup(modifiedDate, maLCT, tenLCT)
+      VALUES(datetime('now'), OLD.maLCT, OLD.tenLCT);
+      END
+      `);
+  });
+}
+createLCTBackupTrigger();
+
+
+const createVTDBackupTrigger = async() => {
+  await db.transaction(async (tx) => {
+      // Trigger tạo backup
+      tx.run(sql`
+      CREATE TRIGGER IF NOT EXISTS TRGD_VTD_BACKUP
+      AFTER DELETE ON VongTD
+      BEGIN
+      INSERT INTO VongTDBackup(modifiedDate, maVTD, tenVTD)
+      VALUES(datetime('now'), OLD.maVTD, OLD.tenVTD);
+      END
+      `);
+      tx.run(sql`
+      CREATE TRIGGER IF NOT EXISTS TRGU_VTD_BACKUP
+      AFTER UPDATE ON VongTD
+      BEGIN
+      INSERT INTO VongTDBackup(modifiedDate, maVTD, tenVTD)
+      VALUES(datetime('now'), OLD.maVTD, OLD.tenVTD);
+      END
+      `);
+  });
+}
+createVTDBackupTrigger();

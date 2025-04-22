@@ -3,13 +3,14 @@
   import Table from "$lib/components/Table.svelte";
   let { data }: PageProps = $props();
   import ButtonPrimary from "$lib/components/ButtonPrimary.svelte";
-  import type { CauThu } from "$lib/typesDatabase";
+  import type { CauThu, LoaiCT } from "$lib/typesDatabase";
   import { showOkToast, showErrorToast } from "$lib/components/Toast";
-  import type { FormField, FormInputMap } from "$lib/components/Form.svelte";
+  import type { FieldOption, FormField, FormInputMap } from "$lib/components/Form.svelte";
   import Form from "$lib/components/Form.svelte";
   import { SvelteMap } from "svelte/reactivity";
 
   let danhSachCauThu: CauThu[] = $state(data.danhSachCauThu);
+  const danhSachLoaiCT: LoaiCT[] = $state(data.loaiCTs);
   const tuoiMin : number = $state(data.tuoiMin);
   const tuoiMax : number = $state(data.tuoiMax);
   const ma_doi = data.ma_doi;
@@ -24,11 +25,8 @@
     { label: "Ngày sinh", propertyName: "ngaySinh", type: "Date", valueType: "Date", 
       min: minDate.toISOString().slice(0, 10), max: maxDate.toISOString().slice(0, 10)},
 
-    { label: "Loại cầu thủ", propertyName: "loaiCT", type: "select", valueType: "number", 
-      options: [ { optionValue: 1, optionName: "1" }, {optionValue: 2, optionName: "2"}, {optionValue: 3, optionName: "3"}]},
-
-    { label: "Nước ngoài", propertyName: "nuocNgoai", type: "select", valueType: "number", 
-      options: [ { optionValue: 0, optionName: "Không" }, {optionValue: 1, optionName: "Có"}]},
+    { label: "Loại cầu thủ", propertyName: "maLCT", type: "select", valueType: "number", 
+      options: danhSachLoaiCT.map((value) => ({optionValue: value.maLCT ?? 0, optionName: value.tenLCT})) },
 
     { label: "Ghi chú", propertyName: "ghiChu", type: "input", valueType: "string"},
   ];
@@ -37,8 +35,10 @@
     { header: "Mã cầu thủ", accessor: "maCT", hidden: true },
     { header: "Tên cầu thủ", accessor: "tenCT" },
     { header: "Ngày sinh", accessor: "ngaySinh" },
-    { header: "Loại cầu thủ", accessor: "loaiCT" },
-    { header: "Nước ngoài", accessor: "nuocNgoai" },
+    { header: "Loại cầu thủ", accessor: "maLCT", accessFunction: (data: CauThu) => {
+      return danhSachLoaiCT.find((value) => value.maLCT === data.maLCT)?.tenLCT ?? "";
+    } },
+    //{ header: "Nước ngoài", accessor: "nuocNgoai" },
     { header: "Ghi chú", accessor: "ghiChu" },
   ];
   let formState : boolean = $state(false);
@@ -62,9 +62,9 @@
       editData.clear();
       editData.set("maCT", data.maCT);
       editData.set("tenCT", data.tenCT);
-      editData.set("loaiCT", parseInt(data.loaiCT));
+      editData.set("maLCT", parseInt(data.maLCT));
       editData.set("ghiChu", data.ghiChu);
-      editData.set("nuocNgoai", Number(data.nuocNgoai));
+      //editData.set("nuocNgoai", Number(data.nuocNgoai));
       editData.set("ngaySinh", new Date(data.ngaySinh));
       selectedIndex = index;
       formState = true;

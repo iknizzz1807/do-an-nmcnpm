@@ -1,9 +1,9 @@
-import type { DSMuaGiai } from "$lib/typesDatabase.js";
+import type { MuaGiai } from "$lib/typesDatabase.js";
 import { redirect, type Actions } from "@sveltejs/kit";
 
 export const POST = async ({ locals, request, cookies }) => {
   try {
-    const data = await request.json() satisfies DSMuaGiai;
+    const data = await request.json() satisfies MuaGiai;
     cookies.set('selectedMuaGiai', JSON.stringify(data), {
       path: "/",
       sameSite: "lax",

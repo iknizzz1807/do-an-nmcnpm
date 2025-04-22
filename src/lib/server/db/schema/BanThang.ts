@@ -6,27 +6,29 @@ import { type TypesAreEqual } from '$lib/server/utils';
 import { type BanThang } from '$lib/typesDatabase';
 import { db } from '../client';
 import { sql } from 'drizzle-orm';
+import { LoaiBTTable } from './Data/LoaiBT';
 
 export const BanThangTable = sqliteTable('BanThang', {
     maTD: integer().notNull().references(() => LichThiDauTable.maTD, { onDelete: "cascade" }),
-    maCT: integer().notNull().references(() => CauThuTable.maCT, { onDelete: "cascade" }),
-    maDoi: integer().notNull().references(() => DoiBongTable.maDoi, { onDelete: "cascade" }),
     thoiDiem: real().notNull(),
-    loaiBanThang: text().notNull(),
+
+    maCT: integer().notNull().references(() => CauThuTable.maCT, { onDelete: "cascade" }),
+    maLBT: integer().notNull().references(() => LoaiBTTable.maLBT, { onDelete: "cascade" }),
+
+    deleted: integer({mode: "boolean"}).default(false),
 }, (table) => [
     primaryKey({ columns: [table.maTD, table.maCT, table.thoiDiem] }),
     check("CHK_BT_THOIDIEM", sql`${table.thoiDiem} BETWEEN 0 AND 90`),
-    check("CHK_BT_LOAIBT", sql`${table.loaiBanThang} IN ('A', 'B', 'C')`)
 ])
 
 export const BanThangTableBackup = sqliteTable('BanThangBackup', {
     BTBackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
     modifiedDate: integer({mode: "timestamp"}).notNull(),
     maTD: integer().notNull(),
-    maCT: integer().notNull(),
-    maDoi: integer().notNull(),
     thoiDiem: real().notNull(),
-    loaiBanThang: text().notNull(),
+    
+    maCT: integer().notNull(),
+    maLBT: integer().notNull(),
 })
 
 

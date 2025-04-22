@@ -21,7 +21,7 @@ export const POST : RequestHandler = async ({ request, locals } : { request: Req
   let lichThiDau : LichThiDau = {
     doiMot: parseInt(data.doiMot),
     doiHai: parseInt(data.doiHai),
-    vongThiDau: parseInt(data.vongThiDau),
+    maVTD: parseInt(data.maVTD),
     doiThang: parseInt(data.doiThang),
     maMG: locals.muaGiai!!.maMG!!,
     maTD: data.maTD,

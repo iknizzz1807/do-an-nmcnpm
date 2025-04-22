@@ -29,13 +29,14 @@ export const load = (async ({ fetch }) => {
     const danhSachSanNha : SanNha[] = await responseSN.json();
 
     return {
-      danhSachDoiBong,
-      danhSachSanNha
+      danhSachDoiBong: danhSachDoiBong,
+      danhSachSanNha: danhSachSanNha
     };
   } catch (error) {
     console.error("Error fetching data:", error);
     return {
       danhSachDoiBong: [],
+      danhSachSanNha: []
     };
   }
 }) satisfies PageServerLoad;

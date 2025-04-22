@@ -1,13 +1,14 @@
 // Database
 export type ThamSo = {
-    key: string,
-    value: number,
+    tenThamSo: string,
+    giaTri: number,
 }
 
-export type DSMuaGiai = {
+export type MuaGiai = {
     maMG?: number | undefined;
     tenMG: string;
     ngayDienRa: string;
+    ngayKetThuc: string;
 }
 
 export type DoiBong = {
@@ -15,22 +16,27 @@ export type DoiBong = {
     tenDoi: string;
     maSan: number;
     tenSan?: string | undefined;
-}
-
-export type SanNha = {
-    maSan?: number | undefined;
-    tenSan: string;
-    diaChi: string;
+    maMG: number;
 }
 
 export type CauThu = {
     maCT?: number | undefined;
     tenCT: string;
-    loaiCT: number;
-    ghiChu: string;
-    nuocNgoai: boolean;
     ngaySinh: string;
+    ghiChu: string;
+    soAo: number;
+    maLCT: number;
+    maDoi: number;
+
     banThang?: number | undefined;
+}
+
+
+export type TrongTai = {
+    maTT?: number | undefined;
+    tenTT: string;
+    ngaySinh: string;
+    maMG: number;
 }
 
 export type ThamGiaDB = {
@@ -43,42 +49,86 @@ export type ThamGiaTD = {
     maTD: number;
     maDoi: number;
     maCT: number;
-    viTri: string;
+    maVT: number;
 };
 
 export type BanThang = {
     maTD: number;
     maCT: number;
-    maDoi: number;
     thoiDiem: number;
-    loaiBanThang: string;
+    maLBT: number;
     // Data display
+    maDoi?: number | undefined;
     tenCT?: string | undefined;
     tenDoi?: string | undefined;
 }
 
 export type ThePhat = {
     maTD: number;
-    maDoi: number;
     maCT: number;
     thoiDiem: number;
-    loaiThe: string;
+    maLTP: number;
     // Data display
+    maDoi?: number | undefined;
     tenCT?: string | undefined;
     tenDoi?: string | undefined;
 }
 
 export type LichThiDau = {
+    maTD?: number | undefined;
+    maMG: number;
+    maVTD: number;
+    maSan: number,
+
     doiMot: number;
     doiHai: number;
-    vongThiDau: number;
-    maMG: number;
     doiThang?: number | null | undefined;
-    maTD?: number | undefined;
+    
+    ngayGioDuKien?: string | undefined;
+    ngayGioThucTe?: string | undefined;
+
+    ThoiGianDaThiDau: number;
+    maTT: number;
+    
     // Data display
-    ngayGio?: string | undefined;
     tenDoiMot?: string | undefined;
     tenDoiHai?: string | undefined;
     tenMG?: string | undefined;
     tenDoiThang?: string | undefined;
+}
+
+// DATA
+export type SanNha = {
+    maSan?: number | undefined;
+    tenSan: string;
+    diaChi: string;
+    maMG: number;
+}
+
+export type LoaiCT = {
+    maLCT?: number | undefined;
+    tenLCT: string;
+    soCauThuToiDa: number;
+}
+
+export type VongTD = {
+    maVTD?: number | undefined;
+    tenVTD: string;
+
+}
+
+export type LoaiBT = {
+    maLBT?: number | undefined;
+    tenLBT: string;
+}
+
+export type LoaiTP = {
+    maLTP?: number | undefined;
+    tenLTP: string;
+    soThePhatToiDa: number;
+}
+
+export type ViTri = {
+    maVT?: number | undefined;
+    tenVT: string;
 }

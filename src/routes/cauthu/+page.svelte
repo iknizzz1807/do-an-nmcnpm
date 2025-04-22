@@ -1,12 +1,13 @@
 <script lang="ts">
   import Table from "$lib/components/Table.svelte";
   import type { PageProps } from "./$types";
-  import type { CauThu } from "$lib/typesDatabase";
+  import type { CauThu, LoaiCT } from "$lib/typesDatabase";
   import { showErrorToast, showOkToast } from "$lib/components/Toast";
   import Form, { type FormField, type FormInputMap } from "$lib/components/Form.svelte";
   import { SvelteMap } from "svelte/reactivity";
   let { data }: PageProps = $props();
 
+  let danhSachLoaiCT : LoaiCT[] = $state(data.loaiCTs);
   let danhSachCauThu: CauThu[] = $state(data.danhSachCauThu);
   const tuoiMin : number = $state(data.tuoiMin);
   const tuoiMax : number = $state(data.tuoiMax);
@@ -17,37 +18,29 @@
 
   let danhSachCauThuCopy = danhSachCauThu;
 
+  
+  const formFields: FormField[] = [
+    { label: "Tên cầu thủ", propertyName: "tenCT", type: "input", valueType: "string"},
+
+    { label: "Ngày sinh", propertyName: "ngaySinh", type: "Date", valueType: "Date", 
+      min: minDate.toISOString().slice(0, 10), max: maxDate.toISOString().slice(0, 10)},
+
+    { label: "Loại cầu thủ", propertyName: "maLCT", type: "select", valueType: "number", 
+      options: danhSachLoaiCT.map((value) => ({optionValue: value.maLCT ?? 0, optionName: value.tenLCT})) },
+
+    { label: "Ghi chú", propertyName: "ghiChu", type: "input", valueType: "string"},
+  ];
+
   const columns = [
     { header: "Mã cầu thủ", accessor: "maCT", hidden: true },
     { header: "Tên cầu thủ", accessor: "tenCT" },
-    { header: "Loại cầu thủ", accessor: "loaiCT" },
-    { header: "Ghi chú", accessor: "ghiChu" },
-    { header: "Nước ngoài", accessor: "nuocNgoai" },
     { header: "Ngày sinh", accessor: "ngaySinh" },
-    { header: "Bàn thắng", accessor: "banThang" },
+    { header: "Loại cầu thủ", accessor: "maLCT", accessFunction: (data: CauThu) => {
+      return danhSachLoaiCT.find((value) => value.maLCT === data.maLCT)?.tenLCT ?? "";
+    } },
+    //{ header: "Nước ngoài", accessor: "nuocNgoai" },
+    { header: "Ghi chú", accessor: "ghiChu" },
   ];
-
-  const formFields : FormField[] = [
-    { label: "Tên cầu thủ", propertyName: "tenCT", type: "input", valueType: "string" },
-    
-    { label: "Loại cầu thủ", propertyName: "loaiCT", type: "select", valueType: "number", options: [
-      { optionValue: 1, optionName: "1" },
-      { optionValue: 2, optionName: "2" },
-      { optionValue: 3, optionName: "3" },
-      { optionValue: 4, optionName: "4" },
-      { optionValue: 5, optionName: "5" },
-    ]},
-
-    { label: "Ghi chú", propertyName: "ghiChu", type: "input", valueType: "string" },
-
-    { label: "Nước ngoài", propertyName: "nuocNgoai", type: "select", valueType: "number", options: [
-      { optionValue: 0, optionName: "Không" },
-      { optionValue: 1, optionName: "Có" },
-    ]},
-
-    { label: "Ngày sinh", propertyName: "ngaySinh", type: "Date", valueType: "Date",
-      min: minDate.toISOString().slice(0, 10), max: maxDate.toISOString().slice(0, 10) }
-  ]
 
   let formState: boolean = $state(false);
   let selectedIndex: number = $state(0);
@@ -99,9 +92,9 @@
       editData.clear();
       editData.set("maCT", data.maCT);
       editData.set("tenCT", data.tenCT);
-      editData.set("loaiCT", parseInt(data.loaiCT));
+      editData.set("maLCT", parseInt(data.maLCT));
       editData.set("ghiChu", data.ghiChu);
-      editData.set("nuocNgoai", Number(data.nuocNgoai));
+      //editData.set("nuocNgoai", Number(data.nuocNgoai));
       editData.set("ngaySinh", new Date(data.ngaySinh));
       console.log(editData);
       formState = true;

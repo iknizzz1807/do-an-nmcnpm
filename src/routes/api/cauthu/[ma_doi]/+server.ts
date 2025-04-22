@@ -12,7 +12,8 @@ export const GET: RequestHandler = async ({ params, locals }) => {
     throw new Error("Khong tim thay doi");
   if ((locals.muaGiai ?? null) === null)
     throw new Error("Không tìm thấy mùa giải");
-  const danhSachCauThu = await selectCauThuDoiBong(locals.muaGiai!!.maMG!!, maDoi);
+  
+  const danhSachCauThu = await selectCauThuDoiBong(maDoi);
   // console.log(danhSachCauThu);
 
   return new Response(JSON.stringify(danhSachCauThu), {
@@ -48,11 +49,11 @@ export const POST: RequestHandler = async ({ request, params, locals }) => {
       throw new Error("Khong tim thay doi");
 
     const soCauThuMax = (await selectThamSo("soCauThuMax"))!!;
-    const soCauThuNuocNgoaiToiDa = (await selectThamSo("soCauThuNuocNgoaiToiDa"))!!;
     if ((await countThamGiaDB(locals.muaGiai?.maMG!!, maDoi)) >= soCauThuMax)
       throw new Error("Đội bóng đã đạt đủ số cầu thủ tối đa");
-    if ((await countThamGiaDBNuocNgoai(locals.muaGiai?.maMG!!, maDoi)) >= soCauThuNuocNgoaiToiDa)
-      throw new Error("Đội bóng đã đạt đủ số cầu thủ nước ngoài tối đa");
+    // TODO
+    // if ((await countThamGiaDBNuocNgoai(locals.muaGiai?.maMG!!, maDoi)) >= soCauThuNuocNgoaiToiDa)
+    //   throw new Error("Đội bóng đã đạt đủ số cầu thủ nước ngoài tối đa");
 
 
     await insertThamGiaDB({

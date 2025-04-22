@@ -15,7 +15,7 @@ export const countThamGiaDB = async (maMG: number, maDoi: number) => {
 export const countThamGiaDBNuocNgoai = async (maMG: number, maDoi: number) => {
   return (await db.select({ count: count() }).from(ThamGiaDBTable)
     .innerJoin(CauThuTable, eq(ThamGiaDBTable.maCT, CauThuTable.maCT))
-    .where(and(eq(CauThuTable.nuocNgoai, true), eq(ThamGiaDBTable.maDoi, maDoi), eq(ThamGiaDBTable.maMG, maMG))))
+    .where(and(eq(CauThuTable.maLCT, 2), eq(ThamGiaDBTable.maDoi, maDoi), eq(ThamGiaDBTable.maMG, maMG))))
     .at(0)?.count ?? 0;
 }
 

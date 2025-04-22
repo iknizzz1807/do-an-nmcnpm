@@ -11,7 +11,7 @@
     { header: "", accessor: "maCT", hidden: true },
     { header: "Tên cầu thủ", accessor: "tenCT" },
     { header: "Tên đội", accessor: "tenDoi" },
-    { header: "Loại cầu thủ", accessor: "loaiCT" },
+    { header: "Loại cầu thủ", accessor: "maLCT" },
     { header: "Số bàn thắng", accessor: "soBanThang" },
   ];
 

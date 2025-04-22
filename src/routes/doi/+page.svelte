@@ -9,7 +9,7 @@
   let { data }: PageProps = $props();
 
   let danhSachDoiBong: DoiBong[] = $state(data.danhSachDoiBong);
-  let danhSachSanNha: SanNha[] = $state(data.danhSachSanNha ?? []);
+  let danhSachSanNha: SanNha[] = $state(data.danhSachSanNha);
 
   for (const doiBong of danhSachDoiBong) {
     doiBong.tenSan = danhSachSanNha.find((val) => val.maSan === doiBong.maSan)?.tenSan ?? "";

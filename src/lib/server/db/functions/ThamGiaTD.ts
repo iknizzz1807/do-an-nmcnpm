@@ -17,7 +17,7 @@ export const updateThamGiaTD = async(thamGiaTD: ThamGiaTD) => {
   await db.update(ThamGiaTDTable).set({
     maCT: thamGiaTD.maCT,
     maDoi: thamGiaTD.maDoi,
-    viTri: thamGiaTD.viTri
+    maVT: thamGiaTD.maVT
   }).where(eq(ThamGiaTDTable.maTD, thamGiaTD.maTD!!))
 }
 

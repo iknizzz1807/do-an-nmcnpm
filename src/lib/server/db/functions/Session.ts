@@ -1,9 +1,9 @@
 import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from "@oslojs/encoding";
-import { SessionTable, UserTable, type SessionSelect, type UserSelect } from "../schema/User";
 import { sha256 } from "@oslojs/crypto/sha2";
 import { db } from "../client";
 import { eq } from "drizzle-orm"
 import type { RequestEvent } from "@sveltejs/kit";
+import { type SessionSelect, SessionTable, UserTable, type UserSelect } from "../schema/User/User";
 
 
 const expiredTime : number = 1000 * 60 * 60 * 24 * 30; // 30 days;

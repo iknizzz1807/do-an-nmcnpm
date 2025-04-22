@@ -37,7 +37,7 @@
     { header: "Cầu thủ", accessor: "tenCT" },
     { header: "Đội", accessor: "tenDoi" },
     { header: "Thời điểm", accessor: "thoiDiem" },
-    { header: "Loại bàn thắng", accessor: "loaiBanThang" },
+    { header: "Loại bàn thắng", accessor: "maLBT" },
   ];
   
   const formFields: FormField[] = [
@@ -53,8 +53,8 @@
         }
     },
     { label: "Thời điểm", propertyName: "thoiDiem", type: "input", valueType: "number", max: thoiDiemGhiBanToiDa },
-    { label: "Loại bàn thắng", propertyName: "loaiBanThang", type: "select", valueType: "string", 
-      options: [ { optionValue: "A", optionName: "A" }, {optionValue: "B", optionName: "B"}]},
+    { label: "Loại bàn thắng", propertyName: "maLBT", type: "select", valueType: "number", 
+      options: [ { optionValue: 1, optionName: "A" }, {optionValue: 2, optionName: "B"}]},
   ];
 
   onMount(() => {

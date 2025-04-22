@@ -1,7 +1,8 @@
 import type { BanThang } from '$lib/typesDatabase';
 import { db } from '../client';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, getTableColumns } from 'drizzle-orm';
 import { BanThangTable } from '../schema/BanThang';
+import { ThamGiaTDTable } from '../schema/ThamGiaTD';
 
 export const insertBanThang = async (...banThang: BanThang[]) => {
     let returning = await db.insert(BanThangTable).values(banThang).returning();
@@ -11,14 +12,11 @@ export const insertBanThang = async (...banThang: BanThang[]) => {
 }
 
 export const updateBanThang = async(oldBanThang : BanThang, banThang: BanThang) => {
-    console.log(oldBanThang);
-    console.log(banThang);
     await db.update(BanThangTable).set({
         maTD: banThang.maTD,
         maCT: banThang.maCT,
-        maDoi: banThang.maDoi,
         thoiDiem: banThang.thoiDiem,
-        loaiBanThang: banThang.loaiBanThang
+        maLBT: banThang.maLBT
     }).where(and(eq(BanThangTable.maTD, oldBanThang.maTD!!), 
             eq(BanThangTable.maCT, oldBanThang.maCT),
             eq(BanThangTable.thoiDiem, oldBanThang.thoiDiem)));
@@ -36,5 +34,12 @@ export const selectAllBanThang = async() => {
 }
 
 export const selectBanThang = async(maTD: number) => {
-    return (await db.select().from(BanThangTable).where(eq(BanThangTable.maTD, maTD))) satisfies BanThang[];
+    return (await db.select({
+        ...getTableColumns(BanThangTable),
+        maDoi: ThamGiaTDTable.maDoi        
+    })
+    .from(BanThangTable)
+    .innerJoin(ThamGiaTDTable, and(eq(ThamGiaTDTable.maCT, BanThangTable.maCT), eq(ThamGiaTDTable.maTD, BanThangTable.maTD)))
+    .where(eq(BanThangTable.maTD, maTD))
+    .groupBy(BanThangTable.maTD, BanThangTable.maCT)) satisfies BanThang[];
 }
