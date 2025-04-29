@@ -11,9 +11,6 @@ import { HasRoleTable } from "./schema/User/HasRole";
 import { UserGroupTable, type UserGroupInsertParams } from "./schema/User/UserGroup";
 import { UserRoleTable, type UserRoleInsertParams } from "./schema/User/UserRole";
 
-
-await createAdmin();
-
 const DefaultSettings : ThamSo[] = [
   { tenThamSo: "tuoiMin", giaTri: 16 },
   { tenThamSo: "tuoiMax", giaTri: 40 },
@@ -92,3 +89,5 @@ await db.insert(VongTDTable).values([
   { tenVTD: "Đi" }, 
   { tenVTD: "Về" }
 ]);
+
+await createAdmin();

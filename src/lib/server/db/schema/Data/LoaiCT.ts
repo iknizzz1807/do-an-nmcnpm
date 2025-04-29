@@ -10,7 +10,7 @@ export const LoaiCTTable = sqliteTable('LoaiCT', {
 ])
 
 export const LoaiCTTableBackup = sqliteTable('LoaiCTBackup', {
-    SNBackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
+    BackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
     modifiedDate: integer({mode: "timestamp"}).notNull(),
     maLCT: integer().notNull(),
     tenLCT: text().notNull(),

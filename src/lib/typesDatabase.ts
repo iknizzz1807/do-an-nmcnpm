@@ -87,7 +87,7 @@ export type LichThiDau = {
     ngayGioDuKien?: string | undefined;
     ngayGioThucTe?: string | undefined;
 
-    ThoiGianDaThiDau: number;
+    thoiGianDaThiDau: number;
     maTT: number;
     
     // Data display

@@ -22,7 +22,7 @@ export const CauThuTable = sqliteTable('CauThu', {
 ])
 
 export const CauThuTableBackup = sqliteTable('CauThuBackup', {
-    CTBackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
+    BackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
     modifiedDate: integer({mode: "timestamp"}).notNull(),
     maCT: integer().notNull(),
     tenCT: text().notNull(),

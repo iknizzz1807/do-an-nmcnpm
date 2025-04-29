@@ -9,7 +9,7 @@ export const ViTriTable = sqliteTable('ViTri', {
 ])
 
 export const ViTriTableBackup = sqliteTable('ViTriBackup', {
-    SNBackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
+    BackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
     modifiedDate: integer({mode: "timestamp"}).notNull(),
     maVT: integer().notNull(),
     tenVT: text().notNull()

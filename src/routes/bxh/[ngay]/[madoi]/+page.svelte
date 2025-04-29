@@ -2,10 +2,15 @@
   import type { PageProps } from "./$types";
   import Table from "$lib/components/Table.svelte";
   import type { CauThuGhiBan } from "$lib/typesResponse";
+  import { onMount } from "svelte";
 
   let { data }: PageProps = $props();
 
   let danhSachCauThu: CauThuGhiBan[] = $state(data.dsCTGhiBan);
+
+  onMount(() => {
+    danhSachCauThu.sort((a, b) => b.soBanThang - a.soBanThang);
+  });
 
   const columns = [
     { header: "", accessor: "maCT", hidden: true },

@@ -9,7 +9,7 @@ export const VongTDTable = sqliteTable('VongTD', {
 ])
 
 export const VongTDTableBackup = sqliteTable('VongTDBackup', {
-    SNBackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
+    BackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
     modifiedDate: integer({mode: "timestamp"}).notNull(),
     maVTD: integer().notNull(),
     tenVTD: text().notNull()

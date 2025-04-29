@@ -1,11 +1,12 @@
 import { integer, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
+import { UserGroupTable } from "./UserGroup";
 
 export const UserTable = sqliteTable("User", {
 	id: integer().primaryKey({ autoIncrement: true }),
 	email: text().notNull().unique(),
 	username: text().notNull(),
 	passwordHash: text().notNull(),
-	groupId: integer().default(1).notNull()
+	groupId: integer().default(1).notNull().references(() => UserGroupTable.groupId, { onDelete: "cascade" }),
 	// emailVerifed: integer().$default(() => 0),
 	// registeredTOTP: integer().$default(() => 0),
 	// registeredPasskey: integer().$default(() => 0),

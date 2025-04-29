@@ -190,7 +190,7 @@ export const generateLichThiDau = async (maMG: number) => {
           ngayGioDuKien: new Date().toJSON(),
           ngayGioThucTe: new Date().toJSON(),
           
-          ThoiGianDaThiDau: 90,
+          thoiGianDaThiDau: 90,
           maTT: trongTais[randIntBetween(0, trongTais.length - 1)].maTT
         }
         
@@ -206,7 +206,7 @@ export const generateLichThiDau = async (maMG: number) => {
           ngayGioDuKien: new Date().toJSON(),
           ngayGioThucTe: new Date().toJSON(),
           
-          ThoiGianDaThiDau: 90,
+          thoiGianDaThiDau: 90,
           maTT: trongTais[randIntBetween(0, trongTais.length - 1)].maTT
         }
         doiBongs.splice(doiMotIndex, 1);

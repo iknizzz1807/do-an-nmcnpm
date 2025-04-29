@@ -15,11 +15,12 @@ export const MuaGiaiTable = sqliteTable('MuaGiai', {
 ])
 
 export const MuaGiaiTableBackup = sqliteTable('MuaGiaiBackup', {
-    DSMGBackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
+    BackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
     modifiedDate: integer({mode: "timestamp"}).notNull(),
     maMG: integer().notNull(),
     tenMG: text().notNull(),
     ngayDienRa: text().notNull(),
+    ngayKetThuc: text().notNull(),
 })
 
 export type InsertMuaGiaiParams = typeof MuaGiaiTable.$inferInsert;

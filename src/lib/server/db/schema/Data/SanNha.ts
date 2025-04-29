@@ -13,7 +13,7 @@ export const SanNhaTable = sqliteTable('SanNha', {
 ])
 
 export const SanNhaTableBackup = sqliteTable('SanNhaBackup', {
-    SNBackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
+    BackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
     modifiedDate: integer({mode: "timestamp"}).notNull(),
     maSan: integer().notNull(),
     tenSan: text().notNull(),

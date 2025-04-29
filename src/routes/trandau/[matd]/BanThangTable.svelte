@@ -159,6 +159,7 @@
   redirectParam={""}
   tableType=""
   onEditClick={onEditClick}
+  onDeleteClick={()=>{}}
   isEditable={isEditable}
 />
 

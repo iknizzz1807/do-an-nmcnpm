@@ -7,19 +7,20 @@ import { sql } from 'drizzle-orm';
 import { db } from '../client';
 import { LichThiDauTable } from './LichThiDau';
 import type { ThamGiaTD } from '$lib/typesDatabase';
+import { ViTriTable } from './Data/ViTri';
 
 // Số lượng cầu thủ tối thiểu, tối đa của đội, số cầu thủ nước ngoài tối đa.
 export const ThamGiaTDTable = sqliteTable('ThamGiaTD', {
     maTD: integer().notNull().references(() => LichThiDauTable.maTD, { onDelete: "cascade" }),
     maCT: integer().notNull().references(() => CauThuTable.maCT, { onDelete: "cascade" }),
     maDoi: integer().notNull().references(() => DoiBongTable.maDoi, { onDelete: "cascade" }),
-    maVT: integer().notNull(),
+    maVT: integer().notNull().references(() => ViTriTable.maVT, { onDelete: "cascade" }),
 }, (table) => [
     primaryKey({ columns: [table.maTD, table.maCT] }),
 ])
 
 export const ThamGiaTDTableBackup = sqliteTable('ThamGiaTDBackup', {
-    TGBackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
+    BackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
     modifiedDate: integer({mode: "timestamp"}).notNull(),
     maTD: integer().notNull(),
     maCT: integer().notNull(),

@@ -22,7 +22,7 @@ export const LichThiDauTable = sqliteTable('LichThiDau', {
     ngayGioDuKien: text().$defaultFn(() => new Date().toJSON()).notNull(),
     ngayGioThucTe: text().$defaultFn(() => new Date().toJSON()).notNull(),
 
-    ThoiGianDaThiDau: real().notNull(),
+    thoiGianDaThiDau: real().notNull(),
     maTT: integer().notNull().references(() => TrongTaiTable.maTT, { onDelete: "cascade" }),
 
     deleted: integer({mode: "boolean"}).default(false),
@@ -32,7 +32,7 @@ export const LichThiDauTable = sqliteTable('LichThiDau', {
 ]);
 
 export const LichThiDauTableBackup = sqliteTable('LichThiDauBackup', {
-    LTDBackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
+    BackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
     modifiedDate: integer({mode: "timestamp"}).notNull(),
     maTD: integer().notNull(),
     maMG: integer().notNull(),
@@ -46,7 +46,7 @@ export const LichThiDauTableBackup = sqliteTable('LichThiDauBackup', {
     ngayGioDuKien: text().notNull(),
     ngayGioThucTe: text().notNull(),
 
-    ThoiGianDaThiDau: real().notNull(),
+    thoiGianDaThiDau: real().notNull(),
 
     maTT: integer().notNull(),
 })

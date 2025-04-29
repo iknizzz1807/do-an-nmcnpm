@@ -9,14 +9,14 @@ export const TrongTaiTable = sqliteTable('TrongTai', {
     maTT: integer().notNull().unique().primaryKey({ autoIncrement: true }),
     tenTT: text().notNull(),
     ngaySinh: text().notNull(),
-    maMG: integer().notNull().references(() => MuaGiaiTable.maMG),
+    maMG: integer().notNull().references(() => MuaGiaiTable.maMG, { onDelete: "cascade" }),
     deleted: integer({mode: "boolean"}).default(false),
 }, (table) => [
     uniqueIndex("TrongTai_maTT").on(table.maTT)
 ])
 
 export const TrongTaiTableBackup = sqliteTable('TrongTaiBackup', {
-    TTBackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
+    BackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
     modifiedDate: integer({mode: "timestamp"}).notNull(),
     maTT: integer().notNull(),
     tenTT: text().notNull(),

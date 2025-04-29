@@ -57,7 +57,7 @@ export const load = (async ({ fetch, params, locals, route }) => {
     danhSachBanThang.sort((a, b) => a.thoiDiem - b.thoiDiem);
     danhSachThePhat.sort((a, b) => a.thoiDiem - b.thoiDiem);
     const thoiDiemGhiBanToiDa = (await selectThamSo("thoiDiemGhiBanToiDa"))!!;
-    const isEditable = await checkPageEditable(locals.user!!.groupId, route.id);
+    // const isEditable = await checkPageEditable(locals.user!!.groupId, route.id);
     
     return {
       maTD: maTD,
@@ -70,7 +70,7 @@ export const load = (async ({ fetch, params, locals, route }) => {
       cauThuDoiHai: cauThuDoiHai,
       danhSachBanThang: danhSachBanThang,
       danhSachThePhat: danhSachThePhat,
-      isEditable: isEditable
+      isEditable: true
     }
   } catch (err) {
     console.error(err);

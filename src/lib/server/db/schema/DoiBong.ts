@@ -17,7 +17,7 @@ export const DoiBongTable = sqliteTable('DoiBong', {
 ])
 
 export const DoiBongTableBackup = sqliteTable('DoiBongBackup', {
-    DBBackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
+    BackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
     modifiedDate: integer({mode: "timestamp"}).notNull(),
     maDoi: integer().notNull(),
     tenDoi: text().notNull(),

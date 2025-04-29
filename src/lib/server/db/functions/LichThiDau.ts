@@ -30,7 +30,7 @@ export const updateLichThiDau = async(lichThiDau: LichThiDau) => {
     ngayGioDuKien: lichThiDau.ngayGioDuKien,
     ngayGioThucTe: lichThiDau.ngayGioThucTe,
 
-    ThoiGianDaThiDau: lichThiDau.ThoiGianDaThiDau,
+    thoiGianDaThiDau: lichThiDau.thoiGianDaThiDau,
     maTT: lichThiDau.maTT
   }).where(eq(LichThiDauTable.maTD, lichThiDau.maTD!!))
 }
