@@ -1,12 +1,25 @@
 import type { BanThang, DoiBong, ThePhat } from "./typesDatabase"
 
 // Query Results
+
 export type KetQuaThiDau = {
   doiMot: DoiBong,
   doiHai: DoiBong,
   tySo: string,
   san : string,
   ngayGio: string
+}
+
+export type UserGroupInsert = {
+  groupId?: number | null;
+  groupName: string;
+  roles: number[];
+};
+
+export type UserGroupRoles = {
+  groupId: number,
+  groupName: string,
+  roles: number[],
 }
 
 export type KQTraCuuCauThu = {

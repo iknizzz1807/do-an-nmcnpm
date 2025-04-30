@@ -41,7 +41,7 @@ const roles : UserRoleInsertParams[] = [
   { roleId: 52, roleName: "Sửa Đội bóng", viewablePage: "/doi", canEdit: true },
   { roleId: 53, roleName: "Sửa Lịch thi đấu", viewablePage: "/trandau", canEdit: true },
   { roleId: 54, roleName: "Sửa Mùa giải", viewablePage: "/muagiai", canEdit: true },
-  { roleId: 9999, roleName: "Cài đặt", viewablePage: "/caidat", canEdit: true },
+  { roleId: 9999, roleName: "Everything", viewablePage: "/%", canEdit: true },
 ];
 
 await db.insert(UserRoleTable).values(roles);

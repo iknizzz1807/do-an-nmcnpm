@@ -1,6 +1,6 @@
 <script lang="ts">
   import SettingNumberInput from "./SettingNumberInput.svelte";
-  import type { Settings, User } from "$lib/typesAuth";
+  import type { Settings, User, UserRole } from "$lib/typesAuth";
   import type { PageProps } from "./$types";
   import SettingSection from "./SettingSection.svelte";
   import SettingMainSection from "./SettingMainSection.svelte";
@@ -12,6 +12,7 @@
   } from "$lib/components/Form.svelte";
   import { SvelteMap } from "svelte/reactivity";
   import { onMount } from "svelte";
+  import type { UserGroupRoles } from "$lib/typesResponse";
 
   const { data }: PageProps = $props();
   let setting: Settings = $state(data.setting);
@@ -22,9 +23,9 @@
   let selectedIndex = $state(-1);
 
   onMount(() => {
-    document.addEventListener("click", closePermissionDropdown);
+    document.addEventListener("click", closeRolesDropdown);
     return () => {
-      document.removeEventListener("click", closePermissionDropdown);
+      document.removeEventListener("click", closeRolesDropdown);
     };
   });
 
@@ -139,221 +140,155 @@
     }
   };
 
-  // For permission dropdown
-  let showPermissionDropdown = $state(false);
-  let permissionSearchQuery = $state("");
+  // For roles dropdown
+  let showRolesDropdown = $state(false);
+  let rolesSearchQuery = $state("");
+  let roles = $state(data.userRoles);
 
-  // Toggle permission dropdown
-  function togglePermissionDropdown() {
-    showPermissionDropdown = !showPermissionDropdown;
+
+  // Toggle roles dropdown
+  function toggleRolesDropdown() {
+    showRolesDropdown = !showRolesDropdown;
   }
 
   // Close dropdown when clicking outside
-  function closePermissionDropdown(event: MouseEvent) {
+  function closeRolesDropdown(event: MouseEvent) {
     const target = event.target as HTMLElement;
-    if (!target.closest(".permission-dropdown")) {
-      showPermissionDropdown = false;
+    if (!target.closest(".roles-dropdown")) {
+      showRolesDropdown = false;
     }
   }
 
   // Mock data for user group management
   let groupName = $state("");
-  let selectedPermissions = $state<string[]>([]);
-  let editingGroupId = $state<string | null>(null);
-
-  // Mock permissions data
-  const permissions = [
-    {
-      id: "team_view",
-      name: "View Teams",
-      description: "Can view team information and roster",
-    },
-    {
-      id: "team_create",
-      name: "Create Teams",
-      description: "Can create new teams in the system",
-    },
-    {
-      id: "team_edit",
-      name: "Edit Teams",
-      description: "Can modify existing team information",
-    },
-    {
-      id: "team_delete",
-      name: "Delete Teams",
-      description: "Can remove teams from the system",
-    },
-    {
-      id: "player_view",
-      name: "View Players",
-      description: "Can view player information and statistics",
-    },
-    {
-      id: "player_create",
-      name: "Create Players",
-      description: "Can add new players to the system",
-    },
-    {
-      id: "player_edit",
-      name: "Edit Players",
-      description: "Can modify existing player information",
-    },
-    {
-      id: "player_delete",
-      name: "Delete Players",
-      description: "Can remove players from the system",
-    },
-    {
-      id: "match_view",
-      name: "View Matches",
-      description: "Can view match schedules and results",
-    },
-    {
-      id: "match_create",
-      name: "Schedule Matches",
-      description: "Can create and schedule new matches",
-    },
-    {
-      id: "match_edit",
-      name: "Edit Matches",
-      description: "Can modify match details and time",
-    },
-    {
-      id: "match_result",
-      name: "Record Results",
-      description: "Can record and update match results and statistics",
-    },
-    {
-      id: "settings_view",
-      name: "View Settings",
-      description: "Can view system settings",
-    },
-    {
-      id: "settings_edit",
-      name: "Edit Settings",
-      description: "Can modify system settings",
-    },
-    {
-      id: "user_manage",
-      name: "Manage Users",
-      description: "Can create, edit, and delete user accounts",
-    },
-  ];
+  let selectedroles = $state<number[]>([]);
+  let editingGroupId = $state<number>(-1);
 
   // Mock user groups
-  let userGroups = $state([
-    {
-      id: "1",
-      name: "Quản lý sân bóng",
-      permissions: ["match_view", "match_create", "match_edit", "match_result"],
-    },
-    {
-      id: "2",
-      name: "Quản lý đội bóng",
-      permissions: [
-        "team_view",
-        "team_edit",
-        "player_view",
-        "player_create",
-        "player_edit",
-      ],
-    },
-    {
-      id: "3",
-      name: "Admin hệ thống",
-      permissions: [
-        "team_view",
-        "team_create",
-        "team_edit",
-        "team_delete",
-        "player_view",
-        "player_create",
-        "player_edit",
-        "player_delete",
-        "match_view",
-        "match_create",
-        "match_edit",
-        "match_result",
-        "settings_view",
-        "settings_edit",
-        "user_manage",
-      ],
-    },
-  ]);
+  let userGroups = $state(data.userGroup);
 
-  // Toggle a permission selection
-  function togglePermission(permissionId: string) {
-    if (selectedPermissions.includes(permissionId)) {
-      selectedPermissions = selectedPermissions.filter(
-        (id) => id !== permissionId
+  // Toggle a roles selection
+  function toggleRoles(rolesId: number) {
+    if (selectedroles.includes(rolesId)) {
+      selectedroles = selectedroles.filter(
+        (id) => id !== rolesId
       );
     } else {
-      selectedPermissions = [...selectedPermissions, permissionId];
+      selectedroles = [...selectedroles, rolesId];
     }
   }
 
-  let filteredPermissions = $state(permissions);
+  let filteredroles = $state(roles);
 
   $effect(() => {
-    if (permissionSearchQuery) {
-      filteredPermissions = permissions.filter(
-        (permission) =>
-          permission.name
+    if (rolesSearchQuery) {
+      filteredroles = roles.filter(
+        (roles) =>
+          roles.roleName
             .toLowerCase()
-            .includes(permissionSearchQuery.toLowerCase()) ||
-          permission.description
+            .includes(rolesSearchQuery.toLowerCase()) ||
+          roles.viewablePage
             .toLowerCase()
-            .includes(permissionSearchQuery.toLowerCase())
+            .includes(rolesSearchQuery.toLowerCase()) 
       );
     } else {
-      filteredPermissions = permissions;
+      filteredroles = roles;
     }
   });
 
   // Reset the form
   function resetForm() {
     groupName = "";
-    selectedPermissions = [];
-    editingGroupId = null;
+    selectedroles = [];
+    editingGroupId = -1;
   }
 
   // Save the user group
-  function saveUserGroup() {
+  async function saveUserGroup() {
     if (!groupName.trim()) {
       showErrorToast("Group name cannot be empty");
       return;
     }
 
-    if (selectedPermissions.length === 0) {
-      showErrorToast("Please select at least one permission");
+    if (selectedroles.length === 0) {
+      showErrorToast("Please select at least one roles");
       return;
     }
 
-    if (editingGroupId) {
+    if (editingGroupId !== -1) {
       // Update existing group
       const index = userGroups.findIndex(
-        (group) => group.id === editingGroupId
+        (group) => group.groupId === editingGroupId
       );
       if (index !== -1) {
-        userGroups[index] = {
-          ...userGroups[index],
-          name: groupName,
-          permissions: selectedPermissions,
-        };
+        try
+        {
+          const response = await fetch("/api/group", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(
+              {
+                groupId: editingGroupId,
+                groupName: groupName,
+                roles: selectedroles,
+              }
+            ),
+          });
+          
+          if (!response.ok)
+            throw new Error("Lỗi cập nhật roles");
+
+          userGroups[index] = {
+            ...userGroups[index],
+            groupName: groupName,
+            roles: selectedroles,
+          };
+          showOkToast(`User group "${groupName}" updated successfully`);
+        }
+        catch(err)
+        {
+          showErrorToast(String(err));
+        }
       }
-      showOkToast(`User group "${groupName}" updated successfully`);
     } else {
       // Create new group
-      const newId = (userGroups.length + 1).toString();
-      userGroups = [
-        ...userGroups,
-        {
-          id: newId,
-          name: groupName,
-          permissions: selectedPermissions,
-        },
-      ];
-      showOkToast(`User group "${groupName}" created successfully`);
+      try
+      {
+        const response = await fetch("/api/group", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(
+              {
+                groupName: groupName,
+                roles: selectedroles,
+              }
+            ),
+          });
+          if (!response.ok)
+            throw new Error("Lỗi cập nhật roles");
+
+          const result = await response.json();
+          userGroups = [
+            ...userGroups,
+            {
+              groupId: result.id,
+              groupName: groupName,
+              roles: selectedroles,
+            },
+          ];
+
+          showOkToast(`User group "${groupName}" created successfully`);
+
+      }
+      catch (e)
+      {
+        showErrorToast(String(e));
+      }
+        
     }
 
     // Reset form after saving
@@ -361,20 +296,16 @@
   }
 
   // Edit an existing user group
-  function editUserGroup(group: {
-    id: string;
-    name: string;
-    permissions: string[];
-  }) {
-    groupName = group.name;
-    selectedPermissions = [...group.permissions];
-    editingGroupId = group.id;
+  async function editUserGroup(group: UserGroupRoles) {
+    groupName = group.groupName;
+    selectedroles = [...group.roles];
+    editingGroupId = group.groupId;
   }
 
   // Delete a user group
-  function deleteUserGroup(groupId: string) {
+  function deleteUserGroup(groupId: number) {
     if (confirm("Are you sure you want to delete this user group?")) {
-      userGroups = userGroups.filter((group) => group.id !== groupId);
+      userGroups = userGroups.filter((group) => group.groupId !== groupId);
       showOkToast("User group deleted successfully");
     }
   }
@@ -453,15 +384,15 @@
 
         <div class="mt-4">
           <h3 class="text-lg font-medium text-gray-700 mb-2">
-            Assign Permissions
+            Assign roles
           </h3>
-          <div class="relative permission-dropdown">
+          <div class="relative roles-dropdown">
             <button
               type="button"
               class="flex justify-between items-center w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-left focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
-              onclick={() => togglePermissionDropdown()}
+              onclick={() => toggleRolesDropdown()}
             >
-              <span>{selectedPermissions.length} permissions selected</span>
+              <span>{selectedroles.length} roles selected</span>
               <svg
                 class="w-5 h-5 ml-2"
                 fill="currentColor"
@@ -476,7 +407,7 @@
               </svg>
             </button>
 
-            {#if showPermissionDropdown}
+            {#if showRolesDropdown}
               <div
                 class="absolute z-10 mt-1 w-full bg-white shadow-lg rounded-md max-h-60 overflow-auto"
               >
@@ -485,32 +416,37 @@
                     <input
                       type="text"
                       class="w-full p-2 border border-gray-300 rounded-md"
-                      placeholder="Search permissions..."
-                      bind:value={permissionSearchQuery}
+                      placeholder="Search roles..."
+                      bind:value={rolesSearchQuery}
                     />
                   </div>
                   <div class="space-y-2">
-                    {#each filteredPermissions as permission}
+                    {#each filteredroles as roles}
                       <div
                         class="flex items-center px-2 py-1 hover:bg-gray-100 rounded-md"
                       >
                         <input
-                          id={`perm_${permission.id}`}
+                          id={`perm_${roles.roleId}`}
                           type="checkbox"
                           class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
-                          checked={selectedPermissions.includes(permission.id)}
-                          onchange={() => togglePermission(permission.id)}
+                          checked={selectedroles.includes(roles.roleId)}
+                          onchange={() => toggleRoles(roles.roleId)}
                         />
                         <label
-                          for={`perm_${permission.id}`}
+                          for={`perm_${roles.roleId}`}
                           class="ml-2 flex flex-col cursor-pointer"
                         >
                           <span class="text-sm font-medium text-gray-700"
-                            >{permission.name}</span
+                            >{roles.roleName}</span
                           >
                           <span class="text-xs text-gray-500"
-                            >{permission.description}</span
+                            >{roles.viewablePage}</span
                           >
+                          {#if roles.canEdit}
+                            <span class="text-xs text-gray-500"
+                              >Có thể chỉnh sửa</span
+                            >
+                          {/if}
                         </label>
                       </div>
                     {/each}
@@ -547,10 +483,10 @@
                 <div class="flex items-center px-4 py-4 sm:px-6">
                   <div class="min-w-0 flex-1">
                     <p class="truncate text-sm font-medium text-gray-900">
-                      {group.name}
+                      {group.groupName}
                     </p>
                     <p class="mt-1 truncate text-sm text-gray-500">
-                      {group.permissions.length} permissions assigned
+                      {group.roles.length} roles assigned
                     </p>
                   </div>
                   <div class="ml-4 flex flex-shrink-0 space-x-2">
@@ -564,7 +500,7 @@
                     <button
                       type="button"
                       class="inline-flex items-center rounded-md border border-transparent bg-red-100 px-3 py-2 text-sm font-medium text-red-700 hover:bg-red-200"
-                      onclick={() => deleteUserGroup(group.id)}
+                      onclick={() => deleteUserGroup(group.groupId)}
                     >
                       Delete
                     </button>

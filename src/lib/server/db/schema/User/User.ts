@@ -6,7 +6,7 @@ export const UserTable = sqliteTable("User", {
 	email: text().notNull().unique(),
 	username: text().notNull(),
 	passwordHash: text().notNull(),
-	groupId: integer().default(1).notNull().references(() => UserGroupTable.groupId, { onDelete: "cascade" }),
+	groupId: integer().default(1).notNull().references(() => UserGroupTable.groupId),
 	// emailVerifed: integer().$default(() => 0),
 	// registeredTOTP: integer().$default(() => 0),
 	// registeredPasskey: integer().$default(() => 0),
