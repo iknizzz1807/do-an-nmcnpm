@@ -49,6 +49,5 @@ export const handle: Handle = async ({ event, resolve }) => {
 	else {
 		event.locals.muaGiai = JSON.parse(selectedMuaGiai) satisfies MuaGiai;
 	}
-
   return resolve(event);
 };

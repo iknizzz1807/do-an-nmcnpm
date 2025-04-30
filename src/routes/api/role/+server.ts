@@ -1,7 +1,6 @@
 import { errorResponseJSON } from "$lib";
-import { updateRolesToGroup } from "$lib/server/db/functions/User/UserGroup";
-import { checkPageViewable } from "$lib/server/db/functions/User/UserRole";
-import type { UserGroupRoles } from "$lib/typesResponse";
+import { checkPageViewable, upsertRole } from "$lib/server/db/functions/User/UserRole";
+import type { UserRoleInsertParams } from "$lib/server/db/schema/User/UserRole";
 import type { RequestHandler } from "./$types";
 
 
@@ -15,9 +14,10 @@ export const POST: RequestHandler = async ({ request, locals, route }) => {
       return errorResponseJSON(401, "Unauthorized");
   }
 
-  const data : UserGroupRoles = await request.json();
-  await updateRolesToGroup(data.groupId, data.roles);
-  return new Response(null, {
+  const data : UserRoleInsertParams = await request.json();
+
+    await upsertRole(data);
+  return new Response(JSON.stringify(data), {
     status: 200
   });
 }

@@ -1,19 +1,21 @@
 <script module lang="ts">
-  type TableProps<T> = {
+  export type TableColumnSpecifier = {
+    header: string;
+    accessor: keyof any;
+    hidden?: boolean | undefined;
+    accessFunction?: ((data: any) => string) | undefined;
+  }
+
+  type TableProps = {
     title: string;
-    columns: { // Data specifier
-      header: string;
-      accessor: keyof T;
-      hidden?: boolean | undefined;
-      accessFunction?: ((data: T) => string) | undefined;
-    }[];
-    data: T[]; // Data holder
+    columns: TableColumnSpecifier[];
+    data: any[]; // Data holder
     tableType: string; // It's like current page. Used to redirect
     redirectParam: string; // Redirect to
     isEditable?: boolean;
-    onItemClick?: ((data: T, index : number) => void) | undefined;
-    onDeleteClick?: ((data: T, index : number) => void) | undefined;
-    onEditClick?: ((data: T, index : number) => void) | undefined;
+    onItemClick?: ((data: any, index : number) => void) | undefined;
+    onDeleteClick?: ((data: any, index : number) => void) | undefined;
+    onEditClick?: ((data: any, index : number) => void) | undefined;
   };
 
 </script>
@@ -23,7 +25,7 @@
   import { isNumber } from "$lib";
   import ButtonPrimary from "./ButtonPrimary.svelte";
   let mouseHover = $state(false);
-  let { title, columns, data, redirectParam, tableType, isEditable = true, onItemClick, onDeleteClick, onEditClick }: TableProps<any> =
+  let { title, columns, data, redirectParam, tableType, isEditable = true, onItemClick, onDeleteClick, onEditClick }: TableProps =
     $props();
   const deleteButton = $state((onDeleteClick ?? null) !== null);
   const editButton = $state((onEditClick ?? null) !== null);

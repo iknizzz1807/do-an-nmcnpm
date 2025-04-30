@@ -7,8 +7,10 @@ export type User = {
 }
 
 export type UserRole = {
-    roleId: number,
-    roleName: string,
+    roleId: number;
+    roleName: string;
+    viewablePage: string;
+    canEdit: boolean;
 }
 
 export type Settings = {

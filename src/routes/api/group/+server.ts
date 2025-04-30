@@ -1,5 +1,5 @@
 import { errorResponseJSON } from "$lib";
-import { insertGroup, updateGroup, updateRolesToGroup } from "$lib/server/db/functions/User/UserGroup";
+import { upsertGroup, updateRolesToGroup } from "$lib/server/db/functions/User/UserGroup";
 import { checkPageViewable } from "$lib/server/db/functions/User/UserRole";
 import type { UserGroupInsert, UserGroupRoles } from "$lib/typesResponse";
 import type { RequestHandler } from "./$types";
@@ -16,20 +16,9 @@ export const POST: RequestHandler = async ({ request, locals, route }) => {
   }
 
   const data : UserGroupInsert = await request.json();
-  if ((data.groupId ?? null) === null)
-  {
-    const id = await insertGroup(data.groupName);
-    await updateRolesToGroup(id.id, data.roles);
-    return new Response(JSON.stringify(id), {
-      status: 200
-    });
-  }
-  else
-  {
-    await updateGroup(data.groupId!!, data.groupName);
-    await updateRolesToGroup(data.groupId!!, data.roles);
-    return new Response(JSON.stringify({ id: data.groupId!! }), {
-      status: 200
-    });
-  }
+  const id = await upsertGroup({ groupId: data.groupId!!, groupName: data.groupName});
+  await updateRolesToGroup(id.id, data.roles);
+  return new Response(JSON.stringify(id), {
+    status: 200
+  });
 }

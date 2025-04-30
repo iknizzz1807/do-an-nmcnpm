@@ -13,14 +13,13 @@
   import { SvelteMap } from "svelte/reactivity";
   import { onMount } from "svelte";
   import type { UserGroupRoles } from "$lib/typesResponse";
+  import SettingUserTable from "./SettingUserTable.svelte";
+  import SettingRoleTable from "./SettingRoleTable.svelte";
 
   const { data }: PageProps = $props();
   let setting: Settings = $state(data.setting);
   let users: User[] = $state(data.users);
-  let editData: FormInputMap = $state(new SvelteMap());
 
-  let formState = $state(false);
-  let selectedIndex = $state(-1);
 
   onMount(() => {
     document.addEventListener("click", closeRolesDropdown);
@@ -29,99 +28,8 @@
     };
   });
 
-  const userFields: FormField[] = [
-    {
-      label: "Username",
-      propertyName: "username",
-      type: "input",
-      valueType: "string",
-    },
-    {
-      label: "Email",
-      propertyName: "email",
-      type: "input",
-      valueType: "string",
-    },
-    {
-      label: "User Type",
-      propertyName: "isAdmin",
-      type: "select",
-      valueType: "number",
-      options: [
-        { optionName: "User", optionValue: 0 },
-        { optionName: "Admin", optionValue: 1 },
-      ],
-    },
-  ];
 
-  const columnsUser = [
-    { header: "ID", accessor: "id", hidden: true },
-    { header: "Username", accessor: "username" },
-    { header: "Email", accessor: "email" },
-    // { header: "User Type", accessor: "isAdmin", accessFunction: (data: User) => data.isAdmin ? "Admin" : "User" },
-  ];
-
-  const onOpenForm = (): FormInputMap | null => {
-    if (editData.size > -1) return editData;
-    return new SvelteMap();
-  };
-
-  const onCloseForm = () => {
-    editData.clear();
-    formState = false;
-  };
-
-  const onEditClick = async (data: User, index: number) => {
-    if (data satisfies User) {
-      editData.clear();
-      editData.set("id", data.id);
-      editData.set("username", data.username);
-      editData.set("email", data.email);
-      // editData.set("isAdmin", Number(data.isAdmin));
-      formState = true;
-      selectedIndex = index;
-    } else {
-      console.error("Data không thỏa mãn LichThiDau");
-      selectedIndex = -1;
-    }
-  };
-
-  const submitForm = async (e: Event, data: User) => {
-    e.preventDefault();
-
-    if (data.username.trim() === "" || data.email.trim() === "") {
-      showErrorToast("Username/Email không thể trống");
-      return;
-    }
-
-    try {
-      const response = await fetch("api/user", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        if (response.status !== 500) throw new Error(error.message);
-        throw new Error("Không thể update");
-      }
-
-      const responseData = await response.json();
-
-      console.log(responseData);
-      users[selectedIndex] = responseData;
-
-      showOkToast("Cập nhật thành công");
-      formState = false;
-    } catch (err) {
-      if (err instanceof Error) showErrorToast(err.message);
-    }
-  };
-
-  const onSubmit = async (e: Event) => {
+  const onSettingSubmit = async (e: Event) => {
     e.preventDefault();
 
     try {
@@ -139,6 +47,7 @@
       showErrorToast(String(err));
     }
   };
+
 
   // For roles dropdown
   let showRolesDropdown = $state(false);
@@ -311,16 +220,13 @@
   }
 </script>
 
-<Form
-  fields={userFields}
-  bind:formState
-  {submitForm}
-  {onOpenForm}
-  {onCloseForm}
-/>
 
-<main class="max-w-7xl mx-auto py-6 px-4">
-  <form onsubmit={onSubmit}>
+<main>
+  <SettingRoleTable bind:roles={roles}/>
+  
+  <SettingUserTable users={users} bind:groups={userGroups} />
+  
+  <form onsubmit={onSettingSubmit}>
     <SettingMainSection sectionName="System Settings">
       <SettingSection sectionName="Player Settings">
         <SettingNumberInput
@@ -648,15 +554,6 @@
         </div>
       </div>
     </SettingMainSection>
-
-    <Table
-      title="User Profiles"
-      columns={columnsUser}
-      data={users}
-      redirectParam={""}
-      tableType=""
-      {onEditClick}
-    />
 
     <div class="bg-white rounded-lg shadow-md p-6">
       <h2 class="text-2xl font-bold text-gray-800 mb-6">System Preferences</h2>

@@ -1,22 +1,22 @@
 import { and, eq, inArray } from "drizzle-orm";
 import { db } from "../../client"
 import { HasRoleTable } from "../../schema/User/HasRole";
-import { UserGroupTable } from "../../schema/User/UserGroup"
+import { UserGroupTable, type UserGroupInsertParams } from "../../schema/User/UserGroup"
 import { UserRoleTable } from "../../schema/User/UserRole";
-import type { UserGroupRoles } from "$lib/typesResponse";
+import type { UserGroupInsert, UserGroupRoles } from "$lib/typesResponse";
 
 export const selectAllUserGroup = async () => {
   return await db.select().from(UserGroupTable);
 }
 
-export const insertGroup = async (groupName : string) => {
-  return (await db.insert(UserGroupTable).values({ groupName }).returning({ id: UserGroupTable.groupId })).at(0)!!;
+export const upsertGroup = async (group : UserGroupInsertParams) => {
+  return (await db.insert(UserGroupTable).values(group)
+  .onConflictDoUpdate({
+    target: UserGroupTable.groupId,
+    set: { groupName: group.groupName }
+  })
+  .returning({ id: UserGroupTable.groupId })).at(0)!!;
 }
-
-export const updateGroup = async (groupId: number, groupName : string) => {
-  await db.update(UserGroupTable).set({ groupName: groupName }).where(eq(UserGroupTable.groupId, groupId));
-}
-
 export const selectAllUserGroupWithRole = async () : Promise<UserGroupRoles[]> => {
   const groups = await db.select().from(UserGroupTable);
   let groupRoles : UserGroupRoles[] = [];
