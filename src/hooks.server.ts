@@ -49,5 +49,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 	else {
 		event.locals.muaGiai = JSON.parse(selectedMuaGiai) satisfies MuaGiai;
 	}
+	
+  if (event.locals.user !== null && 
+		event.route.id !== null && event.route.id !== "/" &&
+		(await checkPageViewable(event.locals.user?.groupId!!, event.route.id)) === false)
+    error(401);
   return resolve(event);
 };

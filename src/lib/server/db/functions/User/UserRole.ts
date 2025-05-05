@@ -15,9 +15,15 @@ export const upsertRole = async(data : UserRoleInsertParams) => {
 }
 
 export const checkPageViewable = async (groupId : number, pageName: string) => {
-  return (await db.select().from(HasRoleTable)
-    .innerJoin(UserRoleTable, eq(UserRoleTable.roleId, HasRoleTable.roleId))
-    .where(and(eq(HasRoleTable.groupId, groupId), eq(UserRoleTable.viewablePage, pageName))).limit(1)).length != 0;
+  console.log(pageName);
+  const roles = (await db.select(getTableColumns(UserRoleTable)).from(HasRoleTable)
+  .innerJoin(UserRoleTable, eq(UserRoleTable.roleId, HasRoleTable.roleId))
+  .where(eq(HasRoleTable.groupId, groupId))
+  .groupBy(UserRoleTable.roleId));
+  for (const role of roles)
+    if (pageName.match(role.viewablePage))
+      return true;
+  return false;
 }
 
 export const checkPageEditable = async (groupId : number, pageName: string) => {
