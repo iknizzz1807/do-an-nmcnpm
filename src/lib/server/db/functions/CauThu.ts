@@ -1,4 +1,4 @@
-import { eq, and, ilike, getTableColumns } from "drizzle-orm";
+import { eq, and, ilike, getTableColumns, sql, sum, gt } from "drizzle-orm";
 import { db } from "../client";
 import { CauThuTable } from "../schema/CauThu";
 import { DoiBongTable } from "../schema/DoiBong";
@@ -6,6 +6,7 @@ import { BanThangTable } from "../schema/BanThang";
 import type { CauThu } from "$lib/typesDatabase";
 import type { KQTraCuuCauThu } from "$lib/typesResponse";
 import { ThamGiaTDTable } from "../schema/ThamGiaTD";
+import { LoaiBTTable } from "../schema/Data/LoaiBT";
 
 export const insertCauThu = async (...cauThu: CauThu[]) => {
   let returning = await db.insert(CauThuTable).values(cauThu).returning({ id: CauThuTable.maCT });
@@ -38,10 +39,16 @@ export const selectAllCauThu = async () => {
 };
 
 export const selectAllCauThuWithBanThang = async () => {
-  return (await db.select({ 
-    ...getTableColumns(CauThuTable), 
-    banThang: db.$count(BanThangTable, eq(BanThangTable.maCT, CauThuTable.maCT))
-  }).from(CauThuTable)) satisfies CauThu[];
+  let ctWithBT = (await db.select({ 
+    ...getTableColumns(CauThuTable),
+    banThang: sql<number>`sum(CASE WHEN ${LoaiBTTable.diemBT} > 0 THEN ${LoaiBTTable.diemBT} END )`
+  }).from(CauThuTable)
+  .leftJoin(BanThangTable, eq(BanThangTable.maCT, CauThuTable.maCT))
+  .leftJoin(LoaiBTTable, eq(LoaiBTTable.maLBT, BanThangTable.maLBT))
+  .groupBy(CauThuTable.maCT)
+  ) satisfies CauThu[];
+  for (let ct of ctWithBT) ct.banThang = ct.banThang ?? 0;
+  return ctWithBT;
 };
 
 export const selectCauThuTen = async (tenCT: string) => {

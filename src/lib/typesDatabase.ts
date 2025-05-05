@@ -120,6 +120,7 @@ export type VongTD = {
 export type LoaiBT = {
     maLBT?: number | undefined;
     tenLBT: string;
+    diemBT?: number | undefined;
 }
 
 export type LoaiTP = {

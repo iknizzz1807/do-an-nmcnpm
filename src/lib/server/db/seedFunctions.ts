@@ -14,7 +14,6 @@ import { TrongTaiTable } from "./schema/TrongTai";
 
 export const generateBanThang = async (maTD: number, maDoi: number, offset : number = 0.0, soBTDoiMot: number = 5) => {
   console.log("BAN THANG !!!!!!!!!!!!!!!");
-
   // if (soBTDoiMot == 0 || soBTDoiHai == 0)
   //   throw new Error("soBT generate khong the bang 0");
   // if (lichThiDau === undefined)
@@ -28,16 +27,6 @@ export const generateBanThang = async (maTD: number, maDoi: number, offset : num
         eq(ThamGiaTDTable.maDoi, maDoi),
         eq(ThamGiaTDTable.maTD, maTD)));
 
-  // const cauThusDoi2 = await db.select({
-  //   ...getTableColumns(CauThuTable)
-  // })
-  //   .from(CauThuTable)
-  //   .innerJoin(ThamGiaTDTable, 
-  //     and(eq(ThamGiaTDTable.maCT, CauThuTable.maCT), 
-  //       eq(ThamGiaTDTable.maDoi, lichThiDau.doiHai),
-  //       eq(ThamGiaTDTable.maTD, lichThiDau.maTD!!)));
-
-  // console.log("Stage 1");
   const n1 = Math.min(soBTDoiMot, cauThusDoi1.length - 1);
   for (let i = 0; i < n1; i++) {
     const cauThu = cauThusDoi1.at(randIntBetween(0, cauThusDoi1.length - 1));
@@ -48,25 +37,10 @@ export const generateBanThang = async (maTD: number, maDoi: number, offset : num
       thoiDiem: 90.0 * (i + 1 + offset) / (n1 + 1) + offset,
 
       maCT: cauThu.maCT,
-      maLBT: choose([1, 2, 3])
+      maLBT: choose([1, 2, 3, 4])
     }
     await db.insert(BanThangTable).values(banThang);
   }
-  // console.log("Stage 2");
-  // const n2 = Math.min(soBTDoiHai, cauThusDoi2.length - 1);
-  // for (let i = 0; i < n2; i++) {
-  //   const cauThu = cauThusDoi2.at(randIntBetween(0, cauThusDoi2.length - 1));
-  //   if (cauThu === undefined)
-  //     throw new Error("Khong the xac dinh duoc cau thu");
-  //   const banThang : BanThang = {
-  //     maTD: lichThiDau.maTD!!,
-  //     thoiDiem: 90.0 * (i + 0.5) / (n2 + 1.0),
-
-  //     maCT: cauThu.maCT,
-  //     maLBT: choose([1, 2, 3])
-  //   }
-  //   await db.insert(BanThangTable).values(banThang);
-  // }
 }
 
 export const generateThePhat = async (maTD: number, soTPDoiMot: number = 5, soTPDoiHai: number = 5) => {

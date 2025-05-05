@@ -24,8 +24,12 @@ export const POST : RequestHandler = async ({ request, locals } : { request: Req
     maVTD: parseInt(data.maVTD),
     doiThang: parseInt(data.doiThang),
     maMG: locals.muaGiai!!.maMG!!,
+    maSan: 1,
     maTD: data.maTD,
-    ngayGio: new Date(data.ngayGio).toJSON(),
+    maTT: data.maTT,
+    thoiGianDaThiDau: 0,
+    ngayGioThucTe: new Date(data.ngayGioThucTe).toJSON(),
+    ngayGioDuKien: new Date(data.ngayGioDuKien).toJSON(),
   };
 
   if ((lichThiDau.maTD ?? null) === null) {

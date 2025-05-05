@@ -69,9 +69,10 @@ await db.insert(ViTriTable).values([
 ]);
 
 await db.insert(LoaiBTTable).values([
-  { tenLBT: "A" }, 
-  { tenLBT: "B" }, 
-  { tenLBT: "C" }
+  { tenLBT: "A", diemBT: 1 }, 
+  { tenLBT: "B", diemBT: 1 }, 
+  { tenLBT: "C", diemBT: 1 }, 
+  { tenLBT: "Phản lưới", diemBT: -1 },
 ]);
 
 await db.insert(LoaiCTTable).values([

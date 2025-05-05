@@ -26,7 +26,7 @@ export const createAdmin = async() => {
     email: getRandomUUID(), 
     username: "Admin", 
     passwordHash: getRandomUUID(), 
-    groupId: 99999 
+    groupId: 0 
   });
   return (await db.select().from(UserTable).where(eq(UserTable.id, 0))).at(0)!!;
 

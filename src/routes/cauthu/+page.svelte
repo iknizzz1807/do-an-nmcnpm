@@ -33,7 +33,7 @@
   ];
 
   const columns = [
-    { header: "Mã cầu thủ", accessor: "maCT", hidden: true },
+    { header: "Mã cầu thủ", accessor: "maCT" },
     { header: "Tên cầu thủ", accessor: "tenCT" },
     { header: "Ngày sinh", accessor: "ngaySinh" },
     { header: "Loại cầu thủ", accessor: "maLCT", accessFunction: (data: CauThu) => {
@@ -41,6 +41,7 @@
     } },
     //{ header: "Nước ngoài", accessor: "nuocNgoai" },
     { header: "Ghi chú", accessor: "ghiChu" },
+    { header: "Số bàn thắng", accessor: "banThang" },
   ];
 
   let formState: boolean = $state(false);

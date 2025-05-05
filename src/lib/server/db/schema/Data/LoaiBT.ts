@@ -4,7 +4,8 @@ import { integer, sqliteTable, text, uniqueIndex } from 'drizzle-orm/sqlite-core
 
 export const LoaiBTTable = sqliteTable('LoaiBT', {
     maLBT: integer().unique().primaryKey({ autoIncrement: true }).notNull(),
-    tenLBT: text().notNull()
+    tenLBT: text().notNull(),
+    diemBT: integer().default(1).notNull()
 }, (table) => [
 ])
 
