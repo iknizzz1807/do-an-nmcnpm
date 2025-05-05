@@ -1,5 +1,5 @@
 # Đồ án nhập môn công nghệ phần mềm với đề tài "Quản lý giải vô địch bóng đá"
- 
+
 To run the project in the development
 
 ```bash
@@ -7,7 +7,6 @@ npm run dev
 
 npm run dev-seeddb
 
-npm run dev-resetdb
 
 # or start the server and open the app in a new browser tab
 npm run dev -- --open
