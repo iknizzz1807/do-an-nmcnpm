@@ -6,15 +6,18 @@ import type { CauThu } from "$lib/typesDatabase";
 import { calculateAge, errorResponseJSON } from "$lib";
 import { selectThamSo } from "$lib/server/db/functions/ThamSo";
 
-export const GET: RequestHandler = async ({ params, locals }) => {
-  const maDoi = parseInt(params.ma_doi);
+export const _GETCauThuMaDoi = async(ma_doi: string) => {
+  const maDoi = parseInt(ma_doi);
   if (!Number.isFinite(maDoi))
     throw new Error("Khong tim thay doi");
+  return await selectCauThuDoiBong(maDoi);
+}
+
+export const GET: RequestHandler = async ({ params, locals }) => {
   if ((locals.muaGiai ?? null) === null)
     throw new Error("Không tìm thấy mùa giải");
   
-  const danhSachCauThu = await selectCauThuDoiBong(maDoi);
-  // console.log(danhSachCauThu);
+  const danhSachCauThu = await _GETCauThuMaDoi(params.ma_doi);
 
   return new Response(JSON.stringify(danhSachCauThu), {
     status: 200,

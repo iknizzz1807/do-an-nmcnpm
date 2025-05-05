@@ -2,10 +2,14 @@ import { deleteLichThiDau, insertLichThiDau, selectAllLichThiDauWithName, update
 import type { LichThiDau } from "$lib/typesDatabase";
 import { type RequestHandler } from "@sveltejs/kit";
 
+export const _GETLichThiDau = async (maMG: number) => {
+  return await selectAllLichThiDauWithName(maMG);
+}
+
 export const GET : RequestHandler = async({ locals }) => {
   if ((locals.muaGiai ?? null) === null)
     throw new Error("Không tìm thấy mùa giải");
-  let dsLTD = await selectAllLichThiDauWithName(locals.muaGiai!!.maMG!!);
+  let dsLTD = await _GETLichThiDau(locals.muaGiai!!.maMG!!);
   return new Response(JSON.stringify(dsLTD), {
     status: 200,
     headers: {

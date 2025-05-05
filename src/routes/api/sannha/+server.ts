@@ -2,8 +2,12 @@
 import { insertSanNha, selectAllSanNha, updateSanNha } from "$lib/server/db/functions/Data/SanNha";
 import type { RequestHandler } from "./$types";
 
+export const _GETSanNha = async () => {
+  return await selectAllSanNha();
+}
+
 export const GET: RequestHandler = async ({ locals }) => {
-  let result = await selectAllSanNha();
+  let result = await _GETSanNha();
   return new Response(JSON.stringify(result), {
     status: 200,
     headers: {

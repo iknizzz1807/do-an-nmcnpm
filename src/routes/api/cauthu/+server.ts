@@ -4,6 +4,10 @@ import type { CauThu } from "$lib/typesDatabase";
 import { calculateAge, errorResponseJSON } from "$lib";
 import { selectThamSo } from "$lib/server/db/functions/ThamSo";
 
+export const _GETCauThu = async() => {
+  return await selectAllCauThuWithBanThang();
+}
+
 export const GET: RequestHandler = async ({locals}) => {
   const danhSachCauThu = await selectAllCauThuWithBanThang();
   return new Response(JSON.stringify(danhSachCauThu), {

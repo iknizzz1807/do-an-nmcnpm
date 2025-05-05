@@ -1,33 +1,17 @@
 import { checkPageEditable } from "$lib/server/db/functions/User/UserRole";
 import type { DoiBong, SanNha } from "$lib/typesDatabase";
+import { _GETDoiBong } from "../api/doibong/+server";
+import { _GETSanNha } from "../api/sannha/+server";
 import type { PageServerLoad } from "./$types";
 
 export const load = (async ({ fetch, locals, route }) => {
   try {
-    const response = await fetch("api/doibong", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await _GETDoiBong(locals.muaGiai!!.maMG!!);
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch data");
-    }
+    const danhSachDoiBong: DoiBong[] = response;
+    const responseSN = await _GETSanNha();
 
-    const danhSachDoiBong: DoiBong[] = await response.json();
-
-    const responseSN = await fetch("api/sannha", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (!responseSN.ok) {
-      throw new Error("Failed to fetch data");
-    }
-
-    const danhSachSanNha : SanNha[] = await responseSN.json();
+    const danhSachSanNha : SanNha[] = responseSN;
     const isEditable = await checkPageEditable(locals.user!!.groupId, route.id);
 
     return {

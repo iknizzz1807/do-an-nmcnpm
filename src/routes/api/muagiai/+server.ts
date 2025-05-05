@@ -1,8 +1,12 @@
 import { deleteMuaGiai, insertMuaGiai, selectAllMuaGiai, updateMuaGiai } from "$lib/server/db/functions/MuaGiai";
 import type { RequestHandler } from "@sveltejs/kit";
 
+export const _GETMuaGiai = async () => {
+  return await selectAllMuaGiai();
+}
+
 export const GET: RequestHandler = async ({locals}) => {
-  let MuaGiai = await selectAllMuaGiai();
+  let MuaGiai = await _GETMuaGiai();
   return new Response(JSON.stringify(MuaGiai), {
     status: 200,
     headers: {

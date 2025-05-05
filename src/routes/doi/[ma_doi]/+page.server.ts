@@ -2,6 +2,7 @@ import { selectLoaiCT } from "$lib/server/db/functions/Data/LoaiCT";
 import { selectThamSo } from "$lib/server/db/functions/ThamSo";
 import { checkPageEditable } from "$lib/server/db/functions/User/UserRole";
 import type { CauThu } from "$lib/typesDatabase";
+import { _GETCauThuMaDoi } from "../../api/cauthu/[ma_doi]/+server";
 import type { PageServerLoad } from "./$types";
 
 export const load = (async ({ params, fetch, locals, route }) => {
@@ -9,19 +10,10 @@ export const load = (async ({ params, fetch, locals, route }) => {
   // Cái này là data giả để mô phỏng data thật được get request từ danh sách các cầu thủ của một đội bóng
 
   try {
-    const response = await fetch("/api/cauthu/" + params.ma_doi, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
 
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch data");
-    }
-
-    const danhSachCauThu: CauThu[] = await response.json();
+    const response = await _GETCauThuMaDoi(params.ma_doi);
+  
+    const danhSachCauThu: CauThu[] = response;
 
     const tuoiMin = (await selectThamSo("tuoiMin"))!!;
     const tuoiMax = (await selectThamSo("tuoiMax"))!!;

@@ -2,22 +2,14 @@ import { selectLoaiCT } from "$lib/server/db/functions/Data/LoaiCT";
 import { selectThamSo } from "$lib/server/db/functions/ThamSo";
 import { checkPageEditable } from "$lib/server/db/functions/User/UserRole";
 import type { CauThu } from "$lib/typesDatabase";
+import { _GETCauThu } from "../api/cauthu/+server";
 import type { PageServerLoad } from "./$types";
 
 export const load = (async ({ fetch, locals, route }) => {
   try {
-    const response = await fetch("api/cauthu", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await _GETCauThu();
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch data");
-    }
-
-    const danhSachCauThu: CauThu[] = await response.json();
+    const danhSachCauThu: CauThu[] = response;
 
     const tuoiMin = (await selectThamSo("tuoiMin"))!!;
     const tuoiMax = (await selectThamSo("tuoiMax"))!!;

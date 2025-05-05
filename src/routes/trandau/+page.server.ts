@@ -1,45 +1,20 @@
 import { checkPageEditable } from "$lib/server/db/functions/User/UserRole";
 import type { DoiBong, MuaGiai, LichThiDau } from "$lib/typesDatabase";
+import { _GETDoiBong } from "../api/doibong/+server";
+import { _GETLichThiDau } from "../api/lichthidau/+server";
+import { _GETMuaGiai } from "../api/muagiai/+server";
 import type { PageServerLoad } from "./$types";
 
 
 export const load = (async ({ fetch, locals, route }) => {
   try {
-
-    const response = await fetch("/api/lichthidau", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
-    if (!response.ok) {
-      throw new Error("Failed to fetch data");
-    }
-
-    const responseDB = await fetch("/api/doibong", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
-    if (!responseDB.ok) {
-      throw new Error("Failed to fetch data");
-    }
-
-    const responseMG = await fetch("/api/muagiai", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
-
-    if (!responseMG.ok) {
-      throw new Error("Failed to fetch data");
-    }
+    const response = await _GETLichThiDau(locals.muaGiai!!.maMG!!);
+    const responseDB = await _GETDoiBong(locals.muaGiai!!.maMG!!);
+    const responseMG = await _GETMuaGiai();
     
-    const danhSachLTD: LichThiDau[] = await response.json();
-    const danhSachDoi: DoiBong[] = await responseDB.json();
-    const danhSachMuaGiai: MuaGiai[] = await responseMG.json();
+    const danhSachLTD: LichThiDau[] = response;
+    const danhSachDoi: DoiBong[] = responseDB;
+    const danhSachMuaGiai: MuaGiai[] = responseMG;
 
     const isEditable = await checkPageEditable(locals.user!!.groupId, route.id);
 

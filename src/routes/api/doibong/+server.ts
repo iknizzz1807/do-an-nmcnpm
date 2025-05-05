@@ -1,8 +1,12 @@
 import type { RequestHandler } from "./$types";
 import { deleteDoiBong, insertDoiBong, selectDoiBongMuaGiai, updateDoiBong } from "$lib/server/db/functions/DoiBong";
 
+export const _GETDoiBong = async(maMG: number) => {
+  return await selectDoiBongMuaGiai(maMG);
+}
+
 export const GET: RequestHandler = async ({ locals }) => {
-  let danhSachDoiBong = await selectDoiBongMuaGiai(locals.muaGiai!!.maMG!!);
+  let danhSachDoiBong = await _GETDoiBong(locals.muaGiai!!.maMG!!);
   return new Response(JSON.stringify(danhSachDoiBong), {
     status: 200,
     headers: {

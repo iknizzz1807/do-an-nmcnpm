@@ -2,6 +2,11 @@ import type { RequestHandler } from "./$types";
 import type { ThamGiaTD } from "$lib/typesDatabase";
 import { insertThamGiaTD, selectCauThuTranDau } from "$lib/server/db/functions/ThamGiaTD";
 
+
+export const _GETLichThiDauMaDoi = async (maTD : number, maDoi : number) => {
+  return await selectCauThuTranDau(maTD, maDoi);
+}
+
 export const GET: RequestHandler = async ({ params, locals }) => {
   const maTD = parseInt(params.matd);
   if (!Number.isFinite(maTD))
@@ -10,7 +15,7 @@ export const GET: RequestHandler = async ({ params, locals }) => {
   if (!Number.isFinite(maDoi))
     throw new Error("Khong tim thay Đội");
 
-  const danhSachCauThu = await selectCauThuTranDau(maTD, maDoi);
+  const danhSachCauThu = await _GETLichThiDauMaDoi(maTD, maDoi);
   // console.log(danhSachCauThu);
 
   return new Response(JSON.stringify(danhSachCauThu), {
@@ -36,7 +41,7 @@ export const POST: RequestHandler = async ({ request, params, locals }) => {
       maTD: maTD,
       maDoi: maDoi,
       maCT: data.maCT,
-      viTri: data.viTri,
+      maVT: data.maVT,
     });
   } catch (error) {
     throw error;
