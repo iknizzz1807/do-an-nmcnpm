@@ -7,6 +7,7 @@
   import { type FieldOption, type FormField, type FormInputMap } from "$lib/components/Form.svelte";
   import Form from "$lib/components/Form.svelte";
   import { SvelteMap } from "svelte/reactivity";
+  import { page } from "$app/state";
 
   let { data }: PageProps = $props();
 
@@ -211,6 +212,7 @@
 {#if isEditable}
   <div class="flex justify-center">
     <ButtonPrimary text={"Thêm trận đấu mới"} onclick={() => {formState = true}} />
+    <a href={ "/sapxeptrandau"}>Sắp xếp lịch</a>
   </div>
 {/if}
 

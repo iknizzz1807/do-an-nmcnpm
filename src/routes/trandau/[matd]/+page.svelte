@@ -28,6 +28,7 @@
   ]
 
 </script>
+
 <a href={ page.url.pathname + "/chitiet"}>Chi tiết</a>
 
 <svelte:head>
