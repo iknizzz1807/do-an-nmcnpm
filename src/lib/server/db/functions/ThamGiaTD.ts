@@ -1,12 +1,15 @@
 import type { ThamGiaTD } from "$lib/typesDatabase";
 import { db } from "../client";
-import { eq, and, getTableColumns } from "drizzle-orm";
+import { eq, and, getTableColumns, sql } from "drizzle-orm";
 import { ThamGiaTDTable } from "../schema/ThamGiaTD";
 import { CauThuTable } from "../schema/CauThu";
 
 // Return maCT
 export const upsertThamGiaTD = async (...thamGiaTD: ThamGiaTD[]) => {
-  await db.insert(ThamGiaTDTable).values(thamGiaTD).onConflictDoNothing();
+  await db.insert(ThamGiaTDTable).values(thamGiaTD).onConflictDoUpdate({
+    target: [ThamGiaTDTable.maTD, ThamGiaTDTable.maCT],
+    set: { maVT: sql`excluded.maVT`}
+  });
 };
 
 export const insertThamGiaTD = async (...thamGiaTD: ThamGiaTD[]) => {

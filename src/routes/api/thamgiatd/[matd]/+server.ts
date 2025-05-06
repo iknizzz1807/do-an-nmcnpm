@@ -11,7 +11,6 @@ export const POST : RequestHandler = async ({ params, locals, request }) => {
     throw new Error("matd param không đúng");
   if (!(data satisfies ThamGiaTD[]))
     throw new Error("data không thỏa mãn");
-  console.log(data);
   await upsertThamGiaTD(...data);
   
   return new Response(JSON.stringify({}), {
