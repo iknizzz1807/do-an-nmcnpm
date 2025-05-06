@@ -6,7 +6,7 @@
     TableColumnSpecifier,
     TableProps,
   } from "$lib/components/Table.svelte";
-  import type { CauThu, LichThiDau } from "$lib/typesDatabase";
+  import type { CauThu, LichThiDau, ViTri } from "$lib/typesDatabase";
   import type { PageData, PageProps } from "./$types";
 
   let { data } : PageProps = $props();
@@ -17,14 +17,13 @@
   const maDoiHai = $state(data.maDoiHai);
   const tenDoiMot = $state(data.tenDoiMot);
   const tenDoiHai = $state(data.tenDoiHai);
+  const viTri = $state(data.viTri);
   // Type for players participating in the match with selected position
   type ParticipatingPlayer = {
     player: CauThu;
-    position: string;
+    position: ViTri;
   };
-
-  const positions = $state(["Thủ môn", "Hậu vệ", "Tiền vệ", "Tiền đạo"]);
-  const defaultPosition = $state("Tiền đạo"); // Default position when adding
+  $inspect(viTri);
 
   let activeTab: "team1" | "team2" = $state("team1");
   // Store arrays of ParticipatingPlayer objects
@@ -56,8 +55,9 @@
   function addPlayerFromTable(playerToAdd: CauThu, index: number) {
     const newParticipant: ParticipatingPlayer = {
       player: playerToAdd,
-      position: defaultPosition, // Assign default position
+      position: viTri[0], // Assign default position
     };
+    console.log(newParticipant);
     if (activeTab === "team1") {
       // Create new array to trigger reactivity
       participatingTeam1Players = [
@@ -110,6 +110,7 @@
      } }, // Unique accessor for the slot
     { header: "Vị trí", accessor: "position" }, // Accessor for the position slot/dropdown
   ];
+  // $inspect(participatingTeam1Players);
 
   // Optional: Load initial data
   onMount(() => {
@@ -194,8 +195,8 @@
           bind:value={participant.position}
           class="border rounded px-2 py-1 bg-white text-sm w-full"
         >
-          {#each positions as pos (pos)}
-            <option value={pos}>{pos}</option>
+          {#each viTri as pos}
+            <option value={pos}>{pos.tenVT}</option>
           {/each}
         </select>
       {:else}

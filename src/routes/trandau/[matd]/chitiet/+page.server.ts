@@ -1,5 +1,6 @@
 import { isNumber } from "$lib";
 import { selectCauThuDoiBong, selectCauThuTGTD } from "$lib/server/db/functions/CauThu";
+import { selectAllViTri } from "$lib/server/db/functions/Data/ViTri";
 import { selectDoiBongTenDoi } from "$lib/server/db/functions/DoiBong";
 import { selectLichThiDauMaTD } from "$lib/server/db/functions/LichThiDau";
 import { selectThamSo } from "$lib/server/db/functions/ThamSo";
@@ -32,6 +33,8 @@ export const load = (async ({ fetch, params, locals, route }) => {
     const cauThuDoiMot = await selectCauThuTGTD(tranDau.maTD!!, tranDau.doiMot);
     const cauThuDoiHai = await selectCauThuTGTD(tranDau.maTD!!, tranDau.doiHai);
 
+    const viTri = await selectAllViTri();
+
     const responseBT = await fetch("/api/banthang/" + maTD, {
       method: "GET",
       headers: {
@@ -51,13 +54,6 @@ export const load = (async ({ fetch, params, locals, route }) => {
     if (!responseTP.ok) {
       throw new Error("Failed to fetch Thẻ phạt");
     }
-
-    const danhSachBanThang : BanThang[] = await responseBT.json();
-    const danhSachThePhat : ThePhat[] = await responseTP.json();
-    danhSachBanThang.sort((a, b) => a.thoiDiem - b.thoiDiem);
-    danhSachThePhat.sort((a, b) => a.thoiDiem - b.thoiDiem);
-    const thoiDiemGhiBanToiDa = (await selectThamSo("thoiDiemGhiBanToiDa"))!!;
-    // const isEditable = await checkPageEditable(locals.user!!.groupId, route.id);
     
     return {
       maTD: maTD,
@@ -65,11 +61,9 @@ export const load = (async ({ fetch, params, locals, route }) => {
       maDoiHai: tranDau.doiHai,
       tenDoiMot: doiMot.tenDoi,
       tenDoiHai: doiHai.tenDoi,
-      thoiDiemGhiBanToiDa: thoiDiemGhiBanToiDa,
       cauThuDoiMot: cauThuDoiMot,
       cauThuDoiHai: cauThuDoiHai,
-      danhSachBanThang: danhSachBanThang,
-      danhSachThePhat: danhSachThePhat,
+      viTri: viTri,
       isEditable: true
     }
   } catch (err) {
@@ -79,11 +73,9 @@ export const load = (async ({ fetch, params, locals, route }) => {
       maDoiHai: 0,
       tenDoiMot: "",
       tenDoiHai: "",
-      thoiDiemGhiBanToiDa: 0,
       cauThuDoiMot: [],
       cauThuDoiHai: [],
-      danhSachBanThang: [],
-      danhSachThePhat: [],
+      viTri: [],
       isEditable: false
     }
   }
