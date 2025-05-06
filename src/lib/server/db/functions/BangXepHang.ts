@@ -26,17 +26,31 @@ export const selectBXHDoiNgay = async (ngay: Date) => {
     if (doi === undefined)
       throw new Error("Doi mot khong ton tai");
 
-    const soTran = await db.$count(LichThiDauTable, or(eq(LichThiDauTable.doiMot, value), eq(LichThiDauTable.doiHai, value)));
+    const soTran = await db.$count(LichThiDauTable, 
+      and(
+        sql`date(${LichThiDauTable.ngayGioThucTe}) = date(${ngay.toJSON()})`,
+        or(
+          eq(LichThiDauTable.doiMot, value), 
+          eq(LichThiDauTable.doiHai, value)
+        )
+      )
+    );
     
     const soTranThang = await db.$count(LichThiDauTable, 
         and(
-          or(eq(LichThiDauTable.doiMot, value), eq(LichThiDauTable.doiHai, value)), 
+          sql`date(${LichThiDauTable.ngayGioThucTe}) = date(${ngay.toJSON()})`,
           eq(LichThiDauTable.doiThang, value))
         );
 
     const soTranThua = await db.$count(LichThiDauTable, 
       and(
-        or(eq(LichThiDauTable.doiMot, value), eq(LichThiDauTable.doiHai, value)), 
+        sql`date(${LichThiDauTable.ngayGioThucTe}) = date(${ngay.toJSON()})`,
+        or(
+          or(
+            eq(LichThiDauTable.doiMot, value), 
+            eq(LichThiDauTable.doiHai, value)
+          )
+        ),
         ne(LichThiDauTable.doiThang, value))
       );
     const doiBXH = {

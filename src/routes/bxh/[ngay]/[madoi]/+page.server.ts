@@ -10,7 +10,7 @@ export const load : PageServerLoad = async ({ params, fetch }) => {
 
     let date = new Date(ngay);
 
-    const response = await fetch("/api/bangxephang/" + dateFormat(date, "isoDate") + "/" + params.madoi, {
+    const response = await fetch("/api/bxh/" + dateFormat(date, "isoDate") + "/" + params.madoi, {
       method: "GET",
       headers: {
         "Content-Type": "application/json"

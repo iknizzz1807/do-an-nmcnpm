@@ -21,7 +21,7 @@
 
   const onDateChange = async (e: Event) => {
     try {
-      const reponse = await fetch("/api/bangxephang/" + dateFormat(dateBXH, "isoDate"), {
+      const reponse = await fetch("/api/bxh/" + dateFormat(dateBXH, "isoDate"), {
         method: "GET",
         headers: {
           "Content-Type": "application/json"

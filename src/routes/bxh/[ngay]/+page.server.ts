@@ -9,7 +9,7 @@ export const load = (async ({ fetch, locals, params }) => {
       throw new Error("Ngày không được trống");
     let date = new Date(ngay);
 
-    const reponse = await fetch("/api/bangxephang/" + dateFormat(date, "isoDate"), {
+    const reponse = await fetch("/api/bxh/" + dateFormat(date, "isoDate"), {
       method: "GET",
       headers: {
         "Content-Type": "application/json"
