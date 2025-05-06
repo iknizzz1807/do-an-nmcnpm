@@ -4,9 +4,11 @@
     header: string;
     accessor: string;
     hidden?: boolean | undefined;
+    accessFunction?: ((data: any) => string) | undefined;
   };
 
   export type TableProps = {
+    customRender?: Snippet<[any, any]>,
     title: string;
     columns: TableColumnSpecifier[];
     data: any[];
@@ -24,9 +26,11 @@
   // ... (Imports and state remain the same) ...
   import { goto } from "$app/navigation";
   import { isNumber } from "$lib";
+  import type { Snippet } from "svelte";
 
   let mouseHover = $state(false);
   let {
+    customRender,
     title,
     columns,
     data,
@@ -104,10 +108,17 @@
                 {#if !column.hidden}
                   <td class="px-6 py-4 whitespace-nowrap">
                     <!-- Use default slot and pass context -->
-                    <slot {row} {index} {column}>
-                      <!-- Default rendering if parent doesn't provide slot content -->
-                      {@html row[column.accessor] ?? ""}
-                    </slot>
+                    <!-- <slot {row} {index} {column}> -->
+                    {#if customRender}
+                      {@render customRender(row, column)}
+                    {:else}
+                      {#if (column.accessFunction ?? null) !== null}
+                        {column.accessFunction!!(row)}
+                      {:else if !column.hidden}
+                        {row[column.accessor]}
+                      {/if}
+                    {/if}
+                    <!-- </slot> -->
                   </td>
                 {/if}
               {/each}
@@ -116,7 +127,7 @@
               {#if (deleteButton || editButton || addButton) && isEditable}
                 <td class="px-6 py-4 whitespace-nowrap">
                   <!-- Pass row and index to the actions slot -->
-                  <slot name="actions" {row} {index}>
+                  <!-- <slot name="actions" {row} {index}> -->
                     {#if addButton}
                       <button
                         class="text-blue-600 hover:text-blue-900 mr-3"
@@ -159,7 +170,7 @@
                         Delete
                       </button>
                     {/if}
-                  </slot>
+                  <!-- </slot> -->
                 </td>
               {/if}
             </tr>

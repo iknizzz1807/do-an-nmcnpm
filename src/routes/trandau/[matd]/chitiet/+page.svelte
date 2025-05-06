@@ -6,47 +6,25 @@
     TableColumnSpecifier,
     TableProps,
   } from "$lib/components/Table.svelte";
-  import type { LichThiDau } from "$lib/typesDatabase";
+  import type { CauThu, LichThiDau } from "$lib/typesDatabase";
+  import type { PageData, PageProps } from "./$types";
 
-  // Player type without position
-  type Player = {
-    id: string;
-    name: string;
-    // position: string; // Removed
-    teamId: string;
-  };
+  let { data } : PageProps = $props();
 
+  const cauThuDoiMot = $state(data.cauThuDoiMot);
+  const cauThuDoiHai = $state(data.cauThuDoiHai);
+  const maDoiMot = $state(data.maDoiMot);
+  const maDoiHai = $state(data.maDoiHai);
+  const tenDoiMot = $state(data.tenDoiMot);
+  const tenDoiHai = $state(data.tenDoiHai);
   // Type for players participating in the match with selected position
   type ParticipatingPlayer = {
-    player: Player;
+    player: CauThu;
     position: string;
   };
 
   const positions = $state(["Thủ môn", "Hậu vệ", "Tiền vệ", "Tiền đạo"]);
   const defaultPosition = $state("Tiền đạo"); // Default position when adding
-
-  // Mock Data (without position)
-  const matchDetails = $state({
-    matchId: "match123",
-    team1: { id: "teamA", name: "Dragon Warriors" },
-    team2: { id: "teamB", name: "Phoenix Knights" },
-    allPlayers: [
-      { id: "p1", name: "Nguyễn Văn A", teamId: "teamA" },
-      { id: "p2", name: "Trần Thị B", teamId: "teamA" },
-      { id: "p3", name: "Lê Văn C", teamId: "teamA" },
-      { id: "p4", name: "Phạm Thị D", teamId: "teamA" },
-      { id: "p5", name: "Hoàng Văn E", teamId: "teamA" },
-      { id: "p6", name: "Vũ Thị F", teamId: "teamA" },
-      { id: "p7", name: "Đặng Văn G", teamId: "teamA" },
-      { id: "p8", name: "Bùi Văn H", teamId: "teamB" },
-      { id: "p9", name: "Dương Thị I", teamId: "teamB" },
-      { id: "p10", name: "Ngô Văn K", teamId: "teamB" },
-      { id: "p11", name: "Mai Thị L", teamId: "teamB" },
-      { id: "p12", name: "Lý Văn M", teamId: "teamB" },
-      { id: "p13", name: "Trịnh Thị N", teamId: "teamB" },
-      { id: "p14", name: "Hồ Văn P", teamId: "teamB" },
-    ] as Player[],
-  });
 
   let activeTab: "team1" | "team2" = $state("team1");
   // Store arrays of ParticipatingPlayer objects
@@ -54,27 +32,28 @@
   let participatingTeam2Players = $state<ParticipatingPlayer[]>([]);
 
   // State for available players (still Player[])
-  let availablePlayersState = $state<Player[]>([]);
+  let availablePlayersState = $state<CauThu[]>([]);
 
   // Effect to calculate available players
   $effect(() => {
     const currentTeamId =
-      activeTab === "team1" ? matchDetails.team1.id : matchDetails.team2.id;
+      activeTab === "team1" ? maDoiMot : maDoiHai;
     const participatingPlayers =
       activeTab === "team1"
         ? participatingTeam1Players
         : participatingTeam2Players;
     const participatingIds = new Set(
-      participatingPlayers.map((p) => p.player.id)
+      participatingPlayers.map((p) => p.player.maCT)
     );
 
-    availablePlayersState = matchDetails.allPlayers.filter(
-      (p) => p.teamId === currentTeamId && !participatingIds.has(p.id)
+    // Lmao ahh ternary
+    availablePlayersState = (activeTab === "team1" ? cauThuDoiMot : cauThuDoiHai).filter(
+      (p) => p.maDoi === currentTeamId && !participatingIds.has(p.maCT)
     );
   });
 
   // Function to add a player (passed from Available Table)
-  function addPlayerFromTable(playerToAdd: Player, index: number) {
+  function addPlayerFromTable(playerToAdd: CauThu, index: number) {
     const newParticipant: ParticipatingPlayer = {
       player: playerToAdd,
       position: defaultPosition, // Assign default position
@@ -100,11 +79,11 @@
   ) {
     if (activeTab === "team1") {
       participatingTeam1Players = participatingTeam1Players.filter(
-        (p) => p.player.id !== participantToRemove.player.id
+        (p) => p.player.maCT !== participantToRemove.player.maCT
       );
     } else {
       participatingTeam2Players = participatingTeam2Players.filter(
-        (p) => p.player.id !== participantToRemove.player.id
+        (p) => p.player.maCT !== participantToRemove.player.maCT
       );
     }
   }
@@ -120,12 +99,15 @@
 
   // Columns for AVAILABLE players table (no position)
   const availableColumns: TableColumnSpecifier[] = [
-    { header: "Tên cầu thủ", accessor: "name" },
+    { header: "Tên cầu thủ", accessor: "tenCT" },
   ];
 
   // Columns for PARTICIPATING players table
   const participatingColumns: TableColumnSpecifier[] = [
-    { header: "Tên cầu thủ", accessor: "playerName" }, // Unique accessor for the slot
+    { header: "Tên cầu thủ", accessor: "tenCT", accessFunction: (data : ParticipatingPlayer) => {
+      console.log(data);
+      return data.player.tenCT;
+     } }, // Unique accessor for the slot
     { header: "Vị trí", accessor: "position" }, // Accessor for the position slot/dropdown
   ];
 
@@ -151,8 +133,7 @@
   <!-- Left Column: Player Selection -->
   <div>
     <h1 class="text-2xl font-bold mb-4">
-      Chọn cầu thủ thi đấu: {matchDetails.team1.name} vs {matchDetails.team2
-        .name}
+      Chọn cầu thủ thi đấu: {tenDoiMot} vs {tenDoiHai}
     </h1>
 
     <!-- Tabs -->
@@ -164,7 +145,7 @@
             : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
           onclick={() => (activeTab = "team1")}
         >
-          {matchDetails.team1.name}
+          {tenDoiMot}
         </button>
         <button
           class="{activeTab === 'team2'
@@ -172,7 +153,7 @@
             : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
           onclick={() => (activeTab = "team2")}
         >
-          {matchDetails.team2.name}
+          {tenDoiHai}
         </button>
       </nav>
     </div>
@@ -180,7 +161,7 @@
     <!-- Available Players Table -->
     <div>
       <Table
-        title={`Cầu thủ có sẵn (${activeTab === "team1" ? matchDetails.team1.name : matchDetails.team2.name})`}
+        title={`Cầu thủ có sẵn (${activeTab === "team1" ? tenDoiMot : tenDoiHai})`}
         columns={availableColumns}
         data={availablePlayersState}
         isEditable={true}
@@ -203,26 +184,10 @@
 
   <!-- Right Column: Participating Players Table -->
   <div>
-    <Table
-      title={`Cầu thủ thi đấu (${activeTab === "team1" ? matchDetails.team1.name : matchDetails.team2.name})`}
-      columns={participatingColumns}
-      data={activeTab === "team1"
-        ? participatingTeam1Players
-        : participatingTeam2Players}
-      isEditable={true}
-      tableType=""
-      redirectParam=""
-      onDeleteClick={removePlayerFromTable}
-      onEditClick={undefined}
-      onItemClick={undefined}
-      onAddClick={undefined}
-      let:row
-      let:column
-      let:index
-    >
+    {#snippet customTableRender(row: any, column: any)}
       <!-- Conditionally render based on column.accessor -->
-      {#if column.accessor === "playerName"}
-        {row.player.name}
+      {#if column.accessor === "tenCT"}
+        {row.player.tenCT}
       {:else if column.accessor === "position"}
         {@const participant = row as ParticipatingPlayer}
         <select
@@ -237,7 +202,22 @@
         <!-- Fallback for other columns if any (using default rendering from Table.svelte) -->
         {@html row[column.accessor] ?? ""}
       {/if}
-    </Table>
+    {/snippet}
+    <Table
+      title={`Cầu thủ thi đấu (${activeTab === "team1" ? tenDoiMot : tenDoiHai})`}
+      columns={participatingColumns}
+      data={activeTab === "team1"
+        ? participatingTeam1Players
+        : participatingTeam2Players}
+      isEditable={true}
+      tableType=""
+      redirectParam=""
+      onDeleteClick={removePlayerFromTable}
+      onEditClick={undefined}
+      onItemClick={undefined}
+      onAddClick={undefined}
+      customRender={customTableRender}
+    />
 
     {#if (activeTab === "team1" ? participatingTeam1Players.length : participatingTeam2Players.length) === 0}
       <p class="text-gray-500 italic mt-4 text-center">

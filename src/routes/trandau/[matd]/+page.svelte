@@ -4,6 +4,7 @@
   import { type FieldOption } from "$lib/components/Form.svelte";
   import BanThangTable from "./BanThangTable.svelte";
   import ThePhatTable from "./ThePhatTable.svelte";
+  import { page } from "$app/state";
   let { data }: PageProps = $props();
 
   const cauThuDoiMot : CauThu[] = $state(data.cauThuDoiMot);
@@ -27,6 +28,7 @@
   ]
 
 </script>
+<a href={ page.url.pathname + "/chitiet"}>Chi tiết</a>
 
 <svelte:head>
   <title>Các trận đấu</title>
