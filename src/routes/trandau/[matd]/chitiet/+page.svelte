@@ -6,13 +6,18 @@
     TableColumnSpecifier,
     TableProps,
   } from "$lib/components/Table.svelte";
-  import type { CauThu, LichThiDau, ViTri } from "$lib/typesDatabase";
+  import type { CauThu, LichThiDau, ThamGiaTD, ViTri } from "$lib/typesDatabase";
   import type { PageData, PageProps } from "./$types";
+  import { showErrorToast, showOkToast } from "$lib/components/Toast";
+  import { page } from "$app/state";
 
   let { data } : PageProps = $props();
 
+  const maTD = $state(data.maTD);
   const cauThuDoiMot = $state(data.cauThuDoiMot);
   const cauThuDoiHai = $state(data.cauThuDoiHai);
+  const cauThuThamGiaDoiMot = $state(data.cauThuThamGiaDoiMot);
+  const cauThuThamGiaDoiHai = $state(data.cauThuThamGiaDoiHai);
   const maDoiMot = $state(data.maDoiMot);
   const maDoiHai = $state(data.maDoiHai);
   const tenDoiMot = $state(data.tenDoiMot);
@@ -20,15 +25,27 @@
   const viTri = $state(data.viTri);
   // Type for players participating in the match with selected position
   type ParticipatingPlayer = {
-    player: CauThu;
-    position: ViTri;
+    cauThu: CauThu;
+    viTri: ViTri;
   };
-  $inspect(viTri);
+
+  // Columns for AVAILABLE players table (no position)
+  const availableColumns: TableColumnSpecifier[] = [
+    // { header: "Mã cầu thủ", accessor: "maCT", accessFunction: (data : CauThu) => (data.maCT!!.toString()) },
+    { header: "Tên cầu thủ", accessor: "tenCT" },
+  ];
+
+  // Columns for PARTICIPATING players table
+  const participatingColumns: TableColumnSpecifier[] = [
+    // { header: "Mã cầu thủ", accessor: "maCT", accessFunction: (data : ParticipatingPlayer) => (data.cauThu.maCT!!.toString()) },
+    { header: "Tên cầu thủ", accessor: "tenCT", accessFunction: (data : ParticipatingPlayer) => (data.cauThu.tenCT) }, // Unique accessor for the slot
+    { header: "Vị trí", accessor: "position" }, // Accessor for the position slot/dropdown
+  ];
 
   let activeTab: "team1" | "team2" = $state("team1");
   // Store arrays of ParticipatingPlayer objects
-  let participatingTeam1Players = $state<ParticipatingPlayer[]>([]);
-  let participatingTeam2Players = $state<ParticipatingPlayer[]>([]);
+  let participatingTeam1Players = $state<ParticipatingPlayer[]>(cauThuThamGiaDoiMot);
+  let participatingTeam2Players = $state<ParticipatingPlayer[]>(cauThuThamGiaDoiHai);
 
   // State for available players (still Player[])
   let availablePlayersState = $state<CauThu[]>([]);
@@ -42,7 +59,7 @@
         ? participatingTeam1Players
         : participatingTeam2Players;
     const participatingIds = new Set(
-      participatingPlayers.map((p) => p.player.maCT)
+      participatingPlayers.map((p) => p.cauThu.maCT)
     );
 
     // Lmao ahh ternary
@@ -54,20 +71,20 @@
   // Function to add a player (passed from Available Table)
   function addPlayerFromTable(playerToAdd: CauThu, index: number) {
     const newParticipant: ParticipatingPlayer = {
-      player: playerToAdd,
-      position: viTri[0], // Assign default position
+      cauThu: playerToAdd,
+      viTri: viTri[0], // Assign default position
     };
     console.log(newParticipant);
     if (activeTab === "team1") {
       // Create new array to trigger reactivity
       participatingTeam1Players = [
-        ...participatingTeam1Players,
         newParticipant,
+        ...participatingTeam1Players,
       ];
     } else {
       participatingTeam2Players = [
-        ...participatingTeam2Players,
         newParticipant,
+        ...participatingTeam2Players,
       ];
     }
   }
@@ -79,51 +96,42 @@
   ) {
     if (activeTab === "team1") {
       participatingTeam1Players = participatingTeam1Players.filter(
-        (p) => p.player.maCT !== participantToRemove.player.maCT
+        (p) => p.cauThu.maCT !== participantToRemove.cauThu.maCT
       );
     } else {
       participatingTeam2Players = participatingTeam2Players.filter(
-        (p) => p.player.maCT !== participantToRemove.player.maCT
+        (p) => p.cauThu.maCT !== participantToRemove.cauThu.maCT
       );
     }
   }
 
-  function saveSelection() {
-    console.log("Saving selection...");
-    // You might want to validate positions or counts here before saving
-    console.log("Team 1 Participating Players:", participatingTeam1Players);
-    console.log("Team 2 Participating Players:", participatingTeam2Players);
-    // Replace console logs with actual API call to save the data
-    alert("Selection saved! (Check console for details)");
+  async function saveSelection() {
+    try 
+    {
+      let data = [...participatingTeam1Players, ...participatingTeam2Players];
+      const body = data.map((value) => ({
+        maTD: maTD!!,
+        maCT: value.cauThu.maCT!!,
+        maDoi: value.cauThu.maDoi,
+        maVT: value.viTri.maVT!!,
+      }) satisfies ThamGiaTD);
+      const response = await fetch("/api/thamgiatd/" + maTD, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+      if (!response.ok)
+        throw new Error("wtf");
+      
+      showOkToast("Cập nhật thành công");
+    }
+    catch (e)
+    {
+      showErrorToast(String(e));
+    }
   }
-
-  // Columns for AVAILABLE players table (no position)
-  const availableColumns: TableColumnSpecifier[] = [
-    { header: "Tên cầu thủ", accessor: "tenCT" },
-  ];
-
-  // Columns for PARTICIPATING players table
-  const participatingColumns: TableColumnSpecifier[] = [
-    { header: "Tên cầu thủ", accessor: "tenCT", accessFunction: (data : ParticipatingPlayer) => {
-      console.log(data);
-      return data.player.tenCT;
-     } }, // Unique accessor for the slot
-    { header: "Vị trí", accessor: "position" }, // Accessor for the position slot/dropdown
-  ];
-  // $inspect(participatingTeam1Players);
-
-  // Optional: Load initial data
-  onMount(() => {
-    // Example of loading initial data if needed
-    // const initialPlayer1 = matchDetails.allPlayers.find(p => p.id === 'p1');
-    // const initialPlayer8 = matchDetails.allPlayers.find(p => p.id === 'p8');
-    // if (initialPlayer1) {
-    //   participatingTeam1Players = [{ player: initialPlayer1, position: 'Tiền đạo' }];
-    // }
-    // if (initialPlayer8) {
-    //   participatingTeam2Players = [{ player: initialPlayer8, position: 'Thủ môn' }];
-    // }
-  });
 </script>
 
 <svelte:head>
@@ -186,17 +194,19 @@
   <!-- Right Column: Participating Players Table -->
   <div>
     {#snippet customTableRender(row: any, column: any)}
+      {@const participant = row as ParticipatingPlayer}
       <!-- Conditionally render based on column.accessor -->
       {#if column.accessor === "tenCT"}
-        {row.player.tenCT}
+        {participant.cauThu.tenCT}
+      {:else if column.accessor === "maCT"}
+        {participant.cauThu.maCT}
       {:else if column.accessor === "position"}
-        {@const participant = row as ParticipatingPlayer}
         <select
-          bind:value={participant.position}
+          bind:value={participant.viTri.maVT}
           class="border rounded px-2 py-1 bg-white text-sm w-full"
         >
           {#each viTri as pos}
-            <option value={pos}>{pos.tenVT}</option>
+            <option value={pos.maVT}>{pos.tenVT}</option>
           {/each}
         </select>
       {:else}
@@ -214,9 +224,6 @@
       tableType=""
       redirectParam=""
       onDeleteClick={removePlayerFromTable}
-      onEditClick={undefined}
-      onItemClick={undefined}
-      onAddClick={undefined}
       customRender={customTableRender}
     />
 

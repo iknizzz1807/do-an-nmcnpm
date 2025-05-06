@@ -5,7 +5,7 @@ import { selectDoiBongTenDoi } from "$lib/server/db/functions/DoiBong";
 import { selectLichThiDauMaTD } from "$lib/server/db/functions/LichThiDau";
 import { selectThamSo } from "$lib/server/db/functions/ThamSo";
 import { checkPageEditable } from "$lib/server/db/functions/User/UserRole";
-import type { BanThang, LichThiDau, ThePhat } from "$lib/typesDatabase";
+import type { BanThang, CauThu, LichThiDau, ThePhat, ViTri } from "$lib/typesDatabase";
 import type { PageServerLoad } from "./$types";
 
 
@@ -30,8 +30,8 @@ export const load = (async ({ fetch, params, locals, route }) => {
 
     if (locals.muaGiai === null)
       throw new Error("Chưa chọn mùa giải");
-    const cauThuDoiMot = await selectCauThuTGTD(tranDau.maTD!!, tranDau.doiMot);
-    const cauThuDoiHai = await selectCauThuTGTD(tranDau.maTD!!, tranDau.doiHai);
+    const cauThuDoiMot = await selectCauThuDoiBong(tranDau.doiMot);
+    const cauThuDoiHai = await selectCauThuDoiBong(tranDau.doiHai);
 
     const viTri = await selectAllViTri();
 
@@ -54,7 +54,34 @@ export const load = (async ({ fetch, params, locals, route }) => {
     if (!responseTP.ok) {
       throw new Error("Failed to fetch Thẻ phạt");
     }
-    
+
+    const cauThuThamGiaDoiMot = await selectCauThuTGTD(maTD, tranDau.doiMot);
+    const cauThuThamGiaDoiHai = await selectCauThuTGTD(maTD, tranDau.doiHai);
+    const cauThuThamGiaDoiMotValue = cauThuThamGiaDoiMot.map((value) => {
+      const cauThu : CauThu = {
+        ...value.cauThu
+      }
+      const viTri : ViTri = {
+        ...value.viTri
+      }
+      return {
+        cauThu: cauThu,
+        viTri: viTri,
+      }
+    });
+    const cauThuThamGiaDoiHaiValue = cauThuThamGiaDoiHai.map((value) => {
+      const cauThu : CauThu = {
+        ...value.cauThu
+      }
+      const viTri : ViTri = {
+        ...value.viTri
+      }
+      return {
+        cauThu: cauThu,
+        viTri: viTri,
+      }
+    });
+
     return {
       maTD: maTD,
       maDoiMot: tranDau.doiMot,
@@ -63,6 +90,8 @@ export const load = (async ({ fetch, params, locals, route }) => {
       tenDoiHai: doiHai.tenDoi,
       cauThuDoiMot: cauThuDoiMot,
       cauThuDoiHai: cauThuDoiHai,
+      cauThuThamGiaDoiMot: cauThuThamGiaDoiMotValue,
+      cauThuThamGiaDoiHai: cauThuThamGiaDoiHaiValue,
       viTri: viTri,
       isEditable: true
     }
@@ -75,6 +104,8 @@ export const load = (async ({ fetch, params, locals, route }) => {
       tenDoiHai: "",
       cauThuDoiMot: [],
       cauThuDoiHai: [],
+      cauThuThamGiaDoiMot: [],
+      cauThuThamGiaDoiHai: [],
       viTri: [],
       isEditable: false
     }

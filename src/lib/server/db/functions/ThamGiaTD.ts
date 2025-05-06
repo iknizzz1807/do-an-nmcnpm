@@ -5,6 +5,10 @@ import { ThamGiaTDTable } from "../schema/ThamGiaTD";
 import { CauThuTable } from "../schema/CauThu";
 
 // Return maCT
+export const upsertThamGiaTD = async (...thamGiaTD: ThamGiaTD[]) => {
+  await db.insert(ThamGiaTDTable).values(thamGiaTD).onConflictDoNothing();
+};
+
 export const insertThamGiaTD = async (...thamGiaTD: ThamGiaTD[]) => {
   let returning = await db.insert(ThamGiaTDTable).values(thamGiaTD).returning({ id: ThamGiaTDTable.maCT });
     if (returning === null || returning.length === 0)

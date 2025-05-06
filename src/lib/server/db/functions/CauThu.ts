@@ -7,6 +7,7 @@ import type { CauThu } from "$lib/typesDatabase";
 import type { KQTraCuuCauThu } from "$lib/typesResponse";
 import { ThamGiaTDTable } from "../schema/ThamGiaTD";
 import { LoaiBTTable } from "../schema/Data/LoaiBT";
+import { ViTriTable } from "../schema/Data/ViTri";
 
 export const insertCauThu = async (...cauThu: CauThu[]) => {
   let returning = await db.insert(CauThuTable).values(cauThu).returning({ id: CauThuTable.maCT });
@@ -60,21 +61,20 @@ export const selectCauThuTen = async (tenCT: string) => {
 
 export const selectCauThuTGTD = async (maTD: number, maDoi: number) => {
   return await db
-    .select(getTableColumns(CauThuTable))
+    .select({cauThu: getTableColumns(CauThuTable), viTri: getTableColumns(ViTriTable)})
     .from(CauThuTable)
     .innerJoin(ThamGiaTDTable, 
       and(
       eq(ThamGiaTDTable.maTD, maTD), 
       eq(ThamGiaTDTable.maDoi, maDoi), 
       eq(ThamGiaTDTable.maCT, CauThuTable.maCT)))
+    .innerJoin(ViTriTable, eq(ViTriTable.maVT, ThamGiaTDTable.maVT))
     .groupBy(CauThuTable.maCT);
 }
 
 export const selectCauThuDoiBong = async (maDoi: number) => {
   return await db
-    .select({
-      ...getTableColumns(CauThuTable)
-    })
+    .select(getTableColumns(CauThuTable))
     .from(CauThuTable)
     .where(eq(CauThuTable.maDoi, maDoi))
 };
