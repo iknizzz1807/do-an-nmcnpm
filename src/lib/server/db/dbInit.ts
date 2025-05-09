@@ -1,6 +1,7 @@
 import type { ThamSo } from "$lib/typesDatabase";
 import { db } from "./client";
 import { createAdmin } from "./functions/User/Admin";
+import { DiemSoTable } from "./schema/Data/DiemSo";
 import { LoaiBTTable } from "./schema/Data/LoaiBT";
 import { LoaiCTTable } from "./schema/Data/LoaiCT";
 import { LoaiTPTable } from "./schema/Data/LoaiTP";
@@ -16,13 +17,10 @@ const DefaultSettings : ThamSo[] = [
   { tenThamSo: "tuoiMax", giaTri: 40 },
   { tenThamSo: "soCauThuMin", giaTri: 15 },
   { tenThamSo: "soCauThuMax", giaTri: 25 },
-  { tenThamSo: "doiDaTrenSanNha", giaTri: 2 },
-  { tenThamSo: "loaiBanThang", giaTri: 1 },
+  { tenThamSo: "doiDaTrenSanNha", giaTri: 1 },
+
+  { tenThamSo: "thoiDiemGhiBanToiThieu", giaTri: 0 },
   { tenThamSo: "thoiDiemGhiBanToiDa", giaTri: 90 },
-  { tenThamSo: "soThePhatToiDa", giaTri: 5 },
-  { tenThamSo: "diemThang", giaTri: 3 },
-  { tenThamSo: "diemHoa", giaTri: 1 },
-  { tenThamSo: "diemThua", giaTri: 0 }
 ];
 
 for (const setting of DefaultSettings) {
@@ -66,6 +64,12 @@ await db.insert(ViTriTable).values([
   { tenVT: "Tiền đạo" }, 
   { tenVT: "Bla bla bla" }, 
   { tenVT: "gì đó" }
+]);
+
+await db.insert(DiemSoTable).values([
+  { tenDS: "Thắng", diemSo: 3 }, 
+  { tenDS: "Hòa", diemSo: 1 }, 
+  { tenDS: "Thua", diemSo: 0 }
 ]);
 
 await db.insert(LoaiBTTable).values([

@@ -21,18 +21,8 @@ export type Settings = {
     soCauThuMax: number;
     doiDaTrenSanNha: number;
     
-    // Bàn thắng
-    loaiBanThang: number;
+    thoiDiemGhiBanToiThieu: number;
     thoiDiemGhiBanToiDa: number;
-    
-    // Thẻ phạt
-    soThePhatToiDa : number;
-
-    // Điểm bảng xếp hạng
-    diemThang : number;
-    diemHoa: number;
-    diemThua: number;
-
 }
 
 export type Session = {

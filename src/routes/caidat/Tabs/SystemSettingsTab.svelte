@@ -83,7 +83,7 @@
       <SettingNumberInput
         min={1}
         max={10}
-        forValue="diemThang"
+        forValue=
         bind:bindValue={setting.diemThang}
         label="Points for Win"
         unit=""
@@ -91,7 +91,7 @@
       <SettingNumberInput
         min={0}
         max={5}
-        forValue="diemHoa"
+        forValue=
         bind:bindValue={setting.diemHoa}
         label="Points for Draw"
         unit=""
@@ -99,7 +99,7 @@
       <SettingNumberInput
         min={-10}
         max={10}
-        forValue="diemThua"
+        forValue=
         bind:bindValue={setting.diemThua}
         label="Points for Loss"
         unit=""

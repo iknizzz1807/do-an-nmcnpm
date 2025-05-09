@@ -1,5 +1,6 @@
 import { db } from "$lib/server/db/client";
 import { insertLichThiDau } from "$lib/server/db/functions/LichThiDau";
+import { selectThamSo } from "$lib/server/db/functions/ThamSo";
 import { LichThiDauTable } from "$lib/server/db/schema/LichThiDau";
 import { TrongTaiTable } from "$lib/server/db/schema/TrongTai";
 import { randIntBetween } from "$lib/server/utils";
@@ -18,10 +19,11 @@ const sapXepLichThiDau = async (maMG: number, doiBongs: DoiBong[]) => {
       const doiHaiIndex = randIntBetween(0, doiBongs.length - 1);
       if (doiMotIndex == doiHaiIndex)
         continue;
+      const doiDaTrenSanNha = await selectThamSo("doiDaTrenSanNha");
       const lichThiDau : LichThiDau = {
         maMG: maMG,
         maVTD: randIntBetween(1, 2),
-        maSan: doiBongs[doiMotIndex].maSan,
+        maSan: doiDaTrenSanNha === 1 ? doiBongs[doiMotIndex].maSan : doiBongs[doiHaiIndex].maSan,
 
         doiHai: doiBongs[doiHaiIndex].maDoi!!,
         doiMot: doiBongs[doiMotIndex].maDoi!!,

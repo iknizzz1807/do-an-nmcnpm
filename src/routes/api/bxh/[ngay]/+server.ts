@@ -3,6 +3,7 @@ import { selectBXHDoiNgay } from "$lib/server/db/functions/BangXepHang";
 import type { BangXepHangNgay } from "$lib/typesResponse";
 import { errorResponseJSON } from "$lib";
 import { selectThamSo } from "$lib/server/db/functions/ThamSo";
+import { selectDiemSoTen } from "$lib/server/db/functions/Data/DiemSo";
 
 export const GET: RequestHandler = async ({ locals, request, params }) => {
   
@@ -14,9 +15,9 @@ export const GET: RequestHandler = async ({ locals, request, params }) => {
     let date = new Date(ngay);
 
     const danhSachTranDau = await selectBXHDoiNgay(new Date(date));
-    const diemThang = (await selectThamSo("diemThang"))!!;
-    const diemHoa = (await selectThamSo("diemHoa"))!!;
-    const diemThua = (await selectThamSo("diemThua"))!!;
+    const diemThang = (await selectDiemSoTen("Thắng"))!!.diemSo;
+    const diemHoa = (await selectDiemSoTen("Hòa"))!!.diemSo;
+    const diemThua = (await selectDiemSoTen("Thua"))!!.diemSo;
     for (let tranDau of danhSachTranDau) {
       tranDau.hieuSo = diemThang * tranDau.soTranThang + 
         diemHoa * tranDau.soTranHoa + 

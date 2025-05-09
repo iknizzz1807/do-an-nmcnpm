@@ -105,6 +105,12 @@ export type SanNha = {
     maMG: number;
 }
 
+export type DiemSo = {
+    maDS?: number | undefined;
+    tenDS: string;
+    diemSo: number;
+}
+
 export type LoaiCT = {
     maLCT?: number | undefined;
     tenLCT: string;

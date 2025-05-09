@@ -8,7 +8,7 @@ export const selectAllLoaiBT = async () => {
 };
 
 export const insertLoaiBT = async (...LoaiBT: LoaiBT[]) => {
-    let returning = await db.insert(LoaiBTTable).values(LoaiBT).returning({ id: LoaiBTTable.tenLBT });
+    let returning = await db.insert(LoaiBTTable).values(LoaiBT).returning({ id: LoaiBTTable.maLBT });
     if (returning === null || returning.length === 0)
         throw new Error("Co gi do sai sot trong luc add vo LoaiBT: Insert khong duoc");
     return returning;

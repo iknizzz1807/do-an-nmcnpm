@@ -3,6 +3,8 @@ import type { RequestHandler } from "./$types";
 import { deleteBanThang, insertBanThang, selectAllBanThang, selectBanThang, updateBanThang } from "$lib/server/db/functions/BanThang";
 import type { BanThang } from "$lib/typesDatabase";
 import type { UpdateBanThang } from "$lib/typesResponse";
+import { selectThamSo } from "$lib/server/db/functions/ThamSo";
+import { errorResponseJSON } from "$lib";
 
 export const GET: RequestHandler = async ({ params, locals }) => {
   const maTD = parseInt(params.matd);
@@ -21,9 +23,9 @@ export const GET: RequestHandler = async ({ params, locals }) => {
 export const POST : RequestHandler = async({ request, locals, params } : { request: Request, locals: App.Locals, params: any }) => {
   const data = await request.json();
   if (!(data satisfies UpdateBanThang))
-    throw new Error("Không thỏa mãn UpdateBanThang");
+    return errorResponseJSON(400, "Không thỏa mãn UpdateBanThang");
   if (params === "") 
-    throw new Error("Param hiện là rỗng");
+    return errorResponseJSON(400, "Param hiện là rỗng");
   console.log(data);
   let banThang : UpdateBanThang = {
     oldBanThang: (data.oldBanThang ?? null) === null ? null : {
@@ -42,6 +44,14 @@ export const POST : RequestHandler = async({ request, locals, params } : { reque
     }
   };
   
+  const thoiDiemGhiBanToiThieu = (await selectThamSo("thoiDiemGhiBanToiThieu"))!!;
+  const thoiDiemGhiBanToiDa = (await selectThamSo("thoiDiemGhiBanToiDa"))!!;
+  if (banThang.newBanThang.thoiDiem > thoiDiemGhiBanToiDa ||
+      banThang.newBanThang.thoiDiem < thoiDiemGhiBanToiThieu)
+      return errorResponseJSON(400, "Thời điểm vượt quá thời điểm ghi bàn tối đa " + 
+        thoiDiemGhiBanToiDa + " hoặc thời điểm ghi bàn tối thiểu" + thoiDiemGhiBanToiThieu);
+
+
   if ((banThang.oldBanThang ?? null) === null) {
     await insertBanThang(banThang.newBanThang).catch((err) => {
       throw err;
@@ -80,7 +90,7 @@ export const DELETE : RequestHandler = async({ request, locals } : { request: Re
     })
   }
   else {
-    throw new Error("Data không thỏa mã BanThang");
+    return errorResponseJSON(400, "Data không thỏa mã BanThang");
   }
 
 }

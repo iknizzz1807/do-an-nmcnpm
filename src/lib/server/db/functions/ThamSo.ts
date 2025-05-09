@@ -18,12 +18,8 @@ export const selectSettings = async() => {
     soCauThuMin: (await selectThamSo("soCauThuMin"))!!,
     soCauThuMax: (await selectThamSo("soCauThuMax"))!!,
     doiDaTrenSanNha: (await selectThamSo("doiDaTrenSanNha"))!!,
-    loaiBanThang: (await selectThamSo("loaiBanThang"))!!,
+    thoiDiemGhiBanToiThieu: (await selectThamSo("thoiDiemGhiBanToiThieu"))!!,
     thoiDiemGhiBanToiDa: (await selectThamSo("thoiDiemGhiBanToiDa"))!!,
-    soThePhatToiDa: (await selectThamSo("soThePhatToiDa"))!!,
-    diemThang: (await selectThamSo("diemThang"))!!,
-    diemHoa: (await selectThamSo("diemHoa"))!!,
-    diemThua: (await selectThamSo("diemThua"))!!
   } satisfies Settings;
 }
 
@@ -33,10 +29,6 @@ export const updateSettings = async(settings: Settings) => {
   await updateThamSo("soCauThuMin", settings.soCauThuMin);
   await updateThamSo("soCauThuMax", settings.soCauThuMax);
   await updateThamSo("doiDaTrenSanNha", settings.doiDaTrenSanNha);
-  await updateThamSo("loaiBanThang", settings.loaiBanThang);
+  await updateThamSo("thoiDiemGhiBanToiThieu", settings.thoiDiemGhiBanToiThieu);
   await updateThamSo("thoiDiemGhiBanToiDa", settings.thoiDiemGhiBanToiDa);
-  await updateThamSo("soThePhatToiDa", settings.soThePhatToiDa);
-  await updateThamSo("diemThang", settings.diemThang);
-  await updateThamSo("diemHoa", settings.diemHoa);
-  await updateThamSo("diemThua", settings.diemThua);
 }

@@ -29,6 +29,7 @@
     { label: "Loại cầu thủ", propertyName: "maLCT", type: "select", valueType: "number", 
       options: danhSachLoaiCT.map((value) => ({optionValue: value.maLCT ?? 0, optionName: value.tenLCT})) },
 
+    { label: "Số áo", propertyName: "soAo", type: "input", valueType: "number"},
     { label: "Ghi chú", propertyName: "ghiChu", type: "input", valueType: "string"},
   ];
 
@@ -39,6 +40,7 @@
     { header: "Loại cầu thủ", accessor: "maLCT", accessFunction: (data: CauThu) => {
       return danhSachLoaiCT.find((value) => value.maLCT === data.maLCT)?.tenLCT ?? "";
     } },
+    { header: "Số áo", accessor: "soAo" },
     //{ header: "Nước ngoài", accessor: "nuocNgoai" },
     { header: "Ghi chú", accessor: "ghiChu" },
   ];
@@ -131,7 +133,7 @@
     }
 
     try {
-      const response = await fetch("/api/cauthu", {
+      const response = await fetch("/api/cauthu" + ma_doi, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

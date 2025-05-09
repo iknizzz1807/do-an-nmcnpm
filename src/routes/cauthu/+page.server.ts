@@ -1,4 +1,4 @@
-import { selectLoaiCT } from "$lib/server/db/functions/Data/LoaiCT";
+import { selectAllLoaiCT } from "$lib/server/db/functions/Data/LoaiCT";
 import { selectThamSo } from "$lib/server/db/functions/ThamSo";
 import { checkPageEditable } from "$lib/server/db/functions/User/UserRole";
 import type { CauThu } from "$lib/typesDatabase";
@@ -13,7 +13,7 @@ export const load = (async ({ fetch, locals, route }) => {
 
     const tuoiMin = (await selectThamSo("tuoiMin"))!!;
     const tuoiMax = (await selectThamSo("tuoiMax"))!!;
-    const loaiCTs = await selectLoaiCT();
+    const loaiCTs = await selectAllLoaiCT();
     const isEditable = await checkPageEditable(locals.user!!.groupId, route.id);
 
     // console.log(danhSachCauThu);

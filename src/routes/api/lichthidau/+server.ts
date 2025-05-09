@@ -1,4 +1,7 @@
+import { errorResponseJSON } from "$lib";
+import { selectDoiBongMaDoi } from "$lib/server/db/functions/DoiBong";
 import { deleteLichThiDau, insertLichThiDau, selectAllLichThiDauWithName, updateLichThiDau } from "$lib/server/db/functions/LichThiDau";
+import { selectThamSo } from "$lib/server/db/functions/ThamSo";
 import type { LichThiDau } from "$lib/typesDatabase";
 import { type RequestHandler } from "@sveltejs/kit";
 
@@ -35,6 +38,13 @@ export const POST : RequestHandler = async ({ request, locals } : { request: Req
     ngayGioThucTe: new Date(data.ngayGioThucTe).toJSON(),
     ngayGioDuKien: new Date(data.ngayGioDuKien).toJSON(),
   };
+
+  const doiBongMot = await selectDoiBongMaDoi(lichThiDau.doiMot);
+  const doiBongHai = await selectDoiBongMaDoi(lichThiDau.doiHai);
+  if (doiBongMot === null || doiBongHai === null)
+    return errorResponseJSON(400, "Đội bóng không tồn tại");
+  const doiDaTrenSanNha = await selectThamSo("doiDaTrenSanNha");
+  lichThiDau.maSan = doiDaTrenSanNha === 1 ? doiBongMot.maSan : doiBongHai.maSan;
 
   if ((lichThiDau.maTD ?? null) === null) {
     await insertLichThiDau(lichThiDau).catch((err) => {

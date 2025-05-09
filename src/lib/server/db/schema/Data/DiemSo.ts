@@ -16,7 +16,6 @@ export const DiemSoTableBackup = sqliteTable('DiemSoBackup', {
     diemSo: integer().notNull(),
 })
 
-
 export type InsertDiemSoParams = typeof DiemSoTable.$inferInsert;
 export type InsertDiemSoBackupParams = typeof DiemSoTableBackup.$inferInsert;
 

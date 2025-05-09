@@ -1,8 +1,10 @@
 import type { RequestHandler } from "./$types";
-import { deleteCauThu, selectAllCauThuWithBanThang, updateCauThu } from "$lib/server/db/functions/CauThu";
+import { deleteCauThu, insertCauThu, selectAllCauThuWithBanThang, updateCauThu } from "$lib/server/db/functions/CauThu";
 import type { CauThu } from "$lib/typesDatabase";
 import { calculateAge, errorResponseJSON } from "$lib";
 import { selectThamSo } from "$lib/server/db/functions/ThamSo";
+import { countThamGiaDB, isThamGiaDBExceedMax } from "$lib/server/db/functions/ThamGiaDB";
+import { selectAllLoaiCT } from "$lib/server/db/functions/Data/LoaiCT";
 
 export const _GETCauThu = async() => {
   return await selectAllCauThuWithBanThang();
@@ -25,43 +27,36 @@ export const POST: RequestHandler = async ({
   request: Request;
   locals: App.Locals
 }) => {
-  // Phần body của post request được gửi tới có bao gồm:
-  // - danhSachCauThu là danh sách của các cầu thủ
-  // - maDoi là mã đội bóng mà các cầu thủ đó thuộc về
-  // Data này là bao gồm danh sách các cầu thủ và mã đội mà những cầu thủ đó thuộc về
-
-  const data = await request.json();
-  let result: CauThu | null;
-  // Hiện tại chỉ là sửa không có Thêm. U HEAR ME?
+  const data : CauThu = await request.json();
   try {
     
-    if ((data.maCT ?? null) === null) {
-      result = null;
-      throw new Error("Hiện tại /cauthu chỉ phục vụ update");
-    }
-    else {
-      const ctAge = calculateAge(new Date(data.ngaySinh));
-      const tuoiMin = (await selectThamSo("tuoiMin"))!!;
-      const tuoiMax = (await selectThamSo("tuoiMax"))!!;
+    const ctAge = calculateAge(new Date(data.ngaySinh));
+    const tuoiMin = (await selectThamSo("tuoiMin"))!!;
+    const tuoiMax = (await selectThamSo("tuoiMax"))!!;
+    if (!(ctAge >= tuoiMin && ctAge <= tuoiMax)) 
+      throw new Error("Cầu thủ có tuổi không hợp lệ")
 
-      if (!(ctAge >= tuoiMin && ctAge <= tuoiMax)) {
-        throw new Error("Cầu thủ có tuổi không hợp lệ");
-      }
-      
-      const cauThu : CauThu = {
-        maCT: data.maCT,
-        tenCT: data.tenCT,
-        maLCT: data.maLCT,
-        ghiChu: data.ghiChu,
-        ngaySinh: data.ngaySinh,
-        soAo: data.soAo,
-        maDoi: data.maDoi
-      };
-      await updateCauThu(cauThu).catch((err) => {
-        throw err;
-      });
-      result = cauThu;
+    if ((locals.muaGiai ?? null) === null)
+      throw new Error("Không tìm thấy mùa giải");
+
+    if (!Number.isFinite(data.maDoi))
+      throw new Error("Khong tim thay doi");
+
+    const soCauThuMax = (await selectThamSo("soCauThuMax"))!!;
+    if ((await countThamGiaDB(locals.muaGiai?.maMG!!, data.maDoi)) >= soCauThuMax)
+      throw new Error("Đội bóng đã đạt đủ số cầu thủ tối đa");
+    const loaiCTs = await selectAllLoaiCT();
+    for (const loaiCT of loaiCTs) {
+      if ((await isThamGiaDBExceedMax(data.maDoi, loaiCT.maLCT)))
+        throw new Error("Đội bóng đã đạt đủ số cầu thủ tối đa của " + loaiCT.tenLCT);
     }
+
+    if ((data.maCT ?? null) === null) 
+      await updateCauThu(data);
+    else
+      throw new Error("Hiện tại /cauthu chỉ phục vụ update");
+      // await updateCauThu(data);
+    
   }
   catch (error) {
     if (error instanceof Error)
@@ -71,7 +66,7 @@ export const POST: RequestHandler = async ({
   }
   
   //Trả về response với danh sách cầu thủ vừa tạo và status 200 OK
-  return new Response(JSON.stringify(result), {
+  return new Response(JSON.stringify(data), {
     status: 200,
     headers: {
       "Content-Type": "application/json",

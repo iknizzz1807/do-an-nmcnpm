@@ -11,9 +11,9 @@ import { ViTriTable } from "../schema/Data/ViTri";
 
 export const insertCauThu = async (...cauThu: CauThu[]) => {
   let returning = await db.insert(CauThuTable).values(cauThu).returning({ id: CauThuTable.maCT });
-    if (returning === null || returning.length === 0)
-        throw new Error("Co gi do sai sot trong luc add vo CauThu: Insert khong duoc");
-    return returning;
+  if (returning === null || returning.length === 0)
+      throw new Error("Co gi do sai sot trong luc add vo CauThu: Insert khong duoc");
+  return returning;
 };
 
 export const updateCauThu = async(cauThu: CauThu) => {
