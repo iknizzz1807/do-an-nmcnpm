@@ -22,3 +22,7 @@ export const updateViTri = async(ViTri: ViTri) => {
   }).where(eq(ViTriTable.maVT, ViTri.maVT!!));
 }
 
+
+export const deleteViTri = async (maVT: number) => {
+  await db.delete(ViTriTable).where(eq(ViTriTable.maVT, maVT!!));
+}

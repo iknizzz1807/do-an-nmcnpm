@@ -7,6 +7,10 @@ export const selectAllSanNha = async () => {
   return (await db.select().from(SanNhaTable)) satisfies SanNha[];
 };
 
+export const selectSanNhaMuaGiai = async (maMG: number) => {
+  return await db.select().from(SanNhaTable).where(eq(SanNhaTable.maMG, maMG)) satisfies SanNha[];
+}
+
 export const insertSanNha = async (...sanNha: SanNha[]) => {
     let returning = await db.insert(SanNhaTable).values(sanNha).returning({ id: SanNhaTable.maSan });
     if (returning === null || returning.length === 0)
@@ -22,3 +26,6 @@ export const updateSanNha = async(sannha: SanNha) => {
   }).where(eq(SanNhaTable.maSan, sannha.maSan!!));
 }
 
+export const deleteSanNha = async (maSan: number) => {
+  await db.delete(SanNhaTable).where(eq(SanNhaTable.maSan, maSan!!));
+}

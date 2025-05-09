@@ -1,5 +1,6 @@
 
-import { insertSanNha, selectAllSanNha, updateSanNha } from "$lib/server/db/functions/Data/SanNha";
+import { deleteSanNha, insertSanNha, selectAllSanNha, updateSanNha } from "$lib/server/db/functions/Data/SanNha";
+import type { SanNha } from "$lib/typesDatabase";
 import type { RequestHandler } from "./$types";
 
 export const _GETSanNha = async () => {
@@ -26,10 +27,14 @@ export const POST: RequestHandler = async ({
 }) => {
 
   // Cái post request này để tạo sân nhà, response ok sẽ tiến hành trả về sân nhà mới vừa tạo
-  const data = await request.json();
-  console.log(data);
+  let data : SanNha = await request.json();
 
-  if (data.maMG ?? null) {
+  if ((data.maMG ?? null) === null)
+  {
+    data.maMG = locals.muaGiai!!.maMG!!;
+  }
+
+  if (data.maSan ?? null) {
     await updateSanNha(data);
   }
   else{
@@ -45,28 +50,26 @@ export const POST: RequestHandler = async ({
   });
 };
 
-// export const DELETE: RequestHandler = async ({
-//   request,
-// }: {
-//   request: Request;
-// }) => {
+export const DELETE: RequestHandler = async ({
+  request,
+}: {
+  request: Request;
+}) => {
   
-//   const data = await request.json();
-//   let result : number | null = null;
+  const data : number | null = await request.json();
+  let result : number | null = null;
+  if ((data) === null) {
+    throw new Error("Không có mã đội sao xóa? bruh");
+  }
+  else {
+    result = data;
+    await deleteSanNha(data);
+  }
 
-//   console.log(data.maMG);
-//   if ((data.maMG) === null) {
-//     throw new Error("Không có mã đội sao xóa? bruh");
-//   }
-//   else {
-//     result = data.maMG!!;
-//     // await deleteSanNha(data.maMG!!);
-//   }
-
-//   return new Response(JSON.stringify({ maMG: result!! }), {
-//     status: 200,
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//   });
-// };
+  return new Response(JSON.stringify({ maSan: result!! }), {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};
