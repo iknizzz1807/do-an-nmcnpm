@@ -225,6 +225,8 @@
               </div>
               <div class="space-y-1">
                 {#each filteredrolesForDropdown as roleItem (roleItem.roleId)}
+                  <!-- svelte-ignore a11y_click_events_have_key_events -->
+                  <!-- svelte-ignore a11y_no_static_element_interactions -->
                   <div
                     class="flex items-center px-2 py-1.5 hover:bg-gray-100 rounded-md cursor-pointer"
                     onclick={() => toggleRoles(roleItem.roleId)}

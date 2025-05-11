@@ -64,3 +64,9 @@ export const selectAllUser = async() => {
     result.splice(0, 1);
   return result;
 }
+
+export const deleteUser = async (userId : number) => {
+  if (userId === 0)
+    throw new Error("Xóa cái này là ăn lồn đó con");
+  await db.delete(UserTable).where(eq(UserTable.id, userId));
+}

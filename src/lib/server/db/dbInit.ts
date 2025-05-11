@@ -45,7 +45,7 @@ const roles : UserRoleInsertParams[] = [
 await db.insert(UserRoleTable).values(roles);
 
 const groupsRoles: { group: UserGroupInsertParams, roles: number[] }[] = [
-  { group: { groupId: 0, groupName: "Admin" }, roles: [ 5, 51, 52, 53, 54, 9999 ] },
+  { group: { groupId: 0, groupName: "Admin" }, roles: [ 9999 ] },
   { group: { groupId: 1, groupName: "Thường" }, roles: [ 1, 2, 3, 4, 5 ] },
   { group: { groupId: 2, groupName: "Quản lý đội bóng" }, roles: [ 1, 51, 52, 4, 5 ] },
   { group: { groupId: 3, groupName: "Quản lý giải đấu" }, roles: [ 51, 52, 53, 54, 5 ] },

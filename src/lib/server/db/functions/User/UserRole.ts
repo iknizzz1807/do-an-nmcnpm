@@ -36,3 +36,9 @@ export const checkPageEditable = async (groupId : number, pageName: string) => {
       return role.canEdit;
   return false;
 }
+
+export const deleteUserRole = async (roleId : number) => {
+  if (roleId === 9999)
+    throw new Error("Xóa cái này là ăn l đó con");
+  await db.delete(UserRoleTable).where(eq(UserRoleTable.roleId, roleId));
+}

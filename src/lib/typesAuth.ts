@@ -4,6 +4,7 @@ export type User = {
     email: string;
     username: string;
     groupId: number;
+    editedPassword? : string | undefined
 }
 
 export type UserRole = {

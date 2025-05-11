@@ -79,38 +79,6 @@
       />
     </SettingSection>
 
-    <SettingSection sectionName="Point System">
-      <SettingNumberInput
-        min={1}
-        max={10}
-        forValue=
-        bind:bindValue={setting.diemThang}
-        label="Points for Win"
-        unit=""
-      />
-      <SettingNumberInput
-        min={0}
-        max={5}
-        forValue=
-        bind:bindValue={setting.diemHoa}
-        label="Points for Draw"
-        unit=""
-      />
-      <SettingNumberInput
-        min={-10}
-        max={10}
-        forValue=
-        bind:bindValue={setting.diemThua}
-        label="Points for Loss"
-        unit=""
-      />
-      <p class="text-sm text-gray-500 mt-2">
-        Note: Points for a win must be greater than points for a draw, which
-        must be greater than points for a loss. (Validation handled by
-        server)
-      </p>
-    </SettingSection>
-
     <!-- Ranking Priority Section (Placeholder for now) -->
     <SettingSection sectionName="Ranking Priority (Tiebreakers)">
       <p class="text-sm text-gray-600 mb-4">

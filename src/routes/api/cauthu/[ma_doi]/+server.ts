@@ -1,7 +1,7 @@
 import type { RequestHandler } from "./$types";
 import { deleteCauThu, selectCauThuDoiBong, updateCauThu } from "$lib/server/db/functions/CauThu";
 import { insertCauThu } from "$lib/server/db/functions/CauThu";
-import { countThamGiaDB, countThamGiaDBNuocNgoai, insertThamGiaDB, isThamGiaDBExceedMax } from "$lib/server/db/functions/ThamGiaDB";
+import { countThamGiaDB, isThamGiaDBExceedMax } from "$lib/server/db/functions/ThamGiaDB";
 import type { CauThu } from "$lib/typesDatabase";
 import { calculateAge, errorResponseJSON } from "$lib";
 import { selectThamSo } from "$lib/server/db/functions/ThamSo";
@@ -47,18 +47,18 @@ export const POST: RequestHandler = async ({ request, params, locals }) => {
       throw new Error("Khong tim thay doi");
 
     const soCauThuMax = (await selectThamSo("soCauThuMax"))!!;
-    if ((await countThamGiaDB(locals.muaGiai?.maMG!!, maDoi)) >= soCauThuMax)
+    if ((await countThamGiaDB(maDoi)) >= soCauThuMax)
       throw new Error("Đội bóng đã đạt đủ số cầu thủ tối đa");
-    const loaiCTs = await selectAllLoaiCT();
-    for (const loaiCT of loaiCTs) {
-      if ((await isThamGiaDBExceedMax(maDoi, loaiCT.maLCT)))
-        throw new Error("Đội bóng đã đạt đủ số cầu thủ tối đa của " + loaiCT.tenLCT);
-    }
+
+    if ((await isThamGiaDBExceedMax(maDoi, data.maLCT)))
+      throw new Error("Đội bóng đã đạt đủ số cầu thủ tối đa của " + data.maLCT);
+    
     data.maDoi = maDoi;
     if ((data.maCT ?? null) === null) 
       await insertCauThu(data);
     else
       await updateCauThu(data);
+    
   } catch (error) {
     if (error instanceof Error)
       return errorResponseJSON(400, error.message);

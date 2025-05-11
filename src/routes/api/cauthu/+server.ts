@@ -43,7 +43,7 @@ export const POST: RequestHandler = async ({
       throw new Error("Khong tim thay doi");
 
     const soCauThuMax = (await selectThamSo("soCauThuMax"))!!;
-    if ((await countThamGiaDB(locals.muaGiai?.maMG!!, data.maDoi)) >= soCauThuMax)
+    if ((await countThamGiaDB(data.maDoi)) >= soCauThuMax)
       throw new Error("Đội bóng đã đạt đủ số cầu thủ tối đa");
     const loaiCTs = await selectAllLoaiCT();
     for (const loaiCT of loaiCTs) {

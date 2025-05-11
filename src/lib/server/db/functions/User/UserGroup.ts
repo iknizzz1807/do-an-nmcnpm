@@ -4,6 +4,7 @@ import { HasRoleTable } from "../../schema/User/HasRole";
 import { UserGroupTable, type UserGroupInsertParams } from "../../schema/User/UserGroup"
 import { UserRoleTable } from "../../schema/User/UserRole";
 import type { UserGroupInsert, UserGroupRoles } from "$lib/typesResponse";
+import { error } from "@sveltejs/kit";
 
 export const selectAllUserGroup = async () => {
   return await db.select().from(UserGroupTable);
@@ -47,4 +48,10 @@ export const updateRolesToGroup = async(groupId: number, roles: number[]) => {
   if (rolesExcluded.length > 0) {
     await db.delete(HasRoleTable).where(and(eq(HasRoleTable.groupId, groupId), inArray(HasRoleTable.roleId, rolesExcluded)));
   }
+}
+
+export const deleteUserGroup = async(groupId : number) => {
+  if (groupId === 0 || groupId === 1)
+    throw new Error("Bruh xóa cái này là ăn lồn đó con");
+  await db.delete(UserGroupTable).where(eq(UserGroupTable.groupId, groupId));
 }

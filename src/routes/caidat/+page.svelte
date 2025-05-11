@@ -64,7 +64,7 @@
       bind:userGroup={userGroup}
       />
   {:else if activeSettingsTab.id === "roles"}
-    <SettingRoleTable bind:roles={data.userRoles} />
+    <SettingRoleTable bind:roles={roles} />
   {:else if activeSettingsTab.id === "systemSettings"}
     <SystemSettingsTab setting={data.setting}/>
   {:else if activeSettingsTab.id === "sanNha"}

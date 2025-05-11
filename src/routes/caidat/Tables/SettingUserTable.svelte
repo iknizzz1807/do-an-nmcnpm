@@ -33,6 +33,12 @@
       valueType: "number",
       options: groups.map(value => ({ optionName: value.groupName, optionValue: value.groupId }))
     },
+    {
+      label: "Password",
+      propertyName: "editedPassword",
+      type: "input",
+      valueType: "string"
+    }
   ];
   const columnsUser : TableColumnSpecifier[] = [
     { header: "ID", accessor: "id", hidden: true },
@@ -58,6 +64,8 @@
       editData.set("username", data.username);
       editData.set("email", data.email);
       editData.set("groupId", data.groupId);
+      if (data.editedPassword ?? null)  
+        editData.set("editedPassword", data.editedPassword!!);
       // editData.set("isAdmin", Number(data.isAdmin));
       formState = true;
       selectedIndex = index;
@@ -101,7 +109,30 @@
       if (err instanceof Error) showErrorToast(err.message);
     }
   };
+  
+  const onDeleteClick = async (data: User, index : number) => {
+    try {
+      const response = await fetch(`/api/user?userId=${data.id}`, {
+        method: "DELETE",
+      });
 
+      if (!response.ok) {
+          const errorData = await response
+            .json()
+            .catch(() => ({ message: "Lỗi xóa user" }));
+          throw new Error(errorData.message || "Lỗi xóa user");
+      }
+
+      users.splice(index, 1);
+
+      // Đóng form và hiện toast thành công sau khi thành công
+      formState = false;
+      showOkToast("Xóa User thành công");
+    } catch (error) {
+      console.error("Error:", error);
+      showErrorToast(String(error));
+    };
+  };
 </script>
 
 
@@ -111,7 +142,8 @@ columns={columnsUser}
 data={users}
 redirectParam={""}
 tableType=""
-{onEditClick}
+onEditClick={onEditClick}
+onDeleteClick={onDeleteClick}
 />
 
 <Form

@@ -7,7 +7,7 @@
   import type { User, UserRole } from "$lib/typesAuth";
   import { SvelteMap } from "svelte/reactivity";
 
-  let { roles = $bindable() } = $props();
+  let { roles = $bindable() } : { roles: UserRole[] } = $props();
 
   let editData: FormInputMap = $state(new SvelteMap());
   let formState = $state(false);
@@ -104,7 +104,30 @@
       if (err instanceof Error) showErrorToast(err.message);
     }
   };
+  
+  const onDeleteClick = async (data: UserRole, index : number) => {
+    try {
+      const response = await fetch(`/api/role?roleId=${data.roleId}`, {
+        method: "DELETE",
+      });
 
+      if (!response.ok) {
+          const errorData = await response
+            .json()
+            .catch(() => ({ message: "Lỗi xóa user role" }));
+          throw new Error(errorData.message || "Lỗi xóa user role");
+      }
+
+      roles.splice(index, 1);
+
+      // Đóng form và hiện toast thành công sau khi thành công
+      formState = false;
+      showOkToast("Xóa UserRole thành công");
+    } catch (error) {
+      console.error("Error:", error);
+      showErrorToast(String(error));
+    };
+  };
 </script>
 
 
@@ -114,7 +137,8 @@ columns={columnsRoles}
 data={roles}
 redirectParam={""}
 tableType=""
-{onEditClick}
+onEditClick={onEditClick}
+onDeleteClick={onDeleteClick}
 />
 
 <div class="flex justify-center">

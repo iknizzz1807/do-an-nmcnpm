@@ -1,7 +1,7 @@
 import { isNumber } from "$lib";
 import { selectCauThuDoiBong, selectCauThuTGTD } from "$lib/server/db/functions/CauThu";
 import { selectAllViTri } from "$lib/server/db/functions/Data/ViTri";
-import { selectDoiBongTenDoi } from "$lib/server/db/functions/DoiBong";
+import { selectDoiBongMaDoi } from "$lib/server/db/functions/DoiBong";
 import { selectLichThiDauMaTD } from "$lib/server/db/functions/LichThiDau";
 import { selectThamSo } from "$lib/server/db/functions/ThamSo";
 import { checkPageEditable } from "$lib/server/db/functions/User/UserRole";
@@ -20,11 +20,11 @@ export const load = (async ({ fetch, params, locals, route }) => {
     if (tranDau === null)
       throw new Error("Không tồn tại trận đấu");
 
-    const doiMot = await selectDoiBongTenDoi(tranDau.doiMot) ?? null;
+    const doiMot = await selectDoiBongMaDoi(tranDau.doiMot) ?? null;
     if (doiMot === null)
       throw new Error("Không tồn tại đội bóng. Thats sus");
 
-    const doiHai = await selectDoiBongTenDoi(tranDau.doiHai) ?? null;
+    const doiHai = await selectDoiBongMaDoi(tranDau.doiHai) ?? null;
     if (doiHai === null)
       throw new Error("Không tồn tại đội bóng. Thats sus");
 

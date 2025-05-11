@@ -35,7 +35,7 @@ export const selectKetQuaThiDau = async(maTD: number) : Promise<null | KetQuaThi
         .innerJoin(LoaiBTTable, eq(LoaiBTTable.maLBT, BanThangTable.maLBT))
         .groupBy(BanThangTable.maTD, BanThangTable.thoiDiem)).at(0)!!;
 
-    const sanNha = (await db.select().from(SanNhaTable).where(eq(SanNhaTable.maSan, doiMot.maSan))).at(0)?.tenSan ?? "";
+    const sanNha = (await db.select().from(SanNhaTable).where(eq(SanNhaTable.maSan, lichThiDau.maSan))).at(0)?.tenSan ?? "";
 
     return {
         doiMot: doiMot,
