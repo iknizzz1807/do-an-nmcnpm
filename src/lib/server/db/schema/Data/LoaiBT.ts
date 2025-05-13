@@ -13,7 +13,8 @@ export const LoaiBTTableBackup = sqliteTable('LoaiBTBackup', {
     BackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
     modifiedDate: integer({mode: "timestamp"}).notNull(),
     maLBT: integer().notNull(),
-    tenLBT: text().notNull()
+    tenLBT: text().notNull(),
+    diemBT: integer().notNull()
 })
 
 
