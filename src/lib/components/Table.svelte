@@ -8,7 +8,7 @@
   };
 
   export type TableProps = {
-    customRender?: Snippet<[any, any]>,
+    customRender?: Snippet<[any, any]>;
     title: string;
     columns: TableColumnSpecifier[];
     data: any[];
@@ -47,20 +47,20 @@
   const addButton = $state((onAddClick ?? null) !== null);
 </script>
 
-<main class="flex justify-center items-center">
+<main class="flex justify-center items-start w-full">
   <div
     id="table-container"
-    class="bg-white rounded-lg shadow-md p-6 mb-8 w-full"
+    class="bg-white rounded-lg shadow-lg p-6 mb-8 w-full border border-gray-200"
   >
-    <h2 class="text-2xl font-bold text-gray-800 mb-6">{title}</h2>
+    <h2 class="text-2xl font-semibold text-gray-800 mb-6">{title}</h2>
     <div class="overflow-x-auto">
       <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
+        <thead class="bg-gray-100">
           <tr>
             {#each columns as column}
               {#if !column.hidden}
                 <th
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider"
                 >
                   {column.header}
                 </th>
@@ -68,9 +68,9 @@
             {/each}
             {#if (deleteButton || editButton || addButton) && isEditable}
               <th
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider"
               >
-                Actions
+                Hành động
               </th>
             {/if}
           </tr>
@@ -102,75 +102,66 @@
               }}
               class:cursor-pointer={onItemClick !== null ||
                 redirectParam !== ""}
-              class="hover:bg-gray-100"
+              class="hover:bg-gray-50 transition-colors duration-150"
             >
               {#each columns as column (column.accessor)}
                 {#if !column.hidden}
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <!-- Use default slot and pass context -->
-                    <!-- <slot {row} {index} {column}> -->
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                     {#if customRender}
                       {@render customRender(row, column)}
-                    {:else}
-                      {#if (column.accessFunction ?? null) !== null}
-                        {column.accessFunction!!(row)}
-                      {:else if !column.hidden}
-                        {row[column.accessor]}
-                      {/if}
+                    {:else if (column.accessFunction ?? null) !== null}
+                      {column.accessFunction!!(row)}
+                    {:else if !column.hidden}
+                      {row[column.accessor]}
                     {/if}
-                    <!-- </slot> -->
                   </td>
                 {/if}
               {/each}
 
-              <!-- Delete/Edit/Add -->
               {#if (deleteButton || editButton || addButton) && isEditable}
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <!-- Pass row and index to the actions slot -->
-                  <!-- <slot name="actions" {row} {index}> -->
-                    {#if addButton}
-                      <button
-                        class="text-blue-600 hover:text-blue-900 mr-3"
-                        onclick={(e: Event) => {
-                          e.stopPropagation(); // Prevent row click
-                          if ((onAddClick ?? null) !== null)
-                            onAddClick!!(row, index);
-                        }}
-                        onmouseenter={() => (mouseHover = true)}
-                        onmouseleave={() => (mouseHover = false)}
-                      >
-                        Add
-                      </button>
-                    {/if}
-                    {#if editButton}
-                      <button
-                        class="text-green-600 hover:text-green-900 mr-3"
-                        onclick={(e: Event) => {
-                          e.stopPropagation(); // Prevent row click
-                          if ((onEditClick ?? null) !== null)
-                            onEditClick!!(row, index);
-                        }}
-                        onmouseenter={() => (mouseHover = true)}
-                        onmouseleave={() => (mouseHover = false)}
-                      >
-                        Edit
-                      </button>
-                    {/if}
-                    {#if deleteButton}
-                      <button
-                        class="text-red-600 hover:text-red-900"
-                        onclick={(e: Event) => {
-                          e.stopPropagation(); // Prevent row click
-                          if ((onDeleteClick ?? null) !== null)
-                            onDeleteClick!!(row, index);
-                        }}
-                        onmouseenter={() => (mouseHover = true)}
-                        onmouseleave={() => (mouseHover = false)}
-                      >
-                        Delete
-                      </button>
-                    {/if}
-                  <!-- </slot> -->
+                <td class="px-6 py-4 whitespace-nowrap text-sm space-x-2">
+                  {#if addButton}
+                    <button
+                      class="text-blue-600 hover:text-blue-800 font-medium"
+                      onclick={(e: Event) => {
+                        e.stopPropagation();
+                        if ((onAddClick ?? null) !== null)
+                          onAddClick!!(row, index);
+                      }}
+                      onmouseenter={() => (mouseHover = true)}
+                      onmouseleave={() => (mouseHover = false)}
+                    >
+                      Thêm
+                    </button>
+                  {/if}
+                  {#if editButton}
+                    <button
+                      class="text-green-600 hover:text-green-800 font-medium"
+                      onclick={(e: Event) => {
+                        e.stopPropagation();
+                        if ((onEditClick ?? null) !== null)
+                          onEditClick!!(row, index);
+                      }}
+                      onmouseenter={() => (mouseHover = true)}
+                      onmouseleave={() => (mouseHover = false)}
+                    >
+                      Sửa
+                    </button>
+                  {/if}
+                  {#if deleteButton}
+                    <button
+                      class="text-red-600 hover:text-red-800 font-medium"
+                      onclick={(e: Event) => {
+                        e.stopPropagation();
+                        if ((onDeleteClick ?? null) !== null)
+                          onDeleteClick!!(row, index);
+                      }}
+                      onmouseenter={() => (mouseHover = true)}
+                      onmouseleave={() => (mouseHover = false)}
+                    >
+                      Xóa
+                    </button>
+                  {/if}
                 </td>
               {/if}
             </tr>

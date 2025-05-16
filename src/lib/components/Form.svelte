@@ -76,10 +76,14 @@
 
 {#if formState}
   <div
-    class="fixed inset-0 flex items-center justify-center backdrop-blur-[1px] bg-white/30"
+    class="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black/30 z-50"
   >
-    <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
-      <h2 class="text-xl font-bold mb-4">Tạo đội bóng mới</h2>
+    <div
+      class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg transform transition-all"
+    >
+      <h2 class="text-xl font-semibold text-gray-800 mb-6">
+        Thông tin chi tiết
+      </h2>
       <form
         onsubmit={(e: Event) => submitForm(e, Object.fromEntries(inputValues))}
       >
@@ -87,22 +91,19 @@
           <div class="mb-4">
             {#if field.type === "input"}
               <label
-                class="block text-gray-700 text-sm font-bold mb-2"
+                class="block text-gray-700 text-sm font-medium mb-1"
                 for={field.propertyName}
               >
                 {field.label}
               </label>
               <input
                 id={field.propertyName}
-                { 
-                  ... 
-                  { 
-                    type: field.valueType === "string" ? "text" : "number",
-                    max: field.max,
-                    min: field.min,
-                  } 
-                }
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                {...{
+                  type: field.valueType === "string" ? "text" : "number",
+                  max: field.max,
+                  min: field.min,
+                }}
+                class="shadow-sm appearance-none border border-gray-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 required
                 bind:value={
                   () => inputValues.get(field.propertyName),
@@ -114,7 +115,7 @@
               />
             {:else if field.type === "select"}
               <label
-                class="block text-gray-700 text-sm font-bold mb-2"
+                class="block text-gray-700 text-sm font-medium mb-1"
                 for={field.propertyName}
               >
                 {field.label}
@@ -122,7 +123,7 @@
 
               <select
                 id={field.propertyName}
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                class="shadow-sm appearance-none border border-gray-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 required
                 bind:value={
                   () => inputValues.get(field.propertyName),
@@ -150,34 +151,32 @@
               </select>
             {:else if field.type === "Date"}
               <label
-                class="block text-gray-700 text-sm font-bold mb-2"
+                class="block text-gray-700 text-sm font-medium mb-1"
                 for={field.propertyName}
               >
                 {field.label}
               </label>
               <input
                 id={field.propertyName}
-                { 
-                  ... 
-                  { 
-                    type: field.valueType === "DateTime" ? "datetime-local" : "date",
-                    // max: field.dateMax,
-                    // min: field.dateMin,
-                  } 
-                }
+                {...{
+                  type:
+                    field.valueType === "DateTime" ? "datetime-local" : "date",
+                }}
                 min={field.min}
                 max={field.max}
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                class="shadow-sm appearance-none border border-gray-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 required
                 bind:value={
                   () => {
                     const value = inputValues.get(field.propertyName);
                     if (value instanceof Date) {
-                      if (field.valueType  === "DateTime") {
-                        const date = dateFormat(value, "isoDateTime").slice(0, 19);
+                      if (field.valueType === "DateTime") {
+                        const date = dateFormat(value, "isoDateTime").slice(
+                          0,
+                          19
+                        );
                         return date;
-                      }
-                      else {
+                      } else {
                         const date = dateFormat(value, "isoDate");
                         return date;
                       }
@@ -194,21 +193,21 @@
             {/if}
           </div>
         {/each}
-        <div class="flex justify-end">
+        <div class="flex justify-end space-x-3 mt-8">
           <button
             type="button"
-            class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mr-2"
+            class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
             onclick={closeForm}
           >
             Hủy
           </button>
           <button
             type="submit"
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
             onclick={(e: Event) =>
               submitForm(e, Object.fromEntries(inputValues))}
           >
-            Tạo
+            Lưu
           </button>
         </div>
       </form>

@@ -7,12 +7,12 @@
   import type { LoaiBT } from "$lib/typesDatabase";
   import { SvelteMap } from "svelte/reactivity";
 
-  let { loaiBT } : { loaiBT: LoaiBT[] } = $props();
+  let { loaiBT }: { loaiBT: LoaiBT[] } = $props();
 
   let editData: FormInputMap = $state(new SvelteMap());
   let formState = $state(false);
   let selectedIndex = $state(-1);
-  
+
   const columns = [
     { header: "ID", accessor: "maLBT", hidden: true },
     { header: "Tên bàn thắng", accessor: "tenLBT" },
@@ -32,7 +32,7 @@
       valueType: "number",
     },
   ];
-  
+
   const onOpenForm = (): FormInputMap | null => {
     if (editData.size > -1) return editData;
     return new SvelteMap();
@@ -92,17 +92,16 @@
     }
   };
 
-  const onDeleteClick = async (data : any, index: number) => {
+  const onDeleteClick = async (data: any, index: number) => {
     if (data satisfies LoaiBT) {
       selectedIndex = index;
       await deleteLoaiBT(data.maLBT);
-    }
-    else {
+    } else {
       console.error("Data không thỏa mãn loại CauThu");
     }
-  }
-  
-  const deleteLoaiBT = async (maLBT : number) => {
+  };
+
+  const deleteLoaiBT = async (maLBT: number) => {
     try {
       const response = await fetch("/api/loaibt", {
         method: "DELETE",
@@ -125,24 +124,31 @@
     } catch (error) {
       console.error("Error:", error);
       showErrorToast(String(error));
-    };
+    }
   };
-
 </script>
 
+<div class="space-y-6">
+  <Table
+    title="Quản lý Loại Bàn Thắng"
+    {columns}
+    data={loaiBT}
+    redirectParam={""}
+    tableType=""
+    {onEditClick}
+    {onDeleteClick}
+  />
 
-<Table
-title="Roles"
-columns={columns}
-data={loaiBT}
-redirectParam={""}
-tableType=""
-{onEditClick}
-{onDeleteClick}
-/>
-
-<div class="flex justify-center">
-  <ButtonPrimary text="Tạo sân nhà mới" onclick={() => (formState = true)} />
+  <div class="flex justify-center mt-6">
+    <ButtonPrimary
+      text="Tạo loại bàn thắng mới"
+      onclick={() => {
+        selectedIndex = -1;
+        editData.clear();
+        formState = true;
+      }}
+    />
+  </div>
 </div>
 
 <Form

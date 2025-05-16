@@ -19,13 +19,21 @@
     { header: "Loại cầu thủ", accessor: "maLCT" },
     { header: "Số bàn thắng", accessor: "soBanThang" },
   ];
-
 </script>
 
-<Table
-  title={"Danh sách các cầu thủ"}
-  {columns}
-  data={danhSachCauThu}
-  redirectParam={""}
-  tableType={""}
-/>
+<div class="page-content">
+  <h1 class="content-title text-3xl font-bold text-gray-800 mb-2">
+    Chi Tiết Cầu Thủ Ghi Bàn
+  </h1>
+  <div class="title-underline w-64 h-1 bg-purple-600 mb-8"></div>
+
+  <Table
+    title={"Danh sách cầu thủ ghi bàn cho đội " +
+      (danhSachCauThu[0]?.tenDoi || "Đội")}
+    {columns}
+    data={danhSachCauThu}
+    redirectParam={""}
+    tableType={""}
+    isEditable={false}
+  />
+</div>
