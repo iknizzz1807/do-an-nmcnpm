@@ -3,15 +3,18 @@
   import type { PageProps } from "./$types";
   import type { CauThu, LoaiCT } from "$lib/typesDatabase";
   import { showErrorToast, showOkToast } from "$lib/components/Toast";
-  import Form, { type FormField, type FormInputMap } from "$lib/components/Form.svelte";
+  import Form, {
+    type FormField,
+    type FormInputMap,
+  } from "$lib/components/Form.svelte";
   import { SvelteMap } from "svelte/reactivity";
   let { data }: PageProps = $props();
 
-  let danhSachLoaiCT : LoaiCT[] = $state(data.loaiCTs);
+  let danhSachLoaiCT: LoaiCT[] = $state(data.loaiCTs);
   let danhSachCauThu: CauThu[] = $state(data.danhSachCauThu);
   const isEditable = $state(data.isEditable);
-  const tuoiMin : number = $state(data.tuoiMin);
-  const tuoiMax : number = $state(data.tuoiMax);
+  const tuoiMin: number = $state(data.tuoiMin);
+  const tuoiMax: number = $state(data.tuoiMax);
   const minDate = new Date();
   minDate.setFullYear(minDate.getFullYear() - tuoiMax);
   const maxDate = new Date();
@@ -19,26 +22,56 @@
 
   let danhSachCauThuCopy = danhSachCauThu;
 
-  
   const formFields: FormField[] = [
-    { label: "Tên cầu thủ", propertyName: "tenCT", type: "input", valueType: "string"},
+    {
+      label: "Tên cầu thủ",
+      propertyName: "tenCT",
+      type: "input",
+      valueType: "string",
+    },
 
-    { label: "Ngày sinh", propertyName: "ngaySinh", type: "Date", valueType: "Date", 
-      min: minDate.toISOString().slice(0, 10), max: maxDate.toISOString().slice(0, 10)},
+    {
+      label: "Ngày sinh",
+      propertyName: "ngaySinh",
+      type: "Date",
+      valueType: "Date",
+      min: minDate.toISOString().slice(0, 10),
+      max: maxDate.toISOString().slice(0, 10),
+    },
 
-    { label: "Loại cầu thủ", propertyName: "maLCT", type: "select", valueType: "number", 
-      options: danhSachLoaiCT.map((value) => ({optionValue: value.maLCT ?? 0, optionName: value.tenLCT})) },
+    {
+      label: "Loại cầu thủ",
+      propertyName: "maLCT",
+      type: "select",
+      valueType: "number",
+      options: danhSachLoaiCT.map((value) => ({
+        optionValue: value.maLCT ?? 0,
+        optionName: value.tenLCT,
+      })),
+    },
 
-    { label: "Ghi chú", propertyName: "ghiChu", type: "input", valueType: "string"},
+    {
+      label: "Ghi chú",
+      propertyName: "ghiChu",
+      type: "input",
+      valueType: "string",
+    },
   ];
 
   const columns = [
     { header: "Mã cầu thủ", accessor: "maCT" },
     { header: "Tên cầu thủ", accessor: "tenCT" },
     { header: "Ngày sinh", accessor: "ngaySinh" },
-    { header: "Loại cầu thủ", accessor: "maLCT", accessFunction: (data: CauThu) => {
-      return danhSachLoaiCT.find((value) => value.maLCT === data.maLCT)?.tenLCT ?? "";
-    } },
+    {
+      header: "Loại cầu thủ",
+      accessor: "maLCT",
+      accessFunction: (data: CauThu) => {
+        return (
+          danhSachLoaiCT.find((value) => value.maLCT === data.maLCT)?.tenLCT ??
+          ""
+        );
+      },
+    },
     //{ header: "Nước ngoài", accessor: "nuocNgoai" },
     { header: "Ghi chú", accessor: "ghiChu" },
     { header: "Số bàn thắng", accessor: "banThang" },
@@ -46,7 +79,7 @@
 
   let formState: boolean = $state(false);
   let selectedIndex: number = $state(0);
-  let editData : FormInputMap = $state(new SvelteMap());
+  let editData: FormInputMap = $state(new SvelteMap());
 
   let searchTerm: string = $state("");
   let isOpen: boolean = $state(false);
@@ -79,15 +112,14 @@
     }, 200);
   }
 
-  const onOpenForm = () : FormInputMap | null => {
-    if (editData.size > 0)
-      return editData;
+  const onOpenForm = (): FormInputMap | null => {
+    if (editData.size > 0) return editData;
     return new SvelteMap();
-  }
+  };
 
   const onCloseForm = () => {
     editData.clear();
-  }
+  };
 
   const onEditClick = (data: any, index: number) => {
     if (data satisfies CauThu) {
@@ -184,7 +216,7 @@
   <title>Các Cầu thủ</title>
 </svelte:head>
 
-<div class="w-full max-w-md mx-auto relative">
+<div class="w-full max-w-md mx-auto relative mb-6">
   <div class="relative">
     <div
       class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
@@ -222,7 +254,7 @@
     />
   </div>
 
-  {#if isOpen && searchTerm}
+  <!-- {#if isOpen && searchTerm}
     <div
       class="absolute z-10 w-full bg-white divide-y divide-gray-100 rounded-lg shadow-lg mt-1 border border-gray-200"
     >
@@ -241,25 +273,24 @@
         <div class="p-4 text-sm text-gray-500">Không tìm thấy kết quả nào.</div>
       {/if}
     </div>
-  {/if}
+  {/if} -->
 </div>
 
 <Table
   title="Danh sách các Cầu thủ"
   {columns}
-  data={danhSachCauThu}
-  redirectParam={""}
-  tableType="cauThu"
-  onDeleteClick={onDeleteClick}
-  onEditClick={onEditClick}
-  isEditable={isEditable}
+  data={filteredResults}
+  redirectParam={"maDoi"}
+  tableType="doi"
+  {onDeleteClick}
+  {onEditClick}
+  {isEditable}
 />
 
-<Form 
-  bind:formState={formState}
-  fields={formFields}  
+<Form
+  bind:formState
+  fields={formFields}
   submitForm={updatePlayer}
-  onCloseForm={onCloseForm}
-  onOpenForm={onOpenForm}
-
+  {onCloseForm}
+  {onOpenForm}
 />

@@ -76,22 +76,22 @@
 
 {#if formState}
   <div
-    class="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black/30 z-50"
+    class="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black/30 z-50 p-4"
   >
     <div
-      class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg transform transition-all"
+      class="bg-white rounded-xl shadow-lg p-6 md:p-8 w-full max-w-lg transform transition-all border border-gray-200"
     >
-      <h2 class="text-xl font-semibold text-gray-800 mb-6">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-6">
         Thông tin chi tiết
       </h2>
       <form
         onsubmit={(e: Event) => submitForm(e, Object.fromEntries(inputValues))}
       >
         {#each fields as field}
-          <div class="mb-4">
+          <div class="mb-5">
             {#if field.type === "input"}
               <label
-                class="block text-gray-700 text-sm font-medium mb-1"
+                class="block text-gray-700 text-sm font-medium mb-1.5"
                 for={field.propertyName}
               >
                 {field.label}
@@ -103,7 +103,7 @@
                   max: field.max,
                   min: field.min,
                 }}
-                class="shadow-sm appearance-none border border-gray-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                class="shadow-sm appearance-none border border-gray-300 rounded-md w-full py-2.5 px-3.5 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 required
                 bind:value={
                   () => inputValues.get(field.propertyName),
@@ -115,15 +115,14 @@
               />
             {:else if field.type === "select"}
               <label
-                class="block text-gray-700 text-sm font-medium mb-1"
+                class="block text-gray-700 text-sm font-medium mb-1.5"
                 for={field.propertyName}
               >
                 {field.label}
               </label>
-
               <select
                 id={field.propertyName}
-                class="shadow-sm appearance-none border border-gray-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                class="shadow-sm appearance-none border border-gray-300 rounded-md w-full py-2.5 px-3.5 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 required
                 bind:value={
                   () => inputValues.get(field.propertyName),
@@ -151,7 +150,7 @@
               </select>
             {:else if field.type === "Date"}
               <label
-                class="block text-gray-700 text-sm font-medium mb-1"
+                class="block text-gray-700 text-sm font-medium mb-1.5"
                 for={field.propertyName}
               >
                 {field.label}
@@ -164,7 +163,7 @@
                 }}
                 min={field.min}
                 max={field.max}
-                class="shadow-sm appearance-none border border-gray-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                class="shadow-sm appearance-none border border-gray-300 rounded-md w-full py-2.5 px-3.5 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 required
                 bind:value={
                   () => {
@@ -193,17 +192,17 @@
             {/if}
           </div>
         {/each}
-        <div class="flex justify-end space-x-3 mt-8">
+        <div class="flex justify-end space-x-3.5 mt-10">
           <button
             type="button"
-            class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
+            class="px-5 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
             onclick={closeForm}
           >
             Hủy
           </button>
           <button
             type="submit"
-            class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+            class="px-5 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
             onclick={(e: Event) =>
               submitForm(e, Object.fromEntries(inputValues))}
           >

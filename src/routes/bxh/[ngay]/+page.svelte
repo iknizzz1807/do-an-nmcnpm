@@ -30,7 +30,7 @@
           },
         }
       );
-      if (!reponse.ok) throw new Error("Failed to fetch dâta");
+      if (!reponse.ok) throw new Error("Failed to fetch data");
 
       bangXepHangNgay = await reponse.json();
     } catch (err) {

@@ -25,7 +25,7 @@
 
 <button
   type="submit"
-  class="bg-purple-600 text-white px-6 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 shadow-sm cursor-pointer text-sm font-medium"
+  class="bg-purple-600 text-white px-5 py-2.5 rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 shadow-md cursor-pointer text-base font-semibold"
   onclick={hanldeClick}
   onmouseenter={handleMouseEnter}
   onmouseleave={handleMouseExit}

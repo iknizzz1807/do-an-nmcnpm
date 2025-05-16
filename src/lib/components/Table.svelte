@@ -50,17 +50,17 @@
 <main class="flex justify-center items-start w-full">
   <div
     id="table-container"
-    class="bg-white rounded-lg shadow-lg p-6 mb-8 w-full border border-gray-200"
+    class="bg-white rounded-lg shadow-md p-5 mb-8 w-full border border-gray-200"
   >
-    <h2 class="text-2xl font-semibold text-gray-800 mb-6">{title}</h2>
+    <h2 class="text-xl font-semibold text-gray-800 mb-5">{title}</h2>
     <div class="overflow-x-auto">
-      <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-100">
+      <table class="min-w-full">
+        <thead class="bg-slate-100">
           <tr>
             {#each columns as column}
               {#if !column.hidden}
                 <th
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider"
+                  class="px-4 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider border-b border-gray-300"
                 >
                   {column.header}
                 </th>
@@ -68,18 +68,17 @@
             {/each}
             {#if (deleteButton || editButton || addButton) && isEditable}
               <th
-                class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider"
+                class="px-4 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider border-b border-gray-300"
               >
                 Hành động
               </th>
             {/if}
           </tr>
         </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
+        <tbody class="bg-white">
           {#each data as row, index}
             <tr
               onclick={() => {
-                // ... (onclick logic remains the same) ...
                 if (
                   mouseHover ||
                   (onItemClick === null && redirectParam === "")
@@ -102,24 +101,35 @@
               }}
               class:cursor-pointer={onItemClick !== null ||
                 redirectParam !== ""}
-              class="hover:bg-gray-50 transition-colors duration-150"
+              class="hover:bg-gray-50 transition-colors duration-150 border-b border-gray-200 last:border-b-0"
             >
               {#each columns as column (column.accessor)}
                 {#if !column.hidden}
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                  <td class="px-4 py-2.5 text-sm text-gray-800 align-top">
+                    <!-- Removed whitespace-nowrap, added align-top -->
                     {#if customRender}
                       {@render customRender(row, column)}
                     {:else if (column.accessFunction ?? null) !== null}
-                      {column.accessFunction!!(row)}
+                      <div
+                        class="max-w-md overflow-hidden text-ellipsis whitespace-normal break-words"
+                      >
+                        {column.accessFunction!!(row)}
+                      </div>
                     {:else if !column.hidden}
-                      {row[column.accessor]}
+                      <div
+                        class="max-w-md overflow-hidden text-ellipsis whitespace-normal break-words"
+                      >
+                        {row[column.accessor]}
+                      </div>
                     {/if}
                   </td>
                 {/if}
               {/each}
 
               {#if (deleteButton || editButton || addButton) && isEditable}
-                <td class="px-6 py-4 whitespace-nowrap text-sm space-x-2">
+                <td
+                  class="px-4 py-2.5 text-sm space-x-2 whitespace-nowrap align-top"
+                >
                   {#if addButton}
                     <button
                       class="text-blue-600 hover:text-blue-800 font-medium"
