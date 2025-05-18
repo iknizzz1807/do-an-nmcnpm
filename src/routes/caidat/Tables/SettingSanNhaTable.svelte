@@ -7,8 +7,9 @@
   import type { SanNha } from "$lib/typesDatabase";
   import { SvelteMap } from "svelte/reactivity";
 
-  let { sanNha } : { sanNha: SanNha[] } = $props();
+  let { dataSanNha } : { dataSanNha: SanNha[] } = $props();
 
+  let sanNha : SanNha[] = $state(dataSanNha);
   let editData: FormInputMap = $state(new SvelteMap());
   let formState = $state(false);
   let selectedIndex = $state(-1);
@@ -83,7 +84,10 @@
       const responseData = await response.json();
 
       console.log(responseData);
-      sanNha[selectedIndex] = responseData;
+      if (selectedIndex === -1)
+        sanNha.push(responseData);
+      else
+        sanNha[selectedIndex] = responseData;
 
       showOkToast("Cập nhật thành công");
       formState = false;

@@ -7,8 +7,9 @@
   import type { ViTri } from "$lib/typesDatabase";
   import { SvelteMap } from "svelte/reactivity";
 
-  let { viTri } : { viTri: ViTri[] } = $props();
+  const { dataViTri } : { dataViTri: ViTri[] } = $props();
 
+  let viTri: ViTri[] = $state(dataViTri);
   let editData: FormInputMap = $state(new SvelteMap());
   let formState = $state(false);
   let selectedIndex = $state(-1);
@@ -75,7 +76,10 @@
       const responseData = await response.json();
 
       console.log(responseData);
-      viTri[selectedIndex] = responseData;
+      if (selectedIndex === -1)
+        viTri.push(responseData);
+      else
+        viTri[selectedIndex] = responseData;
 
       showOkToast("Cập nhật thành công");
       formState = false;

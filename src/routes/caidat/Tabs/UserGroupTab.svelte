@@ -161,7 +161,7 @@
   }
 </script>
 
-<SettingUserTable {users} bind:groups={userGroups} />
+<SettingUserTable dataUser={users} bind:groups={userGroups} />
 
 <SettingMainSection sectionName="User Group Management">
   <SettingSection sectionName="Create or Edit User Group">

@@ -69,17 +69,17 @@
     {:else if activeSettingsTab.id === "systemSettings"}
       <SystemSettingsTab setting={data.setting} />
     {:else if activeSettingsTab.id === "sanNha"}
-      <SettingSanNhaTable sanNha={data.sanNha} />
+      <SettingSanNhaTable dataSanNha={data.sanNha} />
     {:else if activeSettingsTab.id === "loaiCT"}
-      <SettingLoaiCTTable loaiCT={data.loaiCT} />
+      <SettingLoaiCTTable dataLoaiCT={data.loaiCT} />
     {:else if activeSettingsTab.id === "loaiBT"}
-      <SettingLoaiBTTable loaiBT={data.loaiBT} />
+      <SettingLoaiBTTable dataLoaiBT={data.loaiBT} />
     {:else if activeSettingsTab.id === "viTri"}
-      <SettingViTriTable viTri={data.viTri} />
+      <SettingViTriTable dataViTri={data.viTri} />
     {:else if activeSettingsTab.id === "vongTD"}
-      <SettingVongTDTable vongTD={data.vongTD} />
+      <SettingVongTDTable dataVongTD={data.vongTD} />
     {:else if activeSettingsTab.id === "diemSo"}
-      <SettingDiemSoTable diemSo={data.diemSo} />
+      <SettingDiemSoTable dataDiemSo={data.diemSo} />
     {/if}
   </div>
 </div>

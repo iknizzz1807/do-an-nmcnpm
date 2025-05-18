@@ -7,8 +7,9 @@
   import type { LoaiCT } from "$lib/typesDatabase";
   import { SvelteMap } from "svelte/reactivity";
 
-  let { loaiCT } : { loaiCT: LoaiCT[] } = $props();
+  const { dataLoaiCT } : { dataLoaiCT: LoaiCT[] } = $props();
 
+  let loaiCT : LoaiCT[] = $state(dataLoaiCT);
   let editData: FormInputMap = $state(new SvelteMap());
   let formState = $state(false);
   let selectedIndex = $state(-1);
@@ -83,7 +84,10 @@
       const responseData = await response.json();
 
       console.log(responseData);
-      loaiCT[selectedIndex] = responseData;
+      if (selectedIndex === -1)
+        loaiCT.push(responseData);
+      else
+        loaiCT[selectedIndex] = responseData;
 
       showOkToast("Cập nhật thành công");
       formState = false;

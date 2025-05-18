@@ -6,9 +6,11 @@
   import { showErrorToast, showOkToast } from "$lib/components/Toast";
   import type { DiemSo } from "$lib/typesDatabase";
   import { SvelteMap } from "svelte/reactivity";
+  import { validate } from "uuid";
 
-  let { diemSo }: { diemSo: DiemSo[] } = $props();
+  const { dataDiemSo }: { dataDiemSo: DiemSo[] } = $props();
 
+  let diemSo : DiemSo[] = $state(dataDiemSo);
   let editData: FormInputMap = $state(new SvelteMap());
   let formState = $state(false);
   let selectedIndex = $state(-1);
@@ -16,7 +18,7 @@
   const columns = [
     { header: "ID", accessor: "maDS", hidden: true },
     { header: "Tên điểm số", accessor: "tenDS" },
-    { header: "Điểm điểm số", accessor: "diemBT" },
+    { header: "Điểm điểm số", accessor: "diemSo" },
   ];
   const roleFields: FormField[] = [
     {
@@ -66,7 +68,7 @@
     }
 
     try {
-      const response = await fetch("api/loaibt", {
+      const response = await fetch("api/diemso", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -83,7 +85,11 @@
       const responseData = await response.json();
 
       console.log(responseData);
-      diemSo[selectedIndex] = responseData;
+      console.log(selectedIndex);
+      if (selectedIndex === -1)
+        diemSo.push(responseData);
+      else
+        diemSo[selectedIndex] = responseData;
 
       showOkToast("Cập nhật thành công");
       formState = false;
@@ -103,7 +109,7 @@
 
   const deleteDiemSo = async (maDS: number) => {
     try {
-      const response = await fetch("/api/loaibt", {
+      const response = await fetch("/api/diemso", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -112,8 +118,7 @@
       });
 
       if (!response.ok) {
-        showErrorToast("Lỗi cập nhật đội bóng");
-        throw new Error("Lỗi cập nhật đội bóng");
+        throw new Error("Lỗi xóa Điểm số");
       }
 
       diemSo.splice(selectedIndex, 1);
@@ -130,7 +135,7 @@
 
 <div class="space-y-6">
   <Table
-    title="Quản lý Loại Bàn Thắng"
+    title="Quản lý Điểm số"
     {columns}
     data={diemSo}
     redirectParam={""}

@@ -7,8 +7,9 @@
   import type { UserGroupRoles } from "$lib/typesResponse";
   import { SvelteMap } from "svelte/reactivity";
 
-  let { users, groups = $bindable() } : { users: User[], groups: UserGroupRoles[] } = $props();
+  let { dataUser, groups = $bindable() } : { dataUser: User[], groups: UserGroupRoles[] } = $props();
 
+  let users : User[] = $state(dataUser);
   let editData: FormInputMap = $state(new SvelteMap());
   let formState = $state(false);
   let selectedIndex = $state(-1);
@@ -101,7 +102,10 @@
       const responseData = await response.json();
 
       console.log(responseData);
-      users[selectedIndex] = responseData;
+      if (selectedIndex === -1)
+        users.push(responseData);
+      else
+        users[selectedIndex] = responseData;
 
       showOkToast("Cập nhật thành công");
       formState = false;

@@ -19,7 +19,7 @@
 	<div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
 		<h1 class="text-xl font-bold mb-4">Sign up</h1>
 		<form method="POST" use:enhance={({ formElement, formData, action, cancel, submitter }) => {
-	
+			
 			return async ({ result, update }) => {
 				if (result.type == "failure" && (result.data ?? null) != null) {
 					const message = String(result.data!!.message);

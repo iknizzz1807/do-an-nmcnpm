@@ -96,7 +96,10 @@
       const responseData = await response.json();
 
       console.log(responseData);
-      roles[selectedIndex] = responseData;
+      if (selectedIndex === -1)
+        roles.push(responseData);
+      else
+        roles[selectedIndex] = responseData;
 
       showOkToast("Cập nhật thành công");
       formState = false;

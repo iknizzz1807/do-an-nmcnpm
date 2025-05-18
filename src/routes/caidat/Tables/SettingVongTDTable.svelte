@@ -7,8 +7,9 @@
   import type { VongTD } from "$lib/typesDatabase";
   import { SvelteMap } from "svelte/reactivity";
 
-  let { vongTD } : { vongTD: VongTD[] } = $props();
+  let { dataVongTD } : { dataVongTD: VongTD[] } = $props();
 
+  let vongTD: VongTD[] = $state(dataVongTD);
   let editData: FormInputMap = $state(new SvelteMap());
   let formState = $state(false);
   let selectedIndex = $state(-1);
@@ -58,7 +59,7 @@
     }
 
     try {
-      const response = await fetch("api/vitri", {
+      const response = await fetch("api/vongtd", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -75,7 +76,10 @@
       const responseData = await response.json();
 
       console.log(responseData);
-      vongTD[selectedIndex] = responseData;
+      if (selectedIndex === -1)
+        vongTD.push(responseData);
+      else
+        vongTD[selectedIndex] = responseData;
 
       showOkToast("Cập nhật thành công");
       formState = false;
@@ -96,7 +100,7 @@
   
   const deleteVongTD = async (maVTD : number) => {
     try {
-      const response = await fetch("/api/vitri", {
+      const response = await fetch("/api/vongtd", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
