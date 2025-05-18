@@ -4,7 +4,7 @@
   
 
   let { form } : PageProps = $props();
-  let inputEmail = $state("");
+  let inputUsername = $state("");
   let inputPassword = $state("");
 </script>
 
@@ -18,15 +18,15 @@
 		<h1 class="text-xl font-bold mb-4">Sign in</h1>
 		<form method="post" use:enhance>
 			<div class="mb-4">
-				<label for="inputEmail" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+				<label for="inputUsername" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
 				<input
-				type="email"
-				id="inputEmail"
-				name="email"
+				type="text"
+				id="inputUsername"
+				name="username"
 				class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 				autocomplete="username"
 				required
-				bind:value={inputEmail} />
+				bind:value={inputUsername} />
 			</div>
 			<div class="mb-4">
 				<label for="inputPassword" class="block text-gray-700 text-sm font-bold mb-2">Password</label>

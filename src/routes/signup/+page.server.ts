@@ -44,6 +44,11 @@ export const actions : Actions =  {
         message: "Invalid email"
       })
     }
+    if (!username.match("^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$")) {
+      return fail(400, {
+        message: "Invalid Username"
+      });
+    }
     if (!(await verifyPasswordStrength(password))) {
       return fail(400, {
         message: "Password yếu",

@@ -2,7 +2,7 @@ import { verifyPasswordHash } from "$lib/server/auth/password";
 import { Throttler } from "$lib/server/auth/throttler";
 import { TokenBucketRateLimit } from "$lib/server/auth/tokenbucket";
 import { createSession, generateSessionToken, setSessionTokenCookie } from "$lib/server/db/functions/User/Session";
-import { selectUserFromEmail, selectUserPasswordHash, verifyEmailInput } from "$lib/server/db/functions/User/User";
+import { selectUserFromEmail, selectUserFromUsername, selectUserPasswordHash, verifyEmailInput } from "$lib/server/db/functions/User/User";
 import { redirect } from "@sveltejs/kit";
 import { fail, type Actions } from "@sveltejs/kit"
 
@@ -18,49 +18,49 @@ export const actions : Actions =  {
     if (clientIP !== null && !ipBucket.check(clientIP, 1)) {
       return fail(429, {
         message: "Too many requests",
-        email: ""
+        username: ""
       });
     }
 
     const formData = await event.request.formData();
-    const email = formData.get("email");
+    const username = formData.get("username");
     const password = formData.get("password");
-    if (typeof email !== "string" || typeof password !== "string") {
+    if (typeof username !== "string" || typeof password !== "string") {
       return fail(400, {
         message: "Invalid or missing fields",
-        email: ""
+        username: ""
       })
     }
-    if (email === "" || password === "") {
+    if (username === "" || password === "") {
       return fail(400, {
         message: "Invalid or missing fields",
-        email: ""
+        username: ""
       })
     }
-    if (!verifyEmailInput(email)) {
-      return fail(400, {
-        message: "Invalid email",
-        email: ""
-      })
-    }
+    // if (!verifyEmailInput(username)) {
+    //   return fail(400, {
+    //     message: "Invalid username",
+    //     username: ""
+    //   })
+    // }
     
-    const user = await selectUserFromEmail(email);
+    const user = await selectUserFromUsername(username);
     if (user === null) {
       return fail(400, {
         message: "Account does not exist",
-        email
+        username: username
       });
     }
     if (clientIP !== null && !ipBucket.consume(clientIP, 1)) {
       return fail(429, {
         message: "Too many requests",
-        email: ""
+        username: ""
       })
     }
     if (!throttler.consume(user?.id)) {
       return fail(429, {
         message: "Too many requests",
-        email: ""
+        username: ""
       })
     }
 
@@ -69,7 +69,7 @@ export const actions : Actions =  {
     if (!validPassword) {
       return fail(400, {
         message: "Invalid password",
-        email
+        username: username
       });
     }
 	  throttler.reset(user.id);

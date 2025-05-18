@@ -53,6 +53,10 @@ export const selectUserFromEmail = async (email : string) => {
   return (await db.select().from(UserTable).where(eq(UserTable.email, email)).limit(1)).at(0) ?? null;
 }
 
+export const selectUserFromUsername = async (username : string) => {
+  return (await db.select().from(UserTable).where(eq(UserTable.username, username)).limit(1)).at(0) ?? null;
+}
+
 export const selectAllUser = async() => {
   let result = (await db.select().from(UserTable))
     .map((user) => { 
