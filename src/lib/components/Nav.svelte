@@ -10,6 +10,7 @@
   import { writable } from "svelte/store";
   import dateFormat from "dateformat";
   import { page } from "$app/state";
+  import { goto } from "$app/navigation";
 
   let {
     dsMuaGiai,
@@ -66,6 +67,16 @@
       showErrorToast(String(err));
     }
   };
+
+  // Xử lý logout
+  async function logout() {
+    try {
+      await fetch("/api/logout", { method: "POST" });
+    } catch (e) {
+      // ignore error, vẫn chuyển hướng
+    }
+    goto("/login");
+  }
 </script>
 
 <aside
@@ -177,6 +188,36 @@
       </li>
     </ul>
   </nav>
+
+  <!-- Nút Logout -->
+  <div class="mt-auto px-6">
+    <button
+      class="sidebar__nav-link w-full flex items-center justify-start text-red-600 hover:text-red-800 border-l-4 border-transparent hover:border-red-600 transition-colors"
+      onclick={logout}
+      type="button"
+      style="background: none; outline: none;"
+    >
+      <span class="sidebar__menu-icon" style="margin-right:16px;">
+        <!-- SVG icon logout -->
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-[22px] h-[22px]"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M17 16l4-4m0 0l-4-4m4 4H9m4 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1"
+          />
+        </svg>
+      </span>
+      <span>Đăng xuất</span>
+    </button>
+  </div>
 </aside>
 
 <style>
@@ -212,6 +253,9 @@
     margin-right: 16px; /* mr-4 */
     opacity: 0.8;
     filter: grayscale(50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .sidebar__nav-link.active .sidebar__menu-icon {
     opacity: 1;
