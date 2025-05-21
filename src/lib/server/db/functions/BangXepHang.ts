@@ -1,5 +1,5 @@
 import { db } from "../client"
-import { and, eq, inArray, ne, or, sql } from "drizzle-orm"
+import { and, eq, inArray, isNotNull, ne, or, sql } from "drizzle-orm"
 import { LichThiDauTable } from "../schema/LichThiDau"
 import { DoiBongTable } from "../schema/DoiBong";
 import { CauThuTable } from "../schema/CauThu";
@@ -46,12 +46,11 @@ export const selectBXHDoiNgay = async (ngay: Date) => {
       and(
         sql`date(${LichThiDauTable.ngayGioThucTe}) = date(${ngay.toJSON()})`,
         or(
-          or(
-            eq(LichThiDauTable.doiMot, value), 
-            eq(LichThiDauTable.doiHai, value)
-          )
+          eq(LichThiDauTable.doiMot, value), 
+          eq(LichThiDauTable.doiHai, value)
         ),
-        ne(LichThiDauTable.doiThang, value))
+        ne(LichThiDauTable.doiThang, value),
+        isNotNull(LichThiDauTable.doiThang))
       );
     const doiBXH = {
       maDoi: doi.maDoi,

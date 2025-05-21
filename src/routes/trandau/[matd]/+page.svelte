@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { PageProps } from "./$types";
-  import type { BanThang, CauThu, ThePhat } from "$lib/typesDatabase";
+  import type { BanThang, CauThu, LoaiBT, ThePhat } from "$lib/typesDatabase";
   import { type FieldOption } from "$lib/components/Form.svelte";
   import BanThangTable from "./BanThangTable.svelte";
   import ThePhatTable from "./ThePhatTable.svelte";
@@ -12,6 +12,7 @@
   const maDoiMot = $state(data.maDoiMot);
   const maDoiHai = $state(data.maDoiHai);
   const danhSachBanThang: BanThang[] = $state(data.danhSachBanThang);
+  const loaiBTs : LoaiBT[] = $state(data.loaiBTs);
   const isEditable = $state(data.isEditable);
   // const danhSachThePhat : ThePhat[] = $state(data.danhSachThePhat);
   const cauThuDoiMotOption: FieldOption[] = cauThuDoiMot
@@ -61,6 +62,7 @@
   {maDoiHai}
   tenDoiMot={data.tenDoiMot}
   tenDoiHai={data.tenDoiHai}
+  {loaiBTs}
   {cauThuDoiMotOption}
   {cauThuDoiHaiOption}
   {doiOption}

@@ -3,7 +3,7 @@
   import Form, { type FieldOption, type FormField, type FormInputMap } from "$lib/components/Form.svelte";
   import Table from "$lib/components/Table.svelte";
   import { showErrorToast, showOkToast } from "$lib/components/Toast";
-  import type { BanThang, CauThu } from "$lib/typesDatabase";
+  import type { BanThang, CauThu, LoaiBT } from "$lib/typesDatabase";
   import type { UpdateBanThang } from "$lib/typesResponse";
   import { onMount } from "svelte";
   import { SvelteMap } from "svelte/reactivity";
@@ -18,6 +18,7 @@
     maDoiHai: number,
     tenDoiMot: string,
     tenDoiHai: string,
+    loaiBTs: LoaiBT[],
     cauThuDoiMotOption: FieldOption[],
     cauThuDoiHaiOption: FieldOption[],
     doiOption: FieldOption[],
@@ -25,10 +26,11 @@
   }
 
   const { maTD, dsBanThang, cauThuDoiMot, cauThuDoiHai, maDoiMot, thoiDiemGhiBanToiDa,
-      maDoiHai, tenDoiMot, tenDoiHai, cauThuDoiMotOption, cauThuDoiHaiOption,
+      maDoiHai, tenDoiMot, tenDoiHai, loaiBTs, cauThuDoiMotOption, cauThuDoiHaiOption,
       doiOption, isEditable } : Props = $props();
 
   const sortDSBT = (a: BanThang, b : BanThang) => a.thoiDiem - b.thoiDiem;
+  let loaiBTOptions : FieldOption[] = $state(loaiBTs.map(value => ({ optionValue : value.maLBT!!, optionName : value.tenLBT })));
   let danhSachBanThang = $state(dsBanThang.concat());
   let formState: boolean = $state(false);
   let selectedIndex : number = $state(-1);
@@ -54,8 +56,7 @@
         }
     },
     { label: "Thời điểm", propertyName: "thoiDiem", type: "input", valueType: "number", max: thoiDiemGhiBanToiDa },
-    { label: "Loại bàn thắng", propertyName: "maLBT", type: "select", valueType: "number", 
-      options: [ { optionValue: 1, optionName: "A" }, {optionValue: 2, optionName: "B"}]},
+    { label: "Loại bàn thắng", propertyName: "maLBT", type: "select", valueType: "number", options: loaiBTOptions },
   ];
 
   onMount(() => {

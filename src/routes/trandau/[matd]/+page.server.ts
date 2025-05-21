@@ -1,10 +1,11 @@
 import { isNumber } from "$lib";
 import { selectCauThuDoiBong, selectCauThuTGTD } from "$lib/server/db/functions/CauThu";
+import { selectAllLoaiBT } from "$lib/server/db/functions/Data/LoaiBT";
 import { selectDoiBongMaDoi } from "$lib/server/db/functions/DoiBong";
 import { selectLichThiDauMaTD } from "$lib/server/db/functions/LichThiDau";
 import { selectThamSo } from "$lib/server/db/functions/ThamSo";
 import { checkPageEditable } from "$lib/server/db/functions/User/UserRole";
-import type { BanThang, LichThiDau, ThePhat } from "$lib/typesDatabase";
+import type { BanThang, LichThiDau, LoaiBT, ThePhat } from "$lib/typesDatabase";
 import type { PageServerLoad } from "./$types";
 
 
@@ -56,6 +57,8 @@ export const load = (async ({ fetch, params, locals, route }) => {
     const danhSachThePhat : ThePhat[] = await responseTP.json();
     danhSachBanThang.sort((a, b) => a.thoiDiem - b.thoiDiem);
     danhSachThePhat.sort((a, b) => a.thoiDiem - b.thoiDiem);
+
+    const loaiBTs : LoaiBT[] = await selectAllLoaiBT();
     const thoiDiemGhiBanToiDa = (await selectThamSo("thoiDiemGhiBanToiDa"))!!;
     // const isEditable = await checkPageEditable(locals.user!!.groupId, route.id);
     
@@ -70,6 +73,7 @@ export const load = (async ({ fetch, params, locals, route }) => {
       cauThuDoiHai: cauThuDoiHai,
       danhSachBanThang: danhSachBanThang,
       danhSachThePhat: danhSachThePhat,
+      loaiBTs: loaiBTs,
       isEditable: true
     }
   } catch (err) {
@@ -82,6 +86,7 @@ export const load = (async ({ fetch, params, locals, route }) => {
       thoiDiemGhiBanToiDa: 0,
       cauThuDoiMot: [],
       cauThuDoiHai: [],
+      loaiBTs: [],
       danhSachBanThang: [],
       danhSachThePhat: [],
       isEditable: false

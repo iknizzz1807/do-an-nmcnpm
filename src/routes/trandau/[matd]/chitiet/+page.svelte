@@ -1,4 +1,4 @@
-<script lang="ts">
+                <script lang="ts">
   import { SvelteSet } from "svelte/reactivity";
   import { onMount } from "svelte";
   import Table from "$lib/components/Table.svelte";

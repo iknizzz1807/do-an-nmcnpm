@@ -4,6 +4,19 @@ import { checkPageEditable, checkPageViewable } from "$lib/server/db/functions/U
 import type { MuaGiai } from "$lib/typesDatabase";
 import { error, redirect, type Handle } from "@sveltejs/kit";
 
+const excludedRoutes : String[] = [
+	"/login",
+	"/",
+	"/signup",
+	"/loginAdmin",
+	"/api/logout",
+	""
+] 
+
+const isRouteInExcludedRoute = (route: String) : boolean => {
+	return excludedRoutes.includes(route);
+}
+
 export const handle: Handle = async ({ event, resolve }) => {
   // Handle session for user
 	const token = event.cookies.get("session") ?? null;
@@ -50,9 +63,13 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.muaGiai = JSON.parse(selectedMuaGiai) satisfies MuaGiai;
 	}
 	
-  if (event.locals.user !== null && 
-		event.route.id !== null && event.route.id !== "/" &&
-		(await checkPageViewable(event.locals.user?.groupId!!, event.route.id)) === false)
-    error(401);
+	if (event.route.id !== null && !isRouteInExcludedRoute(event.route.id)) {
+		if (event.locals.user !== null && 
+			 	event.route.id !== "/" &&
+				(await checkPageViewable(event.locals.user?.groupId!!, event.route.id)) === false) {
+
+				error(401);
+			}
+	}
   return resolve(event);
 };
