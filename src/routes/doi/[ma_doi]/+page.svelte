@@ -85,12 +85,6 @@
     else
       updatePlayer(data);
   }
-  
-  const onDeleteClick = async (e: Event) => {
-    e.preventDefault();
-
-  }
-
 
   const addPlayer = async (data: any) => {
     if (data.tenCT.trim() === "" || data.ghiChu.trim() === "") {
@@ -159,6 +153,42 @@
     }
   };
 
+  
+  const onDeleteClick = async (data: CauThu, index: number) => {
+    if (data satisfies CauThu) {
+      selectedIndex = index;
+      await deletePlayer(data);
+    } else {
+      console.error("Data không thỏa mãn loại CauThu");
+    }
+  };
+  
+  const deletePlayer = async (data: CauThu) => {
+    try {
+      const response = await fetch("/api/cauthu", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ maCT: data.maCT }),
+      });
+
+      if (!response.ok) {
+        showErrorToast("Lỗi cập nhật cầu thủ");
+        throw new Error("Lỗi cập nhật cầu thủ");
+      }
+
+      danhSachCauThu.splice(selectedIndex, 1);
+
+      // Đóng form và hiện toast thành công sau khi thành công
+      formState = false;
+      showOkToast("Cập nhật cầu thủ mới thành công");
+    } catch (error) {
+      console.error("Error:", error);
+      showErrorToast(String(error));
+    }
+  };
+
 </script>
 
 <Table
@@ -168,6 +198,7 @@
   redirectParam={""}
   tableType={"cauthu"}
   onEditClick={onEditClick}
+  onDeleteClick={onDeleteClick}
   isEditable={isEditable}
 />
 
