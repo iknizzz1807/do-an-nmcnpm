@@ -5,6 +5,7 @@ import type { BanThang } from "$lib/typesDatabase";
 import type { UpdateBanThang } from "$lib/typesResponse";
 import { selectThamSo } from "$lib/server/db/functions/ThamSo";
 import { errorResponseJSON } from "$lib";
+import { isCauThuInTranDau } from "$lib/server/db/functions/CauThu";
 
 export const GET: RequestHandler = async ({ params, locals }) => {
   const maTD = parseInt(params.matd);
@@ -50,7 +51,10 @@ export const POST : RequestHandler = async({ request, locals, params } : { reque
       banThang.newBanThang.thoiDiem < thoiDiemGhiBanToiThieu)
       return errorResponseJSON(400, "Thời điểm vượt quá thời điểm ghi bàn tối đa " + 
         thoiDiemGhiBanToiDa + " hoặc thời điểm ghi bàn tối thiểu" + thoiDiemGhiBanToiThieu);
-
+  
+  if (!isCauThuInTranDau(banThang.newBanThang.maTD, banThang.newBanThang.maCT)) {
+    return errorResponseJSON(400, "Cầu thủ không ở trong trận đấu");
+  }
 
   if ((banThang.oldBanThang ?? null) === null) {
     await insertBanThang(banThang.newBanThang).catch((err) => {

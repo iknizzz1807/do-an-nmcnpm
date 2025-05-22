@@ -79,6 +79,13 @@ export const selectCauThuDoiBong = async (maDoi: number) => {
     .where(eq(CauThuTable.maDoi, maDoi))
 };
 
+export const isCauThuInTranDau = async (maTD: number, maCT : number) => {
+  return (await db
+    .select()
+    .from(ThamGiaTDTable)
+    .where(and(eq(ThamGiaTDTable.maTD, maTD), eq(ThamGiaTDTable.maCT, maCT)))).length > 0;
+}
+
 export const traCuuCauThu = async (tenCT: string) => {
   let ketQua: KQTraCuuCauThu[] = [];
   const cauThu = await db

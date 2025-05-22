@@ -60,11 +60,15 @@ for (const groupRole of groupsRoles)
   }
 }
 
-await db.insert(ViTriTable).values([
-  { tenVT: "Tiền đạo" }, 
-  { tenVT: "Bla bla bla" }, 
-  { tenVT: "gì đó" }
-]);
+const viTris = [
+  "Thủ môn",
+  "Hậu vệ",
+  "Trung vệ",
+  "Tiền vệ",
+  "Tiền đạo"
+]
+
+await db.insert(ViTriTable).values(viTris.map(value => ({ tenVT: value })));
 
 await db.insert(DiemSoTable).values([
   { tenDS: "Thắng", diemSo: 3 }, 
