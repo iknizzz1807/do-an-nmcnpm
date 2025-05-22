@@ -4,7 +4,11 @@
   import type { PageProps } from "./$types";
   import { showErrorToast, showOkToast } from "$lib/components/Toast";
   import type { DoiBong, SanNha } from "$lib/typesDatabase";
-  import Form, { type FieldOption, type FormField, type FormInputMap } from "$lib/components/Form.svelte";
+  import Form, {
+    type FieldOption,
+    type FormField,
+    type FormInputMap,
+  } from "$lib/components/Form.svelte";
   import { SvelteMap } from "svelte/reactivity";
   let { data }: PageProps = $props();
 
@@ -13,38 +17,52 @@
   const isEditable = $state(data.isEditable);
 
   for (const doiBong of danhSachDoiBong) {
-    doiBong.tenSan = danhSachSanNha.find((val) => val.maSan === doiBong.maSan)?.tenSan ?? "";
+    doiBong.tenSan =
+      danhSachSanNha.find((val) => val.maSan === doiBong.maSan)?.tenSan ?? "";
   }
 
-  const sanNhaOption : FieldOption[] = danhSachSanNha.map((val) => ({ optionValue: val.maSan ?? 0, optionName: val.tenSan }));
+  const sanNhaOption: FieldOption[] = danhSachSanNha.map((val) => ({
+    optionValue: val.maSan ?? 0,
+    optionName: val.tenSan,
+  }));
 
   const columns = [
-    { header: "", accessor: "maDoi", hidden: true},
+    { header: "", accessor: "maDoi", hidden: true },
     { header: "Tên đội", accessor: "tenDoi" },
     { header: "Sân nhà", accessor: "tenSan" },
   ];
 
-  const formFields : FormField[] = [
-    { label: "Tên đội", propertyName: "tenDoi", type: "input", valueType: "string" },
-    { label: "Sân nhà", propertyName: "maSan", type: "select", valueType: "number", options: sanNhaOption }
-  ]
-  let selectedIndex : number = $state(0);
-  let maDoi : number = $state(0);
+  const formFields: FormField[] = [
+    {
+      label: "Tên đội",
+      propertyName: "tenDoi",
+      type: "input",
+      valueType: "string",
+    },
+    {
+      label: "Sân nhà",
+      propertyName: "maSan",
+      type: "select",
+      valueType: "number",
+      options: sanNhaOption,
+    },
+  ];
+  let selectedIndex: number = $state(0);
+  let maDoi: number = $state(0);
 
   let formState: boolean = $state(false);
-  let editData : FormInputMap = $state(new SvelteMap());
+  let editData: FormInputMap = $state(new SvelteMap());
 
-  const onOpenForm = () : FormInputMap | null => {
-    if (editData.size > 0)
-      return editData;
+  const onOpenForm = (): FormInputMap | null => {
+    if (editData.size > 0) return editData;
     return new SvelteMap();
-  }
+  };
 
   const onCloseForm = () => {
     editData.clear();
-  }
+  };
 
-  const onEditClick =  (data: DoiBong, index: number) => {
+  const onEditClick = (data: DoiBong, index: number) => {
     if (data satisfies DoiBong) {
       editData.clear();
       editData.set("maDoi", data.maDoi ?? null);
@@ -52,25 +70,23 @@
       editData.set("maSan", data.maSan);
       selectedIndex = index;
       formState = true;
-    }
-    else {
+    } else {
       console.error("Data không thỏa mãn LichThiDau");
       selectedIndex = -1;
     }
-  }
+  };
 
-  const onDeleteClick = async (data : any, index: number) => {
+  const onDeleteClick = async (data: any, index: number) => {
     if (data satisfies DoiBong) {
       selectedIndex = index;
       maDoi = data.maDoi;
       await deleteDoiBong();
-    }
-    else {
+    } else {
       console.error("Data không thỏa mãn loại CauThu");
     }
-  }
+  };
 
-  const addDoiBong = async (e: Event, data : DoiBong) => {
+  const addDoiBong = async (e: Event, data: DoiBong) => {
     e.preventDefault();
     if (data.tenDoi.trim() === "") return;
 
@@ -88,13 +104,12 @@
       }
 
       const result = await response.json();
-      result.tenSan = danhSachSanNha.find((val) => val.maSan === result.maSan)?.tenSan ?? "";
+      result.tenSan =
+        danhSachSanNha.find((val) => val.maSan === result.maSan)?.tenSan ?? "";
 
       // Cập nhật danh sách đội bóng nếu cần thiết
-      if (selectedIndex === -1) 
-        danhSachDoiBong.push(result);
-      else
-        danhSachDoiBong[selectedIndex] = result;
+      if (selectedIndex === -1) danhSachDoiBong.push(result);
+      else danhSachDoiBong[selectedIndex] = result;
 
       // Đóng form và hiện toast thành công sau khi thành công
       formState = false;
@@ -128,7 +143,7 @@
     } catch (error) {
       console.error("Error:", error);
       showErrorToast(String(error));
-    };
+    }
   };
 </script>
 
@@ -142,22 +157,19 @@
   data={danhSachDoiBong}
   redirectParam={"maDoi"}
   tableType="doi"
-  onEditClick={onEditClick}
-  onDeleteClick={onDeleteClick}
-  isEditable={isEditable}
+  {onEditClick}
+  {onDeleteClick}
+  {isEditable}
 />
 
+<div class="flex justify-center">
+  <ButtonPrimary text="Tạo đội mới" onclick={() => (formState = true)} />
+</div>
 
-{#if isEditable}
-  <div class="flex justify-center">
-    <ButtonPrimary text="Tạo đội mới" onclick={() => formState = true} />
-  </div>
-{/if}
-
-<Form 
-  bind:formState={formState}
+<Form
+  bind:formState
   fields={formFields}
   submitForm={addDoiBong}
-  onCloseForm={onCloseForm}
-  onOpenForm={onOpenForm}
+  {onCloseForm}
+  {onOpenForm}
 />

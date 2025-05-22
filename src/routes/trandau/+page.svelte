@@ -275,21 +275,19 @@
   {onDeleteClick}
 />
 
-{#if isEditable}
-  <div class="flex justify-center gap-2">
-    <ButtonPrimary
-      text={"Thêm trận đấu mới"}
-      onclick={() => {
-        formState = true;
-      }}
-    />
-    <a
-      href="/sapxeptrandau"
-      class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 cursor-pointer"
-      >Sắp xếp lịch
-    </a>
-  </div>
-{/if}
+<div class="flex justify-center gap-2">
+  <ButtonPrimary
+    text={"Thêm trận đấu mới"}
+    onclick={() => {
+      formState = true;
+    }}
+  />
+  <a
+    href="/sapxeptrandau"
+    class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 cursor-pointer"
+    >Sắp xếp lịch
+  </a>
+</div>
 
 <!-- Form bao gồm: 
  - Đội 1 đội 2 là được select từ danh sách các đội hiện có
