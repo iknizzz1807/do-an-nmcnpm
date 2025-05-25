@@ -30,8 +30,8 @@ export const load = (async ({ fetch, params, locals, route }) => {
 
     if (locals.muaGiai === null)
       throw new Error("Chưa chọn mùa giải");
-    const cauThuDoiMot = await selectCauThuDoiBong(tranDau.doiMot);
-    const cauThuDoiHai = await selectCauThuDoiBong(tranDau.doiHai);
+    const cauThuDoiMot = await selectCauThuTGTD(tranDau.maTD!!, tranDau.doiMot);
+    const cauThuDoiHai = await selectCauThuTGTD(tranDau.maTD!!, tranDau.doiHai);
 
     const viTri = await selectAllViTri();
 
