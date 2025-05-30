@@ -6,7 +6,7 @@
 <script lang="ts">
   import type { MuaGiai } from "$lib/typesDatabase";
   import { onMount } from "svelte";
-  import { showErrorToast } from "./Toast";
+  import { showErrorToast, showOkToast } from "./Toast";
   import { writable } from "svelte/store";
   import dateFormat from "dateformat";
   import { page } from "$app/state";
@@ -19,13 +19,13 @@
   let selectedValue = $state(selectedMuaGiai?.maMG ?? 0);
   let form: HTMLFormElement;
 
+  $inspect(selectedValue);
+
   $effect(() => {
-    if (selectedValue - 1 >= 0 && selectedValue - 1 < dsMuaGiai.length) {
-      selectedMuaGiai = dsMuaGiai[selectedValue - 1];
-      currentMuaGiai.set(selectedMuaGiai);
-    } else {
-      currentMuaGiai.set(null);
-    }
+    const muaGiai = dsMuaGiai.find((value) => selectedValue == value.maMG) ?? null;
+    if (muaGiai !== null)
+      selectedMuaGiai = muaGiai;
+    currentMuaGiai.set(selectedMuaGiai);
   });
 
   onMount(async () => {
@@ -50,19 +50,22 @@
   const onSubmit = async (e: Event) => {
     e.preventDefault();
     try {
-      const response = await fetch("/api/selectmuagiai", {
+      const response = await fetch("api/selectmuagiai", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(selectedMuaGiai),
       });
+      console.log(selectedMuaGiai);
       if (!response.ok) {
-        selectedValue = 0;
         throw new Error("Không thể thay đổi mùa giải");
       }
       // invalidateAll();
-      window.location.reload();
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
+      showOkToast("Chọn mùa giải thành công");
     } catch (err) {
       showErrorToast(String(err));
     }

@@ -9,6 +9,7 @@ export const MuaGiaiTable = sqliteTable('MuaGiai', {
     tenMG: text().notNull(),
     ngayDienRa: text().notNull(),
     ngayKetThuc: text().notNull(),
+    imageURL: text().default(""),
     deleted: integer({mode: "boolean"}).default(false),
 }, (table) => [
     uniqueIndex("MuaGiai_maMG").on(table.maMG)
@@ -21,6 +22,7 @@ export const MuaGiaiTableBackup = sqliteTable('MuaGiaiBackup', {
     tenMG: text().notNull(),
     ngayDienRa: text().notNull(),
     ngayKetThuc: text().notNull(),
+    imageURL: text(),
 })
 
 export type InsertMuaGiaiParams = typeof MuaGiaiTable.$inferInsert;

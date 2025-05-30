@@ -70,16 +70,16 @@ const createCTBackupTrigger = async() => {
       CREATE TRIGGER IF NOT EXISTS TRGD_CT_BACKUP
       AFTER DELETE ON CauThu
       BEGIN
-          INSERT INTO CauThuBackup(modifiedDate, maCT, tenCT, ngaySinh, ghiChu, soAo, maLCT, maDoi)
-          VALUES(datetime('now'), OLD.maCT, OLD.tenCT, OLD.ngaySinh, OLD.ghiChu, OLD.soAo, OLD.maLCT, OLD.maDoi);
+          INSERT INTO CauThuBackup(modifiedDate, maCT, tenCT, ngaySinh, ghiChu, soAo, maLCT, maDoi, imageURL)
+          VALUES(datetime('now'), OLD.maCT, OLD.tenCT, OLD.ngaySinh, OLD.ghiChu, OLD.soAo, OLD.maLCT, OLD.maDoi, OLD.imageURL);
       END
       `);
       tx.run(sql`
       CREATE TRIGGER IF NOT EXISTS TRGU_CT_BACKUP
       AFTER UPDATE ON CauThu
       BEGIN
-          INSERT INTO CauThuBackup(modifiedDate, maCT, tenCT, ngaySinh, ghiChu, soAo, maLCT, maDoi)
-          VALUES(datetime('now'), OLD.maCT, OLD.tenCT, OLD.ngaySinh, OLD.ghiChu, OLD.soAo, OLD.maLCT, OLD.maDoi);
+          INSERT INTO CauThuBackup(modifiedDate, maCT, tenCT, ngaySinh, ghiChu, soAo, maLCT, maDoi, imageURL)
+          VALUES(datetime('now'), OLD.maCT, OLD.tenCT, OLD.ngaySinh, OLD.ghiChu, OLD.soAo, OLD.maLCT, OLD.maDoi, OLD.imageURL);
       END
       `);
   });
@@ -93,16 +93,16 @@ const createDBBackupTrigger = async() => {
       CREATE TRIGGER IF NOT EXISTS TRGD_DB_BACKUP
       AFTER DELETE ON DoiBong
       BEGIN
-        INSERT INTO DoiBongBackup(modifiedDate, maDoi, tenDoi, maSan, maMG)
-        VALUES(datetime('now'), OLD.maDoi, OLD.tenDoi, OLD.maSan, OLD.maMG);
+        INSERT INTO DoiBongBackup(modifiedDate, maDoi, tenDoi, maSan, maMG, imageURL)
+        VALUES(datetime('now'), OLD.maDoi, OLD.tenDoi, OLD.maSan, OLD.maMG, OLD.imageURL);
       END
       `);
       tx.run(sql`
       CREATE TRIGGER IF NOT EXISTS TRGU_DB_BACKUP
       AFTER UPDATE ON DoiBong
       BEGIN
-        INSERT INTO DoiBongBackup(modifiedDate, maDoi, tenDoi, maSan, maMG)
-        VALUES(datetime('now'), OLD.maDoi, OLD.tenDoi, OLD.maSan, OLD.maMG);
+        INSERT INTO DoiBongBackup(modifiedDate, maDoi, tenDoi, maSan, maMG, imageURL)
+        VALUES(datetime('now'), OLD.maDoi, OLD.tenDoi, OLD.maSan, OLD.maMG, OLD.imageURL);
       END
       `);
   });
@@ -117,16 +117,16 @@ const createMGBackupTrigger = async() => {
       CREATE TRIGGER IF NOT EXISTS TRGD_MG_BACKUP
       AFTER DELETE ON MuaGiai
       BEGIN
-          INSERT INTO MuaGiaiBackup(modifiedDate, maMG, tenMG, ngayDienRa, ngayKetThuc)
-          VALUES(datetime('now'), OLD.maMG, OLD.tenMG, OLD.ngayDienRa, OLD.ngayKetThuc);
+          INSERT INTO MuaGiaiBackup(modifiedDate, maMG, tenMG, ngayDienRa, ngayKetThuc, imageURL)
+          VALUES(datetime('now'), OLD.maMG, OLD.tenMG, OLD.ngayDienRa, OLD.ngayKetThuc, OLD.imageURL);
       END
       `);
       tx.run(sql`
       CREATE TRIGGER IF NOT EXISTS TRGU_MG_BACKUP
       AFTER UPDATE ON MuaGiai
       BEGIN
-          INSERT INTO MuaGiaiBackup(modifiedDate, maMG, tenMG, ngayDienRa, ngayKetThuc)
-          VALUES(datetime('now'), OLD.maMG, OLD.tenMG, OLD.ngayDienRa, OLD.ngayKetThuc);
+          INSERT INTO MuaGiaiBackup(modifiedDate, maMG, tenMG, ngayDienRa, ngayKetThuc, imageURL)
+          VALUES(datetime('now'), OLD.maMG, OLD.tenMG, OLD.ngayDienRa, OLD.ngayKetThuc, OLD.imageURL);
       END
       `);
   });

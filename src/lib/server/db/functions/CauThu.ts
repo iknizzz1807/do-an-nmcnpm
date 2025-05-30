@@ -56,7 +56,15 @@ export const selectCauThuTen = async (tenCT: string) => {
   return (await db
     .select()
     .from(CauThuTable)
-    .where(ilike(CauThuTable.maCT, tenCT))) satisfies CauThu[];
+    .where(ilike(CauThuTable.tenCT, tenCT))) satisfies CauThu[];
+};
+
+export const selectCauThuMaCT = async (maCT: number) => {
+  return (await db
+    .select()
+    .from(CauThuTable)
+    .where(eq(CauThuTable.maCT, maCT))
+    .limit(1)).at(0) ?? null;
 };
 
 export const selectCauThuTGTD = async (maTD: number, maDoi: number) => {

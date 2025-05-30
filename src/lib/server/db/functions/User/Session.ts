@@ -18,7 +18,7 @@ export const generateSessionToken = (): string => {
 export const createSession = async (token: string, userId: number): Promise<SessionSelect> => {
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 	const session: SessionSelect = {
-		id: sessionId,
+		sessionId: sessionId,
 		userId,
 		expiresAt: new Date(Date.now() + expiredTime)
 	};
@@ -38,7 +38,7 @@ export const validateSessionToken = async(token: string): Promise<SessionValidat
 		.select({ user: UserTable, session: SessionTable })
 		.from(SessionTable)
 		.innerJoin(UserTable, eq(SessionTable.userId, UserTable.id))
-		.where(eq(SessionTable.id, sessionId));
+		.where(eq(SessionTable.sessionId, sessionId));
 
 	if (result.length == 0) {
 		return { session: null, user: null };
@@ -46,7 +46,7 @@ export const validateSessionToken = async(token: string): Promise<SessionValidat
 
 	const { user, session } = result[0];
 	if (Date.now() >= session.expiresAt.getTime()) {
-		await db.delete(SessionTable).where(eq(SessionTable.id, session.id));
+		await db.delete(SessionTable).where(eq(SessionTable.sessionId, session.sessionId));
 		return { session: null, user: null };
 	}
 
@@ -58,13 +58,13 @@ export const validateSessionToken = async(token: string): Promise<SessionValidat
 			.set({
 				expiresAt: session.expiresAt
 			})
-			.where(eq(SessionTable.id, session.id));
+			.where(eq(SessionTable.sessionId, session.sessionId));
 	}
 	return { session, user };
 }
 
 export const invalidateSession = async(sessionId: string): Promise<void> => {
-	await db.delete(SessionTable).where(eq(SessionTable.id, sessionId));
+	await db.delete(SessionTable).where(eq(SessionTable.sessionId, sessionId));
 }
 
 export const invalidateAllSessions = async(userId: number): Promise<void> => {

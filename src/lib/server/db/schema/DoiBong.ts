@@ -11,6 +11,7 @@ export const DoiBongTable = sqliteTable('DoiBong', {
     tenDoi: text().notNull(),
     maSan: integer().notNull().references(() => SanNhaTable.maSan, { onDelete: "cascade" }),
     maMG: integer().notNull().references(() => MuaGiaiTable.maMG, { onDelete: "cascade" }),
+    imageURL: text(),
     deleted: integer({mode: "boolean"}).default(false),
 }, (table) => [
     uniqueIndex("DoiBong_maDoi").on(table.maDoi)
@@ -23,6 +24,7 @@ export const DoiBongTableBackup = sqliteTable('DoiBongBackup', {
     tenDoi: text().notNull(),
     maSan: integer().notNull(),
     maMG: integer().notNull(),
+    imageURL: text(),
 })
 
 

@@ -27,7 +27,7 @@ export type Settings = {
 }
 
 export type Session = {
-    id: string;
+    sessionId: string;
     userId: number;
     expiresAt: Date;
 }

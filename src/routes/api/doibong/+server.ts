@@ -2,6 +2,7 @@ import type { RequestHandler } from "./$types";
 import { deleteDoiBong, insertDoiBong, selectDoiBongMuaGiai, updateDoiBong } from "$lib/server/db/functions/DoiBong";
 
 export const _GETDoiBong = async(maMG: number) => {
+  console.log(await selectDoiBongMuaGiai(maMG));
   return await selectDoiBongMuaGiai(maMG);
 }
 

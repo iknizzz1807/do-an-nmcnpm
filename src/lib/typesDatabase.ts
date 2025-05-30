@@ -9,14 +9,16 @@ export type MuaGiai = {
     tenMG: string;
     ngayDienRa: string;
     ngayKetThuc: string;
+    imageURL? : string | null | undefined;
 }
 
 export type DoiBong = {
     maDoi?: number | undefined;
     tenDoi: string;
     maSan: number;
-    tenSan?: string | undefined;
     maMG: number;
+    imageURL? : string | null | undefined;
+    tenSan?: string | undefined;
 }
 
 export type CauThu = {
@@ -27,6 +29,7 @@ export type CauThu = {
     soAo: number;
     maLCT: number;
     maDoi: number;
+    imageURL? : string | null | undefined;
 
     banThang?: number | undefined;
 }

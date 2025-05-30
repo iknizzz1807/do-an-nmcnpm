@@ -12,6 +12,12 @@ import { HasRoleTable } from "./schema/User/HasRole";
 import { UserGroupTable, type UserGroupInsertParams } from "./schema/User/UserGroup";
 import { UserRoleTable, type UserRoleInsertParams } from "./schema/User/UserRole";
 
+/*
+https://github.com/openfootball/players/releases/tag/v2024.06.04
+https://github.com/openfootball/clubs/releases/tag/v2024.06.04
+
+*/
+
 const DefaultSettings : ThamSo[] = [
   { tenThamSo: "tuoiMin", giaTri: 16 },
   { tenThamSo: "tuoiMax", giaTri: 40 },

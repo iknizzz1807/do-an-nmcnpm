@@ -22,6 +22,10 @@ export const selectAllMuaGiai = async() => {
     return await db.select().from(MuaGiaiTable) satisfies MuaGiai[];
 }
 
+export const selectMuaGiaiMaMG = async(maMG: number) => {
+    return (await db.select().from(MuaGiaiTable).where(eq(MuaGiaiTable.maMG, maMG)).limit(1)).at(0);
+}
+
 export const deleteMuaGiai = async (maMG: number) => {
   // const tranDaus = await db.select({maTD: LichThiDauTable.maTD}).from(LichThiDauTable).where(eq(LichThiDauTable.maMG, maMG));
   // for (const tranDau of tranDaus) {
