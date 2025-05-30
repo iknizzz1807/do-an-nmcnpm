@@ -41,8 +41,7 @@ await db.insert(MuaGiaiTable).values(competitions2.seasons.slice(0, 2).map(value
   ngayKetThuc: value.endDate,
   imageURL: competitions2.emblem
 } satisfies MuaGiai)));
-
-
+;
 const seedSeason = async(teams: any, matches: any) => {
   const season = teams.season;
   const teamsMap: Map<number, number> = new Map();
@@ -105,6 +104,8 @@ const seedSeason = async(teams: any, matches: any) => {
       ),
       thoiGianDaThiDau: 90,
       maTT: trongTaiMap.get(match.referees[0].id),
+      ngayGioDuKien: new Date(match.utcDate).toJSON(),
+      ngayGioThucTe: new Date(match.utcDate).toJSON(),
     })
 
     const CTDoiMot = (await selectCauThuDoiBong(teamsMap.get(match.homeTeam.id)!!));
