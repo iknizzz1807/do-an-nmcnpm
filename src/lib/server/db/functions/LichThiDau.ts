@@ -9,6 +9,9 @@ import { BanThangTable } from '../schema/BanThang';
 import { ThePhatTable } from '../schema/ThePhat';
 import { choose, randIntBetween } from '$lib/server/utils';
 import { TrongTaiTable } from '../schema/TrongTai';
+import { CauThuTable } from '../schema/CauThu';
+import { ThamGiaTDTable } from '../schema/ThamGiaTD';
+import { VongTDTable } from '../schema/Data/VongTD';
 
 export const insertLichThiDau = async (...lichThiDau: LichThiDau[]) => {
     let returning = await db.insert(LichThiDauTable).values(lichThiDau).returning({ id: LichThiDauTable.maTD });
@@ -52,6 +55,15 @@ export const selectLichThiDauMaTD = async(maTD: number) => {
     .from(LichThiDauTable)
     .where(eq(LichThiDauTable.maTD, maTD)).limit(1))
     .at(0) satisfies LichThiDau | undefined;
+}
+
+export const selectLichThiDauWithCauThu = async (maCT: number) : Promise<LichThiDau[]> => {
+  return (await db
+    .select(getTableColumns(LichThiDauTable))
+    .from(CauThuTable)
+    .innerJoin(ThamGiaTDTable, eq(ThamGiaTDTable.maCT, maCT))
+    .innerJoin(LichThiDauTable, eq(LichThiDauTable.maTD, ThamGiaTDTable.maTD))
+    .groupBy(LichThiDauTable.maTD)) satisfies LichThiDau[];
 }
 
 export const tuDongSapXep = async (maMG: number, maDBs : number[]) => {

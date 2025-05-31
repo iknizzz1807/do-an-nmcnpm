@@ -8,6 +8,7 @@ import type { KQTraCuuCauThu } from "$lib/typesResponse";
 import { ThamGiaTDTable } from "../schema/ThamGiaTD";
 import { LoaiBTTable } from "../schema/Data/LoaiBT";
 import { ViTriTable } from "../schema/Data/ViTri";
+import { LichThiDauTable } from "../schema/LichThiDau";
 
 export const insertCauThu = async (...cauThu: CauThu[]) => {
   let returning = await db.insert(CauThuTable).values(cauThu).returning({ id: CauThuTable.maCT });

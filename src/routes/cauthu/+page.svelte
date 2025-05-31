@@ -281,7 +281,7 @@
   {columns}
   data={filteredResults}
   redirectParam={"maDoi"}
-  tableType="doi"
+  tableType="cauthu"
   {onDeleteClick}
   {onEditClick}
   {isEditable}

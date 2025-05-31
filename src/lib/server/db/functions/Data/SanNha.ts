@@ -11,6 +11,11 @@ export const selectSanNhaMuaGiai = async (maMG: number) => {
   return await db.select().from(SanNhaTable).where(eq(SanNhaTable.maMG, maMG)) satisfies SanNha[];
 }
 
+export const selectSanNhaMaSan = async (maSan: number) => {
+  return (await db.select().from(SanNhaTable).where(eq(SanNhaTable.maSan, maSan)).limit(1)).at(0);
+}
+
+
 export const insertSanNha = async (...sanNha: SanNha[]) => {
     let returning = await db.insert(SanNhaTable).values(sanNha).returning({ id: SanNhaTable.maSan });
     if (returning === null || returning.length === 0)
