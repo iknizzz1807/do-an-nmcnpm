@@ -235,9 +235,11 @@
   {isEditable}
 />
 
-<div class="flex justify-center">
-  <ButtonPrimary text={"Thêm cầu thủ"} onclick={() => (formState = true)} />
-</div>
+{#if isEditable}
+  <div class="flex justify-center">
+    <ButtonPrimary text={"Thêm cầu thủ"} onclick={() => (formState = true)} />
+  </div>
+{/if}
 
 <Form
   fields={formFields}

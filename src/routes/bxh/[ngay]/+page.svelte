@@ -3,6 +3,7 @@
   import { showErrorToast } from "$lib/components/Toast";
   import type { BangXepHangNgay } from "$lib/typesResponse";
   import dateFormat from "dateformat";
+  import { onMount } from "svelte";
 
   const { data } = $props();
   let dateBXH: string = $state(data.dateBXH);
@@ -19,10 +20,10 @@
     { header: "Hạng", accessor: "hang" },
   ];
 
+
   const onDateChange = async (e: Event) => {
     try {
-      const reponse = await fetch(
-        "/api/bxh/" + dateFormat(dateBXH, "isoDate"),
+      const reponse = await fetch("/api/bxh/" + dateFormat(dateBXH, "isoDate"),
         {
           method: "GET",
           headers: {

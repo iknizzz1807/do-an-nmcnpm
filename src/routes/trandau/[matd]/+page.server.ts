@@ -6,6 +6,7 @@ import { selectLichThiDauMaTD } from "$lib/server/db/functions/LichThiDau";
 import { selectThamSo } from "$lib/server/db/functions/ThamSo";
 import { checkPageEditable } from "$lib/server/db/functions/User/UserRole";
 import type { BanThang, LichThiDau, LoaiBT, ThePhat } from "$lib/typesDatabase";
+import { _GETBanThang } from "../../api/banthang/[matd]/+server";
 import type { PageServerLoad } from "./$types";
 
 
@@ -32,31 +33,24 @@ export const load = (async ({ fetch, params, locals, route }) => {
       throw new Error("Chưa chọn mùa giải");
     const cauThuDoiMot = await selectCauThuTGTD(tranDau.maTD!!, tranDau.doiMot);
     const cauThuDoiHai = await selectCauThuTGTD(tranDau.maTD!!, tranDau.doiHai);
+    console.log("allo");
 
-    const responseBT = await fetch("/api/banthang/" + maTD, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
-    if (!responseBT.ok) {
-      throw new Error("Failed to fetch Bàn thắng");
-    }
+    const responseBT = await _GETBanThang(maTD);
 
-    const responseTP = await fetch("/api/thephat/" + maTD, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
-    if (!responseTP.ok) {
-      throw new Error("Failed to fetch Thẻ phạt");
-    }
+    // const responseTP = await fetch("/api/thephat/" + maTD, {
+    //   method: "GET",
+    //   headers: {
+    //     "Content-Type": "application/json"
+    //   }
+    // });
+    // if (!responseTP.ok) {
+    //   throw new Error("Failed to fetch Thẻ phạt");
+    // }
 
-    const danhSachBanThang : BanThang[] = await responseBT.json();
-    const danhSachThePhat : ThePhat[] = await responseTP.json();
+    const danhSachBanThang : BanThang[] = responseBT;
+    const danhSachThePhat : ThePhat[] = [];
     danhSachBanThang.sort((a, b) => a.thoiDiem - b.thoiDiem);
-    danhSachThePhat.sort((a, b) => a.thoiDiem - b.thoiDiem);
+    // danhSachThePhat.sort((a, b) => a.thoiDiem - b.thoiDiem);
 
     const loaiBTs : LoaiBT[] = await selectAllLoaiBT();
     const thoiDiemGhiBanToiDa = (await selectThamSo("thoiDiemGhiBanToiDa"))!!;

@@ -98,6 +98,7 @@ export type LichThiDau = {
     tenDoiHai?: string | undefined;
     tenMG?: string | undefined;
     tenDoiThang?: string | undefined;
+    tenVTD? : string | undefined;
 }
 
 // DATA

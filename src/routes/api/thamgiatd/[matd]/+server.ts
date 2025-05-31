@@ -7,11 +7,18 @@ export const POST : RequestHandler = async ({ params, locals, request }) => {
   const data = await request.json();
 
   const maTD = parseInt(params.matd);
-  if (!isNumber(maTD))
-    throw new Error("matd param không đúng");
-  if (!(data satisfies ThamGiaTD[]))
-    throw new Error("data không thỏa mãn");
-  await upsertThamGiaTD(...data);
+  try {
+
+    if (!isNumber(maTD))
+      throw new Error("matd param không đúng");
+    if (!(data satisfies ThamGiaTD[]))
+      throw new Error("data không thỏa mãn");
+    await upsertThamGiaTD(...data);
+  } catch (err) {
+    if (err instanceof Error)
+      return errorResponseJSON(400, err.message);
+    throw err;
+  }
   
   return new Response(JSON.stringify({}), {
     status: 200,

@@ -7,7 +7,7 @@
   } from "$lib/components/Form.svelte";
   import Table from "$lib/components/Table.svelte";
   import { showErrorToast, showOkToast } from "$lib/components/Toast";
-  import type { BanThang, CauThu, LoaiBT } from "$lib/typesDatabase";
+  import type { BanThang, CauThu, LoaiBT, ViTri } from "$lib/typesDatabase";
   import type { UpdateBanThang } from "$lib/typesResponse";
   import { onMount } from "svelte";
   import { SvelteMap } from "svelte/reactivity";
@@ -15,8 +15,8 @@
   type Props = {
     maTD: number;
     dsBanThang: BanThang[];
-    cauThuDoiMot: CauThu[];
-    cauThuDoiHai: CauThu[];
+    cauThuDoiMot: { cauThu: CauThu, viTri: ViTri }[];
+    cauThuDoiHai: { cauThu: CauThu, viTri: ViTri }[];
     thoiDiemGhiBanToiDa: number;
     maDoiMot: number;
     maDoiHai: number;
@@ -104,10 +104,10 @@
     for (let banThang of danhSachBanThang) {
       let cauThu: CauThu | null;
       if (banThang.maDoi === maDoiMot) {
-        cauThu = cauThuDoiMot.find((val) => val.maCT === banThang.maCT) ?? null;
+        cauThu = cauThuDoiMot.find((val) => val.cauThu.maCT === banThang.maCT)?.cauThu ?? null;
         banThang.tenDoi = tenDoiMot;
       } else {
-        cauThu = cauThuDoiHai.find((val) => val.maCT === banThang.maCT) ?? null;
+        cauThu = cauThuDoiHai.find((val) => val.cauThu.maCT === banThang.maCT)?.cauThu ?? null;
         banThang.tenDoi = tenDoiHai;
       }
       if (cauThu === null) continue;
@@ -163,10 +163,10 @@
       if (selectedIndex === -1) {
         let cauThu: CauThu | null;
         if (result.maDoi === maDoiMot) {
-          cauThu = cauThuDoiMot.find((val) => val.maCT === result.maCT) ?? null;
+          cauThu = cauThuDoiMot.find((val) => val.cauThu.maCT === result.maCT)?.cauThu ?? null;
           result.tenDoi = tenDoiMot;
         } else {
-          cauThu = cauThuDoiHai.find((val) => val.maCT === result.maCT) ?? null;
+          cauThu = cauThuDoiHai.find((val) => val.cauThu.maCT === result.maCT)?.cauThu ?? null;
           result.tenDoi = tenDoiHai;
         }
         if (cauThu === null)
@@ -197,12 +197,14 @@
   {isEditable}
 />
 
-<div class="flex justify-center">
-  <ButtonPrimary
+{#if isEditable}
+  <div class="flex justify-center">
+    <ButtonPrimary
     text={"Thêm bàn thắng mới"}
     onclick={() => (formState = true)}
-  />
-</div>
+    />
+  </div>
+{/if}
 
 <Form
   {onOpenForm}

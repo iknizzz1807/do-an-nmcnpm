@@ -24,6 +24,7 @@ import { insertBanThang } from "./functions/BanThang";
 import { selectMuaGiaiMaMG } from "./functions/MuaGiai";
 import { seed } from "drizzle-seed";
 import { faker } from "@faker-js/faker";
+import { selectThamSo } from "./functions/ThamSo";
 
 await db.insert(MuaGiaiTable).values(competitions1.seasons.slice(0, 2).map(value => ({ 
   maMG: value.id, 
@@ -41,11 +42,26 @@ await db.insert(MuaGiaiTable).values(competitions2.seasons.slice(0, 2).map(value
   ngayKetThuc: value.endDate,
   imageURL: competitions2.emblem
 } satisfies MuaGiai)));
-;
+
+const seedBanThang = (soBT: number, maTD: number, cauThu: CauThu[], thoiDiem: number) : number => {
+  for (let i = 0; i < soBT; i++) {
+    const cauThuMot = cauThu.at(randIntBetween(0, cauThu.length - 1))!!;
+    insertBanThang({
+      maTD: maTD,
+      maCT: cauThuMot.maCT!!,
+      thoiDiem: thoiDiem,
+      maLBT: 1
+    });
+    thoiDiem += 5;
+  }
+  return thoiDiem;
+}
+
 const seedSeason = async(teams: any, matches: any) => {
   const season = teams.season;
   const teamsMap: Map<number, number> = new Map();
   const playersMap: Map<number, number> = new Map();
+  const soCauThuToiDa = (await selectThamSo("soCauThuMax"))!!;
   for (const team of teams.teams) {
     if (((await selectMuaGiaiMaMG(season.id)) ?? null) === null)
       continue;
@@ -62,7 +78,10 @@ const seedSeason = async(teams: any, matches: any) => {
     })
     teamsMap.set(team.id, doiBongId.at(0)?.id!!);
     
+    let playerCount = 0;
     for (const player of team.squad) {
+      if (playerCount >= soCauThuToiDa)
+        break;
       let cauThu = await insertCauThu({
         tenCT: player.name,
         ngaySinh: player.dateOfBirth ?? dateFormat(new Date(), "isoDate"),
@@ -71,6 +90,7 @@ const seedSeason = async(teams: any, matches: any) => {
         maLCT: 1,
         maDoi: teamsMap.get(team.id)!!,
       });
+      playerCount++;
       playersMap.set(player.id, cauThu.at(0)?.id!!);
     }
   }
@@ -125,49 +145,53 @@ const seedSeason = async(teams: any, matches: any) => {
     await insertThamGiaTD(...thamGiaDoiMot, ...thamGiaDoiHai);
 
     let thoiDiem = 5;
-    for (let i = 0; i < (match.score.fullTime.home ?? 0); i++) {
-      const cauThuMot = CTDoiMot.at(randIntBetween(0, CTDoiMot.length - 1))!!;
-      insertBanThang({
-        maTD: match.id,
-        maCT: cauThuMot.maCT,
-        thoiDiem: thoiDiem,
-        maLBT: 1
-      });
-      thoiDiem += 5;
-    }
+    thoiDiem = seedBanThang((match.score.fullTime.home ?? 0), match.id, CTDoiMot, thoiDiem);
+    thoiDiem = seedBanThang((match.score.fullTime.away ?? 0), match.id, CTDoiHai, thoiDiem);
+    thoiDiem = seedBanThang((match.score.halfTime.home ?? 0), match.id, CTDoiMot, thoiDiem);
+    thoiDiem = seedBanThang((match.score.halfTime.away ?? 0), match.id, CTDoiHai, thoiDiem);
+    // for (let i = 0; i < (match.score.fullTime.home ?? 0); i++) {
+    //   const cauThuMot = CTDoiMot.at(randIntBetween(0, CTDoiMot.length - 1))!!;
+    //   insertBanThang({
+    //     maTD: match.id,
+    //     maCT: cauThuMot.maCT,
+    //     thoiDiem: thoiDiem,
+    //     maLBT: 1
+    //   });
+    //   thoiDiem += 5;
+    // }
     
-    for (let i = 0; i < (match.score.fullTime.away ?? 0); i++) {
-      const cauThuDoiHai = CTDoiHai.at(randIntBetween(0, CTDoiHai.length - 1))!!;
-      insertBanThang({
-        maTD: match.id,
-        maCT: cauThuDoiHai.maCT,
-        thoiDiem: thoiDiem,
-        maLBT: 1
-      });
-      thoiDiem += 5;
-    }
+    // for (let i = 0; i < (match.score.fullTime.away ?? 0); i++) {
+    //   const cauThuDoiHai = CTDoiHai.at(randIntBetween(0, CTDoiHai.length - 1))!!;
+    //   insertBanThang({
+    //     maTD: match.id,
+    //     maCT: cauThuDoiHai.maCT,
+    //     thoiDiem: thoiDiem,
+    //     maLBT: 1
+    //   });
+    //   thoiDiem += 5;
+    // }
     
-    for (let i = 0; i < (match.score.halfTime.home ?? 0); i++) {
-      const cauThuMot = CTDoiMot.at(randIntBetween(0, CTDoiMot.length - 1))!!;
-      insertBanThang({
-        maTD: match.id,
-        maCT: cauThuMot.maCT,
-        thoiDiem: thoiDiem,
-        maLBT: 1
-      });
-      thoiDiem += 5;
-    }
+    // for (let i = 0; i < (match.score.halfTime.home ?? 0); i++) {
+    //   const cauThuMot = CTDoiMot.at(randIntBetween(0, CTDoiMot.length - 1))!!;
+    //   insertBanThang({
+    //     maTD: match.id,
+    //     maCT: cauThuMot.maCT,
+    //     thoiDiem: thoiDiem,
+    //     maLBT: 1
+    //   });
+    //   thoiDiem += 5;
+    // }
     
-    for (let i = 0; i < (match.score.halfTime.away ?? 0); i++) {
-      const cauThuDoiHai = CTDoiHai.at(randIntBetween(0, CTDoiHai.length - 1))!!;
-      insertBanThang({
-        maTD: match.id,
-        maCT: cauThuDoiHai.maCT,
-        thoiDiem: thoiDiem,
-        maLBT: 1
-      });
-      thoiDiem += 5;
-    }
+    // for (let i = 0; i < (match.score.halfTime.away ?? 0); i++) {
+    //   const cauThuDoiHai = CTDoiHai.at(randIntBetween(0, CTDoiHai.length - 1))!!;
+    //   insertBanThang({
+    //     maTD: match.id,
+    //     maCT: cauThuDoiHai.maCT,
+    //     thoiDiem: thoiDiem,
+    //     maLBT: 1
+    //   });
+    //   thoiDiem += 5;
+    // }
   }
 }
 

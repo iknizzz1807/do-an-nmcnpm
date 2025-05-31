@@ -1,7 +1,7 @@
 <script lang="ts">
   import Table from "$lib/components/Table.svelte";
   import type { PageProps } from "./$types";
-  import type { DoiBong, MuaGiai, LichThiDau } from "$lib/typesDatabase";
+  import type { DoiBong, MuaGiai, LichThiDau, VongTD } from "$lib/typesDatabase";
   import ButtonPrimary from "$lib/components/ButtonPrimary.svelte";
   import { showErrorToast, showOkToast } from "$lib/components/Toast";
   import {
@@ -12,20 +12,25 @@
   import Form from "$lib/components/Form.svelte";
   import { SvelteMap } from "svelte/reactivity";
   import { page } from "$app/state";
+  import { onMount } from "svelte";
 
   let { data }: PageProps = $props();
 
   let danhSachLTD: LichThiDau[] = $state(data.danhSachLTD);
   const danhSachDoi: DoiBong[] = $state(data.danhSachDoi);
   const danhSachMuaGiai: MuaGiai[] = $state(data.danhSachMuaGiai);
+  const danhSachVTD: VongTD[] = $state(data.danhSachVTD);
   const isEditable = $state(data.isEditable);
 
-  for (const ltd of danhSachLTD) {
-    let tenDoiThang =
+  onMount(() => {
+    for (const ltd of danhSachLTD) {
+      let tenDoiThang =
       danhSachDoi.find((value) => value.maDoi == ltd.doiThang)?.tenDoi ?? null;
-    if (tenDoiThang === null) tenDoiThang = "Hòa";
-    ltd.tenDoiThang = tenDoiThang;
-  }
+      if (tenDoiThang === null) tenDoiThang = "Hòa";
+      ltd.tenDoiThang = tenDoiThang;
+      ltd.tenVTD = danhSachVTD.find(value => value.maVTD === ltd.maVTD)?.tenVTD ?? "";
+    }
+  });
 
   const doiOption: FieldOption[] = danhSachDoi
     .filter((val) => val.maDoi ?? null)
@@ -106,23 +111,23 @@
   const columns = [
     { header: "Đội Một", accessor: "tenDoiMot" },
     { header: "Đội Hai", accessor: "tenDoiHai" },
-    { header: "Vòng thi đấu", accessor: "maVTD" },
-    { header: "Mã mùa giải", accessor: "tenMG" },
+    { header: "Vòng thi đấu", accessor: "tenVTD" },
+    // { header: "Mã mùa giải", accessor: "tenMG" },
     { header: "Đội thắng", accessor: "tenDoiThang" },
     {
-      header: "Ngày giờ dự kiến",
-      accessor: "ngayGioDuKien",
-      accessFunction: (data: LichThiDau) => {
-        return new Date(data.ngayGioDuKien!!).toLocaleString();
-      },
-    },
-    {
-      header: "Ngày giờ thực tế",
+      header: "Ngày giờ",
       accessor: "ngayGioThucTe",
       accessFunction: (data: LichThiDau) => {
         return new Date(data.ngayGioThucTe!!).toLocaleString();
       },
     },
+    // {
+    //   header: "Ngày giờ thực tế",
+    //   accessor: "ngayGioThucTe",
+    //   accessFunction: (data: LichThiDau) => {
+    //     return new Date(data.ngayGioThucTe!!).toLocaleString();
+    //   },
+    // },
   ];
 
   let selectedIndex: number = $state(0);
@@ -243,8 +248,8 @@
       result.tenDoiThang =
         danhSachDoi.find((value) => value.maDoi == result.doiThang)?.tenDoi ??
         null;
-      result.tenMG =
-        danhSachMuaGiai.find((value) => value.maMG == result.maMG)?.tenMG ?? "";
+      // result.tenMG =
+      //   danhSachMuaGiai.find((value) => value.maMG == result.maMG)?.tenMG ?? "";
       if (result.tenDoiThang === null) result.tenDoiThang = "Hòa";
 
       if (selectedIndex === -1) danhSachLTD.push(result);
@@ -275,19 +280,22 @@
   {onDeleteClick}
 />
 
-<div class="flex justify-center gap-2">
-  <ButtonPrimary
-    text={"Thêm trận đấu mới"}
-    onclick={() => {
-      formState = true;
-    }}
-  />
-  <a
-    href="/sapxeptrandau"
-    class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 cursor-pointer"
-    >Sắp xếp lịch
-  </a>
-</div>
+{#if isEditable}
+  <div class="flex justify-center gap-2">
+    <ButtonPrimary
+      text={"Thêm trận đấu mới"}
+      onclick={() => {
+        formState = true;
+      }}
+    />
+    <a
+      href="/sapxeptrandau"
+      class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 cursor-pointer"
+      >Sắp xếp lịch
+    </a>
+  </div>
+ {/if}
+
 
 <!-- Form bao gồm: 
  - Đội 1 đội 2 là được select từ danh sách các đội hiện có
@@ -297,9 +305,9 @@
  - Ngày giờ tiếp tục chọn date and time dưới dạng input
   -->
 <Form
-  {onOpenForm}
-  {onCloseForm}
-  {submitForm}
-  fields={formFields}
-  bind:formState
+{onOpenForm}
+{onCloseForm}
+{submitForm}
+fields={formFields}
+bind:formState
 />

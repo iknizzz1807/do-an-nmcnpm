@@ -39,6 +39,12 @@
       accessFunction: (data: MuaGiai) =>
         new Date(data.ngayDienRa!!).toLocaleDateString(),
     },
+    {
+      header: "Ngày kết thúc",
+      accessor: "ngayKetThuc",
+      accessFunction: (data: MuaGiai) =>
+        new Date(data.ngayKetThuc!!).toLocaleDateString(),
+    },
   ];
 
   const formFields: FormField[] = [
@@ -54,7 +60,14 @@
       type: "Date",
       valueType: "Date",
     },
+    {
+      label: "Ngày kết thúc",
+      propertyName: "ngayKetThuc",
+      type: "Date",
+      valueType: "Date",
+    },
   ];
+  
   let selectedIndex: number = $state(0);
 
   let formState: boolean = $state(false);
@@ -199,9 +212,11 @@
   {isEditable}
 />
 
-<div class="flex justify-center">
-  <ButtonPrimary text="Tạo đội mới" onclick={() => (formState = true)} />
-</div>
+{#if isEditable}
+  <div class="flex justify-center">
+    <ButtonPrimary text="Tạo đội mới" onclick={() => (formState = true)} />
+  </div>
+{/if}
 
 <Form
   bind:formState

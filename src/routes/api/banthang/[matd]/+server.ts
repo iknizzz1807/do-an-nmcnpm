@@ -7,11 +7,15 @@ import { selectThamSo } from "$lib/server/db/functions/ThamSo";
 import { errorResponseJSON } from "$lib";
 import { isCauThuInTranDau } from "$lib/server/db/functions/CauThu";
 
+export const _GETBanThang = async (maTD: number) => {
+  return await selectBanThang(maTD);
+}
+
 export const GET: RequestHandler = async ({ params, locals }) => {
   const maTD = parseInt(params.matd);
   if (!isNumber(maTD))
     throw new Error("MaTD phải là số");
-  const danhSachBanThang = await selectBanThang(maTD);
+  const danhSachBanThang = await _GETBanThang(maTD);
 
   return new Response(JSON.stringify(danhSachBanThang), {
     status: 200,

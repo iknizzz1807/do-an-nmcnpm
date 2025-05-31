@@ -1,5 +1,6 @@
+import { selectAllVongTD } from "$lib/server/db/functions/Data/VongTD";
 import { checkPageEditable } from "$lib/server/db/functions/User/UserRole";
-import type { DoiBong, MuaGiai, LichThiDau } from "$lib/typesDatabase";
+import type { DoiBong, MuaGiai, LichThiDau, VongTD } from "$lib/typesDatabase";
 import { _GETDoiBong } from "../api/doibong/+server";
 import { _GETLichThiDau } from "../api/lichthidau/+server";
 import { _GETMuaGiai } from "../api/muagiai/+server";
@@ -15,6 +16,7 @@ export const load = (async ({ fetch, locals, route }) => {
     const danhSachLTD: LichThiDau[] = response;
     const danhSachDoi: DoiBong[] = responseDB;
     const danhSachMuaGiai: MuaGiai[] = responseMG;
+    const danhSachVTD: VongTD[] = await selectAllVongTD();
 
     const isEditable = await checkPageEditable(locals.user!!.groupId, route.id);
 
@@ -22,6 +24,7 @@ export const load = (async ({ fetch, locals, route }) => {
       danhSachLTD,
       danhSachDoi,
       danhSachMuaGiai,
+      danhSachVTD,
       isEditable,
     };
   } catch (error) {
@@ -29,6 +32,7 @@ export const load = (async ({ fetch, locals, route }) => {
     return {
       danhSachLTD: [],
       danhSachDoi: [],
+      danhSachVTD: [],
       danhSachMuaGiai: [],
       isEditable: false
     };

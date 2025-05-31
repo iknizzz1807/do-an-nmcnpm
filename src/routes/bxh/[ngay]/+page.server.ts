@@ -1,6 +1,7 @@
 import type { CauThu } from "$lib/typesDatabase";
 import dateFormat from "dateformat";
 import type { PageServerLoad } from "./$types";
+import { _GETBXH } from "../../api/bxh/[ngay]/+server";
 
 export const load = (async ({ fetch, locals, params }) => {
   try {
@@ -9,16 +10,9 @@ export const load = (async ({ fetch, locals, params }) => {
       throw new Error("Ngày không được trống");
     let date = new Date(ngay);
 
-    const reponse = await fetch("/api/bxh/" + dateFormat(date, "isoDate"), {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json"
-      },
-    })
-    if (!reponse.ok)
-      throw new Error("Failed to fetch data");
+    const reponse = await _GETBXH(date);
 
-    const bangXepHangNgay = await reponse.json();
+    const bangXepHangNgay = reponse;
 
     return {
       bangXepHangNgay: bangXepHangNgay,

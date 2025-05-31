@@ -162,9 +162,11 @@
   {isEditable}
 />
 
-<div class="flex justify-center">
-  <ButtonPrimary text="Tạo đội mới" onclick={() => (formState = true)} />
-</div>
+{#if isEditable}
+  <div class="flex justify-center">
+    <ButtonPrimary text="Tạo đội mới" onclick={() => (formState = true)} />
+  </div>
+{/if}
 
 <Form
   bind:formState
