@@ -50,7 +50,7 @@
   </h1>
   <div class="title-underline w-48 h-1 bg-purple-600 mb-8"></div>
 
-  <form class="mb-6 bg-white p-4 rounded-lg shadow border border-gray-200">
+  <div class="mb-6 bg-white p-4 rounded-lg shadow border border-gray-200">
     <label class="block text-gray-700 text-sm font-medium mb-1" for="dateBXH">
       Chọn ngày xem bảng xếp hạng
     </label>
@@ -62,7 +62,7 @@
       required
       bind:value={dateBXH}
     />
-  </form>
+  </div>
   <Table
     title={"Bảng xếp hạng ngày " +
       (dateBXH.trim() === ""
