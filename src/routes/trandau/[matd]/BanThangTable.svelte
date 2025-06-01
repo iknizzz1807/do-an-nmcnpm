@@ -184,6 +184,41 @@
       showErrorToast(String(error));
     }
   };
+
+  
+  const onDeleteClick = async (data: any, index: number) => {
+    if (data satisfies BanThang) {
+      selectedIndex = index;
+      await deleteBanThang(data);
+    } else {
+      console.error("Data không thỏa mãn loại CauThu");
+    }
+  };
+
+  const deleteBanThang = async (banThang: BanThang) => {
+    try {
+      const response = await fetch("/api/banthang/" + banThang.maTD, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(banThang),
+      });
+
+      if (!response.ok) {
+        throw new Error("Lỗi xóa Bàn thắng");
+      }
+
+      danhSachBanThang.splice(selectedIndex, 1);
+
+      // Đóng form và hiện toast thành công sau khi thành công
+      formState = false;
+      showOkToast("Cập nhật bàn thắng mới thành công");
+    } catch (error) {
+      console.error("Error:", error);
+      showErrorToast(String(error));
+    }
+  };
 </script>
 
 <Table
@@ -193,7 +228,7 @@
   redirectParam={""}
   tableType=""
   {onEditClick}
-  onDeleteClick={() => {}}
+  onDeleteClick={onDeleteClick}
   {isEditable}
 />
 

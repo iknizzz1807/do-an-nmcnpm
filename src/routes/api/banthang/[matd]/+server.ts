@@ -81,24 +81,19 @@ export const POST : RequestHandler = async({ request, locals, params } : { reque
 
 export const DELETE : RequestHandler = async({ request, locals } : { request: Request, locals: App.Locals }) => {
   const data = await request.json();
-  if (!(data satisfies BanThang)) {
-    let banThang : BanThang = {
-      maTD: data.maTD,
-      maCT: data.maCT,
-      maDoi: data.maDoi,
-      thoiDiem: data.thoiDiem,
-      maLBT: data.maLBT
-    };
-    await deleteBanThang(banThang);
-    return new Response(JSON.stringify(banThang), {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-  }
-  else {
-    return errorResponseJSON(400, "Data không thỏa mã BanThang");
-  }
+  console.log(data);
+  let banThang : BanThang = {
+    maTD: data.maTD,
+    maCT: data.maCT,
+    thoiDiem: data.thoiDiem,
+    maLBT: data.maLBT
+  };
+  await deleteBanThang(banThang);
+  return new Response(JSON.stringify(banThang), {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
 
 }
