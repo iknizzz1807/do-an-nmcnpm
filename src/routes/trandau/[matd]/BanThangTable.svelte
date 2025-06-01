@@ -15,8 +15,8 @@
   type Props = {
     maTD: number;
     dsBanThang: BanThang[];
-    cauThuDoiMot: { cauThu: CauThu, viTri: ViTri }[];
-    cauThuDoiHai: { cauThu: CauThu, viTri: ViTri }[];
+    cauThuDoiMot: { cauThu: CauThu; viTri: ViTri }[];
+    cauThuDoiHai: { cauThu: CauThu; viTri: ViTri }[];
     thoiDiemGhiBanToiDa: number;
     maDoiMot: number;
     maDoiHai: number;
@@ -104,10 +104,14 @@
     for (let banThang of danhSachBanThang) {
       let cauThu: CauThu | null;
       if (banThang.maDoi === maDoiMot) {
-        cauThu = cauThuDoiMot.find((val) => val.cauThu.maCT === banThang.maCT)?.cauThu ?? null;
+        cauThu =
+          cauThuDoiMot.find((val) => val.cauThu.maCT === banThang.maCT)
+            ?.cauThu ?? null;
         banThang.tenDoi = tenDoiMot;
       } else {
-        cauThu = cauThuDoiHai.find((val) => val.cauThu.maCT === banThang.maCT)?.cauThu ?? null;
+        cauThu =
+          cauThuDoiHai.find((val) => val.cauThu.maCT === banThang.maCT)
+            ?.cauThu ?? null;
         banThang.tenDoi = tenDoiHai;
       }
       if (cauThu === null) continue;
@@ -159,14 +163,17 @@
 
       let result = await response.json();
 
-      // Cập nhật danh sách Bàn thắng nếu cần thiết
       if (selectedIndex === -1) {
         let cauThu: CauThu | null;
         if (result.maDoi === maDoiMot) {
-          cauThu = cauThuDoiMot.find((val) => val.cauThu.maCT === result.maCT)?.cauThu ?? null;
+          cauThu =
+            cauThuDoiMot.find((val) => val.cauThu.maCT === result.maCT)
+              ?.cauThu ?? null;
           result.tenDoi = tenDoiMot;
         } else {
-          cauThu = cauThuDoiHai.find((val) => val.cauThu.maCT === result.maCT)?.cauThu ?? null;
+          cauThu =
+            cauThuDoiHai.find((val) => val.cauThu.maCT === result.maCT)
+              ?.cauThu ?? null;
           result.tenDoi = tenDoiHai;
         }
         if (cauThu === null)
@@ -176,7 +183,6 @@
         danhSachBanThang.sort(sortDSBT);
       } else danhSachBanThang[selectedIndex] = result;
 
-      // Đóng form và hiện toast thành công sau khi thành công
       formState = false;
       showOkToast("Tạo Bàn thắng mới thành công");
     } catch (error) {
@@ -197,14 +203,12 @@
   {isEditable}
 />
 
-{#if isEditable}
-  <div class="flex justify-center">
-    <ButtonPrimary
+<div class="flex justify-center">
+  <ButtonPrimary
     text={"Thêm bàn thắng mới"}
     onclick={() => (formState = true)}
-    />
-  </div>
-{/if}
+  />
+</div>
 
 <Form
   {onOpenForm}

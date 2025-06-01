@@ -34,7 +34,7 @@
       <div class="mb-4">
         <label
           for="inputUsername"
-          class="block text-green-800 text-sm font-bold mb-2">Email</label
+          class="block text-green-800 text-sm font-bold mb-2">Username</label
         >
         <input
           type="text"
