@@ -210,7 +210,7 @@
 
       // Đóng form và hiện toast thành công sau khi thành công
       formState = false;
-      showOkToast("Cập nhật cầu thủ mới thành công");
+      showOkToast("Xóa cầu thủ thành công");
     } catch (error) {
       console.error("Error:", error);
       showErrorToast(String(error));

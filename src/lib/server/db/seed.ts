@@ -57,6 +57,24 @@ const seedBanThang = (soBT: number, maTD: number, cauThu: CauThu[], thoiDiem: nu
   return thoiDiem;
 }
 
+const positionMap : Map<string, number> = new Map();
+positionMap.set("Goalkeeper", 1);
+positionMap.set("Defence", 2);
+positionMap.set("Defensive Midfield", 2);
+positionMap.set("Midfield", 3);
+positionMap.set("Central Midfield", 3);
+positionMap.set("Attacking Midfield", 3);
+
+positionMap.set("Offence", 4);
+positionMap.set("Left Winger", 4);
+positionMap.set("Right Winger", 4);
+
+positionMap.set("Striker", 5);
+positionMap.set("Left-Back", 5);
+positionMap.set("Right-Back", 5);
+positionMap.set("Centre-Back", 5);
+
+
 const seedSeason = async(teams: any, matches: any) => {
   const season = teams.season;
   const teamsMap: Map<number, number> = new Map();
@@ -128,12 +146,6 @@ const seedSeason = async(teams: any, matches: any) => {
       ngayGioThucTe: new Date(match.utcDate).toJSON(),
     })
 
-    const positionMap : Map<string, number> = new Map();
-    positionMap.set("Goalkeeper", 1);
-    positionMap.set("Defence", 2);
-    positionMap.set("Midfield", 3);
-    positionMap.set("Offence", 4);
-    positionMap.set("Striker", 5);
     
     const CTDoiMot : CauThu[] = (await selectCauThuDoiBong(teamsMap.get(match.homeTeam.id)!!));
     const doiMot = teams.teams.find((value : any) => value.id === match.homeTeam.id)!!;

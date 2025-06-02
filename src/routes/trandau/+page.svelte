@@ -168,7 +168,7 @@
       selectedIndex = index;
       await deleteTranDau(data);
     } else {
-      console.error("Data không thỏa mãn loại CauThu");
+      console.error("Data không thỏa mãn");
     }
   };
 

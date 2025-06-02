@@ -197,7 +197,7 @@
       selectedIndex = index;
       await deleteBanThang(data);
     } else {
-      console.error("Data không thỏa mãn loại CauThu");
+      console.error("Data không thỏa mãn");
     }
   };
 
@@ -219,7 +219,7 @@
 
       // Đóng form và hiện toast thành công sau khi thành công
       formState = false;
-      showOkToast("Cập nhật bàn thắng mới thành công");
+      showOkToast("Xóa bàn thắng thành công");
     } catch (error) {
       console.error("Error:", error);
       showErrorToast(String(error));

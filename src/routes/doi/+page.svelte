@@ -71,7 +71,7 @@
       selectedIndex = index;
       formState = true;
     } else {
-      console.error("Data không thỏa mãn LichThiDau");
+      console.error("Data không thỏa mãn");
       selectedIndex = -1;
     }
   };
@@ -82,7 +82,7 @@
       maDoi = data.maDoi;
       await deleteDoiBong();
     } else {
-      console.error("Data không thỏa mãn loại CauThu");
+      console.error("Data không thỏa mãn");
     }
   };
 
@@ -114,7 +114,7 @@
 
       // Đóng form và hiện toast thành công sau khi thành công
       formState = false;
-      showOkToast("Tạo đội bóng mới thành công");
+      showOkToast("Tạo mới thành công");
     } catch (error) {
       console.error("Error:", error);
       showErrorToast(String(error));
@@ -140,7 +140,7 @@
 
       // Đóng form và hiện toast thành công sau khi thành công
       formState = false;
-      showOkToast("Cập nhật đội bóng mới thành công");
+      showOkToast("Xóa thành công");
     } catch (error) {
       console.error("Error:", error);
       showErrorToast(String(error));
