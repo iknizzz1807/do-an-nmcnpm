@@ -5,7 +5,7 @@ import { countThamGiaDB, isThamGiaDBExceedMax } from "$lib/server/db/functions/T
 import type { CauThu } from "$lib/typesDatabase";
 import { calculateAge, errorResponseJSON } from "$lib";
 import { selectThamSo } from "$lib/server/db/functions/ThamSo";
-import { selectAllLoaiCT } from "$lib/server/db/functions/Data/LoaiCT";
+import { selectAllLoaiCT, selectLoaiCTMaLCT } from "$lib/server/db/functions/Data/LoaiCT";
 
 export const _GETCauThuMaDoi = async(ma_doi: string) => {
   const maDoi = parseInt(ma_doi);
@@ -50,8 +50,10 @@ export const POST: RequestHandler = async ({ request, params, locals }) => {
     if ((await countThamGiaDB(maDoi)) >= soCauThuMax)
       throw new Error("Đội bóng đã đạt đủ số cầu thủ tối đa");
 
-    if ((await isThamGiaDBExceedMax(maDoi, data.maLCT)))
-      throw new Error("Đội bóng đã đạt đủ số cầu thủ tối đa của " + data.maLCT);
+    if ((await isThamGiaDBExceedMax(maDoi, data.maLCT))) {
+      const lct = await selectLoaiCTMaLCT(data.maLCT);
+      throw new Error("Đội bóng đã đạt đủ số cầu thủ tối đa của " + (lct?.tenLCT ?? ""));
+    }
     
     data.maDoi = maDoi;
     if ((data.maCT ?? null) === null) 
@@ -63,7 +65,7 @@ export const POST: RequestHandler = async ({ request, params, locals }) => {
     if (error instanceof Error)
       return errorResponseJSON(400, error.message);
     else 
-      throw error;
+      throw error
   }
 
   return new Response(JSON.stringify(data), {

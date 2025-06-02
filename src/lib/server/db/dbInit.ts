@@ -91,7 +91,7 @@ await db.insert(LoaiBTTable).values([
 
 await db.insert(LoaiCTTable).values([
   { tenLCT: "Trong nước", soCauThuToiDa: 0 }, 
-  { tenLCT: "Nước ngoài", soCauThuToiDa: 0 }
+  { tenLCT: "Nước ngoài", soCauThuToiDa: 5 }
 ]);
 
 await db.insert(LoaiTPTable).values([

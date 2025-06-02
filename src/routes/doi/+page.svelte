@@ -100,7 +100,8 @@
       });
 
       if (!response.ok) {
-        throw new Error("Lỗi tạo đội bóng");
+        const error = await response.json();
+        throw new Error(error.message);
       }
 
       const result = await response.json();
@@ -131,15 +132,15 @@
       });
 
       if (!response.ok) {
-        showErrorToast("Lỗi cập nhật đội bóng");
-        throw new Error("Lỗi cập nhật đội bóng");
+        const error = await response.json();
+        throw new Error(error.message);
       }
 
       danhSachDoiBong.splice(selectedIndex, 1);
 
       // Đóng form và hiện toast thành công sau khi thành công
       formState = false;
-      showOkToast("Cập nhật cầu thủ mới thành công");
+      showOkToast("Cập nhật đội bóng mới thành công");
     } catch (error) {
       console.error("Error:", error);
       showErrorToast(String(error));

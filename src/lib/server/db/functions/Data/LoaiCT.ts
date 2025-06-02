@@ -7,6 +7,12 @@ export const selectAllLoaiCT = async () => {
   return (await db.select().from(LoaiCTTable)) satisfies LoaiCT[];
 };
 
+export const selectLoaiCTMaLCT = async (maLCT: number) => {
+  return ((await db.select().from(LoaiCTTable)
+    .where(eq(LoaiCTTable.maLCT, maLCT)).limit(1)).at(0) ?? null) satisfies (LoaiCT | null);
+};
+
+
 export const insertLoaiCT = async (...LoaiCT: LoaiCT[]) => {
     let returning = await db.insert(LoaiCTTable).values(LoaiCT).returning({ id: LoaiCTTable.maLCT });
     if (returning === null || returning.length === 0)

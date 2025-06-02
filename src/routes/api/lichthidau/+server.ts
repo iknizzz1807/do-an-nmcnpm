@@ -25,44 +25,48 @@ export const POST : RequestHandler = async ({ request, locals } : { request: Req
   const data = await request.json();
   if ((locals.muaGiai ?? null) === null) 
     throw new Error("Mùa giải là null");
-  let lichThiDau : LichThiDau = {
-    doiMot: parseInt(data.doiMot),
-    doiHai: parseInt(data.doiHai),
-    maVTD: parseInt(data.maVTD),
-    doiThang: parseInt(data.doiThang),
-    maMG: locals.muaGiai!!.maMG!!,
-    maSan: 1,
-    maTD: data.maTD,
-    maTT: data.maTT,
-    thoiGianDaThiDau: 0,
-    ngayGioThucTe: new Date(data.ngayGioThucTe).toJSON(),
-    ngayGioDuKien: new Date(data.ngayGioDuKien).toJSON(),
-  };
-
-  const doiBongMot = await selectDoiBongMaDoi(lichThiDau.doiMot);
-  const doiBongHai = await selectDoiBongMaDoi(lichThiDau.doiHai);
-  if (doiBongMot === null || doiBongHai === null)
-    return errorResponseJSON(400, "Đội bóng không tồn tại");
-  const doiDaTrenSanNha = await selectThamSo("doiDaTrenSanNha");
-  lichThiDau.maSan = doiDaTrenSanNha === 1 ? doiBongMot.maSan : doiBongHai.maSan;
-
-  if ((lichThiDau.maTD ?? null) === null) {
-    await insertLichThiDau(lichThiDau).catch((err) => {
-      throw err;
-    });
+  try {
+    let lichThiDau : LichThiDau = {
+      doiMot: data.doiMot,
+      doiHai: data.doiHai,
+      maVTD: data.maVTD,
+      doiThang: data.doiThang,
+      maMG: locals.muaGiai!!.maMG!!,
+      maSan: 1,
+      maTD: data.maTD,
+      maTT: data.maTT,
+      thoiGianDaThiDau: 0,
+      ngayGioThucTe: new Date(data.ngayGioThucTe).toJSON(),
+      ngayGioDuKien: new Date(data.ngayGioDuKien).toJSON(),
+    };
+    
+    const doiBongMot = await selectDoiBongMaDoi(lichThiDau.doiMot);
+    const doiBongHai = await selectDoiBongMaDoi(lichThiDau.doiHai);
+    if (doiBongMot === null || doiBongHai === null)
+      throw new Error("Đội bóng không tồn tại");
+    const doiDaTrenSanNha = await selectThamSo("doiDaTrenSanNha");
+    lichThiDau.maSan = doiDaTrenSanNha === 1 ? doiBongMot.maSan : doiBongHai.maSan;
+    
+    if ((lichThiDau.maTD ?? null) === null) {
+      await insertLichThiDau(lichThiDau);
+    }
+    else {
+      await updateLichThiDau(lichThiDau);
+    }
+    
+    return new Response(JSON.stringify(lichThiDau), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
   }
-  else {
-    await updateLichThiDau(lichThiDau).catch((err) => {
-      throw err;
-    });
+  catch (error) {
+    if (error instanceof Error) 
+      return errorResponseJSON(400, error.message);
+    else
+      throw error;
   }
-
-  return new Response(JSON.stringify(lichThiDau), {
-    status: 200,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
 }
 
 
@@ -71,18 +75,27 @@ export const DELETE : RequestHandler = async ({ request } : { request: Request }
 
   let result : number | null = null;
 
-  if ((data.maTD ?? null) === null) {
-    throw new Error("Không có mã cầu thủ sao xóa? bruh");
-  }
-  else {
-    result = data.maTD!!;
-    await deleteLichThiDau(data.maTD!!);
-  }
+  try {
 
-  return new Response(JSON.stringify({ maTD: result!! }), {
-    status: 200,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
+    if ((data.maTD ?? null) === null) {
+      throw new Error("Không có mã cầu thủ sao xóa? bruh");
+    }
+    else {
+      result = data.maTD!!;
+      await deleteLichThiDau(data.maTD!!);
+    }
+    
+    return new Response(JSON.stringify({ maTD: result!! }), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+  }
+  catch (error) {
+    if (error instanceof Error)
+      return errorResponseJSON(400, error.message);
+    else
+      throw error;
+  }
 }
