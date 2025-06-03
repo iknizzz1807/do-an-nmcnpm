@@ -180,15 +180,14 @@
       });
 
       if (!response.ok) {
-        showErrorToast("Lỗi cập nhật Mùa giải");
-        throw new Error("Lỗi cập nhật Mùa giải");
+        throw new Error("Lỗi cập nhật");
       }
 
       danhSachMuaGiai.splice(selectedIndex, 1);
 
       // Đóng form và hiện toast thành công sau khi thành công
       formState = false;
-      showOkToast("Cập nhật cầu thủ mới thành công");
+      showOkToast("Xóa thành công");
     } catch (error) {
       console.error("Error:", error);
       showErrorToast(String(error));

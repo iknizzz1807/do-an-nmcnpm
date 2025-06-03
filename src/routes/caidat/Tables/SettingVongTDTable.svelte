@@ -45,7 +45,7 @@
       formState = true;
       selectedIndex = index;
     } else {
-      console.error("Data không thỏa mãn LichThiDau");
+      console.error("Data không thỏa mãn");
       selectedIndex = -1;
     }
   };
@@ -94,7 +94,7 @@
       await deleteVongTD(data.maVTD);
     }
     else {
-      console.error("Data không thỏa mãn loại CauThu");
+      console.error("Data không thỏa mãn");
     }
   }
   
@@ -109,15 +109,14 @@
       });
 
       if (!response.ok) {
-        showErrorToast("Lỗi cập nhật đội bóng");
-        throw new Error("Lỗi cập nhật đội bóng");
+        throw new Error("Lỗi cập nhật");
       }
 
       vongTD.splice(selectedIndex, 1);
 
       // Đóng form và hiện toast thành công sau khi thành công
       formState = false;
-      showOkToast("Cập nhật vòng thi đấu mới thành công");
+      showOkToast("Cập nhật mới thành công");
     } catch (error) {
       console.error("Error:", error);
       showErrorToast(String(error));

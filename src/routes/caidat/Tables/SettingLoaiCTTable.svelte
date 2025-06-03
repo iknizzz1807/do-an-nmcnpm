@@ -53,7 +53,7 @@
       formState = true;
       selectedIndex = index;
     } else {
-      console.error("Data không thỏa mãn LichThiDau");
+      console.error("Data không thỏa mãn");
       selectedIndex = -1;
     }
   };
@@ -102,7 +102,7 @@
       await deleteLoaiCT(data.maLCT);
     }
     else {
-      console.error("Data không thỏa mãn loại CauThu");
+      console.error("Data không thỏa mãn");
     }
   }
   
@@ -117,15 +117,14 @@
       });
 
       if (!response.ok) {
-        showErrorToast("Lỗi cập nhật đội bóng");
-        throw new Error("Lỗi cập nhật đội bóng");
+        throw new Error("Lỗi cập nhật");
       }
 
       loaiCT.splice(selectedIndex, 1);
 
       // Đóng form và hiện toast thành công sau khi thành công
       formState = false;
-      showOkToast("Cập nhật cầu thủ mới thành công");
+      showOkToast("Cập nhật mới thành công");
     } catch (error) {
       console.error("Error:", error);
       showErrorToast(String(error));

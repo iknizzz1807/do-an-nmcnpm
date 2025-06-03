@@ -43,7 +43,6 @@
     { header: "Đội Một", accessor: "tenDoiMot" },
     { header: "Đội Hai", accessor: "tenDoiHai" },
     { header: "Vòng thi đấu", accessor: "tenVTD" },
-    // { header: "Mã mùa giải", accessor: "tenMG" },
     { header: "Đội thắng", accessor: "tenDoiThang" },
     {
       header: "Ngày giờ",

@@ -71,7 +71,7 @@
       formState = true;
       selectedIndex = index;
     } else {
-      console.error("Data không thỏa mãn User");
+      console.error("Data không thỏa mãn");
       selectedIndex = -1;
     }
   };

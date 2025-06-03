@@ -6,25 +6,17 @@ import type { RequestHandler } from "./$types";
 
 // Update User Group Has Roles
 export const POST: RequestHandler = async ({ request, locals, route }) => {
-  if (!locals.user)
-    return errorResponseJSON(401, "Unauthorized");
-  if (locals.user.id !== 0)
-  {
-    if ((await checkPageViewable(locals.user!!.groupId!!, route.id)) === false)
-      return errorResponseJSON(401, "Unauthorized");
-  }
 
   const data : UserRoleInsertParams = await request.json();
 
-    await upsertRole(data);
+  await upsertRole(data);
+  
   return new Response(JSON.stringify(data), {
     status: 200
   });
 }
 
 export const DELETE: RequestHandler = async ({ request, url, locals}) => {
-  if (!locals.user)
-    return errorResponseJSON(401, "Unauthorized");
   try {
 
     const roleId = parseInt(url.searchParams.get("roleId") ?? "");

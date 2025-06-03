@@ -49,7 +49,12 @@
         optionName: value.tenLCT,
       })),
     },
-
+    {
+      label: "Số áo",
+      propertyName: "soAo",
+      type: "input",
+      valueType: "number",
+    },
     {
       label: "Ghi chú",
       propertyName: "ghiChu",
@@ -126,10 +131,11 @@
       editData.clear();
       editData.set("maCT", data.maCT);
       editData.set("tenCT", data.tenCT);
-      editData.set("maLCT", parseInt(data.maLCT));
-      editData.set("ghiChu", data.ghiChu);
-      //editData.set("nuocNgoai", Number(data.nuocNgoai));
       editData.set("ngaySinh", new Date(data.ngaySinh));
+      editData.set("ghiChu", data.ghiChu);
+      editData.set("maLCT", parseInt(data.maLCT));
+      editData.set("soAo", data.soAo);
+      editData.set("maDoi", data.maDoi);
       console.log(editData);
       formState = true;
       selectedIndex = index;
@@ -204,7 +210,7 @@
 
       // Đóng form và hiện toast thành công sau khi thành công
       formState = false;
-      showOkToast("Cập nhật cầu thủ mới thành công");
+      showOkToast("Xóa cầu thủ thành công");
     } catch (error) {
       console.error("Error:", error);
       showErrorToast(String(error));
@@ -280,7 +286,7 @@
   title="Danh sách các Cầu thủ"
   {columns}
   data={filteredResults}
-  redirectParam={"maDoi"}
+  redirectParam={"maCT"}
   tableType="cauthu"
   {onDeleteClick}
   {onEditClick}

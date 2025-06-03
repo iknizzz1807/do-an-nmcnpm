@@ -28,7 +28,6 @@ export const POST: RequestHandler = async ({
     throw new Error("Không tìm thấy mùa giải");
 
   try {
-    // Cái post request này để tạo đội bóng, response ok sẽ tiến hành trả về đội bóng mới vừa tạo
     const data = await request.json();
     
     if (data.maDoi ?? null) {
@@ -37,7 +36,7 @@ export const POST: RequestHandler = async ({
     else{
       await insertDoiBong(data)
     }
-    // Trả về response với đội bóng vừa tạo và status 200 OK
+    
     return new Response(JSON.stringify(data), {
       status: 200,
       headers: {
@@ -62,13 +61,21 @@ export const DELETE: RequestHandler = async ({
   const data = await request.json();
   let result : number | null = null;
 
-  console.log(data.maDoi);
-  if ((data.maDoi) === null) {
-    throw new Error("Không có mã đội sao xóa? bruh");
+  try {
+
+    if ((data.maDoi) === null) {
+      throw new Error("Không có mã đội sao xóa? bruh");
+    }
+    else {
+      result = data.maDoi!!;
+      await deleteDoiBong(data.maDoi!!);
+    }
   }
-  else {
-    result = data.maDoi!!;
-    await deleteDoiBong(data.maDoi!!);
+  catch (error) {
+    if (error instanceof Error)
+      return errorResponseJSON(400, error.message);
+    else
+      throw error;
   }
 
   return new Response(JSON.stringify({ maDoi: result!! }), {

@@ -29,8 +29,7 @@ export const POST: RequestHandler = async ({
   // Cái post request này để tạo sân nhà, response ok sẽ tiến hành trả về sân nhà mới vừa tạo
   let data : SanNha = await request.json();
 
-  if ((data.maMG ?? null) === null)
-  {
+  if ((data.maMG ?? null) === null) {
     data.maMG = locals.muaGiai!!.maMG!!;
   }
 

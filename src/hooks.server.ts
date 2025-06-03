@@ -1,4 +1,5 @@
 
+import { errorResponseJSON } from "$lib";
 import { deleteSessionTokenCookie, setSessionTokenCookie, validateSessionToken } from "$lib/server/db/functions/User/Session";
 import { checkPageEditable, checkPageViewable } from "$lib/server/db/functions/User/UserRole";
 import type { MuaGiai } from "$lib/typesDatabase";
@@ -25,12 +26,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.session = null;
 		// remove this if it looks like shit bruh
 		if (event.url.pathname.startsWith("/api/")) {
-			return new Response(JSON.stringify({ error: "Unauthorized" }), {
-				status: 401,
-				headers: {
-					"Content-Type": "application/json"
-				}
-			})
+			return errorResponseJSON(401, "Unauthorized");
 		}
 		else if (!event.url.pathname.includes("/login") && event.url.pathname !== "/signup") {
 			return redirect(307, '/login');

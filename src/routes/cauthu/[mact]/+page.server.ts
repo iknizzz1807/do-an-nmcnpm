@@ -23,7 +23,7 @@ export const load = (async ({ params, fetch, locals, route }) => {
 
     const cauThu = await selectCauThuMaCT(maCT);
     if (cauThu === null)
-      throw Error("Đội không tồn tại");
+      throw Error("cầu thủ không tồn tại");
 
     const doiBong = (await selectDoiBongMaDoi(cauThu.maDoi!!))!!;
     const sanNha = (await selectSanNhaMaSan(doiBong.maSan))!!;

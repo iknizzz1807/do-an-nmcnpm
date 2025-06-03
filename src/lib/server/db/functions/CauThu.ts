@@ -9,6 +9,7 @@ import { ThamGiaTDTable } from "../schema/ThamGiaTD";
 import { LoaiBTTable } from "../schema/Data/LoaiBT";
 import { ViTriTable } from "../schema/Data/ViTri";
 import { LichThiDauTable } from "../schema/LichThiDau";
+import dateFormat from "dateformat";
 
 export const insertCauThu = async (...cauThu: CauThu[]) => {
   let returning = await db.insert(CauThuTable).values(cauThu).returning({ id: CauThuTable.maCT });
@@ -24,7 +25,7 @@ export const updateCauThu = async(cauThu: CauThu) => {
       tenCT: cauThu.tenCT,
       maLCT: cauThu.maLCT,
       ghiChu: cauThu.ghiChu,
-      ngaySinh: cauThu.ngaySinh,
+      ngaySinh: dateFormat(cauThu.ngaySinh, "isoDate"),
       maDoi: cauThu.maDoi
   }).where(eq(CauThuTable.maCT, cauThu.maCT!!));
 }

@@ -53,7 +53,7 @@
       formState = true;
       selectedIndex = index;
     } else {
-      console.error("Data không thỏa mãn LichThiDau");
+      console.error("Data không thỏa mãn");
       selectedIndex = -1;
     }
   };

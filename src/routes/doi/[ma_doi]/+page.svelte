@@ -104,10 +104,11 @@
       editData.clear();
       editData.set("maCT", data.maCT);
       editData.set("tenCT", data.tenCT);
-      editData.set("maLCT", parseInt(data.maLCT));
-      editData.set("ghiChu", data.ghiChu);
-      //editData.set("nuocNgoai", Number(data.nuocNgoai));
       editData.set("ngaySinh", new Date(data.ngaySinh));
+      editData.set("ghiChu", data.ghiChu);
+      editData.set("maLCT", (data.maLCT));
+      editData.set("soAo", data.soAo);
+      editData.set("maDoi", parseInt(ma_doi));
       selectedIndex = index;
       formState = true;
     } else {
@@ -118,6 +119,7 @@
 
   const submitForm = async (e: Event, data: CauThu) => {
     e.preventDefault();
+    console.log(selectedIndex);
     if (selectedIndex === -1) addPlayer(data);
     else updatePlayer(data);
   };
@@ -162,7 +164,7 @@
     }
 
     try {
-      const response = await fetch("/api/cauthu" + ma_doi, {
+      const response = await fetch("/api/cauthu/" + ma_doi, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -171,8 +173,8 @@
       });
 
       if (!response.ok) {
-        showErrorToast("Lỗi cập nhật cầu thủ");
-        throw new Error("Lỗi cập nhật cầu thủ");
+        const error = await response.json();
+        throw new Error(error.message);
       }
 
       const result = await response.json();

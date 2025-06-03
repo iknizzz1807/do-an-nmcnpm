@@ -103,7 +103,7 @@
       selectedIndex = index;
       await deleteDiemSo(data.maDS);
     } else {
-      console.error("Data không thỏa mãn loại CauThu");
+      console.error("Data không thỏa mãn");
     }
   };
 

@@ -6,7 +6,7 @@ export const POST: RequestHandler = async (event) => {
   if ((event.locals.session ?? null) === null) {
     return errorResponseJSON(404, "Session doesn't exists");
   }
-  await invalidateSession(event.locals.session!!.id!!);
+  await invalidateSession(event.locals.session!!.sessionId!!);
   deleteSessionTokenCookie(event);
   
   // ??

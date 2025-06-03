@@ -27,50 +27,54 @@ export const GET: RequestHandler = async ({ params, locals }) => {
 
 export const POST : RequestHandler = async({ request, locals, params } : { request: Request, locals: App.Locals, params: any }) => {
   const data = await request.json();
-  if (!(data satisfies UpdateBanThang))
-    return errorResponseJSON(400, "Không thỏa mãn UpdateBanThang");
-  if (params === "") 
-    return errorResponseJSON(400, "Param hiện là rỗng");
-  console.log(data);
-  let banThang : UpdateBanThang = {
-    oldBanThang: (data.oldBanThang ?? null) === null ? null : {
-      maTD: parseInt(params.matd),
-      maCT: data.oldBanThang.maCT,
-      maDoi: data.oldBanThang.maDoi,
-      thoiDiem: data.oldBanThang.thoiDiem,
-      maLBT: data.oldBanThang.maLBT
-    },
-    newBanThang: {
-      maTD: parseInt(params.matd),
-      maCT: data.newBanThang.maCT,
-      maDoi: data.newBanThang.maDoi,
-      thoiDiem: data.newBanThang.thoiDiem,
-      maLBT: data.newBanThang.maLBT,
+  try {
+
+    if (!(data satisfies UpdateBanThang))
+      throw new Error("Không thỏa mãn UpdateBanThang");
+    if (params === "") 
+      throw new Error("Param hiện là rỗng");
+    console.log(data);
+    let banThang : UpdateBanThang = {
+      oldBanThang: (data.oldBanThang ?? null) === null ? null : {
+        maTD: parseInt(params.matd),
+        maCT: data.oldBanThang.maCT,
+        maDoi: data.oldBanThang.maDoi,
+        thoiDiem: data.oldBanThang.thoiDiem,
+        maLBT: data.oldBanThang.maLBT
+      },
+      newBanThang: {
+        maTD: parseInt(params.matd),
+        maCT: data.newBanThang.maCT,
+        maDoi: data.newBanThang.maDoi,
+        thoiDiem: data.newBanThang.thoiDiem,
+        maLBT: data.newBanThang.maLBT,
+      }
+    };
+    
+    const thoiDiemGhiBanToiThieu = (await selectThamSo("thoiDiemGhiBanToiThieu"))!!;
+    const thoiDiemGhiBanToiDa = (await selectThamSo("thoiDiemGhiBanToiDa"))!!;
+    if (banThang.newBanThang.thoiDiem > thoiDiemGhiBanToiDa || banThang.newBanThang.thoiDiem < thoiDiemGhiBanToiThieu) {
+      throw new Error("Thời điểm vượt quá thời điểm ghi bàn tối đa " + thoiDiemGhiBanToiDa + 
+          " hoặc thời điểm ghi bàn tối thiểu" + thoiDiemGhiBanToiThieu);
     }
-  };
-  
-  const thoiDiemGhiBanToiThieu = (await selectThamSo("thoiDiemGhiBanToiThieu"))!!;
-  const thoiDiemGhiBanToiDa = (await selectThamSo("thoiDiemGhiBanToiDa"))!!;
-  if (banThang.newBanThang.thoiDiem > thoiDiemGhiBanToiDa ||
-      banThang.newBanThang.thoiDiem < thoiDiemGhiBanToiThieu)
-      return errorResponseJSON(400, "Thời điểm vượt quá thời điểm ghi bàn tối đa " + 
-        thoiDiemGhiBanToiDa + " hoặc thời điểm ghi bàn tối thiểu" + thoiDiemGhiBanToiThieu);
-  
-  if (!isCauThuInTranDau(banThang.newBanThang.maTD, banThang.newBanThang.maCT)) {
-    return errorResponseJSON(400, "Cầu thủ không ở trong trận đấu");
+            
+    if (!isCauThuInTranDau(banThang.newBanThang.maTD, banThang.newBanThang.maCT)) {
+      throw new Error("Cầu thủ không ở trong trận đấu");
+    }
+    
+    if ((banThang.oldBanThang ?? null) === null) {
+      await insertBanThang(banThang.newBanThang)
+    }
+    else {
+      await updateBanThang(banThang.oldBanThang!!, banThang.newBanThang)
+    }
+  } catch (error) {
+    if (error instanceof Error) 
+      return errorResponseJSON(400, error.message);
+    else
+      throw error;
   }
-
-  if ((banThang.oldBanThang ?? null) === null) {
-    await insertBanThang(banThang.newBanThang).catch((err) => {
-      throw err;
-    });
-  }
-  else {
-    await updateBanThang(banThang.oldBanThang!!, banThang.newBanThang).catch((err) => {
-      throw err;
-    });
-  }
-
+        
   return new Response(JSON.stringify(data.newBanThang), {
     status: 200,
     headers: {
@@ -81,24 +85,19 @@ export const POST : RequestHandler = async({ request, locals, params } : { reque
 
 export const DELETE : RequestHandler = async({ request, locals } : { request: Request, locals: App.Locals }) => {
   const data = await request.json();
-  if (!(data satisfies BanThang)) {
-    let banThang : BanThang = {
-      maTD: data.maTD,
-      maCT: data.maCT,
-      maDoi: data.maDoi,
-      thoiDiem: data.thoiDiem,
-      maLBT: data.maLBT
-    };
-    await deleteBanThang(banThang);
-    return new Response(JSON.stringify(banThang), {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-  }
-  else {
-    return errorResponseJSON(400, "Data không thỏa mã BanThang");
-  }
+  console.log(data);
+  let banThang : BanThang = {
+    maTD: data.maTD,
+    maCT: data.maCT,
+    thoiDiem: data.thoiDiem,
+    maLBT: data.maLBT
+  };
+  await deleteBanThang(banThang);
+  return new Response(JSON.stringify(banThang), {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
 
 }
