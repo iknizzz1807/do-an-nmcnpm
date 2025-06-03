@@ -67,7 +67,7 @@
       valueType: "Date",
     },
   ];
-  
+
   let selectedIndex: number = $state(0);
 
   let formState: boolean = $state(false);
@@ -211,11 +211,9 @@
   {isEditable}
 />
 
-{#if isEditable}
-  <div class="flex justify-center">
-    <ButtonPrimary text="Tạo đội mới" onclick={() => (formState = true)} />
-  </div>
-{/if}
+<div class="flex justify-center">
+  <ButtonPrimary text="Tạo đội mới" onclick={() => (formState = true)} />
+</div>
 
 <Form
   bind:formState

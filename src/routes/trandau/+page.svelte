@@ -1,7 +1,12 @@
 <script lang="ts">
   import Table from "$lib/components/Table.svelte";
   import type { PageProps } from "./$types";
-  import type { DoiBong, MuaGiai, LichThiDau, VongTD } from "$lib/typesDatabase";
+  import type {
+    DoiBong,
+    MuaGiai,
+    LichThiDau,
+    VongTD,
+  } from "$lib/typesDatabase";
   import ButtonPrimary from "$lib/components/ButtonPrimary.svelte";
   import { showErrorToast, showOkToast } from "$lib/components/Toast";
   import {
@@ -25,10 +30,12 @@
   onMount(() => {
     for (const ltd of danhSachLTD) {
       let tenDoiThang =
-      danhSachDoi.find((value) => value.maDoi == ltd.doiThang)?.tenDoi ?? null;
+        danhSachDoi.find((value) => value.maDoi == ltd.doiThang)?.tenDoi ??
+        null;
       if (tenDoiThang === null) tenDoiThang = "Hòa";
       ltd.tenDoiThang = tenDoiThang;
-      ltd.tenVTD = danhSachVTD.find(value => value.maVTD === ltd.maVTD)?.tenVTD ?? "";
+      ltd.tenVTD =
+        danhSachVTD.find((value) => value.maVTD === ltd.maVTD)?.tenVTD ?? "";
     }
   });
 
@@ -110,6 +117,13 @@
 
   const columns = [
     { header: "Đội Một", accessor: "tenDoiMot" },
+    {
+      header: "Tỷ số",
+      accessor: "tyso",
+      accessFunction: (data: LichThiDau) => {
+        return "? - ?"; // Chưa có kết quả
+      },
+    },
     { header: "Đội Hai", accessor: "tenDoiHai" },
     { header: "Vòng thi đấu", accessor: "tenVTD" },
     // { header: "Mã mùa giải", accessor: "tenMG" },
@@ -280,22 +294,19 @@
   {onDeleteClick}
 />
 
-{#if isEditable}
-  <div class="flex justify-center gap-2">
-    <ButtonPrimary
-      text={"Thêm trận đấu mới"}
-      onclick={() => {
-        formState = true;
-      }}
-    />
-    <a
-      href="/sapxeptrandau"
-      class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 cursor-pointer"
-      >Sắp xếp lịch
-    </a>
-  </div>
- {/if}
-
+<div class="flex justify-center gap-2">
+  <ButtonPrimary
+    text={"Thêm trận đấu mới"}
+    onclick={() => {
+      formState = true;
+    }}
+  />
+  <a
+    href="/sapxeptrandau"
+    class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 cursor-pointer"
+    >Sắp xếp lịch
+  </a>
+</div>
 
 <!-- Form bao gồm: 
  - Đội 1 đội 2 là được select từ danh sách các đội hiện có
@@ -305,9 +316,9 @@
  - Ngày giờ tiếp tục chọn date and time dưới dạng input
   -->
 <Form
-{onOpenForm}
-{onCloseForm}
-{submitForm}
-fields={formFields}
-bind:formState
+  {onOpenForm}
+  {onCloseForm}
+  {submitForm}
+  fields={formFields}
+  bind:formState
 />

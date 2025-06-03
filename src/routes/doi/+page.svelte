@@ -19,6 +19,13 @@
   for (const doiBong of danhSachDoiBong) {
     doiBong.tenSan =
       danhSachSanNha.find((val) => val.maSan === doiBong.maSan)?.tenSan ?? "";
+    doiBong.ketQua5TranGanNhat = doiBong.ketQua5TranGanNhat || [
+      Math.random() > 0.5 ? "win" : "lose",
+      Math.random() > 0.5 ? "win" : "lose",
+      Math.random() > 0.5 ? "win" : "lose",
+      Math.random() > 0.5 ? "win" : "lose",
+      Math.random() > 0.5 ? "win" : "lose",
+    ];
   }
 
   const sanNhaOption: FieldOption[] = danhSachSanNha.map((val) => ({
@@ -30,6 +37,13 @@
     { header: "", accessor: "maDoi", hidden: true },
     { header: "Tên đội", accessor: "tenDoi" },
     { header: "Sân nhà", accessor: "tenSan" },
+    {
+      header: "5 trận gần nhất",
+      accessor: "ketQua5TranGanNhat",
+      accessFunction: (data: DoiBong) => {
+        return data.ketQua5TranGanNhat?.join(",") || "";
+      },
+    },
   ];
 
   const formFields: FormField[] = [
@@ -161,7 +175,62 @@
   {onEditClick}
   {onDeleteClick}
   {isEditable}
-/>
+  showTeamLogo={true}
+>
+  {#snippet customRender(row, column)}
+    {#if column.accessor === "ketQua5TranGanNhat"}
+      <div class="flex gap-1">
+        {#each row.ketQua5TranGanNhat || [] as ketQua}
+          {#if ketQua === "win"}
+            <div
+              class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center"
+            >
+              <svg
+                class="w-4 h-4 text-white"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+          {:else}
+            <div
+              class="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center"
+            >
+              <svg
+                class="w-4 h-4 text-white"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+          {/if}
+        {/each}
+      </div>
+    {:else if column.accessFunction}
+      <div
+        class="max-w-md overflow-hidden text-ellipsis whitespace-normal break-words"
+      >
+        {column.accessFunction(row)}
+      </div>
+    {:else}
+      <div
+        class="max-w-md overflow-hidden text-ellipsis whitespace-normal break-words"
+      >
+        {row[column.accessor]}
+      </div>
+    {/if}
+  {/snippet}
+</Table>
 
 <div class="flex justify-center">
   <ButtonPrimary text="Tạo đội mới" onclick={() => (formState = true)} />

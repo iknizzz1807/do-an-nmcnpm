@@ -106,7 +106,7 @@
       editData.set("tenCT", data.tenCT);
       editData.set("ngaySinh", new Date(data.ngaySinh));
       editData.set("ghiChu", data.ghiChu);
-      editData.set("maLCT", (data.maLCT));
+      editData.set("maLCT", data.maLCT);
       editData.set("soAo", data.soAo);
       editData.set("maDoi", parseInt(ma_doi));
       selectedIndex = index;
@@ -237,11 +237,9 @@
   {isEditable}
 />
 
-{#if isEditable}
-  <div class="flex justify-center">
-    <ButtonPrimary text={"Thêm cầu thủ"} onclick={() => (formState = true)} />
-  </div>
-{/if}
+<div class="flex justify-center">
+  <ButtonPrimary text={"Thêm cầu thủ"} onclick={() => (formState = true)} />
+</div>
 
 <Form
   fields={formFields}

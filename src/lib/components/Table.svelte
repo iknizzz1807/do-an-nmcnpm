@@ -19,6 +19,7 @@
     onEditClick?: ((data: any, index: number) => void) | undefined;
     onAddClick?: ((data: any, index: number) => void) | undefined;
     showExportCSV?: boolean;
+    showTeamLogo?: boolean;
   };
 </script>
 
@@ -41,6 +42,7 @@
     onEditClick,
     onAddClick,
     showExportCSV = true,
+    showTeamLogo = false,
   }: TableProps = $props();
   const deleteButton = $state((onDeleteClick ?? null) !== null);
   const editButton = $state((onEditClick ?? null) !== null);
@@ -237,6 +239,14 @@
       <table class="min-w-full">
         <thead class="bg-slate-100">
           <tr>
+            {#if showTeamLogo}
+              <th
+                class="px-4 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider border-b border-gray-300"
+              >
+                Logo
+              </th>
+            {/if}
+
             {#each columns as column}
               {#if !column.hidden}
                 <th
@@ -321,6 +331,26 @@
                 redirectParam !== ""}
               class="hover:bg-gray-50 transition-colors duration-150 border-b border-gray-200 last:border-b-0"
             >
+              {#if showTeamLogo}
+                <td class="px-4 py-2.5 text-sm text-gray-800 align-top">
+                  {#if row.logoUrl}
+                    <img
+                      src={row.logoUrl}
+                      alt="Logo"
+                      class="w-8 h-8 rounded-full object-cover"
+                    />
+                  {:else}
+                    <div
+                      class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center"
+                    >
+                      <span class="text-xs font-bold text-gray-500"
+                        >{row.tenDoi?.charAt(0) || "?"}</span
+                      >
+                    </div>
+                  {/if}
+                </td>
+              {/if}
+
               {#each columns as column (column.accessor)}
                 {#if !column.hidden}
                   <td class="px-4 py-2.5 text-sm text-gray-800 align-top">
