@@ -153,15 +153,3 @@ Hệ thống sử dụng các bảng dữ liệu chính sau:
 ```bash
 npm run dev-seeddb
 ```
-
-## Kết luận
-
-Hệ thống Quản lý Giải Bóng Đá cung cấp một giải pháp toàn diện để quản lý mọi khía cạnh của một giải đấu bóng đá, từ đội bóng, cầu thủ đến lịch thi đấu và kết quả trận đấu. Với giao diện thân thiện và tính năng đầy đủ, hệ thống giúp việc tổ chức và quản lý giải đấu trở nên dễ dàng và hiệu quả.
-
----
-
-## Notes
-
-Dựa trên các tệp mã nguồn được cung cấp, README này mô tả tổng quan về hệ thống quản lý giải bóng đá, bao gồm: giới thiệu, tính năng, cấu trúc dữ liệu, API endpoints, quy trình sử dụng, phân quyền và giao diện người dùng.
-
----
