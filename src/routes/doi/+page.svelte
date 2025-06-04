@@ -19,13 +19,7 @@
   for (const doiBong of danhSachDoiBong) {
     doiBong.tenSan =
       danhSachSanNha.find((val) => val.maSan === doiBong.maSan)?.tenSan ?? "";
-    doiBong.ketQua5TranGanNhat = doiBong.ketQua5TranGanNhat || [
-      Math.random() > 0.5 ? "win" : "lose",
-      Math.random() > 0.5 ? "win" : "lose",
-      Math.random() > 0.5 ? "win" : "lose",
-      Math.random() > 0.5 ? "win" : "lose",
-      Math.random() > 0.5 ? "win" : "lose",
-    ];
+    // doiBong.ketQua5TranGanNhat = doiBong.ketQua5TranGanNhat;
   }
 
   const sanNhaOption: FieldOption[] = danhSachSanNha.map((val) => ({

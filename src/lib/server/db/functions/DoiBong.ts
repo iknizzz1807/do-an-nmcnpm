@@ -1,4 +1,4 @@
-import { ilike, eq, or, getTableColumns } from "drizzle-orm";
+import { ilike, eq, or, and, getTableColumns } from "drizzle-orm";
 import { db } from "../client";
 import { DoiBongTable } from "../schema/DoiBong";
 import type { DoiBong } from "$lib/typesDatabase";
@@ -62,6 +62,14 @@ export const selectAllDoiBongWithTenSan = async () => {
     .innerJoin(SanNhaTable, eq(SanNhaTable.maSan, DoiBongTable.maSan))) satisfies DoiBong[];
 };
 
+export const selectKetQuaTranDauGanDay = async (maDoi: number) => {
+  return await db.select(getTableColumns(LichThiDauTable)).from(DoiBongTable)
+    .innerJoin(LichThiDauTable, or(eq(LichThiDauTable.doiMot, maDoi), eq(LichThiDauTable.doiHai, maDoi)))
+    .where(and(eq(DoiBongTable.maDoi, maDoi)))
+    .groupBy(LichThiDauTable.maTD)
+    .orderBy(LichThiDauTable.ngayGioThucTe)
+    .limit(5);
+}
 
 export const selectDoiBongTen = async (tenDoi: string) => {
   return (await db

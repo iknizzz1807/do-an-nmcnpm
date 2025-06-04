@@ -1,5 +1,6 @@
+import { selectKetQuaTranDauGanDay } from "$lib/server/db/functions/DoiBong";
 import { checkPageEditable } from "$lib/server/db/functions/User/UserRole";
-import type { DoiBong, SanNha } from "$lib/typesDatabase";
+import type { DoiBong, LichThiDau, SanNha } from "$lib/typesDatabase";
 import { _GETDoiBong } from "../api/doibong/+server";
 import { _GETSanNha } from "../api/sannha/+server";
 import type { PageServerLoad } from "./$types";
@@ -13,6 +14,13 @@ export const load = (async ({ fetch, locals, route }) => {
 
     const danhSachSanNha : SanNha[] = responseSN;
     const isEditable = await checkPageEditable(locals.user!!.groupId, route.id);
+
+    for (const doiBong of danhSachDoiBong) {
+      const ketQua : LichThiDau[] = await selectKetQuaTranDauGanDay(doiBong.maDoi!!);
+      doiBong.ketQua5TranGanNhat = ketQua.map(value => 
+        (value.doiThang === doiBong.maDoi ? "win" : (value.doiThang === null ? "tie" : "lose"))
+      ) 
+    }
 
     return {
       danhSachDoiBong: danhSachDoiBong,
