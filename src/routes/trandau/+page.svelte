@@ -121,7 +121,7 @@
       header: "Tỷ số",
       accessor: "tyso",
       accessFunction: (data: LichThiDau) => {
-        return "? - ?"; // Chưa có kết quả
+        return (data.tiSoDoiMot ?? 0).toString() + " - " + (data.tiSoDoiHai ?? 0).toString(); // Chưa có kết quả
       },
     },
     { header: "Đội Hai", accessor: "tenDoiHai" },

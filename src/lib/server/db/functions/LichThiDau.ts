@@ -1,4 +1,4 @@
-import { eq, and, getTableColumns, inArray } from 'drizzle-orm';
+import { eq, and, getTableColumns, inArray, sql } from 'drizzle-orm';
 import { db } from '../client';
 import { LichThiDauTable } from '../schema/LichThiDau';
 import type { LichThiDau } from '$lib/typesDatabase';
@@ -12,6 +12,7 @@ import { TrongTaiTable } from '../schema/TrongTai';
 import { CauThuTable } from '../schema/CauThu';
 import { ThamGiaTDTable } from '../schema/ThamGiaTD';
 import { VongTDTable } from '../schema/Data/VongTD';
+import { LoaiBTTable } from '../schema/Data/LoaiBT';
 
 export const insertLichThiDau = async (...lichThiDau: LichThiDau[]) => {
     let returning = await db.insert(LichThiDauTable).values(lichThiDau).returning({ id: LichThiDauTable.maTD });
@@ -124,7 +125,7 @@ export const tuDongSapXep = async (maMG: number, maDBs : number[]) => {
   return ids;
 }
 
-export const selectAllLichThiDauWithName = async(maMG: number) => {
+export const selectAllLichThiDauWithName = async(maMG: number) : Promise<LichThiDau[]> => {
   const doiMot = alias(DoiBongTable, "doiMot");
   const doiHai = alias(DoiBongTable, "doiHai");
   const doiThang = alias(DoiBongTable, "doiThang");

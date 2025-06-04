@@ -209,6 +209,7 @@
   {onEditClick}
   {onDeleteClick}
   {isEditable}
+  showTeamLogo={true}
 />
 
 <div class="flex justify-center">

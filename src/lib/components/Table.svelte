@@ -335,11 +335,11 @@
             >
               {#if showTeamLogo}
                 <td class="px-4 py-2.5 text-sm text-gray-800 align-top">
-                  {#if row.logoUrl}
+                  {#if row.imageURL}
                     <img
-                      src={row.logoUrl}
+                      src={row.imageURL}
                       alt="Logo"
-                      class="w-8 h-8 rounded-full object-cover"
+                      class="w-16 h-16 rounded-full object-cover"
                     />
                   {:else}
                     <div

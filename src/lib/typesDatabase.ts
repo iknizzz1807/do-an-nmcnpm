@@ -18,6 +18,7 @@ export type DoiBong = {
   maSan: number;
   maMG: number;
   imageURL?: string | null | undefined;
+
   tenSan?: string | undefined;
   ketQua5TranGanNhat?: ("win" | "lose" | "draw")[] | undefined;
   logoUrl?: string | undefined;
@@ -100,6 +101,8 @@ export type LichThiDau = {
   tenMG?: string | undefined;
   tenDoiThang?: string | undefined;
   tenVTD?: string | undefined;
+  tiSoDoiMot?: number | undefined;
+  tiSoDoiHai?: number | undefined;
 };
 
 // DATA

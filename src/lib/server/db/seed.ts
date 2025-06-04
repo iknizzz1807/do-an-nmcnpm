@@ -133,7 +133,7 @@ const seedSeason = async(teams: any, matches: any) => {
       maSan: 1,
       doiMot: teamsMap.get(match.homeTeam.id)!!,
       doiHai: teamsMap.get(match.awayTeam.id)!!,
-      doiThang: (match.score.winner === null ? 
+      doiThang: (match.score.winner === "DRAW" ? 
         null : 
         (match.score.winner === "HOME_TEAM" ? 
           teamsMap.get(match.homeTeam.id)!! : 
@@ -169,8 +169,8 @@ const seedSeason = async(teams: any, matches: any) => {
     let thoiDiem = 5;
     thoiDiem = seedBanThang((match.score.fullTime.home ?? 0), match.id, CTDoiMot, thoiDiem);
     thoiDiem = seedBanThang((match.score.fullTime.away ?? 0), match.id, CTDoiHai, thoiDiem);
-    thoiDiem = seedBanThang((match.score.halfTime.home ?? 0), match.id, CTDoiMot, thoiDiem);
-    thoiDiem = seedBanThang((match.score.halfTime.away ?? 0), match.id, CTDoiHai, thoiDiem);
+    // thoiDiem = seedBanThang((match.score.halfTime.home ?? 0), match.id, CTDoiMot, thoiDiem);
+    // thoiDiem = seedBanThang((match.score.halfTime.away ?? 0), match.id, CTDoiHai, thoiDiem);
   }
 }
 
