@@ -102,11 +102,11 @@
         class="flex-1 text-center bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition-all duration-150"
         >Tạo tài khoản</a
       >
-      <a
+      <!-- <a
         href="/forgot-password"
         class="flex-1 text-center bg-yellow-400 hover:bg-yellow-500 text-green-900 font-bold py-2 px-4 rounded-lg transition-all duration-150"
         >Quên mật khẩu?</a
-      >
+      > -->
     </div>
   </div>
 </div>
