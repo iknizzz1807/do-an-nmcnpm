@@ -20,10 +20,10 @@
     { header: "Hạng", accessor: "hang" },
   ];
 
-
   const onDateChange = async (e: Event) => {
     try {
-      const reponse = await fetch("/api/bxh/" + dateFormat(dateBXH, "isoDate"),
+      const reponse = await fetch(
+        "/api/bxh/" + dateFormat(dateBXH, "isoDate"),
         {
           method: "GET",
           headers: {
@@ -45,13 +45,13 @@
 </svelte:head>
 
 <div class="page-content">
-  <h1 class="content-title text-3xl font-bold text-gray-800 mb-2">
+  <!-- <h1 class="content-title text-3xl font-bold text-gray-800 mb-2">
     Bảng Xếp Hạng Giải Đấu
   </h1>
-  <div class="title-underline w-48 h-1 bg-purple-600 mb-8"></div>
+  <div class="title-underline w-88 h-1 bg-purple-600 mb-8"></div> -->
 
   <div class="mb-6 bg-white p-4 rounded-lg shadow border border-gray-200">
-    <label class="block text-gray-700 text-sm font-medium mb-1" for="dateBXH">
+    <label class="block text-gray-700 text-base font-medium mb-1" for="dateBXH">
       Chọn ngày xem bảng xếp hạng
     </label>
     <input

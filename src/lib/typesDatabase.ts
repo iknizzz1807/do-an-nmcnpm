@@ -19,7 +19,7 @@ export type DoiBong = {
   maMG: number;
   imageURL?: string | null | undefined;
   tenSan?: string | undefined;
-  ketQua5TranGanNhat?: ("win" | "lose")[] | undefined;
+  ketQua5TranGanNhat?: ("win" | "lose" | "draw")[] | undefined;
   logoUrl?: string | undefined;
 };
 

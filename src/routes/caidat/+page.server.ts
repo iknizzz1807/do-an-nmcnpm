@@ -1,24 +1,32 @@
 import { errorResponseJSON } from "$lib";
 import { selectSettings } from "$lib/server/db/functions/ThamSo";
 import { selectAllUser } from "$lib/server/db/functions/User/User";
-import { checkPageViewable, selectAllRole } from "$lib/server/db/functions/User/UserRole";
+import {
+  checkPageViewable,
+  selectAllRole,
+} from "$lib/server/db/functions/User/UserRole";
 import { error } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { selectAllUserGroup, selectAllUserGroupWithRole } from "$lib/server/db/functions/User/UserGroup";
-import { selectAllSanNha, selectSanNhaMuaGiai } from "$lib/server/db/functions/Data/SanNha";
+import {
+  selectAllUserGroup,
+  selectAllUserGroupWithRole,
+} from "$lib/server/db/functions/User/UserGroup";
+import {
+  selectAllSanNha,
+  selectSanNhaMuaGiai,
+} from "$lib/server/db/functions/Data/SanNha";
 import { selectAllLoaiCT } from "$lib/server/db/functions/Data/LoaiCT";
 import { selectAllLoaiBT } from "$lib/server/db/functions/Data/LoaiBT";
 import { selectAllViTri } from "$lib/server/db/functions/Data/ViTri";
 import { selectAllVongTD } from "$lib/server/db/functions/Data/VongTD";
 import { selectAllDiemSo } from "$lib/server/db/functions/Data/DiemSo";
 
-export const load = (async ({ locals, route}) => {
+export const load = (async ({ locals, route }) => {
   const roleId = 9999;
-  if (!locals.user)
-    error(401);
+  if (!locals.user) error(401);
   if ((await checkPageViewable(locals.user?.groupId!!, route.id)) === false)
     error(401);
-    
+
   return {
     setting: await selectSettings(),
     users: await selectAllUser(),

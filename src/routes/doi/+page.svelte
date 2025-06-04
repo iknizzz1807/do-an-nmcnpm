@@ -19,12 +19,28 @@
   for (const doiBong of danhSachDoiBong) {
     doiBong.tenSan =
       danhSachSanNha.find((val) => val.maSan === doiBong.maSan)?.tenSan ?? "";
+
     doiBong.ketQua5TranGanNhat = doiBong.ketQua5TranGanNhat || [
-      Math.random() > 0.5 ? "win" : "lose",
-      Math.random() > 0.5 ? "win" : "lose",
-      Math.random() > 0.5 ? "win" : "lose",
-      Math.random() > 0.5 ? "win" : "lose",
-      Math.random() > 0.5 ? "win" : "lose",
+      ["win", "lose", "draw"][Math.floor(Math.random() * 3)] as
+        | "win"
+        | "lose"
+        | "draw",
+      ["win", "lose", "draw"][Math.floor(Math.random() * 3)] as
+        | "win"
+        | "lose"
+        | "draw",
+      ["win", "lose", "draw"][Math.floor(Math.random() * 3)] as
+        | "win"
+        | "lose"
+        | "draw",
+      ["win", "lose", "draw"][Math.floor(Math.random() * 3)] as
+        | "win"
+        | "lose"
+        | "draw",
+      ["win", "lose", "draw"][Math.floor(Math.random() * 3)] as
+        | "win"
+        | "lose"
+        | "draw",
     ];
   }
 
@@ -197,7 +213,7 @@
                 />
               </svg>
             </div>
-          {:else}
+          {:else if ketQua === "lose"}
             <div
               class="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center"
             >
@@ -209,6 +225,22 @@
                 <path
                   fill-rule="evenodd"
                   d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+          {:else if ketQua === "draw"}
+            <div
+              class="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center"
+            >
+              <svg
+                class="w-4 h-4 text-white"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
                   clip-rule="evenodd"
                 />
               </svg>

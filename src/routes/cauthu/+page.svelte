@@ -182,7 +182,6 @@
       danhSachCauThu[selectedIndex] = result satisfies CauThu;
       danhSachCauThu[selectedIndex].banThang = tempBanThang;
 
-      // Đóng form và hiện toast thành công sau khi thành công
       formState = false;
       showOkToast("Cập nhật cầu thủ mới thành công");
     } catch (error) {
@@ -259,27 +258,6 @@
       }}
     />
   </div>
-
-  <!-- {#if isOpen && searchTerm}
-    <div
-      class="absolute z-10 w-full bg-white divide-y divide-gray-100 rounded-lg shadow-lg mt-1 border border-gray-200"
-    >
-      {#if filteredResults.length > 0}
-        <ul class="py-2 text-sm text-gray-700">
-          {#each filteredResults as result}
-            <li>
-              <div class="px-4 py-3 hover:bg-gray-100 cursor-pointer">
-                <div class="font-medium">{result.tenCT}</div>
-                <div class="text-xs text-gray-500">{result.ghiChu}</div>
-              </div>
-            </li>
-          {/each}
-        </ul>
-      {:else}
-        <div class="p-4 text-sm text-gray-500">Không tìm thấy kết quả nào.</div>
-      {/if}
-    </div>
-  {/if} -->
 </div>
 
 <Table

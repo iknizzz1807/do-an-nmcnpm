@@ -235,9 +235,11 @@
       {/if}
     </div>
 
-    <div>
+    <!-- Container với chiều cao cố định và scroll -->
+    <div class="max-h-100 overflow-auto border border-gray-200 rounded-lg">
       <table class="min-w-full">
-        <thead class="bg-slate-100">
+        <!-- Header cố định -->
+        <thead class="bg-slate-100 sticky top-0 z-10">
           <tr>
             {#if showTeamLogo}
               <th

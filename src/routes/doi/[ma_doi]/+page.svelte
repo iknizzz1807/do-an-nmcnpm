@@ -226,6 +226,10 @@
   };
 </script>
 
+<div class="flex justify-center">
+  <ButtonPrimary text={"Thêm cầu thủ"} onclick={() => (formState = true)} />
+</div>
+
 <Table
   title={"Danh sách các cầu thủ"}
   {columns}
@@ -236,10 +240,6 @@
   {onDeleteClick}
   {isEditable}
 />
-
-<div class="flex justify-center">
-  <ButtonPrimary text={"Thêm cầu thủ"} onclick={() => (formState = true)} />
-</div>
 
 <Form
   fields={formFields}
