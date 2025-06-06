@@ -158,6 +158,7 @@
       // Đóng form và hiện toast thành công sau khi thành công
       formState = false;
       showOkToast("Tạo Mùa giải mới thành công");
+      invalidateAll();
     } catch (error) {
       console.error("Error:", error);
       showErrorToast(String(error));
@@ -199,6 +200,10 @@
   <title>Các Mùa giải</title>
 </svelte:head>
 
+<div class="flex justify-center">
+  <ButtonPrimary text="Tạo mùa giải mới" onclick={() => (formState = true)} />
+</div>
+
 <Table
   title="Danh sách các Mùa giải"
   {columns}
@@ -211,10 +216,6 @@
   {isEditable}
   showTeamLogo={true}
 />
-
-<div class="flex justify-center">
-  <ButtonPrimary text="Tạo đội mới" onclick={() => (formState = true)} />
-</div>
 
 <Form
   bind:formState

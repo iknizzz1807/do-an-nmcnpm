@@ -1,6 +1,7 @@
 <script lang="ts">
   import Table from "$lib/components/Table.svelte";
   import type { PageProps } from "./$types";
+  import { goto } from "$app/navigation";
   import type {
     DoiBong,
     MuaGiai,
@@ -121,7 +122,11 @@
       header: "Tỷ số",
       accessor: "tyso",
       accessFunction: (data: LichThiDau) => {
-        return (data.tiSoDoiMot ?? 0).toString() + " - " + (data.tiSoDoiHai ?? 0).toString(); // Chưa có kết quả
+        return (
+          (data.tiSoDoiMot ?? 0).toString() +
+          " - " +
+          (data.tiSoDoiHai ?? 0).toString()
+        ); // Chưa có kết quả
       },
     },
     { header: "Đội Hai", accessor: "tenDoiHai" },
@@ -283,6 +288,21 @@
   <title>Các trận đấu</title>
 </svelte:head>
 
+<div class="flex justify-center gap-4">
+  <ButtonPrimary
+    text={"Thêm trận đấu mới"}
+    onclick={() => {
+      formState = true;
+    }}
+  />
+  <ButtonPrimary
+    text={"Sắp xếp lịch"}
+    onclick={() => {
+      goto("/sapxeptrandau");
+    }}
+  />
+</div>
+
 <Table
   title="Danh sách các trận đấu"
   {columns}
@@ -293,20 +313,6 @@
   {onEditClick}
   {onDeleteClick}
 />
-
-<div class="flex justify-center gap-2">
-  <ButtonPrimary
-    text={"Thêm trận đấu mới"}
-    onclick={() => {
-      formState = true;
-    }}
-  />
-  <a
-    href="/sapxeptrandau"
-    class="bg-green-600 text-white px-5 py-2.5 h-fit rounded-md hover:bg-green-700 transition-colors duration-200 font-medium text-center"
-    >Sắp xếp lịch
-  </a>
-</div>
 
 <!-- Form bao gồm: 
  - Đội 1 đội 2 là được select từ danh sách các đội hiện có

@@ -15,17 +15,21 @@
   let {
     dsMuaGiai,
     selectedMuaGiai,
-    isAdmin
-  }: { dsMuaGiai: MuaGiai[]; selectedMuaGiai: MuaGiai | null, isAdmin: boolean } = $props();
+    isAdmin,
+  }: {
+    dsMuaGiai: MuaGiai[];
+    selectedMuaGiai: MuaGiai | null;
+    isAdmin: boolean;
+  } = $props();
   let selectedValue = $state(selectedMuaGiai?.maMG ?? 0);
   let form: HTMLFormElement;
 
   $inspect(selectedValue);
 
   $effect(() => {
-    const muaGiai = dsMuaGiai.find((value) => selectedValue == value.maMG) ?? null;
-    if (muaGiai !== null)
-      selectedMuaGiai = muaGiai;
+    const muaGiai =
+      dsMuaGiai.find((value) => selectedValue == value.maMG) ?? null;
+    if (muaGiai !== null) selectedMuaGiai = muaGiai;
     currentMuaGiai.set(selectedMuaGiai);
   });
 
@@ -84,26 +88,24 @@
 </script>
 
 <aside
-  class="fixed top-0 left-0 h-screen z-30 sidebar w-[260px] bg-[#F6F6F4] border-r border-[#D3D3D3] flex flex-col pt-[23px] pb-6 flex-shrink-0 transition-width duration-300"
+  class="fixed top-0 left-0 h-screen z-30 w-[260px] bg-slate-900 text-slate-300 flex flex-col transition-width duration-300"
 >
-  <div class="sidebar__brand flex items-center px-6 mb-10">
-    <!-- Actual icon image if available, e.g., <img src="/images/onesport-icon.png" class="sidebar__brand-icon w-6 h-6 mr-2.5 object-contain" alt="Icon"> -->
-    <span class="sidebar__brand-name text-[20px] font-bold text-[#0F0F0F]"
-      >Onesport</span
-    >
+  <div class="flex items-center px-6 pt-6 pb-8">
+    <img src="/favicon.png" class="w-10 h-6 mr-3 object-contain" alt="Icon" />
+    <span class="text-xl font-bold text-white tracking-wider">Onesport</span>
   </div>
 
-  <div class="px-6 mb-4">
-    <form bind:this={form} onsubmit={onSubmit} class="mb-6">
+  <div class="px-6 mb-8">
+    <form bind:this={form} onsubmit={onSubmit}>
       <label
         for="muagiai-select"
-        class="block text-sm font-medium text-[#626262] mb-1"
-        >Chọn Mùa Giải</label
+        class="block text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider"
+        >Mùa Giải</label
       >
       <select
         id="muagiai-select"
         onchange={() => form.requestSubmit()}
-        class="w-full bg-white border border-gray-300 text-gray-800 text-sm rounded-md focus:ring-purple-500 focus:border-purple-500 block p-2.5 shadow-sm"
+        class="w-full bg-slate-800 border border-slate-700 text-white text-sm rounded-md focus:ring-purple-500 focus:border-purple-500 block p-2.5 shadow-sm"
         bind:value={selectedValue}
       >
         <option value={0} selected>Năm hiện tại</option>
@@ -115,79 +117,150 @@
   </div>
 
   <span
-    class="sidebar__menu-label text-[#626262] text-[14px] font-medium mb-[15px] px-6 uppercase tracking-wider"
+    class="text-slate-500 text-xs font-semibold mb-3 px-6 uppercase tracking-wider"
     >Menu</span
   >
-  <nav class="flex-grow">
-    <ul class="sidebar__nav-list space-y-1">
-      <li class="sidebar__nav-item">
-        <a
-          href="/"
-          class="sidebar__nav-link"
-          class:active={page.url.pathname === "/"}
-        >
-          <span class="sidebar__menu-icon">🏠</span>
+  <nav class="flex-grow overflow-y-auto">
+    <ul class="space-y-1.5 px-4">
+      <!-- REPLACED: Emojis with more professional SVG icons. -->
+      <li>
+        <a href="/" class="nav-link" class:active={page.url.pathname === "/"}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="nav-icon"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"
+            />
+          </svg>
           <span>Trang chủ</span>
         </a>
       </li>
-      <li class="sidebar__nav-item">
+      <li>
         <a
           href="/cauthu"
-          class="sidebar__nav-link"
+          class="nav-link"
           class:active={page.url.pathname.startsWith("/cauthu")}
         >
-          <span class="sidebar__menu-icon">🏃</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="nav-icon"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+              clip-rule="evenodd"
+            />
+          </svg>
           <span>Cầu thủ</span>
         </a>
       </li>
-      <li class="sidebar__nav-item">
+      <li>
         <a
           href="/doi"
-          class="sidebar__nav-link"
+          class="nav-link"
           class:active={page.url.pathname.startsWith("/doi")}
         >
-          <span class="sidebar__menu-icon">🛡️</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="nav-icon"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+            <path
+              fill-rule="evenodd"
+              d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h.01a1 1 0 100-2H10zm3 0a1 1 0 000 2h.01a1 1 0 100-2H13z"
+              clip-rule="evenodd"
+            />
+          </svg>
           <span>Đội</span>
         </a>
       </li>
-      <li class="sidebar__nav-item">
+      <li>
         <a
           href="/trandau"
-          class="sidebar__nav-link"
+          class="nav-link"
           class:active={page.url.pathname.startsWith("/trandau")}
         >
-          <span class="sidebar__menu-icon">🏟️</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="nav-icon"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V4a2 2 0 00-2-2H4zm1 2a1 1 0 011-1h1a1 1 0 011 1v1a1 1 0 01-1 1H6a1 1 0 01-1-1V4zm4 0a1 1 0 011-1h1a1 1 0 011 1v1a1 1 0 01-1 1h-1a1 1 0 01-1-1V4zm4 0a1 1 0 011-1h1a1 1 0 011 1v1a1 1 0 01-1 1h-1a1 1 0 01-1-1V4zm-8 4a1 1 0 011-1h1a1 1 0 011 1v1a1 1 0 01-1 1H6a1 1 0 01-1-1V8zm4 0a1 1 0 011-1h1a1 1 0 011 1v1a1 1 0 01-1 1h-1a1 1 0 01-1-1V8zm4 0a1 1 0 011-1h1a1 1 0 011 1v1a1 1 0 01-1 1h-1a1 1 0 01-1-1V8zm-8 4a1 1 0 011-1h1a1 1 0 011 1v1a1 1 0 01-1 1H6a1 1 0 01-1-1v-1zm4 0a1 1 0 011-1h1a1 1 0 011 1v1a1 1 0 01-1 1h-1a1 1 0 01-1-1v-1zm4 0a1 1 0 011-1h1a1 1 0 011 1v1a1 1 0 01-1 1h-1a1 1 0 01-1-1v-1z"
+              clip-rule="evenodd"
+            />
+          </svg>
           <span>Trận đấu</span>
         </a>
       </li>
-      <li class="sidebar__nav-item">
+      <li>
         <a
           href={"/bxh/" + dateFormat(new Date(), "isoDate")}
-          class="sidebar__nav-link"
+          class="nav-link"
           class:active={page.url.pathname.startsWith("/bxh")}
         >
-          <span class="sidebar__menu-icon">📊</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="nav-icon"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"
+            />
+          </svg>
           <span>Bảng xếp hạng</span>
         </a>
       </li>
-      <li class="sidebar__nav-item">
+      <li>
         <a
           href="/muagiai"
-          class="sidebar__nav-link"
+          class="nav-link"
           class:active={page.url.pathname === "/muagiai"}
         >
-          <span class="sidebar__menu-icon">🗓️</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="nav-icon"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+              clip-rule="evenodd"
+            />
+          </svg>
           <span>Mùa giải</span>
         </a>
       </li>
       {#if isAdmin}
-        <li class="sidebar__nav-item">
+        <li>
           <a
-          href="/caidat"
-          class="sidebar__nav-link"
-          class:active={page.url.pathname === "/caidat"}
+            href="/caidat"
+            class="nav-link"
+            class:active={page.url.pathname === "/caidat"}
           >
-            <span class="sidebar__menu-icon">⚙️</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="nav-icon"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
+                clip-rule="evenodd"
+              />
+            </svg>
             <span>Cài đặt</span>
           </a>
         </li>
@@ -195,76 +268,62 @@
     </ul>
   </nav>
 
-  <!-- Nút Logout -->
-  <div class="mt-auto px-6">
+  <!-- Logout Button -->
+  <div class="mt-auto p-4">
     <button
-      class="sidebar__nav-link w-full flex items-center justify-start text-red-600 hover:text-red-800 border-l-4 border-transparent hover:border-red-600 transition-colors"
+      class="w-full cursor-pointer flex items-center justify-center gap-1 px-4 py-2.5 rounded-lg text-slate-300 hover:bg-red-500/20 hover:text-red-400 transition-all duration-200"
       onclick={logout}
       type="button"
-      style="background: none; outline: none;"
     >
-      <span class="sidebar__menu-icon" style="margin-right:16px;">
-        <!-- SVG icon logout -->
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="w-[22px] h-[22px]"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M17 16l4-4m0 0l-4-4m4 4H9m4 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1"
-          />
-        </svg>
-      </span>
-      <span>Đăng xuất</span>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-5 h-5 pt-0.5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+        />
+      </svg>
+      <span class="font-medium pr-8">Đăng xuất</span>
     </button>
   </div>
 </aside>
 
+<!-- ADDED: New styles for the redesigned sidebar -->
 <style>
-  .sidebar__nav-link {
+  .nav-link {
     display: flex;
     align-items: center;
-    padding: 14px 24px;
+    padding: 10px 16px;
+    border-radius: 8px;
     text-decoration: none;
-    color: #626262; /* text-gray-600 */
-    font-size: 16px;
+    color: #cbd5e1; /* slate-300 */
+    font-size: 15px;
     font-weight: 500;
-    border-left: 4px solid transparent;
-    margin-bottom: 4px; /* space-y-1 */
     transition:
       background-color 0.2s ease,
-      color 0.2s ease,
-      border-left-color 0.2s ease;
+      color 0.2s ease;
   }
-  .sidebar__nav-link:hover {
-    background-color: #e8e6f1; /* hover:bg-purple-100 */
-    color: #5642a9; /* hover:text-purple-700 */
-    border-left-color: #5642a9; /* hover:border-purple-600 */
+  .nav-link:hover {
+    background-color: #334155; /* slate-700 */
+    color: #ffffff; /* white */
   }
-  .sidebar__nav-link.active {
-    color: #0f0f0f; /* blackish from UI.txt, was purple */
+  .nav-link.active {
+    background-color: #7c3aed; /* purple-600 */
+    color: #ffffff;
     font-weight: 600;
-    background-color: #ffffff; /* white from UI.txt, was light purple */
-    border-left-color: #5642a9; /* purple-600 */
+    box-shadow:
+      0 4px 6px -1px rgb(0 0 0 / 0.1),
+      0 2px 4px -2px rgb(0 0 0 / 0.1);
   }
-  .sidebar__menu-icon {
-    width: 22px;
-    height: 22px;
-    margin-right: 16px; /* mr-4 */
-    opacity: 0.8;
-    filter: grayscale(50%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .sidebar__nav-link.active .sidebar__menu-icon {
-    opacity: 1;
-    filter: none; /* Remove grayscale */
+  .nav-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 14px;
   }
 </style>

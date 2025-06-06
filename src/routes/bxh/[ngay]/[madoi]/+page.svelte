@@ -25,7 +25,7 @@
   <h1 class="content-title text-3xl font-bold text-gray-800 mb-2">
     Chi Tiết Cầu Thủ Ghi Bàn
   </h1>
-  <div class="title-underline w-64 h-1 bg-purple-600 mb-8"></div>
+  <div class="title-underline w-64 h-1 bg-green-600 mb-8"></div>
 
   <Table
     title={"Danh sách cầu thủ ghi bàn cho đội " +

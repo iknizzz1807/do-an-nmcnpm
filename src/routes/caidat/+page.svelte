@@ -41,7 +41,7 @@
 
 <div class="page-content">
   <h1 class="content-title text-3xl font-bold text-gray-800 mb-2">Cài Đặt</h1>
-  <div class="title-underline w-24 h-1 bg-purple-600 mb-8"></div>
+  <div class="title-underline w-24 h-1 bg-green-600 mb-8"></div>
 
   <!-- Tab Navigation -->
   <div class="mb-6 border-b border-gray-300">
@@ -50,7 +50,7 @@
         <button
           class="whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm transition-colors duration-150
             {activeSettingsTab.id === tab.id
-            ? 'border-purple-600 text-purple-700'
+            ? 'border-green-600 text-green-700'
             : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-400'}"
           onclick={() => (activeSettingsTab = tab)}
         >

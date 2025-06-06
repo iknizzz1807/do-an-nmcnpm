@@ -7,13 +7,15 @@
 
 {#if !page.url.pathname.startsWith("/login") && !page.url.pathname.startsWith("/signup") && !page.url.pathname.startsWith("/forgot")}
   <div class="app-layout flex w-full min-h-screen">
-    <Nav dsMuaGiai={data.dsMuaGiai} selectedMuaGiai={data.selectedMuaGiai} isAdmin={data.isAdmin} />
-    <div
-      class="main-wrapper flex-grow flex flex-col bg-white pl-[260px] pb-[60px]"
-    >
+    <Nav
+      dsMuaGiai={data.dsMuaGiai}
+      selectedMuaGiai={data.selectedMuaGiai}
+      isAdmin={data.isAdmin}
+    />
+    <div class="main-wrapper flex-grow flex flex-col bg-white pl-[260px] ]">
       <main
         id="content-area"
-        class="content-area flex-grow p-[30px] overflow-y-auto bg-[#f9f9f9]"
+        class="content-area flex-grow p-[30px] pb-0 overflow-y-auto bg-[#f9f9f9]"
         style="min-height:0;"
       >
         {@render children()}
@@ -27,7 +29,7 @@
 {/if}
 
 <footer
-  class="footer fixed bottom-0 left-0 w-full pl-[260px] py-[15px] px-[30px] bg-white border-t border-[#e0e0e0] text-center text-[#888] text-[13px] z-20"
+  class="footer fixed bottom-0 left-0 w-full pl-[260px] py-[5px] px-[30px] bg-white border-t border-[#e0e0e0] text-center text-[#888] text-[13px] z-20"
   style="display: {page.url.pathname.startsWith('/login') ||
   page.url.pathname.startsWith('/signup') ||
   page.url.pathname.startsWith('/forgot')

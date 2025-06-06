@@ -58,7 +58,7 @@
       id="dateBXH"
       type="date"
       onchange={onDateChange}
-      class="shadow-sm appearance-none border border-gray-300 rounded-md w-full md:w-1/3 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+      class="shadow-sm appearance-none border border-gray-300 rounded-md w-full md:w-1/3 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
       required
       bind:value={dateBXH}
     />

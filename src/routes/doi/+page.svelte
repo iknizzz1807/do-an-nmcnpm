@@ -20,7 +20,7 @@
     doiBong.tenSan =
       danhSachSanNha.find((val) => val.maSan === doiBong.maSan)?.tenSan ?? "";
 
-    doiBong.ketQua5TranGanNhat = doiBong.ketQua5TranGanNhat
+    doiBong.ketQua5TranGanNhat = doiBong.ketQua5TranGanNhat;
   }
 
   const sanNhaOption: FieldOption[] = danhSachSanNha.map((val) => ({
@@ -161,6 +161,10 @@
   <title>Các đội bóng</title>
 </svelte:head>
 
+<div class="flex justify-center">
+  <ButtonPrimary text="Tạo đội mới" onclick={() => (formState = true)} />
+</div>
+
 <Table
   title="Danh sách các đội bóng"
   {columns}
@@ -242,10 +246,6 @@
     {/if}
   {/snippet}
 </Table>
-
-<div class="flex justify-center">
-  <ButtonPrimary text="Tạo đội mới" onclick={() => (formState = true)} />
-</div>
 
 <Form
   bind:formState

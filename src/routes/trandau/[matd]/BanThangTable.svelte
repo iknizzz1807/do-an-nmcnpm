@@ -1,5 +1,7 @@
 <script lang="ts">
   import ButtonPrimary from "$lib/components/ButtonPrimary.svelte";
+  import { goto } from "$app/navigation";
+  import { page } from "$app/state";
   import Form, {
     type FieldOption,
     type FormField,
@@ -191,7 +193,6 @@
     }
   };
 
-  
   const onDeleteClick = async (data: any, index: number) => {
     if (data satisfies BanThang) {
       selectedIndex = index;
@@ -227,6 +228,17 @@
   };
 </script>
 
+<div class="flex justify-center gap-4">
+  <ButtonPrimary
+    text=" Chi tiết danh sách cầu thủ thi đấu"
+    onclick={() => goto(page.url.pathname + "/chitiet")}
+  />
+  <ButtonPrimary
+    text={"Thêm bàn thắng mới"}
+    onclick={() => (formState = true)}
+  />
+</div>
+
 <Table
   title="Danh sách các bàn thắng"
   columns={columnsBanThang}
@@ -234,16 +246,9 @@
   redirectParam={""}
   tableType=""
   {onEditClick}
-  onDeleteClick={onDeleteClick}
+  {onDeleteClick}
   {isEditable}
 />
-
-<div class="flex justify-center">
-  <ButtonPrimary
-    text={"Thêm bàn thắng mới"}
-    onclick={() => (formState = true)}
-  />
-</div>
 
 <Form
   {onOpenForm}

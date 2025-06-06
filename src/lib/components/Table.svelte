@@ -206,7 +206,7 @@
 <main class="flex justify-center items-start w-full">
   <div
     id="table-container"
-    class="bg-white rounded-lg shadow-md p-5 mb-8 w-full border border-gray-200"
+    class="bg-white rounded-lg shadow-md p-5 w-full border border-gray-200"
   >
     <div class="flex justify-between items-center mb-5">
       <h2 class="text-xl font-semibold text-gray-800">{title}</h2>
@@ -214,7 +214,7 @@
       {#if showExportCSV && data.length > 0}
         <button
           onclick={exportToCSV}
-          class="bg-green-600 hover:bg-green-700 text-white text-sm font-medium py-1.5 px-3 rounded flex items-center gap-1 transition-colors"
+          class="bg-green-600 cursor-pointer hover:bg-green-700 text-white text-sm font-medium py-1.5 px-3 rounded flex items-center gap-1 transition-colors"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -235,8 +235,7 @@
       {/if}
     </div>
 
-    <!-- Container với chiều cao cố định và scroll -->
-    <div class="max-h-100 overflow-auto border border-gray-200 rounded-lg">
+    <div class="max-h-120 overflow-auto border border-gray-200 rounded-lg">
       <table class="min-w-full">
         <!-- Header cố định -->
         <thead class="bg-slate-100 sticky top-0 z-10">
