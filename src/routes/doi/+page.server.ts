@@ -18,7 +18,7 @@ export const load = (async ({ fetch, locals, route }) => {
     for (const doiBong of danhSachDoiBong) {
       const ketQua : LichThiDau[] = await selectKetQuaTranDauGanDay(doiBong.maDoi!!);
       doiBong.ketQua5TranGanNhat = ketQua.map(value => 
-        (value.doiThang === doiBong.maDoi ? "win" : (value.doiThang === null ? "tie" : "lose"))
+        (value.doiThang === doiBong.maDoi ? "win" : (value.doiThang === null ? "draw" : "lose"))
       ) 
     }
 

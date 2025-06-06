@@ -20,28 +20,7 @@
     doiBong.tenSan =
       danhSachSanNha.find((val) => val.maSan === doiBong.maSan)?.tenSan ?? "";
 
-    doiBong.ketQua5TranGanNhat = doiBong.ketQua5TranGanNhat || [
-      ["win", "lose", "draw"][Math.floor(Math.random() * 3)] as
-        | "win"
-        | "lose"
-        | "draw",
-      ["win", "lose", "draw"][Math.floor(Math.random() * 3)] as
-        | "win"
-        | "lose"
-        | "draw",
-      ["win", "lose", "draw"][Math.floor(Math.random() * 3)] as
-        | "win"
-        | "lose"
-        | "draw",
-      ["win", "lose", "draw"][Math.floor(Math.random() * 3)] as
-        | "win"
-        | "lose"
-        | "draw",
-      ["win", "lose", "draw"][Math.floor(Math.random() * 3)] as
-        | "win"
-        | "lose"
-        | "draw",
-    ];
+    doiBong.ketQua5TranGanNhat = doiBong.ketQua5TranGanNhat
   }
 
   const sanNhaOption: FieldOption[] = danhSachSanNha.map((val) => ({

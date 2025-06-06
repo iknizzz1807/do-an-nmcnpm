@@ -7,7 +7,7 @@
 
 {#if !page.url.pathname.startsWith("/login") && !page.url.pathname.startsWith("/signup") && !page.url.pathname.startsWith("/forgot")}
   <div class="app-layout flex w-full min-h-screen">
-    <Nav dsMuaGiai={data.dsMuaGiai} selectedMuaGiai={data.selectedMuaGiai} />
+    <Nav dsMuaGiai={data.dsMuaGiai} selectedMuaGiai={data.selectedMuaGiai} isAdmin={data.isAdmin} />
     <div
       class="main-wrapper flex-grow flex flex-col bg-white pl-[260px] pb-[60px]"
     >

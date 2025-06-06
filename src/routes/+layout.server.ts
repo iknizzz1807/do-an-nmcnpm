@@ -4,8 +4,10 @@ import { selectAllMuaGiai } from "$lib/server/db/functions/MuaGiai";
 
 export const load : LayoutServerLoad = async ({ locals }) => {
   console.log(locals.muaGiai);
+  const isAdmin = (locals.user?.groupId ?? -1) == 0;
   return {
     dsMuaGiai: await selectAllMuaGiai(),
-    selectedMuaGiai: locals.muaGiai
+    selectedMuaGiai: locals.muaGiai,
+    isAdmin: isAdmin,
   }
 }

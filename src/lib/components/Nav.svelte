@@ -15,7 +15,8 @@
   let {
     dsMuaGiai,
     selectedMuaGiai,
-  }: { dsMuaGiai: MuaGiai[]; selectedMuaGiai: MuaGiai | null } = $props();
+    isAdmin
+  }: { dsMuaGiai: MuaGiai[]; selectedMuaGiai: MuaGiai | null, isAdmin: boolean } = $props();
   let selectedValue = $state(selectedMuaGiai?.maMG ?? 0);
   let form: HTMLFormElement;
 
@@ -179,16 +180,18 @@
           <span>Mùa giải</span>
         </a>
       </li>
-      <li class="sidebar__nav-item">
-        <a
+      {#if isAdmin}
+        <li class="sidebar__nav-item">
+          <a
           href="/caidat"
           class="sidebar__nav-link"
           class:active={page.url.pathname === "/caidat"}
-        >
-          <span class="sidebar__menu-icon">⚙️</span>
-          <span>Cài đặt</span>
-        </a>
-      </li>
+          >
+            <span class="sidebar__menu-icon">⚙️</span>
+            <span>Cài đặt</span>
+          </a>
+        </li>
+      {/if}
     </ul>
   </nav>
 
