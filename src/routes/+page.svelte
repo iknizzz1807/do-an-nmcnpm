@@ -3,13 +3,7 @@
   import { goto } from "$app/navigation";
   import { onMount } from "svelte";
   import dateFormat from "dateformat";
-
-  // --- Dữ liệu Giả lập cho Dashboard ---
-  // Bạn sẽ thay thế phần này bằng dữ liệu thật từ `let { data } = $props()`
-  let user = {
-    username: "Adminstrator", // Lấy từ data.user.username
-    role: "Admin", // Lấy từ data.user.role
-  };
+  let { data } = $props();
 
   // Lối tắt truy cập nhanh
   const quickAccessLinks = [
@@ -60,7 +54,7 @@
         class="text-4xl md:text-5xl font-extrabold tracking-tight"
         in:fly={{ y: -20, duration: 400, delay: 400 }}
       >
-        Chào mừng, {user.username}
+        Chào mừng, {data.user.username}
       </h1>
       <div
         class="flex items-center gap-3 mt-3"
@@ -68,7 +62,7 @@
       >
         <span
           class="bg-purple-600 text-white text-sm font-bold px-4 py-1.5 rounded-full shadow-lg"
-          >{user.role}</span
+          >{data.user.groupName}</span
         >
       </div>
       <p

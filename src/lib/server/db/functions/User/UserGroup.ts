@@ -10,6 +10,10 @@ export const selectAllUserGroup = async () => {
   return await db.select().from(UserGroupTable);
 }
 
+export const selectUserGroupGroupID = async (groupID: number) => {
+  return (await db.select().from(UserGroupTable).where(eq(UserGroupTable.groupId, groupID)).limit(1)).at(0) ?? null;
+}
+
 export const upsertGroup = async (group : UserGroupInsertParams) => {
   return (await db.insert(UserGroupTable).values(group)
   .onConflictDoUpdate({
