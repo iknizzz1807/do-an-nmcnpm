@@ -5,7 +5,7 @@
   import SettingNumberInput from "../SettingNumberInput.svelte";
   import SettingSection from "../SettingSection.svelte";
 
-  let { setting } : { setting: Settings } = $props();
+  let { setting }: { setting: Settings } = $props();
 
   const onSettingSubmit = async (e: Event) => {
     e.preventDefault();
@@ -25,11 +25,10 @@
       showErrorToast(String(err));
     }
   };
-
 </script>
 
 <form onsubmit={onSettingSubmit}>
-  <SettingMainSection sectionName="System Settings">
+  <SettingMainSection sectionName="Cài đặt hệ thống">
     <SettingSection sectionName="Player Settings">
       <SettingNumberInput
         min={16}
@@ -82,9 +81,8 @@
     <!-- Ranking Priority Section (Placeholder for now) -->
     <SettingSection sectionName="Ranking Priority (Tiebreakers)">
       <p class="text-sm text-gray-600 mb-4">
-        Define the order of criteria used to rank teams if they have the
-        same number of points. Drag to reorder (functionality not yet
-        implemented).
+        Define the order of criteria used to rank teams if they have the same
+        number of points. Drag to reorder (functionality not yet implemented).
       </p>
       <div class="space-y-2">
         <div
@@ -119,9 +117,7 @@
   </SettingMainSection>
 
   <div class="bg-white rounded-lg shadow-md p-6 mt-8">
-    <h2 class="text-2xl font-bold text-gray-800 mb-6">
-      System Preferences
-    </h2>
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">System Preferences</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
         <label
@@ -197,7 +193,7 @@
     </div>
   </div>
 
-  <div class="mt-8 flex justify-end space-x-4">
+  <div class="mt-8 mb-12 flex justify-end space-x-4">
     <button
       type="button"
       class="px-6 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"

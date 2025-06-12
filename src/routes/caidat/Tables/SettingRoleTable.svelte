@@ -7,17 +7,21 @@
   import type { User, UserRole } from "$lib/typesAuth";
   import { SvelteMap } from "svelte/reactivity";
 
-  let { roles = $bindable() } : { roles: UserRole[] } = $props();
+  let { roles = $bindable() }: { roles: UserRole[] } = $props();
 
   let editData: FormInputMap = $state(new SvelteMap());
   let formState = $state(false);
   let selectedIndex = $state(-1);
-  
+
   const columnsRoles = [
     { header: "ID", accessor: "roleId", hidden: true },
     { header: "Name", accessor: "roleName" },
     { header: "Viewable Page", accessor: "viewablePage" },
-    { header: "Có thể chính sửa", accessor: "canEdit", accessFunction: (data: UserRole) => data.canEdit ? "Có" : "Không" },
+    {
+      header: "Có thể chính sửa",
+      accessor: "canEdit",
+      accessFunction: (data: UserRole) => (data.canEdit ? "Có" : "Không"),
+    },
   ];
   const roleFields: FormField[] = [
     {
@@ -43,7 +47,7 @@
       ],
     },
   ];
-  
+
   const onOpenForm = (): FormInputMap | null => {
     if (editData.size > -1) return editData;
     return new SvelteMap();
@@ -96,10 +100,8 @@
       const responseData = await response.json();
 
       console.log(responseData);
-      if (selectedIndex === -1)
-        roles.push(responseData);
-      else
-        roles[selectedIndex] = responseData;
+      if (selectedIndex === -1) roles.push(responseData);
+      else roles[selectedIndex] = responseData;
 
       showOkToast("Cập nhật thành công");
       formState = false;
@@ -107,18 +109,18 @@
       if (err instanceof Error) showErrorToast(err.message);
     }
   };
-  
-  const onDeleteClick = async (data: UserRole, index : number) => {
+
+  const onDeleteClick = async (data: UserRole, index: number) => {
     try {
       const response = await fetch(`/api/role?roleId=${data.roleId}`, {
         method: "DELETE",
       });
 
       if (!response.ok) {
-          const errorData = await response
-            .json()
-            .catch(() => ({ message: "Lỗi xóa user role" }));
-          throw new Error(errorData.message || "Lỗi xóa user role");
+        const errorData = await response
+          .json()
+          .catch(() => ({ message: "Lỗi xóa user role" }));
+        throw new Error(errorData.message || "Lỗi xóa user role");
       }
 
       roles.splice(index, 1);
@@ -129,22 +131,21 @@
     } catch (error) {
       console.error("Error:", error);
       showErrorToast(String(error));
-    };
+    }
   };
 </script>
 
-
 <Table
-title="Roles"
-columns={columnsRoles}
-data={roles}
-redirectParam={""}
-tableType=""
-onEditClick={onEditClick}
-onDeleteClick={onDeleteClick}
+  title="Roles"
+  columns={columnsRoles}
+  data={roles}
+  redirectParam={""}
+  tableType=""
+  {onEditClick}
+  {onDeleteClick}
 />
 
-<div class="flex justify-center">
+<div class="flex mb-8 mt-4 justify-center">
   <ButtonPrimary text="Tạo role mới" onclick={() => (formState = true)} />
 </div>
 

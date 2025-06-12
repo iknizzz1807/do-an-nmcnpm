@@ -24,9 +24,9 @@
     name: string;
   };
   const tabs: SettingsTab[] = [
-    { id: "systemSettings", name: "System Settings" },
-    { id: "usersAndGroups", name: "Users & Groups" },
-    { id: "roles", name: "Roles" },
+    { id: "systemSettings", name: "Cài đặt hệ thống" },
+    { id: "usersAndGroups", name: "Người dùng và nhóm" },
+    { id: "roles", name: "Vai trò" },
 
     { id: "sanNha", name: "Sân nhà" },
     { id: "loaiCT", name: "Loại cầu thủ" },
@@ -39,16 +39,17 @@
   // --- End Tab Management ---
 </script>
 
-<div class="page-content">
-  <h1 class="content-title text-3xl font-bold text-gray-800 mb-2">Cài Đặt</h1>
-  <div class="title-underline w-24 h-1 bg-green-600 mb-8"></div>
+<svelte:head>
+  <title>Cài đặt</title>
+</svelte:head>
 
+<div class="page-content">
   <!-- Tab Navigation -->
-  <div class="mb-6 border-b border-gray-300">
+  <div class="mb-4 border-b border-gray-300">
     <nav class="-mb-px flex space-x-6 overflow-x-auto pb-px" aria-label="Tabs">
       {#each tabs as tab}
         <button
-          class="whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm transition-colors duration-150
+          class="whitespace-nowrap py-3 px-1 border-b-2 font-medium text-base transition-colors duration-150
             {activeSettingsTab.id === tab.id
             ? 'border-green-600 text-green-700'
             : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-400'}"
