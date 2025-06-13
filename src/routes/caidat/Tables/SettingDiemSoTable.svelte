@@ -306,7 +306,7 @@
     showExportCSV={false}
   />
 
-  <div class="flex justify-end mt-4">
+  <div class="flex justify-center mt-4">
     <ButtonPrimary
       text="Tạo loại điểm số mới"
       onclick={() => {

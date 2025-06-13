@@ -7,13 +7,13 @@
   import type { LoaiCT } from "$lib/typesDatabase";
   import { SvelteMap } from "svelte/reactivity";
 
-  const { dataLoaiCT } : { dataLoaiCT: LoaiCT[] } = $props();
+  const { dataLoaiCT }: { dataLoaiCT: LoaiCT[] } = $props();
 
-  let loaiCT : LoaiCT[] = $state(dataLoaiCT);
+  let loaiCT: LoaiCT[] = $state(dataLoaiCT);
   let editData: FormInputMap = $state(new SvelteMap());
   let formState = $state(false);
   let selectedIndex = $state(-1);
-  
+
   const columns = [
     { header: "ID", accessor: "maLCT", hidden: true },
     { header: "Tên cầu thủ", accessor: "tenLCT" },
@@ -33,7 +33,7 @@
       valueType: "number",
     },
   ];
-  
+
   const onOpenForm = (): FormInputMap | null => {
     if (editData.size > -1) return editData;
     return new SvelteMap();
@@ -84,10 +84,8 @@
       const responseData = await response.json();
 
       console.log(responseData);
-      if (selectedIndex === -1)
-        loaiCT.push(responseData);
-      else
-        loaiCT[selectedIndex] = responseData;
+      if (selectedIndex === -1) loaiCT.push(responseData);
+      else loaiCT[selectedIndex] = responseData;
 
       showOkToast("Cập nhật thành công");
       formState = false;
@@ -96,17 +94,16 @@
     }
   };
 
-  const onDeleteClick = async (data : any, index: number) => {
+  const onDeleteClick = async (data: any, index: number) => {
     if (data satisfies LoaiCT) {
       selectedIndex = index;
       await deleteLoaiCT(data.maLCT);
-    }
-    else {
+    } else {
       console.error("Data không thỏa mãn");
     }
-  }
-  
-  const deleteLoaiCT = async (maLCT : number) => {
+  };
+
+  const deleteLoaiCT = async (maLCT: number) => {
     try {
       const response = await fetch("/api/loaict", {
         method: "DELETE",
@@ -128,23 +125,21 @@
     } catch (error) {
       console.error("Error:", error);
       showErrorToast(String(error));
-    };
+    }
   };
-
 </script>
 
-
 <Table
-title="Roles"
-columns={columns}
-data={loaiCT}
-redirectParam={""}
-tableType=""
-{onEditClick}
-{onDeleteClick}
+  title="Roles"
+  {columns}
+  data={loaiCT}
+  redirectParam={""}
+  tableType=""
+  {onEditClick}
+  {onDeleteClick}
 />
 
-<div class="flex justify-center">
+<div class="flex justify-center pt-4">
   <ButtonPrimary text="Tạo sân nhà mới" onclick={() => (formState = true)} />
 </div>
 

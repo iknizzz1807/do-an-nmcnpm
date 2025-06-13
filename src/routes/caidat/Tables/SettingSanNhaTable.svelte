@@ -7,13 +7,13 @@
   import type { SanNha } from "$lib/typesDatabase";
   import { SvelteMap } from "svelte/reactivity";
 
-  let { dataSanNha } : { dataSanNha: SanNha[] } = $props();
+  let { dataSanNha }: { dataSanNha: SanNha[] } = $props();
 
-  let sanNha : SanNha[] = $state(dataSanNha);
+  let sanNha: SanNha[] = $state(dataSanNha);
   let editData: FormInputMap = $state(new SvelteMap());
   let formState = $state(false);
   let selectedIndex = $state(-1);
-  
+
   const columns = [
     { header: "ID", accessor: "maSan", hidden: true },
     { header: "Tên sân", accessor: "tenSan" },
@@ -33,7 +33,7 @@
       valueType: "string",
     },
   ];
-  
+
   const onOpenForm = (): FormInputMap | null => {
     if (editData.size > -1) return editData;
     return new SvelteMap();
@@ -84,10 +84,8 @@
       const responseData = await response.json();
 
       console.log(responseData);
-      if (selectedIndex === -1)
-        sanNha.push(responseData);
-      else
-        sanNha[selectedIndex] = responseData;
+      if (selectedIndex === -1) sanNha.push(responseData);
+      else sanNha[selectedIndex] = responseData;
 
       showOkToast("Cập nhật thành công");
       formState = false;
@@ -96,17 +94,16 @@
     }
   };
 
-  const onDeleteClick = async (data : any, index: number) => {
+  const onDeleteClick = async (data: any, index: number) => {
     if (data satisfies SanNha) {
       selectedIndex = index;
       await deleteSanNha(data.maSan);
-    }
-    else {
+    } else {
       console.error("Data không thỏa mãn loại CauThu");
     }
-  }
-  
-  const deleteSanNha = async (maSan : number) => {
+  };
+
+  const deleteSanNha = async (maSan: number) => {
     try {
       const response = await fetch("/api/sannha", {
         method: "DELETE",
@@ -129,23 +126,21 @@
     } catch (error) {
       console.error("Error:", error);
       showErrorToast(String(error));
-    };
+    }
   };
-
 </script>
 
-
 <Table
-title="Roles"
-columns={columns}
-data={sanNha}
-redirectParam={""}
-tableType=""
-{onEditClick}
-{onDeleteClick}
+  title="Roles"
+  {columns}
+  data={sanNha}
+  redirectParam={""}
+  tableType=""
+  {onEditClick}
+  {onDeleteClick}
 />
 
-<div class="flex justify-center">
+<div class="flex justify-center pt-4 pb-8">
   <ButtonPrimary text="Tạo sân nhà mới" onclick={() => (formState = true)} />
 </div>
 
