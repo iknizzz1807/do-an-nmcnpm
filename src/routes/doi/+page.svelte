@@ -76,7 +76,7 @@
       editData.clear();
       editData.set("maDoi", data.maDoi ?? null);
       editData.set("tenDoi", data.tenDoi);
-      editData.set("maSan", data.maSan);
+      editData.set("maSan", data.maSan!!);
       selectedIndex = index;
       formState = true;
     } else {
@@ -161,9 +161,11 @@
   <title>Các đội bóng</title>
 </svelte:head>
 
-<div class="flex justify-center">
-  <ButtonPrimary text="Tạo đội mới" onclick={() => (formState = true)} />
-</div>
+{#if isEditable}
+  <div class="flex justify-center">
+    <ButtonPrimary text="Tạo đội mới" onclick={() => (formState = true)} />
+  </div>
+{/if}
 
 <Table
   title="Danh sách các đội bóng"

@@ -54,7 +54,7 @@ export const load = (async ({ fetch, params, locals, route }) => {
 
     const loaiBTs : LoaiBT[] = await selectAllLoaiBT();
     const thoiDiemGhiBanToiDa = (await selectThamSo("thoiDiemGhiBanToiDa"))!!;
-    // const isEditable = await checkPageEditable(locals.user!!.groupId, route.id);
+    const isEditable = await checkPageEditable(locals.user!!.groupId, route.id);
     
     return {
       maTD: maTD,
@@ -68,7 +68,7 @@ export const load = (async ({ fetch, params, locals, route }) => {
       danhSachBanThang: danhSachBanThang,
       danhSachThePhat: danhSachThePhat,
       loaiBTs: loaiBTs,
-      isEditable: true
+      isEditable: isEditable
     }
   } catch (err) {
     console.error(err);

@@ -226,9 +226,11 @@
   };
 </script>
 
-<div class="flex justify-center">
-  <ButtonPrimary text={"Thêm cầu thủ"} onclick={() => (formState = true)} />
-</div>
+{#if isEditable}
+  <div class="flex justify-center">
+    <ButtonPrimary text={"Thêm cầu thủ"} onclick={() => (formState = true)} />
+  </div>
+{/if}
 
 <Table
   title={"Danh sách các cầu thủ"}

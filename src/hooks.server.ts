@@ -77,7 +77,7 @@ export const handle: Handle = async ({ event, resolve }) => {
         event.route.id
       )) === false
     ) {
-      error(401);
+      error(401, "Không có quyền truy cập trang này");
     }
   }
   return resolve(event);

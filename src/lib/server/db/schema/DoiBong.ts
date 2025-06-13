@@ -9,7 +9,7 @@ import { MuaGiaiTable } from './MuaGiai';
 export const DoiBongTable = sqliteTable('DoiBong', {
     maDoi: integer().notNull().unique().primaryKey({ autoIncrement: true }),
     tenDoi: text().notNull(),
-    maSan: integer().notNull().references(() => SanNhaTable.maSan, { onDelete: "cascade" }),
+    maSan: integer().references(() => SanNhaTable.maSan, { onDelete: "set null" }),
     maMG: integer().notNull().references(() => MuaGiaiTable.maMG, { onDelete: "cascade" }),
     imageURL: text(),
     deleted: integer({mode: "boolean"}).default(false),
@@ -22,7 +22,7 @@ export const DoiBongTableBackup = sqliteTable('DoiBongBackup', {
     modifiedDate: integer({mode: "timestamp"}).notNull(),
     maDoi: integer().notNull(),
     tenDoi: text().notNull(),
-    maSan: integer().notNull(),
+    maSan: integer(),
     maMG: integer().notNull(),
     imageURL: text(),
 })

@@ -169,7 +169,7 @@
       editData.set("maTD", data.maTD ?? null);
       editData.set("doiMot", data.doiMot);
       editData.set("doiHai", data.doiHai);
-      editData.set("maVTD", data.maVTD);
+      editData.set("maVTD", data.maVTD!!);
       editData.set("doiThang", data.doiThang ?? null);
       editData.set("maMG", data.maMG);
       editData.set("ngayGioDuKien", new Date(data.ngayGioDuKien ?? ""));
@@ -288,8 +288,9 @@
   <title>Các trận đấu</title>
 </svelte:head>
 
-<div class="flex justify-center gap-4">
-  <ButtonPrimary
+{#if isEditable}
+  <div class="flex justify-center gap-4">
+    <ButtonPrimary
     text={"Thêm trận đấu mới"}
     onclick={() => {
       formState = true;
@@ -300,8 +301,9 @@
     onclick={() => {
       goto("/sapxeptrandau");
     }}
-  />
-</div>
+    />
+  </div>
+{/if}
 
 <Table
   title="Danh sách các trận đấu"

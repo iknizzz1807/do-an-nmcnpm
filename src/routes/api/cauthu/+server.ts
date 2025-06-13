@@ -46,7 +46,7 @@ export const POST: RequestHandler = async ({
     const soCauThuMax = (await selectThamSo("soCauThuMax"))!!;
     if ((await countThamGiaDB(data.maDoi)) >= soCauThuMax)
       throw new Error("Đội bóng đã đạt đủ số cầu thủ tối đa");    
-    if ((await isThamGiaDBExceedMax(data.maDoi, data.maLCT))) {
+    if (data.maLCT && (await isThamGiaDBExceedMax(data.maDoi, data.maLCT))) {
       const lct = await selectLoaiCTMaLCT(data.maLCT);
       throw new Error("Đội bóng đã đạt đủ số cầu thủ tối đa của " + (lct?.tenLCT ?? ""));
     }

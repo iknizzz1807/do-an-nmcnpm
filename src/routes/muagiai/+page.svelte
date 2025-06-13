@@ -200,9 +200,11 @@
   <title>Các Mùa giải</title>
 </svelte:head>
 
-<div class="flex justify-center">
-  <ButtonPrimary text="Tạo mùa giải mới" onclick={() => (formState = true)} />
-</div>
+{#if isEditable}
+  <div class="flex justify-center">
+    <ButtonPrimary text="Tạo mùa giải mới" onclick={() => (formState = true)} />
+  </div>
+{/if}
 
 <Table
   title="Danh sách các Mùa giải"

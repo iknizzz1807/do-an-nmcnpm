@@ -13,7 +13,7 @@ export const BanThangTable = sqliteTable('BanThang', {
     thoiDiem: real().notNull(),
 
     maCT: integer().notNull().references(() => CauThuTable.maCT, { onDelete: "cascade" }),
-    maLBT: integer().notNull().references(() => LoaiBTTable.maLBT, { onDelete: "cascade" }),
+    maLBT: integer().references(() => LoaiBTTable.maLBT, { onDelete: "set null" }),
 
     deleted: integer({mode: "boolean"}).default(false),
 }, (table) => [
@@ -27,7 +27,7 @@ export const BanThangTableBackup = sqliteTable('BanThangBackup', {
     thoiDiem: real().notNull(),
     
     maCT: integer().notNull(),
-    maLBT: integer().notNull(),
+    maLBT: integer(),
 })
 
 

@@ -15,7 +15,7 @@ export type MuaGiai = {
 export type DoiBong = {
   maDoi?: number | undefined;
   tenDoi: string;
-  maSan: number;
+  maSan?: number | null | undefined;
   maMG: number;
   imageURL?: string | null | undefined;
 
@@ -30,7 +30,7 @@ export type CauThu = {
   ngaySinh: string;
   ghiChu: string;
   soAo: number;
-  maLCT: number;
+  maLCT?: number | null | undefined;
   maDoi: number;
   imageURL?: string | null | undefined;
 
@@ -54,14 +54,14 @@ export type ThamGiaTD = {
   maTD: number;
   maDoi: number;
   maCT: number;
-  maVT: number;
+  maVT?: number | null | undefined;
 };
 
 export type BanThang = {
   maTD: number;
   maCT: number;
   thoiDiem: number;
-  maLBT: number;
+  maLBT?: number | null | undefined;
   // Data display
   maDoi?: number | undefined;
   tenCT?: string | undefined;
@@ -82,8 +82,8 @@ export type ThePhat = {
 export type LichThiDau = {
   maTD?: number | undefined;
   maMG: number;
-  maVTD: number;
-  maSan: number;
+  maVTD?: number | null | undefined;
+  maSan?: number | null | undefined;
 
   doiMot: number;
   doiHai: number;
@@ -93,7 +93,7 @@ export type LichThiDau = {
   ngayGioThucTe?: string | undefined;
 
   thoiGianDaThiDau: number;
-  maTT: number;
+  maTT?: number | null | undefined;
 
   // Data display
   tenDoiMot?: string | undefined;

@@ -12,8 +12,8 @@ import { TrongTaiTable } from './TrongTai';
 export const LichThiDauTable = sqliteTable('LichThiDau', {
     maTD: integer().notNull().unique().primaryKey({ autoIncrement: true }),
     maMG: integer().notNull().references(() => MuaGiaiTable.maMG, { onDelete: "cascade" }),
-    maVTD: integer().notNull().references(() => VongTDTable.maVTD, { onDelete: "cascade" }),
-    maSan: integer().notNull().references(() => SanNhaTable.maSan, { onDelete: "cascade" }),
+    maVTD: integer().references(() => VongTDTable.maVTD, { onDelete: "set null" }),
+    maSan: integer().references(() => SanNhaTable.maSan, { onDelete: "set null" }),
 
     doiMot: integer().notNull().references(() => DoiBongTable.maDoi, { onDelete: "cascade" }),
     doiHai: integer().notNull().references(() => DoiBongTable.maDoi, { onDelete: "cascade" }),
@@ -23,7 +23,7 @@ export const LichThiDauTable = sqliteTable('LichThiDau', {
     ngayGioThucTe: text().$defaultFn(() => new Date().toJSON()).notNull(),
 
     thoiGianDaThiDau: real().notNull(),
-    maTT: integer().notNull().references(() => TrongTaiTable.maTT, { onDelete: "cascade" }),
+    maTT: integer().references(() => TrongTaiTable.maTT, { onDelete: "set null" }),
 
     deleted: integer({mode: "boolean"}).default(false),
 }, (table) : any => [
@@ -36,7 +36,7 @@ export const LichThiDauTableBackup = sqliteTable('LichThiDauBackup', {
     modifiedDate: integer({mode: "timestamp"}).notNull(),
     maTD: integer().notNull(),
     maMG: integer().notNull(),
-    maVTD: integer().notNull(),
+    maVTD: integer(),
     maSan: integer().notNull(),
 
     doiMot: integer().notNull(),
@@ -48,7 +48,7 @@ export const LichThiDauTableBackup = sqliteTable('LichThiDauBackup', {
 
     thoiGianDaThiDau: real().notNull(),
 
-    maTT: integer().notNull(),
+    maTT: integer(),
 })
 
 

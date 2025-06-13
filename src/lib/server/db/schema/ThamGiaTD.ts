@@ -14,7 +14,7 @@ export const ThamGiaTDTable = sqliteTable('ThamGiaTD', {
     maTD: integer().notNull().references(() => LichThiDauTable.maTD, { onDelete: "cascade" }),
     maCT: integer().notNull().references(() => CauThuTable.maCT, { onDelete: "cascade" }),
     maDoi: integer().notNull().references(() => DoiBongTable.maDoi, { onDelete: "cascade" }),
-    maVT: integer().notNull().references(() => ViTriTable.maVT, { onDelete: "cascade" }),
+    maVT: integer().references(() => ViTriTable.maVT, { onDelete: "set null" }),
 }, (table) => [
     primaryKey({ columns: [table.maTD, table.maCT] }),
 ])
@@ -25,7 +25,7 @@ export const ThamGiaTDTableBackup = sqliteTable('ThamGiaTDBackup', {
     maTD: integer().notNull(),
     maCT: integer().notNull(),
     maDoi: integer().notNull(),
-    maVT: integer().notNull(),
+    maVT: integer(),
 })
 
 

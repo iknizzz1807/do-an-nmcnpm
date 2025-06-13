@@ -50,7 +50,7 @@ export const POST: RequestHandler = async ({ request, params, locals }) => {
     if ((await countThamGiaDB(maDoi)) >= soCauThuMax)
       throw new Error("Đội bóng đã đạt đủ số cầu thủ tối đa");
 
-    if ((await isThamGiaDBExceedMax(maDoi, data.maLCT))) {
+    if (data.maLCT && (await isThamGiaDBExceedMax(maDoi, data.maLCT))) {
       const lct = await selectLoaiCTMaLCT(data.maLCT);
       throw new Error("Đội bóng đã đạt đủ số cầu thủ tối đa của " + (lct?.tenLCT ?? ""));
     }

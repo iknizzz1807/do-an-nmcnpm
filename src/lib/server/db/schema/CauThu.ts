@@ -14,7 +14,7 @@ export const CauThuTable = sqliteTable('CauThu', {
     ngaySinh: text().notNull(),
     ghiChu: text().notNull(),
     soAo: integer().notNull(),
-    maLCT: integer().notNull().references(() => LoaiCTTable.maLCT, { onDelete: "cascade" }),
+    maLCT: integer().references(() => LoaiCTTable.maLCT, { onDelete: "set null" }),
     maDoi: integer().notNull().references(() => DoiBongTable.maDoi, { onDelete: "cascade" }),
     imageURL: text(),
     deleted: integer({mode: "boolean"}).default(false),
@@ -30,7 +30,7 @@ export const CauThuTableBackup = sqliteTable('CauThuBackup', {
     ngaySinh: text().notNull(),
     ghiChu: text().notNull(),
     soAo: integer().notNull(),
-    maLCT: integer().notNull(),
+    maLCT: integer(),
     maDoi: integer().notNull(),
     imageURL: text(),
 })

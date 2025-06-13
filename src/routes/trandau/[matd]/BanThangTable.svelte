@@ -228,16 +228,18 @@
   };
 </script>
 
-<div class="flex justify-center gap-4">
-  <ButtonPrimary
-    text=" Chi tiết danh sách cầu thủ thi đấu"
-    onclick={() => goto(page.url.pathname + "/chitiet")}
-  />
-  <ButtonPrimary
-    text={"Thêm bàn thắng mới"}
-    onclick={() => (formState = true)}
-  />
-</div>
+{#if isEditable}
+  <div class="flex justify-center gap-4">
+    <ButtonPrimary
+      text=" Chi tiết danh sách cầu thủ thi đấu"
+      onclick={() => goto(page.url.pathname + "/chitiet")}
+      />
+    <ButtonPrimary
+      text={"Thêm bàn thắng mới"}
+      onclick={() => (formState = true)}
+      />
+  </div>
+{/if}
 
 <Table
   title="Danh sách các bàn thắng"
