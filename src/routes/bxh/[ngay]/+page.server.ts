@@ -1,7 +1,8 @@
 import type { CauThu } from "$lib/typesDatabase";
 import dateFormat from "dateformat";
 import type { PageServerLoad } from "./$types";
-import { _GETBXH } from "../../api/bxh/[ngay]/+server";
+import { _GETBXHNgay } from "../../api/bxh/ngay/[ngay]/+server";
+import { _GETMuaGiai } from "../../api/muagiai/+server";
 
 export const load = (async ({ fetch, locals, params }) => {
   try {
@@ -10,18 +11,21 @@ export const load = (async ({ fetch, locals, params }) => {
       throw new Error("Ngày không được trống");
     let date = new Date(ngay);
 
-    const reponse = await _GETBXH(date);
+    const reponse = await _GETBXHNgay(date);
 
     const bangXepHangNgay = reponse;
+    const danhSachMuaGiai = await _GETMuaGiai();
 
     return {
       bangXepHangNgay: bangXepHangNgay,
+      danhSachMuaGiai: danhSachMuaGiai,
       dateBXH: dateFormat(date, "isoDate")
     }
   } catch (err) {
     console.error(err);
     return {
       bangXepHangNgay: [],
+      danhSachMuaGiai: [],
       dateBXH: ""
     }
   }

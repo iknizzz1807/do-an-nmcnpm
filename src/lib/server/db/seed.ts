@@ -130,7 +130,7 @@ const seedSeason = async(teams: any, matches: any) => {
       maTD: match.id,
       maMG: season.id,
       maVTD: 1,
-      maSan: 1,
+      maSan: (await selectDoiBongMaDoi(teamsMap.get(match.homeTeam.id)!!))?.maSan,
       doiMot: teamsMap.get(match.homeTeam.id)!!,
       doiHai: teamsMap.get(match.awayTeam.id)!!,
       doiThang: (match.score.winner === "DRAW" ? 

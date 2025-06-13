@@ -100,6 +100,8 @@ export type LichThiDau = {
   tenDoiHai?: string | undefined;
   tenMG?: string | undefined;
   tenDoiThang?: string | undefined;
+  tenSan?: string | undefined;
+  tenTT?: string | undefined;
   tenVTD?: string | undefined;
   tiSoDoiMot?: number | undefined;
   tiSoDoiHai?: number | undefined;

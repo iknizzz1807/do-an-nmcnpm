@@ -1,11 +1,11 @@
 import type { RequestHandler } from "@sveltejs/kit";
-import { selectBXHDoiNgay } from "$lib/server/db/functions/BangXepHang";
+import { selectBXHDoiNgay, selectBXHDoiThang } from "$lib/server/db/functions/BangXepHang";
 import type { BangXepHangNgay } from "$lib/typesResponse";
 import { errorResponseJSON } from "$lib";
 import { selectThamSo } from "$lib/server/db/functions/ThamSo";
 import { selectDiemSoTen } from "$lib/server/db/functions/Data/DiemSo";
 
-export const _GETBXH = async (ngay: Date) => {
+export const _GETBXHNgay = async (ngay: Date) => {
   const danhSachTranDau = await selectBXHDoiNgay(ngay);
   console.log(danhSachTranDau);
   const diemThang = (await selectDiemSoTen("Thắng"))!!.diemSo;
@@ -30,7 +30,7 @@ export const GET: RequestHandler = async ({ locals, request, params }) => {
 
     let date = new Date(ngay);
 
-    const bxh = await _GETBXH(date);
+    const bxh = await _GETBXHNgay(date);
     return new Response(JSON.stringify(bxh), {
       status: 200,
       headers: {

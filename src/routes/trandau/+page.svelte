@@ -7,6 +7,7 @@
     MuaGiai,
     LichThiDau,
     VongTD,
+    SanNha,
   } from "$lib/typesDatabase";
   import ButtonPrimary from "$lib/components/ButtonPrimary.svelte";
   import { showErrorToast, showOkToast } from "$lib/components/Toast";
@@ -26,6 +27,7 @@
   const danhSachDoi: DoiBong[] = $state(data.danhSachDoi);
   const danhSachMuaGiai: MuaGiai[] = $state(data.danhSachMuaGiai);
   const danhSachVTD: VongTD[] = $state(data.danhSachVTD);
+  const danhSachSan: SanNha[] = $state(data.danhSachSan);
   const isEditable = $state(data.isEditable);
 
   onMount(() => {
@@ -37,6 +39,7 @@
       ltd.tenDoiThang = tenDoiThang;
       ltd.tenVTD =
         danhSachVTD.find((value) => value.maVTD === ltd.maVTD)?.tenVTD ?? "";
+      ltd.tenSan = danhSachSan.find(value => value.maSan === ltd.maSan)?.tenSan ?? "";
     }
   });
 
@@ -133,6 +136,7 @@
     { header: "Vòng thi đấu", accessor: "tenVTD" },
     // { header: "Mã mùa giải", accessor: "tenMG" },
     { header: "Đội thắng", accessor: "tenDoiThang" },
+    { header: "Sân", accessor: "tenSan" },
     {
       header: "Ngày giờ",
       accessor: "ngayGioThucTe",
