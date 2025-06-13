@@ -76,43 +76,15 @@
         label="Maximum Time for Goal Scoring"
         unit="minutes"
       />
-    </SettingSection>
-
-    <!-- Ranking Priority Section (Placeholder for now) -->
-    <SettingSection sectionName="Ranking Priority (Tiebreakers)">
-      <p class="text-sm text-gray-600 mb-4">
-        Define the order of criteria used to rank teams if they have the same
-        number of points. Drag to reorder (functionality not yet implemented).
-      </p>
-      <div class="space-y-2">
-        <div
-          class="flex items-center bg-gray-100 p-3 rounded-md border border-gray-200"
-        >
-          <span
-            class="w-5 h-5 bg-indigo-500 text-white rounded-full flex items-center justify-center mr-3 text-xs"
-            >1</span
-          >
-          <span class="text-gray-700 text-sm">Goal Difference</span>
-        </div>
-        <div
-          class="flex items-center bg-gray-100 p-3 rounded-md border border-gray-200"
-        >
-          <span
-            class="w-5 h-5 bg-indigo-500 text-white rounded-full flex items-center justify-center mr-3 text-xs"
-            >2</span
-          >
-          <span class="text-gray-700 text-sm">Goals For</span>
-        </div>
-        <div
-          class="flex items-center bg-gray-100 p-3 rounded-md border border-gray-200"
-        >
-          <span
-            class="w-5 h-5 bg-indigo-500 text-white rounded-full flex items-center justify-center mr-3 text-xs"
-            >3</span
-          >
-          <span class="text-gray-700 text-sm">Head-to-head Results</span>
-        </div>
-      </div>
+      
+      <SettingNumberInput
+        min={1}
+        max={2}
+        forValue="thoiDiemGhiBanToiDa"
+        bind:bindValue={setting.thoiDiemGhiBanToiDa}
+        label="Đội sân nhà"
+        unit="minutes"
+      />
     </SettingSection>
   </SettingMainSection>
 
@@ -133,7 +105,7 @@
         </select>
       </div>
       <div>
-        <label
+        <!-- <label
           class="block text-sm font-medium text-gray-700 mb-1"
           for="defaultTimeZone">Default Time Zone</label
         >
@@ -143,7 +115,7 @@
         >
           <option value="UTC+0700">Hanoi, Vietnam (UTC+07:00)</option>
           <option value="UTC+0000">London, UK (UTC+00:00)</option>
-        </select>
+        </select> -->
       </div>
       <div>
         <label
@@ -158,7 +130,7 @@
           <option value="xlsx">Excel (XLSX)</option>
         </select>
       </div>
-      <div>
+      <!-- <div>
         <label class="block text-sm font-medium text-gray-700 mb-2"
           >System Notifications</label
         >
@@ -189,7 +161,7 @@
             >
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 

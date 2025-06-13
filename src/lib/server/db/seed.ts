@@ -25,6 +25,7 @@ import { selectMuaGiaiMaMG } from "./functions/MuaGiai";
 import { seed } from "drizzle-seed";
 import { faker } from "@faker-js/faker";
 import { selectThamSo } from "./functions/ThamSo";
+import { selectAllLoaiBT } from "./functions/Data/LoaiBT";
 
 await db.insert(MuaGiaiTable).values(competitions1.seasons.slice(0, 2).map(value => ({ 
   maMG: value.id, 
@@ -43,14 +44,16 @@ await db.insert(MuaGiaiTable).values(competitions2.seasons.slice(0, 2).map(value
   imageURL: competitions2.emblem
 } satisfies MuaGiai)));
 
-const seedBanThang = (soBT: number, maTD: number, cauThu: CauThu[], thoiDiem: number) : number => {
+const phanLuoiLBT = (await selectAllLoaiBT())?.find(value => value.tenLBT === "Phản lưới")!!;
+
+const seedBanThang = (soBT: number, maTD: number, cauThu: CauThu[], thoiDiem: number, phanLuoi: boolean = false) : number => {
   for (let i = 0; i < soBT; i++) {
     const cauThuMot = cauThu.at(randIntBetween(0, cauThu.length - 1))!!;
     insertBanThang({
       maTD: maTD,
       maCT: cauThuMot.maCT!!,
       thoiDiem: thoiDiem,
-      maLBT: 1
+      maLBT: phanLuoi ? phanLuoiLBT.maLBT : randIntBetween(1, 3),
     });
     thoiDiem += 5;
   }
@@ -130,7 +133,7 @@ const seedSeason = async(teams: any, matches: any) => {
       maTD: match.id,
       maMG: season.id,
       maVTD: 1,
-      maSan: 1,
+      maSan: (await selectDoiBongMaDoi(teamsMap.get(match.homeTeam.id)!!))?.maSan,
       doiMot: teamsMap.get(match.homeTeam.id)!!,
       doiHai: teamsMap.get(match.awayTeam.id)!!,
       doiThang: (match.score.winner === "DRAW" ? 
@@ -167,10 +170,20 @@ const seedSeason = async(teams: any, matches: any) => {
     await insertThamGiaTD(...thamGiaDoiMot, ...thamGiaDoiHai);
 
     let thoiDiem = 5;
-    thoiDiem = seedBanThang((match.score.fullTime.home ?? 0), match.id, CTDoiMot, thoiDiem);
-    thoiDiem = seedBanThang((match.score.fullTime.away ?? 0), match.id, CTDoiHai, thoiDiem);
-    // thoiDiem = seedBanThang((match.score.halfTime.home ?? 0), match.id, CTDoiMot, thoiDiem);
-    // thoiDiem = seedBanThang((match.score.halfTime.away ?? 0), match.id, CTDoiHai, thoiDiem);
+    let banThangDoiMot = match.score.fullTime.home ?? 0;
+    let banThangDoiHai = match.score.fullTime.away ?? 0;
+
+    const phanLuoiDoiMot = randIntBetween(0, banThangDoiMot / 2);
+    const phanLuoiDoiHai = randIntBetween(0, banThangDoiHai / 2);
+
+    banThangDoiMot -= phanLuoiDoiMot;
+    banThangDoiHai -= phanLuoiDoiHai;
+
+    thoiDiem = seedBanThang(banThangDoiMot, match.id, CTDoiMot, thoiDiem);
+    thoiDiem = seedBanThang(phanLuoiDoiMot, match.id, CTDoiHai, thoiDiem, true);
+    
+    thoiDiem = seedBanThang(banThangDoiHai, match.id, CTDoiHai, thoiDiem);
+    thoiDiem = seedBanThang(phanLuoiDoiHai, match.id, CTDoiMot, thoiDiem, true);
   }
 }
 
