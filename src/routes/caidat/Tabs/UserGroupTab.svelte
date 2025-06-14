@@ -8,12 +8,15 @@
   import SettingSection from "../SettingSection.svelte";
   import SettingUserTable from "../Tables/SettingUserTable.svelte";
 
-  let { userGroup = $bindable(),  roles = $bindable(), users = $bindable() } : 
-    { 
-      userGroup : UserGroupRoles[],
-      roles : UserRole[],
-      users: User[]
-    } = $props();
+  let {
+    userGroup = $bindable(),
+    roles = $bindable(),
+    users = $bindable(),
+  }: {
+    userGroup: UserGroupRoles[];
+    roles: UserRole[];
+    users: User[];
+  } = $props();
 
   onMount(() => {
     document.addEventListener("click", closeRolesDropdown);
@@ -21,7 +24,6 @@
       document.removeEventListener("click", closeRolesDropdown);
     };
   });
-
 
   // For roles dropdown (used in User Group Management)
   let showRolesDropdown = $state(false);
@@ -58,7 +60,8 @@
 
   $effect(() => {
     if (rolesSearchQuery) {
-      filteredrolesForDropdown = roles.filter( ( role : UserRole ) =>
+      filteredrolesForDropdown = roles.filter(
+        (role: UserRole) =>
           role.roleName
             .toLowerCase()
             .includes(rolesSearchQuery.toLowerCase()) ||
@@ -152,7 +155,9 @@
             .catch(() => ({ message: "Lỗi xóa nhóm người dùng" }));
           throw new Error(errorData.message || "Lỗi xóa nhóm người dùng");
         }
-        userGroups = userGroups.filter((group : UserGroupRoles) => group.groupId !== groupId);
+        userGroups = userGroups.filter(
+          (group: UserGroupRoles) => group.groupId !== groupId
+        );
         showOkToast("User group deleted successfully");
       } catch (err) {
         showErrorToast(String(err));
@@ -163,123 +168,284 @@
 
 <SettingUserTable dataUser={users} bind:groups={userGroups} />
 
-<SettingMainSection sectionName="User Group Management">
-  <SettingSection sectionName="Create or Edit User Group">
-    <div class="mb-4">
-      <label
-        class="block text-sm font-medium text-gray-700 mb-2"
-        for="groupName"
-      >
-        User Group Name
-      </label>
-      <input
-        id="groupName"
-        type="text"
-        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
-        placeholder="Enter group name (e.g. Team Manager, League Admin)"
-        bind:value={groupName}
-      />
-    </div>
+<SettingMainSection sectionName="Cài đặt nhóm người dùng">
+  <SettingSection sectionName="Tạo hoặc chỉnh sửa nhóm và quyền người dùng">
+    <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
+      <!-- Form Header -->
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-1">
+          {editingGroupId !== -1
+            ? "Chỉnh sửa nhóm người dùng"
+            : "Tạo nhóm người dùng"}
+        </h3>
+        <p class="text-sm text-gray-600">
+          {editingGroupId !== -1
+            ? "Điều chỉnh cài đặt nhóm người dùng có sẵn ở bên dưới."
+            : "Định nghĩa nhóm người dùng mới với quyền và vai trò riêng"}
+        </p>
+      </div>
 
-    <div class="mt-4">
-      <h3 class="text-lg font-medium text-gray-700 mb-2">Assign Roles</h3>
-      <div class="relative roles-dropdown">
-        <button
-          type="button"
-          class="flex justify-between items-center w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-left focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
-          onclick={toggleRolesDropdown}
+      <!-- Group Name Input -->
+      <div class="mb-6">
+        <label
+          class="block text-sm font-medium text-gray-700 mb-2"
+          for="groupName"
         >
-          <span
-            >{selectedroles.length} role{selectedroles.length === 1
-              ? ""
-              : "s"} selected</span
-          >
-          <svg
-            class="w-5 h-5 ml-2 transition-transform duration-200 {showRolesDropdown
-              ? 'rotate-180'
-              : ''}"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-              clip-rule="evenodd"
-            ></path>
-          </svg>
-        </button>
+          Tên nhóm người dùng <span class="text-red-500">*</span>
+        </label>
+        <input
+          id="groupName"
+          type="text"
+          class="block w-full px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition-colors duration-200"
+          placeholder="Tên nhóm người dùng (e.g. Team Manager, League Admin)"
+          bind:value={groupName}
+        />
+        {#if groupName.trim()}
+          <p class="mt-1 text-sm text-green-600">
+            ✓ Tên nhóm người dùng hợp lệ
+          </p>
+        {/if}
+      </div>
 
-        {#if showRolesDropdown}
-          <div
-            class="absolute z-10 mt-1 w-full bg-white shadow-lg rounded-md max-h-60 overflow-auto border border-gray-200"
+      <!-- Role Assignment Section -->
+      <div class="mb-6">
+        <div class="flex items-center justify-between mb-3">
+          <label class="text-sm font-medium text-gray-700">
+            Đã gán <span class="text-red-500">*</span>
+          </label>
+          {#if selectedroles.length > 0}
+            <span class="text-sm text-green-600 font-medium">
+              {selectedroles.length} vai trò{selectedroles.length === 1
+                ? ""
+                : "s"}
+              đã chọn
+            </span>
+          {/if}
+        </div>
+
+        <!-- Custom Dropdown -->
+        <div class="relative roles-dropdown">
+          <button
+            type="button"
+            class="flex justify-between items-center w-full px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-sm text-left hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors duration-200"
+            onclick={toggleRolesDropdown}
           >
-            <div class="p-2">
-              <div class="mb-2 px-2">
-                <input
-                  type="text"
-                  class="w-full p-2 border border-gray-300 rounded-md"
-                  placeholder="Search roles..."
-                  bind:value={rolesSearchQuery}
-                  onclick={(e) => e.stopPropagation()}
+            <div class="flex items-center">
+              <svg
+                class="w-5 h-5 text-gray-400 mr-3"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
                 />
+              </svg>
+              <span class="text-gray-700">
+                {#if selectedroles.length === 0}
+                  Chọn những vai trò cho nhóm này
+                {:else}
+                  {selectedroles.length} role{selectedroles.length === 1
+                    ? ""
+                    : "s"} đã chọn
+                {/if}
+              </span>
+            </div>
+            <svg
+              class="w-5 h-5 text-gray-400 transition-transform duration-200 {showRolesDropdown
+                ? 'rotate-180'
+                : ''}"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
+
+          {#if showRolesDropdown}
+            <div
+              class="absolute z-20 mt-2 w-full bg-white shadow-xl rounded-lg border border-gray-200 max-h-64 overflow-hidden"
+            >
+              <!-- Search Input -->
+              <div class="p-3 bg-gray-50 border-b border-gray-200">
+                <div class="relative">
+                  <svg
+                    class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                  </svg>
+                  <input
+                    type="text"
+                    class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                    placeholder="Tìm kiếm vai trò..."
+                    bind:value={rolesSearchQuery}
+                    onclick={(e) => e.stopPropagation()}
+                  />
+                </div>
               </div>
-              <div class="space-y-1">
+
+              <!-- Roles List -->
+              <div class="max-h-48 overflow-y-auto">
                 {#each filteredrolesForDropdown as roleItem (roleItem.roleId)}
                   <!-- svelte-ignore a11y_click_events_have_key_events -->
                   <!-- svelte-ignore a11y_no_static_element_interactions -->
                   <div
-                    class="flex items-center px-2 py-1.5 hover:bg-gray-100 rounded-md cursor-pointer"
+                    class="flex items-start px-4 py-3 hover:bg-blue-50 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors duration-150"
                     onclick={() => toggleRoles(roleItem.roleId)}
                   >
                     <input
                       id={`perm_${roleItem.roleId}`}
                       type="checkbox"
-                      class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded pointer-events-none"
+                      class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded pointer-events-none mt-0.5"
                       checked={selectedroles.includes(roleItem.roleId)}
                       tabindex="-1"
                     />
-                    <label
-                      for={`perm_${roleItem.roleId}`}
-                      class="ml-2 flex flex-col cursor-pointer"
-                    >
-                      <span class="text-sm font-medium text-gray-700"
-                        >{roleItem.roleName}</span
-                      >
-                      <span class="text-xs text-gray-500"
-                        >{roleItem.viewablePage}</span
-                      >
-                      {#if roleItem.canEdit}
-                        <span class="text-xs text-green-600">Can Edit</span>
-                      {/if}
-                    </label>
+                    <div class="ml-3 flex-1">
+                      <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium text-gray-900"
+                          >{roleItem.roleName}</span
+                        >
+                        {#if roleItem.canEdit}
+                          <span
+                            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"
+                          >
+                            Can Edit
+                          </span>
+                        {/if}
+                      </div>
+                      <p class="text-xs text-gray-500 mt-0.5">
+                        {roleItem.viewablePage}
+                      </p>
+                    </div>
                   </div>
                 {:else}
-                  <p class="px-2 py-2 text-sm text-gray-500">
-                    No roles found.
-                  </p>
+                  <div class="px-4 py-8 text-center">
+                    <svg
+                      class="mx-auto h-12 w-12 text-gray-300"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1"
+                        d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 20c-2.21 0-4.21-.895-5.657-2.343L3.515 20.485"
+                      />
+                    </svg>
+                    <p class="mt-2 text-sm text-gray-500">No roles found</p>
+                    <p class="text-xs text-gray-400">
+                      Try adjusting your search terms
+                    </p>
+                  </div>
                 {/each}
               </div>
+            </div>
+          {/if}
+        </div>
+
+        <!-- Selected Roles Preview -->
+        {#if selectedroles.length > 0}
+          <div class="mt-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+            <p class="text-sm font-medium text-blue-800 mb-2">
+              Selected Roles:
+            </p>
+            <div class="flex flex-wrap gap-2">
+              {#each selectedroles as roleId}
+                {@const roleDetails = roles.find((r) => r.roleId === roleId)}
+                {#if roleDetails}
+                  <span
+                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                  >
+                    {roleDetails.roleName}
+                    <button
+                      type="button"
+                      class="ml-1 h-4 w-4 rounded-full inline-flex items-center justify-center hover:bg-blue-200 transition-colors"
+                      onclick={() => toggleRoles(roleId)}
+                    >
+                      <svg
+                        class="h-3 w-3"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </button>
+                  </span>
+                {/if}
+              {/each}
             </div>
           </div>
         {/if}
       </div>
-    </div>
 
-    <div class="mt-6 flex justify-end space-x-3">
-      <button
-        type="button"
-        class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        onclick={resetForm}
-      >
-        {editingGroupId !== -1 ? "Cancel Edit" : "Reset"}
-      </button>
-      <button
-        type="button"
-        class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-        onclick={saveUserGroup}
-      >
-        {editingGroupId !== -1 ? "Update Group" : "Save User Group"}
-      </button>
+      <!-- Action Buttons -->
+      <div class="flex justify-end space-x-3 pt-4 border-t border-gray-200">
+        <button
+          type="button"
+          class="px-6 py-2.5 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200"
+          onclick={resetForm}
+        >
+          <div class="flex items-center">
+            <svg
+              class="w-4 h-4 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+            {editingGroupId !== -1 ? "Cancel Edit" : "Reset Form"}
+          </div>
+        </button>
+        <button
+          type="button"
+          class="px-6 py-2.5 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          onclick={saveUserGroup}
+          disabled={!groupName.trim() || selectedroles.length === 0}
+        >
+          <div class="flex items-center">
+            <svg
+              class="w-4 h-4 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            {editingGroupId !== -1 ? "Update Group" : "Create Group"}
+          </div>
+        </button>
+      </div>
     </div>
   </SettingSection>
 
@@ -307,7 +473,7 @@
                     <div class="flex -space-x-1 overflow-hidden">
                       {#each group.roles.slice(0, 5) as roleId}
                         {@const roleDetails = roles.find(
-                          (r : UserRole) => r.roleId === roleId
+                          (r) => r.roleId === roleId
                         )}
                         {#if roleDetails}
                           <span
