@@ -3,7 +3,7 @@
     header: string;
     accessor: string;
     hidden?: boolean | undefined;
-    accessFunction?: ((data: any) => string) | undefined;
+    accessFunction?: ((data: any) => string | number | Date) | undefined;
   };
 
   export type TableProps = {
@@ -58,30 +58,76 @@
     sortedData = [...data];
   });
 
+  /**
+   * Phân tích chuỗi ngày tháng linh hoạt. Hỗ trợ 2 định dạng:
+   * 1. 'hh:mm:ss dd/mm/yyyy'
+   * 2. 'dd/mm/yyyy'
+   * Trả về đối tượng Date hoặc null nếu không hợp lệ.
+   */
+  function parseFlexibleDateString(value: any): Date | null {
+    if (typeof value !== "string") return null;
+
+    // Regex cho định dạng: hh:mm:ss dd/mm/yyyy
+    const dateTimeRegex =
+      /^(\d{1,2}):(\d{1,2}):(\d{1,2})\s+(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
+    let parts = value.match(dateTimeRegex);
+    if (parts) {
+      const hour = parseInt(parts[1], 10);
+      const minute = parseInt(parts[2], 10);
+      const second = parseInt(parts[3], 10);
+      const day = parseInt(parts[4], 10);
+      const month = parseInt(parts[5], 10) - 1; // Tháng trong JS là 0-indexed
+      const year = parseInt(parts[6], 10);
+
+      const date = new Date(year, month, day, hour, minute, second);
+      if (
+        date.getFullYear() === year &&
+        date.getMonth() === month &&
+        date.getDate() === day
+      ) {
+        return date;
+      }
+    }
+
+    // Regex cho định dạng: dd/mm/yyyy
+    const dateOnlyRegex = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
+    parts = value.match(dateOnlyRegex);
+    if (parts) {
+      const day = parseInt(parts[1], 10);
+      const month = parseInt(parts[2], 10) - 1;
+      const year = parseInt(parts[3], 10);
+
+      const date = new Date(year, month, day);
+      if (
+        date.getFullYear() === year &&
+        date.getMonth() === month &&
+        date.getDate() === day
+      ) {
+        return date;
+      }
+    }
+
+    return null;
+  }
+
   // Hàm xử lý sắp xếp
   function sortByColumn(columnAccessor: string) {
     if (sortedColumn === columnAccessor) {
-      // Nếu đang sắp xếp theo cột này, đảo ngược hướng sắp xếp
       sortDirection = sortDirection === "asc" ? "desc" : "asc";
     } else {
-      // Nếu sắp xếp theo cột mới, mặc định sắp xếp tăng dần
       sortedColumn = columnAccessor;
       sortDirection = "asc";
     }
 
-    // Thực hiện sắp xếp dữ liệu
     sortedData = [...data].sort((a, b) => {
-      // Lấy giá trị từ đối tượng, kiểm tra xem có accessor function không
-      let valueA, valueB;
+      // Lấy giá trị từ đối tượng
       const column = columns.find((col) => col.accessor === columnAccessor);
-
-      if (column?.accessFunction) {
-        valueA = column.accessFunction(a);
-        valueB = column.accessFunction(b);
-      } else {
-        valueA = a[columnAccessor];
-        valueB = b[columnAccessor];
-      }
+      const valueA = column?.accessFunction
+        ? column.accessFunction(a)
+        : a[columnAccessor];
+      const valueB = column?.accessFunction
+        ? column.accessFunction(b)
+        : b[columnAccessor];
 
       // Xử lý null/undefined
       if (valueA === null || valueA === undefined)
@@ -89,22 +135,33 @@
       if (valueB === null || valueB === undefined)
         return sortDirection === "asc" ? 1 : -1;
 
-      // Xử lý các kiểu dữ liệu khác nhau
+      // --- LOGIC SẮP XẾP ĐA KIỂU DỮ LIỆU ---
+
+      // 1. Thử phân tích chuỗi thành Date
+      const dateA = parseFlexibleDateString(valueA);
+      const dateB = parseFlexibleDateString(valueB);
+
+      if (dateA && dateB) {
+        return sortDirection === "asc"
+          ? dateA.getTime() - dateB.getTime()
+          : dateB.getTime() - dateA.getTime();
+      }
+
+      // 2. Kiểm tra nếu là đối tượng Date gốc
       if (valueA instanceof Date && valueB instanceof Date) {
         return sortDirection === "asc"
           ? valueA.getTime() - valueB.getTime()
           : valueB.getTime() - valueA.getTime();
       }
 
-      // Xử lý số
+      // 3. Kiểm tra nếu là số
       if (typeof valueA === "number" && typeof valueB === "number") {
         return sortDirection === "asc" ? valueA - valueB : valueB - valueA;
       }
 
-      // Xử lý chuỗi (phân biệt tiếng Việt)
+      // 4. Mặc định: sắp xếp như chuỗi
       const strA = String(valueA).toLowerCase();
       const strB = String(valueB).toLowerCase();
-
       return sortDirection === "asc"
         ? strA.localeCompare(strB, "vi")
         : strB.localeCompare(strA, "vi");
@@ -129,53 +186,25 @@
               return '""';
             }
 
-            // GIẢI PHÁP 1: Buộc đọc tất cả ngày tháng như TEXT
-            // Xử lý đối tượng Date
             if (cellValue instanceof Date) {
-              // Chuyển thành định dạng nhất quán dd/mm/yyyy
               const day = cellValue.getDate().toString().padStart(2, "0");
               const month = (cellValue.getMonth() + 1)
                 .toString()
                 .padStart(2, "0");
               const year = cellValue.getFullYear();
-              // Thêm dấu ' đầu chuỗi để Excel hiểu là text
               return `"'${day}/${month}/${year}'"`;
             }
 
-            // Xử lý chuỗi có dạng ngày tháng
             const dateStr = String(cellValue);
-            if (/^\d{1,4}[-/\.]\d{1,2}[-/\.]\d{1,4}$/.test(dateStr)) {
-              try {
-                const parts = dateStr.split(/[-/\.]/);
-
-                if (parts.length === 3) {
-                  // Nếu là YYYY-MM-DD (từ UI)
-                  if (parseInt(parts[0]) > 31) {
-                    const year = parts[0];
-                    const month = parts[1].padStart(2, "0");
-                    const day = parts[2].padStart(2, "0");
-                    // GIẢI PHÁP 2: Thêm dấu ' để Excel đọc là text
-                    return `"'${day}/${month}/${year}'"`;
-                  }
-                  // Nếu là DD-MM-YYYY
-                  else if (parseInt(parts[2]) > 31) {
-                    const day = parts[0].padStart(2, "0");
-                    const month = parts[1].padStart(2, "0");
-                    const year = parts[2];
-                    return `"'${day}/${month}/${year}'"`;
-                  }
-                  // GIẢI PHÁP 3: Trường hợp không rõ format, vẫn thêm dấu ' để đảm bảo
-                  return `"'${dateStr}'"`;
-                }
-
-                // Đảm bảo tất cả các chuỗi ngày đều có dấu ' ở đầu
-                return `"'${dateStr}'"`;
-              } catch (e) {
-                return `"'${dateStr}'"`;
-              }
+            // Cải thiện regex để bắt cả định dạng dd/mm/yyyy
+            if (
+              /^\d{1,4}[-/\.]\d{1,2}[-/\.]\d{1,4}/.test(dateStr) ||
+              /^\d{1,2}\/\d{1,2}\/\d{4}/.test(dateStr) ||
+              /^\d{1,2}:\d{1,2}:\d{1,2}\s+\d{1,2}\/\d{1,2}\/\d{4}/.test(dateStr)
+            ) {
+              return `"'${dateStr}'"`; // Luôn thêm dấu ' để Excel hiểu là text
             }
 
-            // Xử lý các loại dữ liệu khác
             const stringValue = String(cellValue).replace(/"/g, '""');
             return `"${stringValue}"`;
           })
@@ -184,9 +213,7 @@
       .join("\n");
 
     const csvContent = "\uFEFF" + `${headers}\n${csvRows}`;
-
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-
     const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
 
