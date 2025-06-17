@@ -8,6 +8,7 @@
     LichThiDau,
     VongTD,
     SanNha,
+    TrongTai,
   } from "$lib/typesDatabase";
   import ButtonPrimary from "$lib/components/ButtonPrimary.svelte";
   import { showErrorToast, showOkToast } from "$lib/components/Toast";
@@ -21,6 +22,7 @@
   import { page } from "$app/state";
   import { onMount } from "svelte";
   import dateFormat from "dateformat";
+  import TrongTaiTable from "./TrongTaiTable.svelte";
 
   let { data }: PageProps = $props();
 
@@ -29,6 +31,7 @@
   const danhSachMuaGiai: MuaGiai[] = $state(data.danhSachMuaGiai);
   const danhSachVTD: VongTD[] = $state(data.danhSachVTD);
   const danhSachSan: SanNha[] = $state(data.danhSachSan);
+  let danhSachTrongTai: TrongTai[] = $state(data.danhSachTrongTai);
   const minDate: Date = $state(data.minDate);
   minDate.setHours(0, 0, 0, 0); // Đặt giờ về 00:00:00
   const maxDate: Date = $state(data.maxDate);
@@ -50,6 +53,9 @@
         danhSachDoi.find((value) => value.maDoi == ltd.doiMot)?.tenDoi ?? "";
       ltd.tenDoiHai =
         danhSachDoi.find((value) => value.maDoi == ltd.doiHai)?.tenDoi ?? "";
+      ltd.tenTT =
+        danhSachTrongTai.find((value) => value.maTT === ltd.maTT)?.tenTT ??
+        "Chưa có trọng tài";
     }
   });
 
@@ -70,6 +76,13 @@
         optionName: value.tenMG,
       } satisfies FieldOption;
     });
+
+  const trongTaiOptions: FieldOption[] = danhSachTrongTai.map((value) => {
+      return {
+        optionValue: value.maTT!!,
+        optionName: value.tenTT,
+      } satisfies FieldOption;
+    })
 
   const formFields: FormField[] = [
     {
@@ -131,6 +144,13 @@
       min: dateFormat(minDate, "yyyy-mm-dd'T'HH:MM"),
       max: dateFormat(maxDate, "yyyy-mm-dd'T'HH:MM"),
     },
+    {
+      label: "Trọng tài",
+      propertyName: "maTT",
+      type: "select",
+      valueType: "number",
+      options: trongTaiOptions,
+    },
   ];
 
   const columns = [
@@ -164,6 +184,10 @@
       accessFunction: (data: LichThiDau) => {
         return new Date(data.ngayGioThucTe!!).toLocaleString("vi-VN");
       },
+    },
+    {
+      header: "Trọng tài",
+      accessor: "tenTT"
     },
   ];
 
@@ -359,53 +383,6 @@
   type TabId = "matches" | "referees";
   let activeTabId: TabId = $state("matches");
 
-  // --- MOCK DATA CHO TAB TRỌNG TÀI  ---
-  let mockReferees = $state([
-    { id: 1, name: "Nguyễn Văn A" },
-    { id: 2, name: "Trần Thị B" },
-    { id: 3, name: "Lê Hoàng C" },
-    { id: 4, name: "Phạm Minh D" },
-  ]);
-
-  let mockMatchesForAssignment = $state([
-    {
-      id: 101,
-      team1: "Hà Nội FC",
-      team2: "Hoàng Anh Gia Lai",
-      date: "2024-10-26",
-      round: "Vòng 1",
-      refereeId: null as number | null,
-    },
-    {
-      id: 102,
-      team1: "Viettel FC",
-      team2: "Sông Lam Nghệ An",
-      date: "2024-10-26",
-      round: "Vòng 1",
-      refereeId: 2 as number | null,
-    },
-    {
-      id: 103,
-      team1: "Bình Định FC",
-      team2: "Hải Phòng FC",
-      date: "2024-10-27",
-      round: "Vòng 1",
-      refereeId: null as number | null,
-    },
-    {
-      id: 104,
-      team1: "Thanh Hóa FC",
-      team2: "Công An Hà Nội",
-      date: "2024-10-27",
-      round: "Vòng 1",
-      refereeId: 1 as number | null,
-    },
-  ]);
-
-  function saveRefereeAssignments() {
-    console.log("Saving referee assignments:", mockMatchesForAssignment);
-    showOkToast("Đã lưu phân công trọng tài thành công! (Mock)");
-  }
 </script>
 
 <svelte:head>
@@ -472,69 +449,7 @@
     bind:formState
   />
 {:else if activeTabId === "referees"}
-  <div class="bg-white rounded-lg shadow-md p-6 border border-gray-200">
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-xl font-semibold text-gray-800">Phân công Trọng tài</h2>
-      {#if isEditable}
-        <button
-          class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105"
-          onclick={saveRefereeAssignments}
-        >
-          Lưu thay đổi
-        </button>
-      {/if}
-    </div>
-
-    <div class="overflow-x-auto border border-gray-200 rounded-lg">
-      <table class="min-w-full">
-        <thead class="bg-slate-100">
-          <tr>
-            <th
-              class="px-4 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider"
-              >Ngày</th
-            >
-            <th
-              class="px-4 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider"
-              >Vòng đấu</th
-            >
-            <th
-              class="px-4 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider"
-              >Trận đấu</th
-            >
-            <th
-              class="px-4 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider w-1/3"
-              >Trọng tài</th
-            >
-          </tr>
-        </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
-          {#each mockMatchesForAssignment as match (match.id)}
-            <tr class="hover:bg-gray-50 transition-colors">
-              <td class="px-4 py-3 text-sm text-gray-600 whitespace-nowrap"
-                >{match.date}</td
-              >
-              <td class="px-4 py-3 text-sm text-gray-600 whitespace-nowrap"
-                >{match.round}</td
-              >
-              <td class="px-4 py-3 text-sm text-gray-800 font-medium"
-                >{match.team1} vs {match.team2}</td
-              >
-              <td class="px-4 py-3">
-                <select
-                  class="w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
-                  bind:value={match.refereeId}
-                  disabled={!isEditable}
-                >
-                  <option value={null}>-- Chưa phân công --</option>
-                  {#each mockReferees as referee}
-                    <option value={referee.id}>{referee.name}</option>
-                  {/each}
-                </select>
-              </td>
-            </tr>
-          {/each}
-        </tbody>
-      </table>
-    </div>
-  </div>
+  <TrongTaiTable
+    bind:dataTrongTai={danhSachTrongTai}
+  />
 {/if}

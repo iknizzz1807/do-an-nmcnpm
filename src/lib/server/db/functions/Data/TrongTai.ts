@@ -11,6 +11,10 @@ export const selectTrongTaiMaTT = async (maTT: number) => {
   return (await db.select().from(TrongTaiTable).where(eq(TrongTaiTable.maTT, maTT)).limit(1)).at(0) ?? null;
 };
 
+export const selectTrongTaiMaMG = async (maMG: number) => {
+  return await db.select().from(TrongTaiTable).where(eq(TrongTaiTable.maMG, maMG));
+};
+
 export const insertTrongTai = async (...TrongTai: TrongTai[]) => {
     let returning = await db.insert(TrongTaiTable).values(TrongTai).returning({ id: TrongTaiTable.maTT });
     if (returning === null || returning.length === 0)

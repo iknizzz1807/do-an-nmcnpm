@@ -12,6 +12,10 @@ export const upsertThamGiaTD = async (...thamGiaTD: ThamGiaTD[]) => {
   });
 };
 
+export const deleteThamGiaTD = async (maTD: number) => {
+  await db.delete(ThamGiaTDTable).where(eq(ThamGiaTDTable.maTD, maTD));
+}
+
 export const insertThamGiaTD = async (...thamGiaTD: ThamGiaTD[]) => {
   let returning = await db.insert(ThamGiaTDTable).values(thamGiaTD).returning({ id: ThamGiaTDTable.maCT });
     if (returning === null || returning.length === 0)

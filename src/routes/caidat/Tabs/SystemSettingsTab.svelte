@@ -86,6 +86,14 @@
         label="Số cầu thủ tối đa mỗi đội"
         unit=""
       />
+      <SettingNumberInput
+        min={5}
+        max={40}
+        forValue="soCauThuTGTDMax"
+        bind:bindValue={setting.soCauThuTGTDMax}
+        label="Số cầu thủ tham gia thi đấu tối đa"
+        unit=""
+      />
     </SettingSection>
 
     <SettingSection sectionName="Cài đặt trận đấu">
@@ -126,82 +134,6 @@
     </SettingSection>
   </SettingMainSection>
 
-  <!-- <div class="bg-white rounded-lg shadow-md p-6 mt-8 mb-8">
-    <h2 class="text-2xl font-bold text-gray-800 mb-6">Tuỳ chọn hệ thống</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6"> -->
-  <!-- <div>
-        <label
-          class="block text-sm font-medium text-gray-700 mb-2"
-          for="defaultLanguage">Ngôn ngữ mặc định</label
-        >
-        <select
-          id="defaultLanguage"
-          class="block w-full h-12 px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 text-sm bg-white transition-colors duration-200"
-        >
-          <option value="en">English</option>
-          <option value="vi">Tiếng Việt</option>
-        </select>
-      </div> -->
-  <!-- <div> -->
-  <!-- <label
-          class="block text-sm font-medium text-gray-700 mb-1"
-          for="defaultTimeZone">Default Time Zone</label
-        >
-        <select
-          id="defaultTimeZone"
-          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 text-sm"
-        >
-          <option value="UTC+0700">Hanoi, Vietnam (UTC+07:00)</option>
-          <option value="UTC+0000">London, UK (UTC+00:00)</option>
-        </select> -->
-  <!-- </div> -->
-  <!-- <div>
-        <label
-          class="block text-sm font-medium text-gray-700 mb-2"
-          for="dataExportFormat">Format dữ liệu xuất ra</label
-        >
-        <select
-          id="dataExportFormat"
-          class="block w-full h-12 px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 text-sm bg-white transition-colors duration-200"
-        >
-          <option value="csv">CSV</option>
-          <option value="xlsx">Excel (XLSX)</option>
-        </select>
-      </div> -->
-  <!-- <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2"
-          >System Notifications</label
-        >
-        <div class="space-y-2">
-          <div class="flex items-center">
-            <input
-              id="email_notifications"
-              type="checkbox"
-              class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
-              checked
-            />
-            <label
-              for="email_notifications"
-              class="ml-2 block text-sm text-gray-700"
-              >Email Notifications</label
-            >
-          </div>
-          <div class="flex items-center">
-            <input
-              id="browser_notifications"
-              type="checkbox"
-              class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
-            />
-            <label
-              for="browser_notifications"
-              class="ml-2 block text-sm text-gray-700"
-              >Browser Notifications</label
-            >
-          </div>
-        </div>
-      </div> -->
-  <!-- </div>
-  </div> -->
   <div class="mt-4"></div>
   <SettingMainSection sectionName="Quản lý  dữ liệu">
     <div class="p-4 bg-gray-50 rounded-md border border-gray-200">

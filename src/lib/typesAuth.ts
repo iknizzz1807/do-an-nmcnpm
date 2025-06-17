@@ -20,6 +20,7 @@ export type Settings = {
     tuoiMax: number;
     soCauThuMin: number;
     soCauThuMax: number;
+    soCauThuTGTDMax: number;
     doiDaTrenSanNha: number;
     
     thoiDiemGhiBanToiThieu: number;

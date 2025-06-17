@@ -1,3 +1,4 @@
+import { selectThamSo } from "$lib/server/db/functions/ThamSo";
 import { checkPageEditable } from "$lib/server/db/functions/User/UserRole";
 import type { DoiBong, MuaGiai, LichThiDau } from "$lib/typesDatabase";
 import { _GETDoiBong } from "../api/doibong/+server";

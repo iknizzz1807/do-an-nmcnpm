@@ -19,7 +19,7 @@ import { insertLichThiDau } from "./functions/LichThiDau";
 import { TrongTaiTable } from "./schema/TrongTai";
 import { insertTrongTai, selectTrongTaiMaTT } from "./functions/Data/TrongTai";
 import { insertThamGiaTD, selectCauThuTranDau } from "./functions/ThamGiaTD";
-import { randIntBetween } from "../utils";
+import { randDateBetween, randIntBetween } from "../utils";
 import { insertBanThang } from "./functions/BanThang";
 import { selectMuaGiaiMaMG } from "./functions/MuaGiai";
 import { seed } from "drizzle-seed";
@@ -77,6 +77,7 @@ positionMap.set("Left-Back", 5);
 positionMap.set("Right-Back", 5);
 positionMap.set("Centre-Back", 5);
 
+const soCauThuTGTDMax = (await selectThamSo("soCauThuTGTDMax"))!!;
 
 const seedSeason = async(teams: any, matches: any) => {
   const season = teams.season;
@@ -124,7 +125,7 @@ const seedSeason = async(teams: any, matches: any) => {
       let trongTai = await insertTrongTai({
         tenTT: match.referees[0].name,
         maMG: season.id,
-        ngaySinh: dateFormat(new Date(), "isoDate"),  
+        ngaySinh: dateFormat(randDateBetween(new Date("1980-01-01"), new Date("2000-01-01")), "isoDate"),  
       });
       trongTaiMap.set(match.referees[0].id, trongTai.at(0)?.id!!);
     }
@@ -150,7 +151,7 @@ const seedSeason = async(teams: any, matches: any) => {
     })
 
     
-    const CTDoiMot : CauThu[] = (await selectCauThuDoiBong(teamsMap.get(match.homeTeam.id)!!));
+    const CTDoiMot : CauThu[] = (await selectCauThuDoiBong(teamsMap.get(match.homeTeam.id)!!)).slice(0, soCauThuTGTDMax);
     const doiMot = teams.teams.find((value : any) => value.id === match.homeTeam.id)!!;
     const thamGiaDoiMot = CTDoiMot.map(value => ({ 
       maTD: match.id, 
@@ -159,7 +160,7 @@ const seedSeason = async(teams: any, matches: any) => {
       maVT: positionMap.get(doiMot.squad.find((player: any) => playersMap.get(player.id) === value.maCT)?.position) ?? 1
     }));
 
-    const CTDoiHai : CauThu[] = (await selectCauThuDoiBong(teamsMap.get(match.awayTeam.id)!!));
+    const CTDoiHai : CauThu[] = (await selectCauThuDoiBong(teamsMap.get(match.awayTeam.id)!!)).slice(0, soCauThuTGTDMax);
     const doiHai = teams.teams.find((value : any) => value.id === match.awayTeam.id)!!;
     const thamGiaDoiHai = CTDoiHai.map(value => ({ 
       maTD: match.id, 

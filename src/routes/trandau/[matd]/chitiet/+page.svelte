@@ -91,12 +91,20 @@
     };
     console.log(newParticipant);
     if (activeTab === "team1") {
+      if (participatingTeam1Players.length >= data.soCauThuTGTDMax) {
+        showErrorToast(`Đội ${tenDoiMot} đã đủ cầu thủ tham gia thi đấu.`);
+        return;
+      }
       // Create new array to trigger reactivity
       participatingTeam1Players = [
         newParticipant,
         ...participatingTeam1Players,
       ];
     } else {
+      if (participatingTeam2Players.length >= data.soCauThuTGTDMax) {
+        showErrorToast(`Đội ${tenDoiHai} đã đủ cầu thủ tham gia thi đấu.`);
+        return;
+      }
       participatingTeam2Players = [
         newParticipant,
         ...participatingTeam2Players,
@@ -139,7 +147,7 @@
         },
         body: JSON.stringify(body),
       });
-      if (!response.ok) throw new Error("wtf");
+      if (!response.ok) throw new Error("Không thể cập nhật đội hình thi đấu");
 
       showOkToast("Cập nhật thành công");
     } catch (e) {

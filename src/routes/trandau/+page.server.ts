@@ -1,5 +1,6 @@
 import { selectTiSoPhanLuoiTranDau, selectTiSoTranDau } from "$lib/server/db/functions/BanThang";
 import { selectSanNhaMuaGiai } from "$lib/server/db/functions/Data/SanNha";
+import { selectAllTrongTai, selectTrongTaiMaMG, selectTrongTaiMaTT } from "$lib/server/db/functions/Data/TrongTai";
 import { selectAllVongTD } from "$lib/server/db/functions/Data/VongTD";
 import { checkPageEditable } from "$lib/server/db/functions/User/UserRole";
 import type { DoiBong, MuaGiai, LichThiDau, VongTD, SanNha } from "$lib/typesDatabase";
@@ -36,6 +37,7 @@ export const load = (async ({ fetch, locals, route }) => {
       danhSachMuaGiai,
       danhSachVTD,
       danhSachSan,
+      danhSachTrongTai: await selectTrongTaiMaMG(locals.muaGiai!!.maMG!!),
       minDate: new Date(locals.muaGiai!!.ngayDienRa!!),
       maxDate: new Date(locals.muaGiai!!.ngayKetThuc!!),
       isEditable,
@@ -48,6 +50,7 @@ export const load = (async ({ fetch, locals, route }) => {
       danhSachVTD: [],
       danhSachMuaGiai: [],
       danhSachSan: [],
+      danhSachTrongTai: [],
       minDate: new Date(),
       maxDate: new Date(),
       isEditable: false
