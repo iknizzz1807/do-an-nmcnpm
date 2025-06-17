@@ -8,6 +8,7 @@ import { sql } from 'drizzle-orm';
 import { SanNhaTable } from './Data/SanNha';
 import { VongTDTable } from './Data/VongTD';
 import { TrongTaiTable } from './TrongTai';
+import type { LichThiDauBackup } from '$lib/typesBackup';
 
 export const LichThiDauTable = sqliteTable('LichThiDau', {
     maTD: integer().notNull().unique().primaryKey({ autoIncrement: true }),
@@ -33,18 +34,18 @@ export const LichThiDauTable = sqliteTable('LichThiDau', {
 
 export const LichThiDauTableBackup = sqliteTable('LichThiDauBackup', {
     BackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
-    modifiedDate: integer({mode: "timestamp"}).notNull(),
+    modifiedDate: text().notNull(),
     maTD: integer().notNull(),
     maMG: integer().notNull(),
     maVTD: integer(),
-    maSan: integer().notNull(),
+    maSan: integer(),
 
     doiMot: integer().notNull(),
     doiHai: integer().notNull(),
     doiThang: integer(),
    
-    ngayGioDuKien: text().notNull(),
-    ngayGioThucTe: text().notNull(),
+    ngayGioDuKien: text(),
+    ngayGioThucTe: text(),
 
     thoiGianDaThiDau: real().notNull(),
 
@@ -56,3 +57,4 @@ export type InsertLichThiDauParams = typeof LichThiDauTable.$inferInsert;
 export type InsertLichThiDauBackupParams = typeof LichThiDauTableBackup.$inferInsert;
 
 const checkType : TypesAreEqual<InsertLichThiDauParams, LichThiDau> = true;
+const checkTypeBackUp : TypesAreEqual<InsertLichThiDauBackupParams, LichThiDauBackup> = true;

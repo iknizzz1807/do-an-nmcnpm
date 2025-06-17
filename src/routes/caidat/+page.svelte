@@ -11,6 +11,7 @@
   import SettingLoaiBTTable from "./Tables/SettingLoaiBTTable.svelte";
   import SettingVongTDTable from "./Tables/SettingVongTDTable.svelte";
   import SettingDiemSoTable from "./Tables/SettingDiemSoTable.svelte";
+  import SettingTieuChiXepHangTable from "./Tables/SettingTieuChiXepHangTable.svelte";
 
   const { data }: PageProps = $props();
 
@@ -34,6 +35,7 @@
     { id: "viTri", name: "Vị trí" },
     { id: "vongTD", name: "Vòng thi đấu" },
     { id: "diemSo", name: "Điểm số" },
+    { id: "tieuChiXepHang", name: "Tiêu chí xếp hạng" },
   ];
   let activeSettingsTab: SettingsTab = $state(tabs[0]);
   // --- End Tab Management ---
@@ -81,6 +83,8 @@
       <SettingVongTDTable dataVongTD={data.vongTD} />
     {:else if activeSettingsTab.id === "diemSo"}
       <SettingDiemSoTable dataDiemSo={data.diemSo} />
+    {:else if activeSettingsTab.id === "tieuChiXepHang"}
+      <SettingTieuChiXepHangTable dataTieuChiXepHang={data.tieuChiXepHang} />
     {/if}
   </div>
 </div>

@@ -67,8 +67,8 @@ export const selectBXHDoiNgay = async (ngay: Date) => {
       soTranThang: soTranThang,
       soTranThua: soTranThua,
       soTranHoa: soTran - soTranThang - soTranThua,
-      hieuSo: 0,
-      diem: soBanThang.soBanThang,
+      hieuSo: soBanThang.soBanThang,
+      diem: 0,
       hang: 0,
     }
     result.push(doiBXH);
@@ -138,8 +138,8 @@ export const selectBXHDoiThang = async (thang: Date) => {
       soTranThua: soTranThua,
       soTranHoa: soTran - soTranThang - soTranThua,
       hang: 0,
-      hieuSo: 0,
-      diem: soBanThang.soBanThang,
+      hieuSo: soBanThang.soBanThang,
+      diem: 0,
     }
     // console.log(doiBXH);
     result.push(doiBXH);
@@ -206,8 +206,8 @@ export const selectBXHDoiMuaGiai = async (maMG: number) => {
       soTranThua: soTranThua,
       soTranHoa: soTran - soTranThang - soTranThua,
       hang: 0,
-      hieuSo: 0,
-      diem: soBanThang.soBanThang,
+      hieuSo: soBanThang.soBanThang,
+      diem: 0,
     }
     // console.log(doiBXH);
     result.push(doiBXH);

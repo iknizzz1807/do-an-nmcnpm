@@ -21,7 +21,7 @@ export const ThePhatTable = sqliteTable('ThePhat', {
 
 export const ThePhatTableBackup = sqliteTable('ThePhatBackup', {
   BackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
-  modifiedDate: integer({mode: "timestamp"}).notNull(),
+  modifiedDate: text().notNull(),
   maTD: integer().notNull(),
   maCT: integer().notNull(),
   thoiDiem: real().notNull(),

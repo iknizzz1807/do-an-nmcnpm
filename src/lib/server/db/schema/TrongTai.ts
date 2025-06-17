@@ -17,7 +17,7 @@ export const TrongTaiTable = sqliteTable('TrongTai', {
 
 export const TrongTaiTableBackup = sqliteTable('TrongTaiBackup', {
     BackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
-    modifiedDate: integer({mode: "timestamp"}).notNull(),
+    modifiedDate: text().notNull(),
     maTT: integer().notNull(),
     tenTT: text().notNull(),
     ngaySinh: text().notNull(),

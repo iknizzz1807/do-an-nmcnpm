@@ -19,7 +19,7 @@ export const ThamGiaDBTable = sqliteTable('ThamGiaDB', {
 
 export const ThamGiaDBTableBackup = sqliteTable('ThamGiaDBBackup', {
     BackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
-    modifiedDate: integer({mode: "timestamp"}).notNull(),
+    modifiedDate: text().notNull(),
     maDoi: integer().notNull(),
     maCT: integer().notNull(),
     maMG: integer().notNull()

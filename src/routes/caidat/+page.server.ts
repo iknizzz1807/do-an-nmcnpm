@@ -20,6 +20,7 @@ import { selectAllLoaiBT } from "$lib/server/db/functions/Data/LoaiBT";
 import { selectAllViTri } from "$lib/server/db/functions/Data/ViTri";
 import { selectAllVongTD } from "$lib/server/db/functions/Data/VongTD";
 import { selectAllDiemSo } from "$lib/server/db/functions/Data/DiemSo";
+import { selectAllTieuChiXepHang } from "$lib/server/db/functions/Data/TieuChiXepHang";
 
 export const load = (async ({ locals, route }) => {
   const roleId = 9999;
@@ -38,5 +39,6 @@ export const load = (async ({ locals, route }) => {
     viTri: await selectAllViTri(),
     vongTD: await selectAllVongTD(),
     diemSo: await selectAllDiemSo(),
+    tieuChiXepHang: await selectAllTieuChiXepHang(),
   };
 }) satisfies PageServerLoad;

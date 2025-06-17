@@ -22,7 +22,7 @@ export const BanThangTable = sqliteTable('BanThang', {
 
 export const BanThangTableBackup = sqliteTable('BanThangBackup', {
     BackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
-    modifiedDate: integer({mode: "timestamp"}).notNull(),
+    modifiedDate: text().notNull(),
     maTD: integer().notNull(),
     thoiDiem: real().notNull(),
     

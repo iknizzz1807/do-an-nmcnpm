@@ -1,5 +1,6 @@
 import type { ThamSo } from "$lib/typesDatabase";
 import { db } from "./client";
+import { insertTieuChiXepHang } from "./functions/Data/TieuChiXepHang";
 import { createAdmin } from "./functions/User/Admin";
 import { DiemSoTable } from "./schema/Data/DiemSo";
 import { LoaiBTTable } from "./schema/Data/LoaiBT";
@@ -73,6 +74,11 @@ const viTris = [
   "Tiền vệ",
   "Tiền đạo"
 ]
+
+await insertTieuChiXepHang(
+  { tenTC: "diem", uuTien: 1 },
+  { tenTC: "hieuSo", uuTien: 2 },
+);
 
 await db.insert(ViTriTable).values(viTris.map(value => ({ tenVT: value })));
 

@@ -1,9 +1,10 @@
 import type { RequestHandler } from "@sveltejs/kit";
 import { selectBXHDoiNgay, selectBXHDoiThang } from "$lib/server/db/functions/BangXepHang";
 import type { BangXepHangNgay } from "$lib/typesResponse";
-import { errorResponseJSON } from "$lib";
+import { errorResponseJSON, isNumber } from "$lib";
 import { selectThamSo } from "$lib/server/db/functions/ThamSo";
 import { selectDiemSoTen } from "$lib/server/db/functions/Data/DiemSo";
+import { selectAllTieuChiXepHang } from "$lib/server/db/functions/Data/TieuChiXepHang";
 
 export const _GETBXHNgay = async (ngay: Date) => {
   const danhSachTranDau = await selectBXHDoiNgay(ngay);
@@ -12,11 +13,33 @@ export const _GETBXHNgay = async (ngay: Date) => {
   const diemHoa = (await selectDiemSoTen("Hòa"))!!.diemSo;
   const diemThua = (await selectDiemSoTen("Thua"))!!.diemSo;
   for (let tranDau of danhSachTranDau) {
-    tranDau.hieuSo = diemThang * tranDau.soTranThang + 
+    tranDau.diem = diemThang * tranDau.soTranThang + 
       diemHoa * tranDau.soTranHoa + 
       diemThua * tranDau.soTranThua;
   }
-  danhSachTranDau.sort((a: BangXepHangNgay, b: BangXepHangNgay) => b.hieuSo - a.hieuSo);
+  const tieuChi = new Map((await selectAllTieuChiXepHang()).sort((a, b) => b.uuTien - a.uuTien).map(tc => [tc.tenTC, tc]));
+  danhSachTranDau.sort((a: BangXepHangNgay, b: BangXepHangNgay) => {
+    if (tieuChi.size === 0) return b.diem - a.diem;
+    
+    for (const [key, tc] of tieuChi) {
+      const valueA = a[key as keyof BangXepHangNgay];
+      const valueB = b[key as keyof BangXepHangNgay];
+      // Skip if either value is null/undefined
+      if (valueA == null || valueB == null) continue;
+      
+      const numA = typeof valueA === 'string' ? parseFloat(valueA) : valueA;
+      const numB = typeof valueB === 'string' ? parseFloat(valueB) : valueB;
+      
+      if (typeof numA !== 'number' || typeof numB !== 'number') continue;
+      if (!isNumber(numA) || !isNumber(numB)) continue; 
+
+      if (numA !== numB) {
+        return (numB - numA);
+      }
+    }
+    return 0;
+  });
+    
   for (let i = 0; i < danhSachTranDau.length; i++) danhSachTranDau[i].hang = i + 1;
   return danhSachTranDau;
 }

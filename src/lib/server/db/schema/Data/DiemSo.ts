@@ -10,7 +10,7 @@ export const DiemSoTable = sqliteTable('DiemSo', {
 
 export const DiemSoTableBackup = sqliteTable('DiemSoBackup', {
     BackupID: integer().notNull().unique().primaryKey({ autoIncrement: true }),
-    modifiedDate: integer({mode: "timestamp"}).notNull(),
+    modifiedDate: text().notNull(),
     maDS: integer().notNull(),
     tenDS: text().notNull(),
     diemSo: integer().notNull(),

@@ -1,19 +1,27 @@
 // Database
-export type ThamSo = {
+export type ThamSoBackup = {
+  BackupID?: number | undefined;
+  modifiedDate: string;
   tenThamSo: string;
   giaTri: number;
 };
 
-export type MuaGiai = {
-  maMG?: number | undefined;
+export type MuaGiaiBackup = {
+  
+  BackupID?: number | undefined;
+  modifiedDate: string;
+  maMG: number;
   tenMG: string;
   ngayDienRa: string;
   ngayKetThuc: string;
   imageURL?: string | null | undefined;
 };
 
-export type DoiBong = {
-  maDoi?: number | undefined;
+export type DoiBongBackup = {
+  
+  BackupID?: number | undefined;
+  modifiedDate: string;
+  maDoi: number;
   tenDoi: string;
   maSan?: number | null | undefined;
   maMG: number;
@@ -24,8 +32,11 @@ export type DoiBong = {
   logoUrl?: string | undefined;
 };
 
-export type CauThu = {
-  maCT?: number | undefined;
+export type CauThuBackup = {
+  
+  BackupID?: number | undefined;
+  modifiedDate: string;
+  maCT: number;
   tenCT: string;
   ngaySinh: string;
   ghiChu: string;
@@ -37,33 +48,47 @@ export type CauThu = {
   banThang?: number | undefined;
 };
 
-export type TrongTai = {
-  maTT?: number | undefined;
+export type TrongTaiBackup = {
+  
+  BackupID?: number | undefined;
+  modifiedDate: string;
+  maTT: number;
   tenTT: string;
   ngaySinh: string;
   maMG: number;
 };
 
-export type ThamGiaDB = {
+export type ThamGiaDBBackup = {
+  
+  BackupID?: number | undefined;
+  modifiedDate: string;
   maDoi: number;
   maCT: number;
   maMG: number;
 };
 
-export type TieuChiXepHang = {
-    tenTC: string;
-    uuTien: number;
-    maTC?: number | undefined;
+export type TieuChiXepHangBackup = {
+  
+  BackupID?: number | undefined;
+  modifiedDate: string;
+  tenTC: string;
+  uuTien: number;
+  maTC: number;
 }
 
-export type ThamGiaTD = {
+export type ThamGiaTDBackup = {
+  
+  BackupID?: number | undefined;
+  modifiedDate: string;
   maTD: number;
   maDoi: number;
   maCT: number;
   maVT?: number | null | undefined;
 };
 
-export type BanThang = {
+export type BanThangBackup = {
+  BackupID?: number | undefined;
+  modifiedDate: string;
   maTD: number;
   maCT: number;
   thoiDiem: number;
@@ -75,7 +100,10 @@ export type BanThang = {
   tenLBT?: string | undefined;
 };
 
-export type ThePhat = {
+export type ThePhatBackup = {
+  
+  BackupID?: number | undefined;
+  modifiedDate: string;
   maTD: number;
   maCT: number;
   thoiDiem: number;
@@ -86,8 +114,11 @@ export type ThePhat = {
   tenDoi?: string | undefined;
 };
 
-export type LichThiDau = {
-  maTD?: number | undefined;
+export type LichThiDauBackup = {
+  
+  BackupID?: number | undefined;
+  modifiedDate: string;
+  maTD: number;
   maMG: number;
   maVTD?: number | null | undefined;
   maSan?: number | null | undefined;
@@ -96,8 +127,8 @@ export type LichThiDau = {
   doiHai: number;
   doiThang?: number | null | undefined;
 
-  ngayGioDuKien?: string | undefined;
-  ngayGioThucTe?: string | undefined;
+  ngayGioDuKien?: string | null | undefined;
+  ngayGioThucTe?: string | null | undefined;
 
   thoiGianDaThiDau: number;
   maTT?: number | null | undefined;
@@ -115,43 +146,64 @@ export type LichThiDau = {
 };
 
 // DATA
-export type SanNha = {
-  maSan?: number | undefined;
+export type SanNhaBackup = {
+  
+  BackupID?: number | undefined;
+  modifiedDate: string;
+  maSan: number;
   tenSan: string;
   diaChi: string;
   maMG: number;
 };
 
-export type DiemSo = {
-  maDS?: number | undefined;
+export type DiemSoBackup = {
+  
+  BackupID?: number | undefined;
+  modifiedDate: string;
+  maDS: number;
   tenDS: string;
   diemSo: number;
 };
 
-export type LoaiCT = {
-  maLCT?: number | undefined;
+export type LoaiCTBackup = {
+  
+  BackupID?: number | undefined;
+  modifiedDate: string;
+  maLCT: number;
   tenLCT: string;
   soCauThuToiDa: number;
 };
 
-export type VongTD = {
-  maVTD?: number | undefined;
+export type VongTDBackup = {
+  
+  BackupID?: number | undefined;
+  modifiedDate: string;
+  maVTD: number;
   tenVTD: string;
 };
 
-export type LoaiBT = {
-  maLBT?: number | undefined;
+export type LoaiBTBackup = {
+  
+  BackupID?: number | undefined;
+  modifiedDate: string;
+  maLBT: number;
   tenLBT: string;
   diemBT?: number | undefined;
 };
 
-export type LoaiTP = {
-  maLTP?: number | undefined;
+export type LoaiTPBackup = {
+  
+  BackupID?: number | undefined;
+  modifiedDate: string;
+  maLTP: number;
   tenLTP: string;
   soThePhatToiDa: number;
 };
 
-export type ViTri = {
-  maVT?: number | undefined;
+export type ViTriBackup = {
+  
+  BackupID?: number | undefined;
+  modifiedDate: string;
+  maVT: number;
   tenVT: string;
 };

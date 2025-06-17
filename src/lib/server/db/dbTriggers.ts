@@ -10,7 +10,7 @@ const createBTBackupTrigger = async() => {
       AFTER DELETE ON BanThang
       BEGIN
       INSERT INTO BanThangBackup(modifiedDate, maTD, thoiDiem, maCT, maLBT)
-      VALUES(datetime('now'), OLD.maTD, OLD.thoiDiem, OLD.maCT, OLD.maLBT);
+      VALUES(datetime('now','localtime'), OLD.maTD, OLD.thoiDiem, OLD.maCT, OLD.maLBT);
       END
       `);
       tx.run(sql`
@@ -18,7 +18,7 @@ const createBTBackupTrigger = async() => {
       AFTER UPDATE ON BanThang
       BEGIN
       INSERT INTO BanThangBackup(modifiedDate, maTD, thoiDiem, maCT, maLBT)
-      VALUES(datetime('now'), OLD.maTD, OLD.thoiDiem, OLD.maCT, OLD.maLBT);
+      VALUES(datetime('now','localtime'), OLD.maTD, OLD.thoiDiem, OLD.maCT, OLD.maLBT);
       END
       `);
       // Trigger check Cầu thủ ghi bàn có thuộc đội ghi bàn không
@@ -71,7 +71,7 @@ const createCTBackupTrigger = async() => {
       AFTER DELETE ON CauThu
       BEGIN
           INSERT INTO CauThuBackup(modifiedDate, maCT, tenCT, ngaySinh, ghiChu, soAo, maLCT, maDoi, imageURL)
-          VALUES(datetime('now'), OLD.maCT, OLD.tenCT, OLD.ngaySinh, OLD.ghiChu, OLD.soAo, OLD.maLCT, OLD.maDoi, OLD.imageURL);
+          VALUES(datetime('now','localtime'), OLD.maCT, OLD.tenCT, OLD.ngaySinh, OLD.ghiChu, OLD.soAo, OLD.maLCT, OLD.maDoi, OLD.imageURL);
       END
       `);
       tx.run(sql`
@@ -79,7 +79,7 @@ const createCTBackupTrigger = async() => {
       AFTER UPDATE ON CauThu
       BEGIN
           INSERT INTO CauThuBackup(modifiedDate, maCT, tenCT, ngaySinh, ghiChu, soAo, maLCT, maDoi, imageURL)
-          VALUES(datetime('now'), OLD.maCT, OLD.tenCT, OLD.ngaySinh, OLD.ghiChu, OLD.soAo, OLD.maLCT, OLD.maDoi, OLD.imageURL);
+          VALUES(datetime('now','localtime'), OLD.maCT, OLD.tenCT, OLD.ngaySinh, OLD.ghiChu, OLD.soAo, OLD.maLCT, OLD.maDoi, OLD.imageURL);
       END
       `);
   });
@@ -94,7 +94,7 @@ const createDBBackupTrigger = async() => {
       AFTER DELETE ON DoiBong
       BEGIN
         INSERT INTO DoiBongBackup(modifiedDate, maDoi, tenDoi, maSan, maMG, imageURL)
-        VALUES(datetime('now'), OLD.maDoi, OLD.tenDoi, OLD.maSan, OLD.maMG, OLD.imageURL);
+        VALUES(datetime('now','localtime'), OLD.maDoi, OLD.tenDoi, OLD.maSan, OLD.maMG, OLD.imageURL);
       END
       `);
       tx.run(sql`
@@ -102,7 +102,7 @@ const createDBBackupTrigger = async() => {
       AFTER UPDATE ON DoiBong
       BEGIN
         INSERT INTO DoiBongBackup(modifiedDate, maDoi, tenDoi, maSan, maMG, imageURL)
-        VALUES(datetime('now'), OLD.maDoi, OLD.tenDoi, OLD.maSan, OLD.maMG, OLD.imageURL);
+        VALUES(datetime('now','localtime'), OLD.maDoi, OLD.tenDoi, OLD.maSan, OLD.maMG, OLD.imageURL);
       END
       `);
   });
@@ -118,7 +118,7 @@ const createMGBackupTrigger = async() => {
       AFTER DELETE ON MuaGiai
       BEGIN
           INSERT INTO MuaGiaiBackup(modifiedDate, maMG, tenMG, ngayDienRa, ngayKetThuc, imageURL)
-          VALUES(datetime('now'), OLD.maMG, OLD.tenMG, OLD.ngayDienRa, OLD.ngayKetThuc, OLD.imageURL);
+          VALUES(datetime('now','localtime'), OLD.maMG, OLD.tenMG, OLD.ngayDienRa, OLD.ngayKetThuc, OLD.imageURL);
       END
       `);
       tx.run(sql`
@@ -126,7 +126,7 @@ const createMGBackupTrigger = async() => {
       AFTER UPDATE ON MuaGiai
       BEGIN
           INSERT INTO MuaGiaiBackup(modifiedDate, maMG, tenMG, ngayDienRa, ngayKetThuc, imageURL)
-          VALUES(datetime('now'), OLD.maMG, OLD.tenMG, OLD.ngayDienRa, OLD.ngayKetThuc, OLD.imageURL);
+          VALUES(datetime('now','localtime'), OLD.maMG, OLD.tenMG, OLD.ngayDienRa, OLD.ngayKetThuc, OLD.imageURL);
       END
       `);
   });
@@ -142,7 +142,7 @@ const createLTDBackupTrigger = async() => {
     AFTER DELETE ON LichThiDau
     BEGIN
       INSERT INTO LichThiDauBackup(modifiedDate, maTD, maMG, maVTD, maSan, doiMot, doiHai, doiThang, ngayGioDuKien, ngayGioThucTe, ThoiGianDaThiDau, maTT)
-      VALUES(datetime('now'), OLD.maTD, OLD.maMG, OLD.maVTD, OLD.maSan, OLD.doiMot, OLD.doiHai, OLD.doiThang, OLD.ngayGioDuKien, OLD.ngayGioThucTe, OLD.ThoiGianDaThiDau, OLD.maTT);
+      VALUES(datetime('now','localtime'), OLD.maTD, OLD.maMG, OLD.maVTD, OLD.maSan, OLD.doiMot, OLD.doiHai, OLD.doiThang, OLD.ngayGioDuKien, OLD.ngayGioThucTe, OLD.ThoiGianDaThiDau, OLD.maTT);
     END
     `);
     tx.run(sql`
@@ -150,7 +150,7 @@ const createLTDBackupTrigger = async() => {
     AFTER UPDATE ON LichThiDau
     BEGIN
       INSERT INTO LichThiDauBackup(modifiedDate, maTD, maMG, maVTD, maSan, doiMot, doiHai, doiThang, ngayGioDuKien, ngayGioThucTe, ThoiGianDaThiDau, maTT)
-      VALUES(datetime('now'), OLD.maTD, OLD.maMG, OLD.maVTD, OLD.maSan, OLD.doiMot, OLD.doiHai, OLD.doiThang, OLD.ngayGioDuKien, OLD.ngayGioThucTe, OLD.ThoiGianDaThiDau, OLD.maTT);
+      VALUES(datetime('now','localtime'), OLD.maTD, OLD.maMG, OLD.maVTD, OLD.maSan, OLD.doiMot, OLD.doiHai, OLD.doiThang, OLD.ngayGioDuKien, OLD.ngayGioThucTe, OLD.ThoiGianDaThiDau, OLD.maTT);
     END
     `);
   });
@@ -166,7 +166,7 @@ const createSNBackupTrigger = async() => {
       AFTER DELETE ON SanNha
       BEGIN
         INSERT INTO SanNhaBackup(modifiedDate, maSan, tenSan, diaChi, maMG)
-        VALUES(datetime('now'), OLD.maSan, OLD.tenSan, OLD.diaChi, OLD.maMG);
+        VALUES(datetime('now','localtime'), OLD.maSan, OLD.tenSan, OLD.diaChi, OLD.maMG);
       END
       `);
       tx.run(sql`
@@ -174,7 +174,7 @@ const createSNBackupTrigger = async() => {
       AFTER UPDATE ON SanNha
       BEGIN
         INSERT INTO SanNhaBackup(modifiedDate, maSan, tenSan, diaChi, maMG)
-        VALUES(datetime('now'), OLD.maSan, OLD.tenSan, OLD.diaChi, OLD.maMG);
+        VALUES(datetime('now','localtime'), OLD.maSan, OLD.tenSan, OLD.diaChi, OLD.maMG);
       END
     `);
   });
@@ -190,7 +190,7 @@ createSNBackupTrigger()// .catch(console.error); // This may cause some horrible
 //       AFTER DELETE ON ThamGiaDB
 //       BEGIN
 //       INSERT INTO ThamGiaDBBackup(modifiedDate, maDoi, maCT, maMG)
-//       VALUES(datetime('now'), OLD.maDoi, OLD.maCT, OLD.maMG);
+//       VALUES(datetime('now','localtime'), OLD.maDoi, OLD.maCT, OLD.maMG);
 //       END
 //       `);
 //       tx.run(sql`
@@ -198,7 +198,7 @@ createSNBackupTrigger()// .catch(console.error); // This may cause some horrible
 //       AFTER UPDATE ON ThamGiaDB
 //       BEGIN
 //       INSERT INTO ThamGiaDBBackup(modifiedDate, maDoi, maCT, maMG)
-//       VALUES(datetime('now'), OLD.maDoi, OLD.maCT, OLD.maMG);
+//       VALUES(datetime('now','localtime'), OLD.maDoi, OLD.maCT, OLD.maMG);
 //       END
 //       `);
 //       // // Trigger giới hạn cầu thủ tối đa và cầu thủ nước ngoài tối đa
@@ -245,7 +245,7 @@ const createTGTDBackupTrigger = async() => {
       AFTER DELETE ON ThamGiaTD
       BEGIN
         INSERT INTO ThamGiaTDBackup(modifiedDate, maTD, maCT, maDoi, maVT)
-        VALUES(datetime('now'), OLD.maTD, OLD.maCT, OLD.maDoi, OLD.maVT);
+        VALUES(datetime('now','localtime'), OLD.maTD, OLD.maCT, OLD.maDoi, OLD.maVT);
       END
       `);
       tx.run(sql`
@@ -253,7 +253,7 @@ const createTGTDBackupTrigger = async() => {
       AFTER UPDATE ON ThamGiaTD
       BEGIN
         INSERT INTO ThamGiaTDBackup(modifiedDate, maTD, maCT, maDoi, maVT)
-        VALUES(datetime('now'), OLD.maTD, OLD.maCT, OLD.maDoi, OLD.maVT);
+        VALUES(datetime('now','localtime'), OLD.maTD, OLD.maCT, OLD.maDoi, OLD.maVT);
       END
     `);
   });
@@ -269,7 +269,7 @@ createTGTDBackupTrigger()// .catch(console.error); // This may cause some horrib
 //       AFTER DELETE ON ThePhat
 //       BEGIN
 //       INSERT INTO ThePhatBackup(modifiedDate, maTD, maCT, thoiDiem, maLTP)
-//       VALUES(datetime('now'), OLD.maTD, OLD.maCT, OLD.thoiDiem, OLD.maLTP);
+//       VALUES(datetime('now','localtime'), OLD.maTD, OLD.maCT, OLD.thoiDiem, OLD.maLTP);
 //       END
 //       `);
 //       tx.run(sql`
@@ -277,7 +277,7 @@ createTGTDBackupTrigger()// .catch(console.error); // This may cause some horrib
 //       AFTER UPDATE ON ThePhat
 //       BEGIN
 //       INSERT INTO ThePhatBackup(modifiedDate, maTD, maCT, thoiDiem, maLTP)
-//       VALUES(datetime('now'), OLD.maTD, OLD.maCT, OLD.thoiDiem, OLD.maLTP);
+//       VALUES(datetime('now','localtime'), OLD.maTD, OLD.maCT, OLD.thoiDiem, OLD.maLTP);
 //       END
 //       `);
 //       // Trigger check Cầu thủ bị phạt có thuộc đội bị phạt không
@@ -331,7 +331,7 @@ const createLBTBackupTrigger = async() => {
       AFTER DELETE ON LoaiBT
       BEGIN
       INSERT INTO LoaiBTBackup(modifiedDate, maLBT, tenLBT, diemBT)
-      VALUES(datetime('now'), OLD.maLBT, OLD.tenLBT, OLD.diemBT);
+      VALUES(datetime('now','localtime'), OLD.maLBT, OLD.tenLBT, OLD.diemBT);
       END
       `);
       tx.run(sql`
@@ -339,7 +339,7 @@ const createLBTBackupTrigger = async() => {
       AFTER UPDATE ON LoaiBT
       BEGIN
       INSERT INTO LoaiBTBackup(modifiedDate, maLBT, tenLBT, diemBT)
-      VALUES(datetime('now'), OLD.maLBT, OLD.tenLBT, OLD.diemBT);
+      VALUES(datetime('now','localtime'), OLD.maLBT, OLD.tenLBT, OLD.diemBT);
       END
       `);
   });
@@ -354,7 +354,7 @@ createLBTBackupTrigger();
 //       AFTER DELETE ON LoaiTP
 //       BEGIN
 //       INSERT INTO LoaiTPBackup(modifiedDate, maLTP, tenLTP)
-//       VALUES(datetime('now'), OLD.maLTP, OLD.tenLTP);
+//       VALUES(datetime('now','localtime'), OLD.maLTP, OLD.tenLTP);
 //       END
 //       `);
 //       tx.run(sql`
@@ -362,7 +362,7 @@ createLBTBackupTrigger();
 //       AFTER UPDATE ON LoaiTP
 //       BEGIN
 //       INSERT INTO LoaiTPBackup(modifiedDate, maLTP, tenLTP)
-//       VALUES(datetime('now'), OLD.maLTP, OLD.tenLTP);
+//       VALUES(datetime('now','localtime'), OLD.maLTP, OLD.tenLTP);
 //       END
 //       `);
 //   });
@@ -377,7 +377,7 @@ const createVTBackupTrigger = async() => {
       AFTER DELETE ON ViTri
       BEGIN
       INSERT INTO ViTriBackup(modifiedDate, maVT, tenVT)
-      VALUES(datetime('now'), OLD.maVT, OLD.tenVT);
+      VALUES(datetime('now','localtime'), OLD.maVT, OLD.tenVT);
       END
       `);
       tx.run(sql`
@@ -385,7 +385,7 @@ const createVTBackupTrigger = async() => {
       AFTER UPDATE ON ViTri
       BEGIN
       INSERT INTO ViTriBackup(modifiedDate, maVT, tenVT)
-      VALUES(datetime('now'), OLD.maVT, OLD.tenVT);
+      VALUES(datetime('now','localtime'), OLD.maVT, OLD.tenVT);
       END
       `);
   });
@@ -400,7 +400,7 @@ const createLCTBackupTrigger = async() => {
       AFTER DELETE ON LoaiCT
       BEGIN
       INSERT INTO LoaiCTBackup(modifiedDate, maLCT, tenLCT, soCauThuToiDa)
-      VALUES(datetime('now'), OLD.maLCT, OLD.tenLCT, OLD.soCauThuToiDa);
+      VALUES(datetime('now','localtime'), OLD.maLCT, OLD.tenLCT, OLD.soCauThuToiDa);
       END
       `);
       tx.run(sql`
@@ -408,7 +408,7 @@ const createLCTBackupTrigger = async() => {
       AFTER UPDATE ON LoaiCT
       BEGIN
       INSERT INTO LoaiCTBackup(modifiedDate, maLCT, tenLCT, soCauThuToiDa)
-      VALUES(datetime('now'), OLD.maLCT, OLD.tenLCT, OLD.soCauThuToiDa);
+      VALUES(datetime('now','localtime'), OLD.maLCT, OLD.tenLCT, OLD.soCauThuToiDa);
       END
       `);
   });
@@ -424,7 +424,7 @@ const createVTDBackupTrigger = async() => {
       AFTER DELETE ON VongTD
       BEGIN
       INSERT INTO VongTDBackup(modifiedDate, maVTD, tenVTD)
-      VALUES(datetime('now'), OLD.maVTD, OLD.tenVTD);
+      VALUES(datetime('now','localtime'), OLD.maVTD, OLD.tenVTD);
       END
       `);
       tx.run(sql`
@@ -432,7 +432,7 @@ const createVTDBackupTrigger = async() => {
       AFTER UPDATE ON VongTD
       BEGIN
       INSERT INTO VongTDBackup(modifiedDate, maVTD, tenVTD)
-      VALUES(datetime('now'), OLD.maVTD, OLD.tenVTD);
+      VALUES(datetime('now','localtime'), OLD.maVTD, OLD.tenVTD);
       END
       `);
   });
