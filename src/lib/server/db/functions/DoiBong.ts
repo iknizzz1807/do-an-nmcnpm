@@ -21,7 +21,8 @@ export const updateDoiBong = async(doiBong: DoiBong) => {
   }
   await db.update(DoiBongTable).set({
     tenDoi: doiBong.tenDoi,
-    maSan: doiBong.maSan
+    maSan: doiBong.maSan,
+    imageURL: doiBong.imageURL,
   }).where(eq(DoiBongTable.maDoi, doiBong.maDoi!!));
 }
 

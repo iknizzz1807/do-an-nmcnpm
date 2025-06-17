@@ -17,7 +17,7 @@ export const _GETBXHNgay = async (ngay: Date) => {
       diemHoa * tranDau.soTranHoa + 
       diemThua * tranDau.soTranThua;
   }
-  const tieuChi = new Map((await selectAllTieuChiXepHang()).sort((a, b) => b.uuTien - a.uuTien).map(tc => [tc.tenTC, tc]));
+  const tieuChi = new Map((await selectAllTieuChiXepHang()).sort((a, b) => a.uuTien - b.uuTien).map(tc => [tc.tenTC, tc]));
   danhSachTranDau.sort((a: BangXepHangNgay, b: BangXepHangNgay) => {
     if (tieuChi.size === 0) return b.diem - a.diem;
     

@@ -17,6 +17,7 @@ export const updateMuaGiai = async(muaGiai: MuaGiai) => {
     tenMG: muaGiai.tenMG,
     ngayDienRa: muaGiai.ngayDienRa,
     ngayKetThuc: muaGiai.ngayKetThuc,
+    imageURL: muaGiai.imageURL,
   }).where(eq(MuaGiaiTable.maMG, muaGiai.maMG!!));
 }
 
@@ -29,12 +30,5 @@ export const selectMuaGiaiMaMG = async(maMG: number) => {
 }
 
 export const deleteMuaGiai = async (maMG: number) => {
-  // const tranDaus = await db.select({maTD: LichThiDauTable.maTD}).from(LichThiDauTable).where(eq(LichThiDauTable.maMG, maMG));
-  // for (const tranDau of tranDaus) {
-  //   await db.delete(BanThangTable).where(eq(BanThangTable.maTD, tranDau.maTD));
-  //   await db.delete(ThePhatTable).where(eq(ThePhatTable.maTD, tranDau.maTD));
-  //   await db.delete(LichThiDauTable).where(eq(LichThiDauTable.maTD, tranDau.maTD));
-  // }
-  // await db.delete(ThamGiaDBTable).where(eq(ThamGiaDBTable.maMG, maMG));
   await db.delete(MuaGiaiTable).where(eq(MuaGiaiTable.maMG, maMG));
 }

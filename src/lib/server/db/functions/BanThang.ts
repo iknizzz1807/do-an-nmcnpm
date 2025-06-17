@@ -73,5 +73,5 @@ export const selectBanThang = async(maTD: number) => {
     .from(BanThangTable)
     .innerJoin(ThamGiaTDTable, and(eq(ThamGiaTDTable.maCT, BanThangTable.maCT), eq(ThamGiaTDTable.maTD, BanThangTable.maTD)))
     .where(eq(BanThangTable.maTD, maTD))
-    .groupBy(BanThangTable.maTD, BanThangTable.maCT)) satisfies BanThang[];
+    .groupBy(BanThangTable.maTD, BanThangTable.thoiDiem)) satisfies BanThang[];
 }

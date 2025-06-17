@@ -16,9 +16,6 @@ export const POST : RequestHandler = async({ request, locals, params } : { reque
   
     if (!verifyEmailInput(user.email ?? ""))
       throw new Error("Email không hợp lệ");
-    if (!(await verifyPasswordStrength(user.editedPassword ?? ""))) {
-      throw new Error("Mật khẩu không đủ mạnh");
-    }
     if ((user.id ?? null) === null) {
       throw new Error("Không thể update user không có id");
     }
@@ -27,6 +24,9 @@ export const POST : RequestHandler = async({ request, locals, params } : { reque
         throw err;
       });
       if (user.editedPassword ?? null) {
+        if (!(await verifyPasswordStrength(user.editedPassword ?? ""))) {
+          throw new Error("Mật khẩu không đủ mạnh");
+        }
         updateUserPassword(user.id, user.editedPassword!!);
       }
     }

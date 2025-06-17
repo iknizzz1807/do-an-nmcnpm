@@ -55,14 +55,14 @@ export const DELETE: RequestHandler = async ({
   request: Request;
 }) => {
   
-  const data : number | null = await request.json();
+  const data = await request.json();
   let result : number | null = null;
   if ((data) === null) {
-    throw new Error("Không có mã đội sao xóa? bruh");
+    throw new Error("Không có mã sao xóa? bruh");
   }
   else {
-    result = data;
-    await deleteSanNha(data);
+    result = data.maSan;
+    await deleteSanNha(result!!);
   }
 
   return new Response(JSON.stringify({ maSan: result!! }), {
