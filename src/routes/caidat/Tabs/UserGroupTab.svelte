@@ -167,7 +167,7 @@
 </script>
 
 <SettingUserTable dataUser={users} bind:groups={userGroups} />
-
+<div class="mb-4"></div>
 <SettingMainSection sectionName="Cài đặt nhóm người dùng">
   <SettingSection sectionName="Tạo hoặc chỉnh sửa nhóm và quyền người dùng">
     <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
@@ -419,7 +419,7 @@
                 d="M6 18L18 6M6 6l12 12"
               />
             </svg>
-            {editingGroupId !== -1 ? "Cancel Edit" : "Reset Form"}
+            {editingGroupId !== -1 ? "Huỷ chỉnh sửa" : "Làm mới bảng"}
           </div>
         </button>
         <button
@@ -442,14 +442,14 @@
                 d="M5 13l4 4L19 7"
               />
             </svg>
-            {editingGroupId !== -1 ? "Update Group" : "Create Group"}
+            {editingGroupId !== -1 ? "Cập nhật nhóm" : "Tạo nhóm"}
           </div>
         </button>
       </div>
     </div>
   </SettingSection>
 
-  <SettingSection sectionName="Existing User Groups">
+  <SettingSection sectionName="Những nhóm người dùng sẵn có">
     {#if userGroups.length > 0}
       <div class="overflow-hidden bg-white shadow sm:rounded-md">
         <ul role="list" class="divide-y divide-gray-200">
@@ -464,9 +464,9 @@
                       {group.groupName}
                     </p>
                     <p class="mt-1 flex items-center text-sm text-gray-500">
-                      {group.roles.length} role{group.roles.length === 1
+                      {group.roles.length} vai trò{group.roles.length === 1
                         ? ""
-                        : "s"} assigned
+                        : "s"} được gán
                     </p>
                   </div>
                   <div class="mt-2 flex-shrink-0 sm:mt-0 sm:ml-5">
@@ -478,7 +478,7 @@
                         {#if roleDetails}
                           <span
                             title={roleDetails.roleName}
-                            class="inline-block h-6 w-6 rounded-full ring-2 ring-white bg-gray-200 text-gray-700 flex items-center justify-center text-xs"
+                            class=" h-6 w-6 rounded-full ring-2 ring-white bg-gray-200 text-gray-700 flex items-center justify-center text-xs"
                           >
                             {roleDetails.roleName.substring(0, 1)}
                           </span>
@@ -486,7 +486,7 @@
                       {/each}
                       {#if group.roles.length > 5}
                         <span
-                          class="inline-block h-6 w-6 rounded-full ring-2 ring-white bg-gray-300 text-gray-800 flex items-center justify-center text-xs"
+                          class="h-6 w-6 rounded-full ring-2 ring-white bg-gray-300 text-gray-800 flex items-center justify-center text-xs"
                         >
                           +{group.roles.length - 5}
                         </span>
@@ -500,14 +500,14 @@
                     class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     onclick={() => editUserGroup(group)}
                   >
-                    Edit
+                    Chỉnh
                   </button>
                   <button
                     type="button"
                     class="inline-flex items-center rounded-md border border-transparent bg-red-100 px-3 py-2 text-sm font-medium leading-4 text-red-700 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                     onclick={() => deleteUserGroup(group.groupId)}
                   >
-                    Delete
+                    Xoá
                   </button>
                 </div>
               </div>

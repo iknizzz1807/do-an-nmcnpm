@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-  <title>Login Admin</title>
+  <title>Đăng nhập Admin</title>
 </svelte:head>
 
 <div class="fixed inset-0 flex items-center justify-center bg-gray-100">
@@ -31,7 +31,7 @@
       <div class="mb-6">
         <label
           for="inputPassword"
-          class="block text-gray-700 text-sm font-semibold mb-2">Password</label
+          class="block text-gray-700 text-sm font-semibold mb-2">Mật khấu</label
         >
         <input
           type="password"

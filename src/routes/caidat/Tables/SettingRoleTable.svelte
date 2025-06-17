@@ -15,8 +15,8 @@
 
   const columnsRoles = [
     { header: "ID", accessor: "roleId", hidden: true },
-    { header: "Name", accessor: "roleName" },
-    { header: "Viewable Page", accessor: "viewablePage" },
+    { header: "Tên vai trò", accessor: "roleName" },
+    { header: "Những trang xem được", accessor: "viewablePage" },
     {
       header: "Có thể chính sửa",
       accessor: "canEdit",
@@ -25,13 +25,13 @@
   ];
   const roleFields: FormField[] = [
     {
-      label: "Name",
+      label: "Tên vai trò",
       propertyName: "roleName",
       type: "input",
       valueType: "string",
     },
     {
-      label: "Viewable Page",
+      label: "Những trang xem được",
       propertyName: "viewablePage",
       type: "input",
       valueType: "string",
@@ -136,8 +136,12 @@
   };
 </script>
 
+<div class="flex justify-center">
+  <ButtonPrimary text="Tạo vai trò mới" onclick={() => (formState = true)} />
+</div>
+
 <Table
-  title="Roles"
+  title="Các vai trò"
   columns={columnsRoles}
   data={roles}
   redirectParam={""}
@@ -145,10 +149,6 @@
   {onEditClick}
   {onDeleteClick}
 />
-
-<div class="flex mb-8 mt-4 justify-center">
-  <ButtonPrimary text="Tạo vai trò mới" onclick={() => (formState = true)} />
-</div>
 
 <Form
   fields={roleFields}

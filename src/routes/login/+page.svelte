@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-  <title>Login</title>
+  <title>Đăng nhập</title>
 </svelte:head>
 
 <div
@@ -30,7 +30,8 @@
     <div class="mb-5">
       <label
         for="inputUsername"
-        class="block text-gray-700 text-sm font-semibold mb-2">Username</label
+        class="block text-gray-700 text-sm font-semibold mb-2"
+        >Tên đăng nhập</label
       >
       <input
         type="text"
@@ -45,7 +46,7 @@
     <div class="mb-6">
       <label
         for="inputPassword"
-        class="block text-gray-700 text-sm font-semibold mb-2">Password</label
+        class="block text-gray-700 text-sm font-semibold mb-2">Mật khẩu</label
       >
       <input
         type="password"

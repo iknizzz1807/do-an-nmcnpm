@@ -132,6 +132,10 @@
   };
 </script>
 
+<div class="flex justify-center">
+  <ButtonPrimary text="Tạo sân nhà mới" onclick={() => (formState = true)} />
+</div>
+
 <Table
   title="Danh sách các sân nhà"
   {columns}
@@ -141,10 +145,6 @@
   {onEditClick}
   {onDeleteClick}
 />
-
-<div class="flex justify-center pt-4 pb-8">
-  <ButtonPrimary text="Tạo sân nhà mới" onclick={() => (formState = true)} />
-</div>
 
 <Form
   fields={roleFields}

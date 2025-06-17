@@ -21,7 +21,7 @@
 
   const userFields: FormField[] = [
     {
-      label: "Username",
+      label: "Tên đăng nhập",
       propertyName: "username",
       type: "input",
       valueType: "string",
@@ -33,7 +33,7 @@
       valueType: "string",
     },
     {
-      label: "User Type",
+      label: "Nhóm người dùng",
       propertyName: "groupId",
       type: "select",
       valueType: "number",
@@ -43,7 +43,7 @@
       })),
     },
     {
-      label: "Password",
+      label: "Mật khẩu",
       propertyName: "editedPassword",
       type: "input",
       valueType: "string",
@@ -51,10 +51,10 @@
   ];
   const columnsUser: TableColumnSpecifier[] = [
     { header: "ID", accessor: "id", hidden: true },
-    { header: "Username", accessor: "username" },
+    { header: "Tên đăng nhập", accessor: "username" },
     { header: "Email", accessor: "email" },
     {
-      header: "User Group",
+      header: "Nhóm người dùng",
       accessor: "groupId",
       accessFunction: (data: User) =>
         groups.find((value) => data.groupId == value.groupId)?.groupName ?? "",

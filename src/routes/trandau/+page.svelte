@@ -78,11 +78,11 @@
     });
 
   const trongTaiOptions: FieldOption[] = danhSachTrongTai.map((value) => {
-      return {
-        optionValue: value.maTT!!,
-        optionName: value.tenTT,
-      } satisfies FieldOption;
-    })
+    return {
+      optionValue: value.maTT!!,
+      optionName: value.tenTT,
+    } satisfies FieldOption;
+  });
 
   const formFields: FormField[] = [
     {
@@ -167,19 +167,19 @@
       },
     },
     { header: "Đội Hai", accessor: "tenDoiHai" },
-    { header: "Vòng thi đấu", accessor: "tenVTD" },
+    { header: "Vòng", accessor: "tenVTD" },
     // { header: "Mã mùa giải", accessor: "tenMG" },
     { header: "Đội thắng", accessor: "tenDoiThang" },
     { header: "Sân", accessor: "tenSan" },
     {
-      header: "Ngày giờ dự kiến",
+      header: "TGian dự kiến",
       accessor: "ngayGioDuKien",
       accessFunction: (data: LichThiDau) => {
         return new Date(data.ngayGioDuKien!!).toLocaleString("vi-VN");
       },
     },
     {
-      header: "Ngày giờ thực tế",
+      header: "TGian thực tế",
       accessor: "ngayGioThucTe",
       accessFunction: (data: LichThiDau) => {
         return new Date(data.ngayGioThucTe!!).toLocaleString("vi-VN");
@@ -187,7 +187,7 @@
     },
     {
       header: "Trọng tài",
-      accessor: "tenTT"
+      accessor: "tenTT",
     },
   ];
 
@@ -382,7 +382,6 @@
 
   type TabId = "matches" | "referees";
   let activeTabId: TabId = $state("matches");
-
 </script>
 
 <svelte:head>
@@ -449,7 +448,5 @@
     bind:formState
   />
 {:else if activeTabId === "referees"}
-  <TrongTaiTable
-    bind:dataTrongTai={danhSachTrongTai}
-  />
+  <TrongTaiTable bind:dataTrongTai={danhSachTrongTai} />
 {/if}
