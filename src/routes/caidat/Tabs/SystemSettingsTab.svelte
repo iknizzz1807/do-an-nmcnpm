@@ -116,6 +116,7 @@
             id="doiSanNha"
             name="doiSanNha"
             class="block w-full px-1 py-2 rounded-lg border border-gray-300 shadow-sm focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 text-sm bg-white transition-colors duration-200"
+            bind:value={setting.doiDaTrenSanNha}
           >
             <option value={1}>Đội một</option>
             <option value={2}>Đội hai</option>
