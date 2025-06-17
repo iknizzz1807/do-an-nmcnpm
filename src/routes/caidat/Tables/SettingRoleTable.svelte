@@ -146,7 +146,7 @@
 />
 
 <div class="flex mb-8 mt-4 justify-center">
-  <ButtonPrimary text="Tạo role mới" onclick={() => (formState = true)} />
+  <ButtonPrimary text="Tạo vai trò mới" onclick={() => (formState = true)} />
 </div>
 
 <Form

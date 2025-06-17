@@ -131,7 +131,7 @@
 </script>
 
 <Table
-  title="Roles"
+  title="Danh sách các sân nhà"
   {columns}
   data={sanNha}
   redirectParam={""}

@@ -122,7 +122,7 @@
 </script>
 
 <Table
-  title="Roles"
+  title="Các loại vị trí"
   {columns}
   data={viTri}
   redirectParam={""}
@@ -132,7 +132,7 @@
 />
 
 <div class="flex justify-center pt-4">
-  <ButtonPrimary text="Tạo sân nhà mới" onclick={() => (formState = true)} />
+  <ButtonPrimary text="Tạo vị trí mới" onclick={() => (formState = true)} />
 </div>
 
 <Form

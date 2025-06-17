@@ -130,7 +130,7 @@
 </script>
 
 <Table
-  title="Roles"
+  title="Loại cầu thủ"
   {columns}
   data={loaiCT}
   redirectParam={""}
@@ -140,7 +140,10 @@
 />
 
 <div class="flex justify-center pt-4">
-  <ButtonPrimary text="Tạo sân nhà mới" onclick={() => (formState = true)} />
+  <ButtonPrimary
+    text="Tạo loại cầu thủ mới"
+    onclick={() => (formState = true)}
+  />
 </div>
 
 <Form

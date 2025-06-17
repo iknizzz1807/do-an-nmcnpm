@@ -122,7 +122,7 @@
 </script>
 
 <Table
-  title="Roles"
+  title="Các vòng thi đấu"
   {columns}
   data={vongTD}
   redirectParam={""}
@@ -132,7 +132,10 @@
 />
 
 <div class="flex justify-center pt-4">
-  <ButtonPrimary text="Tạo sân nhà mới" onclick={() => (formState = true)} />
+  <ButtonPrimary
+    text="Tạo vòng thi đấu mới"
+    onclick={() => (formState = true)}
+  />
 </div>
 
 <Form

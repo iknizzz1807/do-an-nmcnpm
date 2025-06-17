@@ -98,21 +98,37 @@
         unit="minutes"
       />
 
-      <SettingNumberInput
+      <!-- <SettingNumberInput
         min={1}
         max={2}
         forValue="thoiDiemGhiBanToiDa"
         bind:bindValue={setting.thoiDiemGhiBanToiDa}
         label="Đội sân nhà"
         unit="minutes"
-      />
+      /> -->
+      <div>
+        <label
+          class="block text-sm mb-1 font-medium text-gray-700"
+          for="doiSanNha">Đội sân nhà</label
+        >
+        <div class="flex items-center">
+          <select
+            id="doiSanNha"
+            name="doiSanNha"
+            class="block w-full px-1 py-2 rounded-lg border border-gray-300 shadow-sm focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 text-sm bg-white transition-colors duration-200"
+          >
+            <option value={1}>Đội một</option>
+            <option value={2}>Đội hai</option>
+          </select>
+        </div>
+      </div>
     </SettingSection>
   </SettingMainSection>
 
-  <div class="bg-white rounded-lg shadow-md p-6 mt-8 mb-8">
+  <!-- <div class="bg-white rounded-lg shadow-md p-6 mt-8 mb-8">
     <h2 class="text-2xl font-bold text-gray-800 mb-6">Tuỳ chọn hệ thống</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <!-- <div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6"> -->
+  <!-- <div>
         <label
           class="block text-sm font-medium text-gray-700 mb-2"
           for="defaultLanguage">Ngôn ngữ mặc định</label
@@ -125,8 +141,8 @@
           <option value="vi">Tiếng Việt</option>
         </select>
       </div> -->
-      <!-- <div> -->
-        <!-- <label
+  <!-- <div> -->
+  <!-- <label
           class="block text-sm font-medium text-gray-700 mb-1"
           for="defaultTimeZone">Default Time Zone</label
         >
@@ -137,8 +153,8 @@
           <option value="UTC+0700">Hanoi, Vietnam (UTC+07:00)</option>
           <option value="UTC+0000">London, UK (UTC+00:00)</option>
         </select> -->
-      <!-- </div> -->
-      <div>
+  <!-- </div> -->
+  <!-- <div>
         <label
           class="block text-sm font-medium text-gray-700 mb-2"
           for="dataExportFormat">Format dữ liệu xuất ra</label
@@ -150,8 +166,8 @@
           <option value="csv">CSV</option>
           <option value="xlsx">Excel (XLSX)</option>
         </select>
-      </div>
-      <!-- <div>
+      </div> -->
+  <!-- <div>
         <label class="block text-sm font-medium text-gray-700 mb-2"
           >System Notifications</label
         >
@@ -183,9 +199,9 @@
           </div>
         </div>
       </div> -->
-    </div>
-  </div>
-
+  <!-- </div>
+  </div> -->
+  <div class="mt-4"></div>
   <SettingMainSection sectionName="Quản lý  dữ liệu">
     <div class="p-4 bg-gray-50 rounded-md border border-gray-200">
       <h3 class="text-lg font-medium text-gray-800">Sao lưu dữ liệu</h3>

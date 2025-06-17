@@ -205,6 +205,11 @@
               return `"'${dateStr}'"`; // Luôn thêm dấu ' để Excel hiểu là text
             }
 
+            if (/^\s*\d+\s*-\s*\d+\s*$/.test(dateStr)) {
+              // Định dạng thành công thức ="..." để ép Excel hiểu là chuỗi
+              return `="${dateStr}"`;
+            }
+
             const stringValue = String(cellValue).replace(/"/g, '""');
             return `"${stringValue}"`;
           })
@@ -269,7 +274,7 @@
           <tr>
             {#if showTeamLogo}
               <th
-                class="px-4 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider border-b border-gray-300"
+                class="px-4 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider border-b border-gray-300 whitespace-nowrap"
               >
                 Logo
               </th>
@@ -278,7 +283,7 @@
             {#each columns as column}
               {#if !column.hidden}
                 <th
-                  class="px-4 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider border-b border-gray-300 cursor-pointer select-none"
+                  class="px-4 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider border-b border-gray-300 cursor-pointer select-none whitespace-nowrap"
                   onclick={() => sortByColumn(column.accessor)}
                 >
                   <div class="flex items-center justify-between">
@@ -324,7 +329,7 @@
             {/each}
             {#if (deleteButton || editButton || addButton) && isEditable}
               <th
-                class="px-4 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider border-b border-gray-300"
+                class="px-4 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider border-b border-gray-300 whitespace-nowrap"
               >
                 Hành động
               </th>
