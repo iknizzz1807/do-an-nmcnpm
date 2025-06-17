@@ -26,6 +26,7 @@ export const updateCauThu = async(cauThu: CauThu) => {
       maLCT: cauThu.maLCT,
       ghiChu: cauThu.ghiChu,
       ngaySinh: dateFormat(cauThu.ngaySinh, "isoDate"),
+      soAo: cauThu.soAo,
       maDoi: cauThu.maDoi
   }).where(eq(CauThuTable.maCT, cauThu.maCT!!));
 }
@@ -96,24 +97,24 @@ export const isCauThuInTranDau = async (maTD: number, maCT : number) => {
     .where(and(eq(ThamGiaTDTable.maTD, maTD), eq(ThamGiaTDTable.maCT, maCT)))).length > 0;
 }
 
-export const traCuuCauThu = async (tenCT: string) => {
-  let ketQua: KQTraCuuCauThu[] = [];
-  const cauThu = await db
-    .select()
-    .from(CauThuTable)
-    .innerJoin(DoiBongTable, eq(DoiBongTable.maDoi, CauThuTable.maDoi))
-    .where(ilike(CauThuTable.tenCT, "%" + tenCT + "%"));
-  cauThu.forEach(async (value) => {
-    const tongSoBanThang = await db.$count(
-      BanThangTable,
-      eq(BanThangTable.maCT, value.CauThu.maCT)
-    );
-    ketQua.push({
-      tenCT: value.CauThu.tenCT,
-      tenDoi: value.DoiBong.tenDoi,
-      maLCT: value.CauThu.maLCT,
-      tongSoBanThang: tongSoBanThang,
-    });
-  });
-  return ketQua;
-};
+// export const traCuuCauThu = async (tenCT: string) => {
+//   let ketQua: KQTraCuuCauThu[] = [];
+//   const cauThu = await db
+//     .select()
+//     .from(CauThuTable)
+//     .innerJoin(DoiBongTable, eq(DoiBongTable.maDoi, CauThuTable.maDoi))
+//     .where(ilike(CauThuTable.tenCT, "%" + tenCT + "%"));
+//   cauThu.forEach(async (value) => {
+//     const tongSoBanThang = await db.$count(
+//       BanThangTable,
+//       eq(BanThangTable.maCT, value.CauThu.maCT)
+//     );
+//     ketQua.push({
+//       tenCT: value.CauThu.tenCT,
+//       tenDoi: value.DoiBong.tenDoi,
+//       maLCT: value.CauThu.maLCT,
+//       tongSoBanThang: tongSoBanThang,
+//     });
+//   });
+//   return ketQua;
+// };

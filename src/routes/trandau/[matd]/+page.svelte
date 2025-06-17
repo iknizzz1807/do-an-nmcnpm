@@ -9,6 +9,7 @@
   } from "$lib/typesDatabase";
   import { type FieldOption } from "$lib/components/Form.svelte";
   import BanThangTable from "./BanThangTable.svelte";
+  import { onMount } from "svelte";
   let { data }: PageProps = $props();
 
   const cauThuDoiMot: { cauThu: CauThu; viTri: ViTri }[] = $state(
@@ -19,7 +20,9 @@
   );
   const doiMot = $state(data.doiMot!!);
   const doiHai = $state(data.doiHai!!); 
-  const danhSachBanThang: BanThang[] = $state(data.danhSachBanThang);
+  let banThangDoiMot = $state(0);
+  let banThangDoiHai = $state(0);
+  let danhSachBanThang: BanThang[] = $state(data.danhSachBanThang);
   const loaiBTs: LoaiBT[] = $state(data.loaiBTs);
   const isEditable = $state(data.isEditable);
   // const danhSachThePhat : ThePhat[] = $state(data.danhSachThePhat);
@@ -46,6 +49,7 @@
     { optionValue: doiHai?.maDoi ?? 0, optionName: doiHai?.tenDoi ?? "" },
   ];
   $inspect(doiMot);
+
 </script>
 
 <svelte:head>
@@ -81,9 +85,7 @@
     <!-- Score -->
     <div class="text-4xl sm:text-5xl font-bold text-lime-300">
       <span class="tracking-widest">
-        {danhSachBanThang.filter((bt) => bt.maDoi === doiMot.maDoi)
-          .length} - {danhSachBanThang.filter((bt) => bt.maDoi === doiHai.maDoi)
-          .length}
+        {banThangDoiMot} - {banThangDoiHai}
       </span>
     </div>
 
@@ -107,7 +109,9 @@
 <BanThangTable
   maTD={data.maTD!!}
   thoiDiemGhiBanToiDa={data.thoiDiemGhiBanToiDa}
-  dsBanThang={danhSachBanThang}
+  bind:dsBanThang={danhSachBanThang}
+  bind:banThangDoiMot={banThangDoiMot}
+  bind:banThangDoiHai={banThangDoiHai}
   {cauThuDoiMot}
   {cauThuDoiHai}
   maDoiMot={doiMot.maDoi!!}

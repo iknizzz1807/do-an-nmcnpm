@@ -17,6 +17,8 @@
   type Props = {
     maTD: number;
     dsBanThang: BanThang[];
+    banThangDoiMot: number;
+    banThangDoiHai: number;
     cauThuDoiMot: { cauThu: CauThu; viTri: ViTri }[];
     cauThuDoiHai: { cauThu: CauThu; viTri: ViTri }[];
     thoiDiemGhiBanToiDa: number;
@@ -31,9 +33,11 @@
     isEditable: boolean;
   };
 
-  const {
+  let {
     maTD,
-    dsBanThang,
+    dsBanThang = $bindable([]),
+    banThangDoiMot = $bindable(0),
+    banThangDoiHai = $bindable(0),
     cauThuDoiMot,
     cauThuDoiHai,
     maDoiMot,
@@ -55,7 +59,7 @@
       optionName: value.tenLBT,
     }))
   );
-  let danhSachBanThang = $state(dsBanThang.concat());
+  let danhSachBanThang = $state(dsBanThang);
   let formState: boolean = $state(false);
   let selectedIndex: number = $state(-1);
   let editData: FormInputMap = $state(new SvelteMap());
@@ -119,7 +123,19 @@
       if (cauThu === null) continue;
       banThang.tenCT = cauThu.tenCT;
       banThang.tenLBT = loaiBTs.find((val) => val.maLBT === banThang.maLBT)?.tenLBT ?? "Không xác định";
-      console.log("Bàn thắng:", banThang);
+      
+      if (banThang.maDoi === maDoiMot) {
+        if (banThang.tenLBT === "Phản lưới")
+          banThangDoiHai++;
+        else
+          banThangDoiMot++;
+      }
+      else {
+        if (banThang.tenLBT === "Phản lưới")
+          banThangDoiMot++;
+        else
+          banThangDoiHai++;
+      } 
     }
   });
 
@@ -169,6 +185,7 @@
 
       let result = await response.json();
 
+      let prevBanThang = null;
       if (selectedIndex === -1) {
         let cauThu: CauThu | null;
         if (result.maDoi === maDoiMot) {
@@ -185,9 +202,42 @@
         if (cauThu === null)
           throw new Error("WTF tại sao lại không tìm thấy cầu thủ???");
         result.tenCT = cauThu.tenCT;
+
         danhSachBanThang.push(result);
         danhSachBanThang.sort(sortDSBT);
-      } else danhSachBanThang[selectedIndex] = result;
+      } 
+      else {
+        prevBanThang = danhSachBanThang[selectedIndex];
+        danhSachBanThang[selectedIndex] = result;
+      }
+      
+      if (prevBanThang) {
+        if (prevBanThang.maDoi === maDoiMot) {
+          if (prevBanThang.tenLBT === "Phản lưới")
+            banThangDoiHai--;
+          else
+            banThangDoiMot--;
+        } else {
+          if (prevBanThang.tenLBT === "Phản lưới")
+            banThangDoiMot--;
+          else
+            banThangDoiHai--;
+        }
+      }
+
+      if (result.maDoi === maDoiMot) {
+        if (result.tenLBT === "Phản lưới")
+          banThangDoiHai++;
+        else
+          banThangDoiMot++;
+      }
+      else {
+        if (result.tenLBT === "Phản lưới")
+          banThangDoiMot++;
+        else
+          banThangDoiHai++;
+      } 
+      result.tenLBT = loaiBTs.find((val) => val.maLBT === result.maLBT)?.tenLBT ?? "Không xác định";
 
       formState = false;
       showOkToast("Tạo Bàn thắng mới thành công");
@@ -221,6 +271,19 @@
         throw new Error("Lỗi xóa Bàn thắng");
       }
 
+      const result: BanThang = danhSachBanThang[selectedIndex];
+      if (result.maDoi === maDoiMot) {
+        if (result.tenLBT === "Phản lưới")
+          banThangDoiHai++;
+        else
+          banThangDoiMot++;
+      }
+      else {
+        if (result.tenLBT === "Phản lưới")
+          banThangDoiMot++;
+        else
+          banThangDoiHai++;
+      } 
       danhSachBanThang.splice(selectedIndex, 1);
 
       // Đóng form và hiện toast thành công sau khi thành công
