@@ -17,9 +17,11 @@
   const isEditable = $state(data.isEditable);
 
   for (const doiBong of danhSachDoiBong) {
-    doiBong.tenSan =
-      danhSachSanNha.find((val) => val.maSan === doiBong.maSan)?.tenSan ?? "";
-
+    const sanNha = danhSachSanNha.find(
+      (val) => val.maSan === doiBong.maSan
+    );
+    doiBong.tenSan = sanNha?.tenSan ?? "";
+    doiBong.diaChi = sanNha?.diaChi ?? "";
     doiBong.ketQua5TranGanNhat = doiBong.ketQua5TranGanNhat;
   }
 
@@ -49,12 +51,23 @@
       valueType: "string",
     },
     {
-      label: "Sân nhà",
-      propertyName: "maSan",
-      type: "select",
-      valueType: "number",
-      options: sanNhaOption,
+      label: "Tên sân nhà",
+      propertyName: "tenSan",
+      type: "input",
+      valueType: "string",
     },
+    {
+      label: "Địa chỉ sân nhà",
+      propertyName: "diaChi",
+      type: "input",
+      valueType: "string",
+    },
+    {
+      label: "Logo đội bóng",
+      propertyName: "imageURL",
+      type: "input",
+      valueType: "string",
+    }
   ];
   let selectedIndex: number = $state(-1);
   let maDoi: number = $state(0);
@@ -79,7 +92,10 @@
       editData.clear();
       editData.set("maDoi", data.maDoi ?? null);
       editData.set("tenDoi", data.tenDoi);
-      editData.set("maSan", data.maSan!!);
+      editData.set("maSan", data.maSan ?? null);
+      editData.set("tenSan", data.tenSan!!);
+      editData.set("diaChi", data.diaChi!!);
+      editData.set("imageURL", data.imageURL ?? "");
       selectedIndex = index;
       formState = true;
     } else {
@@ -105,6 +121,7 @@
     if (data.tenDoi.trim() === "") return;
 
     try {
+      console.log("Submitting data:", data);
       const response = await fetch("/api/doibong", {
         method: "POST",
         headers: {
@@ -119,8 +136,8 @@
       }
 
       let result = await response.json();
-      result.tenSan =
-        danhSachSanNha.find((val) => val.maSan === result.maSan)?.tenSan ?? "";
+      // result.tenSan =
+      //   danhSachSanNha.find((val) => val.maSan === result.maSan)?.tenSan ?? "";
 
       // Cập nhật danh sách đội bóng nếu cần thiết
       if (selectedIndex === -1) danhSachDoiBong.push(result);

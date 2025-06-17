@@ -133,6 +133,16 @@
     {onDeleteClick}
     showExportCSV={false}
   />
+  <div class="flex justify-center mt-6">
+    <ButtonPrimary
+      text="Tạo tiêu chí xếp hạng mới"
+      onclick={() => {
+        selectedIndex = -1;
+        editData.clear();
+        formState = true;
+      }}
+    />
+  </div>
 </div>
 
 <Form

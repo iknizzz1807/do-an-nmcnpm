@@ -20,6 +20,7 @@ export type DoiBong = {
   imageURL?: string | null | undefined;
 
   tenSan?: string | undefined;
+  diaChi?: string | undefined;
   ketQua5TranGanNhat?: ("win" | "lose" | "draw")[] | undefined;
   logoUrl?: string | undefined;
 };

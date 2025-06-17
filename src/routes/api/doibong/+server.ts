@@ -1,6 +1,9 @@
 import type { RequestHandler } from "./$types";
 import { deleteDoiBong, insertDoiBong, selectDoiBongMuaGiai, updateDoiBong } from "$lib/server/db/functions/DoiBong";
 import { errorResponseJSON } from "$lib";
+import { insertSanNha, updateSanNha } from "$lib/server/db/functions/Data/SanNha";
+import { updateMuaGiai } from "$lib/server/db/functions/MuaGiai";
+import type { DoiBong } from "$lib/typesDatabase";
 
 export const _GETDoiBong = async(maMG: number) => {
   console.log(await selectDoiBongMuaGiai(maMG));
@@ -28,13 +31,25 @@ export const POST: RequestHandler = async ({
     throw new Error("Không tìm thấy mùa giải");
 
   try {
-    let data = await request.json();
+    let data : DoiBong = await request.json();
     data.maMG = locals.muaGiai!!.maMG!!;
     
     if (data.maDoi ?? null) {
+      await updateSanNha({
+        maSan: data.maSan!!,
+        tenSan: data.tenSan!!,
+        diaChi: data.diaChi!!,
+        maMG: data.maMG
+      });
       await updateDoiBong(data);
     }
     else{
+      var sanNha = await insertSanNha({
+        tenSan: data.tenSan!!,
+        diaChi: data.diaChi!!,
+        maMG: data.maMG
+      });
+      data.maSan = sanNha.at(0)!!.id;
       await insertDoiBong(data);
     }
     

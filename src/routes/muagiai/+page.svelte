@@ -67,6 +67,12 @@
       type: "Date",
       valueType: "Date",
     },
+    {
+      label: "Logo mùa giải",
+      propertyName: "imageURL",
+      type: "input",
+      valueType: "string",
+    },
   ];
 
   let selectedIndex: number = $state(0);
@@ -92,6 +98,7 @@
       editData.set("tenMG", data.tenMG);
       editData.set("ngayDienRa", new Date(data.ngayDienRa));
       editData.set("ngayKetThuc", new Date(data.ngayKetThuc));
+      editData.set("imageURL", data.imageURL ?? "");
       selectedIndex = index;
       formState = true;
       console.log(editData);
