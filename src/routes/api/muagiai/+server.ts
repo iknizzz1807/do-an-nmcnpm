@@ -1,3 +1,4 @@
+import { errorResponseJSON } from "$lib";
 import { deleteMuaGiai, insertMuaGiai, selectAllMuaGiai, updateMuaGiai } from "$lib/server/db/functions/MuaGiai";
 import type { MuaGiai } from "$lib/typesDatabase";
 import type { RequestHandler } from "@sveltejs/kit";
@@ -26,26 +27,38 @@ export const POST: RequestHandler = async ({
   locals: App.Locals
 }) => {
 
-  // Cái post request này để tạo đội bóng, response ok sẽ tiến hành trả về đội bóng mới vừa tạo
-  let data : MuaGiai = await request.json();
-  console.log(data);
-  data.ngayDienRa = dateFormat(data.ngayDienRa, "isoDate");
-  data.ngayKetThuc = dateFormat(data.ngayKetThuc, "isoDate");
+  try {
+    
+    // Cái post request này để tạo đội bóng, response ok sẽ tiến hành trả về đội bóng mới vừa tạo
+    let data : MuaGiai = await request.json();
+    console.log(data);
+    data.ngayDienRa = dateFormat(data.ngayDienRa, "isoDate");
+    data.ngayKetThuc = dateFormat(data.ngayKetThuc, "isoDate");
+    if (data.ngayDienRa === "Invalid Date" || data.ngayKetThuc === "Invalid Date")
+      throw new Error("Ngày diễn ra hoặc ngày kết thúc không hợp lệ");
+    if (data.ngayDienRa > data.ngayKetThuc)
+      throw new Error("Ngày diễn ra không thể lớn hơn ngày kết thúc");
 
-  if (data.maMG ?? null) {
-    await updateMuaGiai(data);
-  }
-  else{
-    await insertMuaGiai(data)
-  }
+    if (data.maMG ?? null) {
+      await updateMuaGiai(data);
+    }
+    else{
+      await insertMuaGiai(data)
+    }
 
-  // Trả về response với đội bóng vừa tạo và status 200 OK
-  return new Response(JSON.stringify(data), {
-    status: 200,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+    // Trả về response với đội bóng vừa tạo và status 200 OK
+    return new Response(JSON.stringify(data), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      return errorResponseJSON(400, error.message);
+    }
+    else throw error;
+  }
 };
 
 // Delete DoiBong

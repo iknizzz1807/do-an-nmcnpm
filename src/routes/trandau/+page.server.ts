@@ -36,6 +36,8 @@ export const load = (async ({ fetch, locals, route }) => {
       danhSachMuaGiai,
       danhSachVTD,
       danhSachSan,
+      minDate: new Date(locals.muaGiai!!.ngayDienRa!!),
+      maxDate: new Date(locals.muaGiai!!.ngayKetThuc!!),
       isEditable,
     };
   } catch (error) {
@@ -46,6 +48,8 @@ export const load = (async ({ fetch, locals, route }) => {
       danhSachVTD: [],
       danhSachMuaGiai: [],
       danhSachSan: [],
+      minDate: new Date(),
+      maxDate: new Date(),
       isEditable: false
     };
   }

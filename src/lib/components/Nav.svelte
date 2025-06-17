@@ -62,7 +62,6 @@
         },
         body: JSON.stringify(selectedMuaGiai),
       });
-      console.log(selectedMuaGiai);
       if (!response.ok) {
         throw new Error("Không thể thay đổi mùa giải");
       }
@@ -204,7 +203,7 @@
       </li>
       <li>
         <a
-          href={"/bxh/" + dateFormat(new Date(), "isoDate")}
+          href={"/bxh"}
           class="nav-link"
           class:active={page.url.pathname.startsWith("/bxh")}
         >

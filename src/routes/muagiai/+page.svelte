@@ -128,6 +128,14 @@
   const submitMuaGiai = async (e: Event, data: MuaGiai) => {
     e.preventDefault();
     if (data.tenMG.trim() === "") return;
+    if (data.ngayDienRa === null || data.ngayKetThuc === null) {
+      showErrorToast("Ngày diễn ra và ngày kết thúc không được để trống");
+      return;
+    }
+    if (data.ngayDienRa >= data.ngayKetThuc) {
+      showErrorToast("Ngày kết thúc phải sau ngày diễn ra");
+      return;
+    }
 
     try {
       const response = await fetch("/api/muagiai", {

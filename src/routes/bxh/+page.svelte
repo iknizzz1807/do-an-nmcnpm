@@ -4,14 +4,13 @@
   import type { MuaGiai } from "$lib/typesDatabase.js";
   import type { BangXepHangNgay } from "$lib/typesResponse";
   import dateFormat from "dateformat";
-  import { onMount } from "svelte";
 
   const { data } = $props();
   let dateBXH: string = $state(data.dateBXH);
   let monthBXH: string = $state("");
   let danhSachMuaGiai: MuaGiai[] = $state(data.danhSachMuaGiai);
   let muaGiaiBXH: MuaGiai | null = $state(null);
-  let bxhSelected: ("ngay" | "thang" | "muaGiai") = $state("ngay");
+  let bxhSelected: ("ngay" | "thang" | "muagiai") = $state("ngay");
 
   $inspect(dateBXH);
   let bangXepHang: BangXepHangNgay[] = $state(data.bangXepHangNgay);
@@ -23,6 +22,7 @@
     { header: "Số trận thua", accessor: "soTranThua" },
     { header: "Số trận hòa", accessor: "soTranHoa" },
     { header: "Hiệu số", accessor: "hieuSo" },
+    { header: "Số bàn thắng", accessor: "soBanThang" },
     { header: "Hạng", accessor: "hang" },
   ];
 
@@ -104,11 +104,11 @@
       <label for="ngay">Theo ngày</label>
       <input type="radio" id="thang" name="bxh" value="thang" bind:group={bxhSelected}>
       <label for="thang">Theo tháng</label>
-      <input type="radio" id="muaGiai" name="bxh" value="muaGiai" bind:group={bxhSelected}>
-      <label for="muaGiai">Theo mùa giải</label>
+      <input type="radio" id="muagiai" name="bxh" value="muagiai" bind:group={bxhSelected}>
+      <label for="muagiai">Theo mùa giải</label>
     </form>
 
-    {#if bxhSelected === "muaGiai"}
+    {#if bxhSelected === "muagiai"}
       <label
         class="block text-gray-700 text-sm font-medium mb-1.5"
         for="muaGiaiBXH"
@@ -161,6 +161,10 @@
     {columns}
     data={bangXepHang}
     redirectParam={"maDoi"}
-    tableType={"bxh/" + dateFormat(dateBXH, "isoDate")}
+    tableType={"bxh/" + bxhSelected + "/" + (bxhSelected === "muagiai" ? 
+    muaGiaiBXH?.maMG ?? 0 : 
+    (bxhSelected === "thang" ? 
+       dateFormat(monthBXH, "isoDate")
+      : dateFormat(dateBXH, "isoDate")))}
   />
 </div>

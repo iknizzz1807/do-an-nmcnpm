@@ -7,7 +7,7 @@ import { selectDiemSoTen } from "$lib/server/db/functions/Data/DiemSo";
 
 export const _GETBXHNgay = async (ngay: Date) => {
   const danhSachTranDau = await selectBXHDoiNgay(ngay);
-  console.log(danhSachTranDau);
+  
   const diemThang = (await selectDiemSoTen("Thắng"))!!.diemSo;
   const diemHoa = (await selectDiemSoTen("Hòa"))!!.diemSo;
   const diemThua = (await selectDiemSoTen("Thua"))!!.diemSo;

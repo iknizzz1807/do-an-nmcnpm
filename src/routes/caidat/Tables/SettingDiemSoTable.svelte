@@ -127,17 +127,6 @@
     {onDeleteClick}
     showExportCSV={false}
   />
-
-  <div class="flex justify-center mt-4">
-    <ButtonPrimary
-      text="Tạo loại điểm số mới"
-      onclick={() => {
-        selectedIndex = -1;
-        editData.clear();
-        formState = true;
-      }}
-    />
-  </div>
 </div>
 
 <Form

@@ -20,6 +20,7 @@
   import { SvelteMap } from "svelte/reactivity";
   import { page } from "$app/state";
   import { onMount } from "svelte";
+  import dateFormat from "dateformat";
 
   let { data }: PageProps = $props();
 
@@ -28,7 +29,11 @@
   const danhSachMuaGiai: MuaGiai[] = $state(data.danhSachMuaGiai);
   const danhSachVTD: VongTD[] = $state(data.danhSachVTD);
   const danhSachSan: SanNha[] = $state(data.danhSachSan);
-  const isEditable = $state(data.isEditable);
+  const minDate: Date = $state(data.minDate);
+  minDate.setHours(0, 0, 0, 0); // Đặt giờ về 00:00:00
+  const maxDate: Date = $state(data.maxDate);
+  maxDate.setHours(0, 0, 0, 0); // Đặt giờ về 00:00:00
+  const isEditable = $state(data.isEditable); 
 
   onMount(() => {
     for (const ltd of danhSachLTD) {
@@ -110,12 +115,16 @@
       propertyName: "ngayGioDuKien",
       type: "Date",
       valueType: "DateTime",
+      min: dateFormat(minDate, "yyyy-mm-dd'T'HH:MM"),
+      max: dateFormat(maxDate, "yyyy-mm-dd'T'HH:MM"),
     },
     {
       label: "Ngày giờ thực tế",
       propertyName: "ngayGioThucTe",
       type: "Date",
       valueType: "DateTime",
+      min: dateFormat(minDate, "yyyy-mm-dd'T'HH:MM"),
+      max: dateFormat(maxDate, "yyyy-mm-dd'T'HH:MM"),
     },
   ];
 
@@ -210,6 +219,14 @@
       showErrorToast("Vui lòng chọn đủ thông tin");
       return;
     }
+    if ((data.ngayGioDuKien ?? null) === null || (data.ngayGioThucTe ?? null) === null) {
+      showErrorToast("Vui lòng nhập ngày giờ dự kiến và thực tế");
+      return;
+    }
+    if (data.ngayGioDuKien!! > data.ngayGioThucTe!!) {
+      showErrorToast("Ngày giờ thực tế không thể trước ngày giờ dự kiến");
+      return;
+    }
 
     try {
       const response = await fetch("/api/lichthidau", {
@@ -221,7 +238,8 @@
       });
 
       if (!response.ok) {
-        throw new Error("Lỗi xóa lịch thi đấu");
+        const result = await response.json();
+        throw new Error(result.message || "Lỗi xóa lịch thi đấu");
       }
 
       danhSachLTD.splice(selectedIndex, 1);
@@ -230,8 +248,11 @@
       formState = false;
       showOkToast("Xóa lịch thi đấu thành công");
     } catch (error) {
-      console.error("Error:", error);
-      showErrorToast(String(error));
+      if (error instanceof Error) {
+        showErrorToast(error.message);
+      } else {
+        console.error("Error:", error);
+      }
     }
   };
 
@@ -251,6 +272,30 @@
       showErrorToast("Vui lòng chọn đủ thông tin");
       return;
     }
+    if ((data.ngayGioDuKien ?? null) === null || (data.ngayGioThucTe ?? null) === null) {
+      showErrorToast("Vui lòng nhập ngày giờ dự kiến và thực tế");
+      return;
+    }
+    if (data.ngayGioDuKien!! >= data.ngayGioThucTe!!) {
+      showErrorToast("Ngày giờ thực tế không thể trước ngày giờ dự kiến");
+      return;
+    } 
+    if (data.doiMot === data.doiHai) {
+      showErrorToast("Đội một và đội hai không thể giống nhau");
+      return;
+    } 
+    if (data.doiThang !== null && data.doiThang !== data.doiMot && data.doiThang !== data.doiHai) {
+      showErrorToast("Đội thắng phải là một trong hai đội thi đấu");
+      return;
+    } 
+    const ngayGioDuKien = new Date(data.ngayGioDuKien!!);
+    ngayGioDuKien.setHours(0,0,0,0);
+    const ngayGioThucTe = new Date(data.ngayGioThucTe!!);
+    ngayGioThucTe.setHours(0,0,0,0);
+    if (ngayGioDuKien < minDate || ngayGioThucTe > maxDate) {
+      showErrorToast("Ngày giờ phải trong khoảng từ " + dateFormat(minDate, "dd/mm/yyyy") + " đến " + dateFormat(maxDate, "dd/mm/yyyy"));
+      return;
+    }
 
     console.log(editData);
     try {
@@ -263,7 +308,8 @@
       });
 
       if (!response.ok) {
-        throw new Error("Lỗi tạo lịch thi đấu");
+        const result = await response.json();
+        throw new Error(result.message || "Lỗi tạo lịch thi đấu");  
       }
 
       const result = await response.json();
@@ -288,8 +334,11 @@
       formState = false;
       showOkToast("Tạo lịch thi đấu mới thành công");
     } catch (error) {
-      console.error("Error:", error);
-      showErrorToast(String(error));
+      if (error instanceof Error) {
+        showErrorToast(error.message);
+      } else {
+        console.error("Error:", error);
+      }
     }
   };
 </script>

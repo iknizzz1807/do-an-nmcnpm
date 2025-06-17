@@ -39,6 +39,11 @@ export const POST : RequestHandler = async ({ request, locals } : { request: Req
       ngayGioThucTe: new Date(data.ngayGioThucTe).toJSON(),
       ngayGioDuKien: new Date(data.ngayGioDuKien).toJSON(),
     };
+
+    if (lichThiDau.ngayGioDuKien === "Invalid Date" || lichThiDau.ngayGioThucTe === "Invalid Date")
+      throw new Error("Ngày giờ dự kiến hoặc thực tế không hợp lệ");
+    if (lichThiDau.ngayGioDuKien!! > lichThiDau.ngayGioThucTe!!)
+      throw new Error("Ngày giờ dự kiến không thể lớn hơn ngày giờ thực tế");
     
     const doiBongMot = await selectDoiBongMaDoi(lichThiDau.doiMot);
     const doiBongHai = await selectDoiBongMaDoi(lichThiDau.doiHai);

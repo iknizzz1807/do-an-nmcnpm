@@ -37,15 +37,16 @@ export type BangXepHangNgay = {
   soTranThua: number,
   soTranHoa: number,
   hieuSo: number,
-  hang: number
+  soBanThang: number,
+  hang: number,
 }
 
 export type CauThuGhiBan = {
   maCT: number;
-  maDoi: number;
   tenCT: string;
+  maDoi: number;
   tenDoi: string;
-  maLCT: number;
+  maLCT: number | null;
   soBanThang: number;
 }
 

@@ -136,7 +136,7 @@ const seedSeason = async(teams: any, matches: any) => {
       maSan: (await selectDoiBongMaDoi(teamsMap.get(match.homeTeam.id)!!))?.maSan,
       doiMot: teamsMap.get(match.homeTeam.id)!!,
       doiHai: teamsMap.get(match.awayTeam.id)!!,
-      doiThang: (match.score.winner === "DRAW" ? 
+      doiThang: (match.score.winner === "DRAW" || match.score.winner === null ? 
         null : 
         (match.score.winner === "HOME_TEAM" ? 
           teamsMap.get(match.homeTeam.id)!! : 

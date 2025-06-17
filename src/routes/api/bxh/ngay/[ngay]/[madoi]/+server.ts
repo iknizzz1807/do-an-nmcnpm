@@ -1,5 +1,5 @@
 import type { RequestHandler } from "@sveltejs/kit";
-import { selectCauThuGhiBan } from "$lib/server/db/functions/BangXepHang";
+import { selectCauThuGhiBanNgay } from "$lib/server/db/functions/BangXepHang";
 import { errorResponseJSON, isNumber } from "$lib";
 
 export const GET: RequestHandler = async ({ locals, params, request }) => {
@@ -17,7 +17,7 @@ export const GET: RequestHandler = async ({ locals, params, request }) => {
     
     let date = new Date(ngay);
     
-    const dsCTGhiBan = await selectCauThuGhiBan(date, madoi);
+    const dsCTGhiBan = await selectCauThuGhiBanNgay(date, madoi);
     return new Response(JSON.stringify(dsCTGhiBan), {
       status: 200,
       headers: {
