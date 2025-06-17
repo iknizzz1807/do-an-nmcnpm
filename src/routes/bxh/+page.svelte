@@ -21,8 +21,8 @@
     { header: "Số trận thắng", accessor: "soTranThang" },
     { header: "Số trận thua", accessor: "soTranThua" },
     { header: "Số trận hòa", accessor: "soTranHoa" },
+    { header: "Điểm", accessor: "diem" },
     { header: "Hiệu số", accessor: "hieuSo" },
-    { header: "Số bàn thắng", accessor: "soBanThang" },
     { header: "Hạng", accessor: "hang" },
   ];
 

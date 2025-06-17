@@ -36,8 +36,8 @@ export type BangXepHangNgay = {
   soTranThang: number,
   soTranThua: number,
   soTranHoa: number,
+  diem: number,
   hieuSo: number,
-  soBanThang: number,
   hang: number,
 }
 

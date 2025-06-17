@@ -86,38 +86,36 @@
     }
   };
 
-  const onDeleteClick = async (data: any, index: number) => {
-    if (confirm(`Bạn có chắc muốn xóa "${data.tenDS}" không?`)) {
-      selectedIndex = index;
-      await deleteDiemSo(data.maDS);
-      selectedIndex = -1;
-    }
-  };
+  // const onDeleteClick = async (data: any, index: number) => {
+  //   if (confirm(`Bạn có chắc muốn xóa "${data.tenDS}" không?`)) {
+  //     selectedIndex = index;
+  //     await deleteDiemSo(data.maDS);
+  //     selectedIndex = -1;
+  //   }
+  // };
 
-  const deleteDiemSo = async (maDS: number) => {
-    try {
-      const response = await fetch("/api/caidat/diemso", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ maDS: maDS }),
-      });
+  // const deleteDiemSo = async (maDS: number) => {
+  //   try {
+  //     const response = await fetch("/api/caidat/diemso", {
+  //       method: "DELETE",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ maDS: maDS }),
+  //     });
 
-      if (!response.ok) {
-        throw new Error("Lỗi khi xóa Điểm số");
-      }
+  //     if (!response.ok) {
+  //       throw new Error("Lỗi khi xóa Điểm số");
+  //     }
 
-      diemSo.splice(selectedIndex, 1);
-      showOkToast("Xóa thành công");
-    } catch (error) {
-      console.error("Error:", error);
-      showErrorToast(String(error));
-    }
-  };
+  //     diemSo.splice(selectedIndex, 1);
+  //     showOkToast("Xóa thành công");
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //     showErrorToast(String(error));
+  //   }
+  // };
 </script>
-
-<!-- RESTRUCTURED: Removed outer container and title. This component now focuses only on the table and its associated form logic. -->
 <div class="space-y-6">
   <Table
     title="Quản lý Điểm số"
@@ -126,7 +124,6 @@
     redirectParam={""}
     tableType=""
     {onEditClick}
-    {onDeleteClick}
     showExportCSV={false}
   />
 </div>

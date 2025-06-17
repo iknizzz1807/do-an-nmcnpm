@@ -68,8 +68,8 @@ export const selectBXHDoiNgay = async (ngay: Date) => {
       soTranThua: soTranThua,
       soTranHoa: soTran - soTranThang - soTranThua,
       hieuSo: 0,
+      diem: soBanThang.soBanThang,
       hang: 0,
-      soBanThang: soBanThang.soBanThang
     }
     result.push(doiBXH);
   }
@@ -130,16 +130,16 @@ export const selectBXHDoiThang = async (thang: Date) => {
       .innerJoin(LichThiDauTable, eq(LichThiDauTable.maTD, BanThangTable.maTD))
       .where(and(comparationThang, eq(CauThuTable.maDoi, value)))
       .groupBy(CauThuTable.maDoi)).at(0) ?? {soBanThang: 0};
-    const doiBXH = {
+    const doiBXH : BangXepHangNgay = {
       maDoi: doi.maDoi,
       tenDoi: doi.tenDoi,
       soTran: soTran,
       soTranThang: soTranThang,
       soTranThua: soTranThua,
       soTranHoa: soTran - soTranThang - soTranThua,
-      hieuSo: 0,
       hang: 0,
-      soBanThang: soBanThang.soBanThang
+      hieuSo: 0,
+      diem: soBanThang.soBanThang,
     }
     // console.log(doiBXH);
     result.push(doiBXH);
@@ -205,9 +205,9 @@ export const selectBXHDoiMuaGiai = async (maMG: number) => {
       soTranThang: soTranThang,
       soTranThua: soTranThua,
       soTranHoa: soTran - soTranThang - soTranThua,
-      hieuSo: 0,
       hang: 0,
-      soBanThang: soBanThang.soBanThang
+      hieuSo: 0,
+      diem: soBanThang.soBanThang,
     }
     // console.log(doiBXH);
     result.push(doiBXH);

@@ -75,7 +75,7 @@
         max={30}
         forValue="soCauThuMin"
         bind:bindValue={setting.soCauThuMin}
-        label="Số cầu thủ nhiều nhất mỗi đội"
+        label="Số cầu thủ tối thiểu mỗi đội"
         unit=""
       />
       <SettingNumberInput
@@ -83,7 +83,7 @@
         max={40}
         forValue="soCauThuMax"
         bind:bindValue={setting.soCauThuMax}
-        label="Số cầu thủ nhiều nhất mỗi đội"
+        label="Số cầu thủ tối đa mỗi đội"
         unit=""
       />
     </SettingSection>

@@ -78,10 +78,9 @@
     )
       .filter(
         (p) =>
-          p.cauThu.maDoi === currentTeamId &&
-          !participatingIds.has(p.cauThu.maCT)
-      )
-      .map((value) => value.cauThu);
+          p.maDoi === currentTeamId &&
+          !participatingIds.has(p.maCT)
+      );
   });
 
   // Function to add a player (passed from Available Table)

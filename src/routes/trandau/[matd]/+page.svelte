@@ -48,7 +48,6 @@
     { optionValue: doiMot?.maDoi ?? 0, optionName: doiMot?.tenDoi ?? "" },
     { optionValue: doiHai?.maDoi ?? 0, optionName: doiHai?.tenDoi ?? "" },
   ];
-  $inspect(doiMot);
 
 </script>
 

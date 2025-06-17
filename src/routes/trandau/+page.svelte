@@ -222,14 +222,6 @@
       showErrorToast("Vui lòng chọn đủ thông tin");
       return;
     }
-    if ((data.ngayGioDuKien ?? null) === null || (data.ngayGioThucTe ?? null) === null) {
-      showErrorToast("Vui lòng nhập ngày giờ dự kiến và thực tế");
-      return;
-    }
-    if (data.ngayGioDuKien!! > data.ngayGioThucTe!!) {
-      showErrorToast("Ngày giờ thực tế không thể trước ngày giờ dự kiến");
-      return;
-    }
 
     try {
       const response = await fetch("/api/lichthidau", {

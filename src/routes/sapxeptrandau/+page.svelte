@@ -54,6 +54,10 @@
   }
 
   async function saveSelection() {
+    if (participatingTeams.length <= 1) {
+      showErrorToast("Vui lòng chọn ít nhất hai đội bóng");
+      return;
+    }
     try 
     {
       const body = [...participatingTeams];
@@ -103,6 +107,7 @@
         onEditClick={undefined}
         onDeleteClick={undefined}
         onItemClick={undefined}
+        showExportCSV={false}
       >
         <!-- Default rendering in Table.svelte handles this -->
       </Table>
@@ -124,6 +129,7 @@
       tableType=""
       redirectParam=""
       onDeleteClick={removeTeamFromTable}
+      showExportCSV={false}
     />
 
     {#if participatingTeams.length === 0}
