@@ -42,6 +42,7 @@
 
   const onCloseForm = () => {
     editData.clear();
+    selectedIndex = -1;
     formState = false;
   };
 
@@ -89,6 +90,7 @@
     if (confirm(`Bạn có chắc muốn xóa "${data.tenDS}" không?`)) {
       selectedIndex = index;
       await deleteDiemSo(data.maDS);
+      selectedIndex = -1;
     }
   };
 

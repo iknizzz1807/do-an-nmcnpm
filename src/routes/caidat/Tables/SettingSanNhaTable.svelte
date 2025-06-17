@@ -41,6 +41,7 @@
 
   const onCloseForm = () => {
     editData.clear();
+    selectedIndex = -1;
     formState = false;
   };
 
@@ -98,6 +99,7 @@
     if (data satisfies SanNha) {
       selectedIndex = index;
       await deleteSanNha(data.maSan);
+      selectedIndex = -1;
     } else {
       console.error("Data không thỏa mãn loại CauThu");
     }

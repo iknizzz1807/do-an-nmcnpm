@@ -28,13 +28,14 @@ export const POST: RequestHandler = async ({
     throw new Error("Không tìm thấy mùa giải");
 
   try {
-    const data = await request.json();
+    let data = await request.json();
+    data.maMG = locals.muaGiai!!.maMG!!;
     
     if (data.maDoi ?? null) {
       await updateDoiBong(data);
     }
     else{
-      await insertDoiBong(data)
+      await insertDoiBong(data);
     }
     
     return new Response(JSON.stringify(data), {

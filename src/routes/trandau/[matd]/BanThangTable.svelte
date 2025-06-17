@@ -64,7 +64,7 @@
     { header: "Cầu thủ", accessor: "tenCT" },
     { header: "Đội", accessor: "tenDoi" },
     { header: "Thời điểm", accessor: "thoiDiem" },
-    { header: "Loại bàn thắng", accessor: "maLBT" },
+    { header: "Loại bàn thắng", accessor: "tenLBT" },
   ];
 
   const formFields: FormField[] = [
@@ -118,6 +118,8 @@
       }
       if (cauThu === null) continue;
       banThang.tenCT = cauThu.tenCT;
+      banThang.tenLBT = loaiBTs.find((val) => val.maLBT === banThang.maLBT)?.tenLBT ?? "Không xác định";
+      console.log("Bàn thắng:", banThang);
     }
   });
 
@@ -128,6 +130,8 @@
 
   const onCloseForm = () => {
     editData.clear();
+    selectedIndex = -1;
+    formState = false;
   };
 
   const onEditClick = (data: BanThang, index: number) => {
@@ -197,6 +201,7 @@
     if (data satisfies BanThang) {
       selectedIndex = index;
       await deleteBanThang(data);
+      selectedIndex = -1;
     } else {
       console.error("Data không thỏa mãn");
     }

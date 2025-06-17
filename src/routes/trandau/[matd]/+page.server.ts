@@ -58,10 +58,8 @@ export const load = (async ({ fetch, params, locals, route }) => {
     
     return {
       maTD: maTD,
-      maDoiMot: tranDau.doiMot,
-      maDoiHai: tranDau.doiHai,
-      tenDoiMot: doiMot.tenDoi,
-      tenDoiHai: doiHai.tenDoi,
+      doiMot: doiMot,
+      doiHai: doiHai, 
       thoiDiemGhiBanToiDa: thoiDiemGhiBanToiDa,
       cauThuDoiMot: cauThuDoiMot,
       cauThuDoiHai: cauThuDoiHai,
@@ -73,10 +71,8 @@ export const load = (async ({ fetch, params, locals, route }) => {
   } catch (err) {
     console.error(err);
     return {
-      maDoiMot: 0,
-      maDoiHai: 0,
-      tenDoiMot: "",
-      tenDoiHai: "",
+      doiMot: null,
+      doiHai: null, 
       thoiDiemGhiBanToiDa: 0,
       cauThuDoiMot: [],
       cauThuDoiHai: [],

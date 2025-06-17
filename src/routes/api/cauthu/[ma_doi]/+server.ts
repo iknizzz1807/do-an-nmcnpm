@@ -49,9 +49,6 @@ export const POST: RequestHandler = async ({ request, params, locals }) => {
     if (!Number.isFinite(maDoi))
       throw new Error("Không tìm thấy đội bóng");
 
-    const cauThu = await selectCauThuMaCT(data.maCT!!);
-    if (cauThu === null)
-      throw new Error("Không tìm thấy cầu thủ với mã " + data.maCT + " tên " + data.tenCT);
     if (data.maLCT === null)
       throw new Error("Không có mã loại cầu thủ");
     
@@ -69,6 +66,9 @@ export const POST: RequestHandler = async ({ request, params, locals }) => {
     }
     else {
 
+      const cauThu = await selectCauThuMaCT(data.maCT!!);
+      if (cauThu === null)
+        throw new Error("Không tìm thấy cầu thủ với mã " + data.maCT + " tên " + data.tenCT);
       if (cauThu.maLCT !== data.maLCT && (await isThamGiaDBExceedMax(data.maDoi, data.maLCT!!))) {
         const lct = await selectLoaiCTMaLCT(data.maLCT!!);
         throw new Error("Đội bóng đã đạt đủ số cầu thủ tối đa của " + (lct?.tenLCT ?? ""));

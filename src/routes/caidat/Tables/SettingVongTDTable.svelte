@@ -34,6 +34,7 @@
 
   const onCloseForm = () => {
     editData.clear();
+    selectedIndex = -1;
     formState = false;
   };
 
@@ -90,6 +91,7 @@
     if (data satisfies VongTD) {
       selectedIndex = index;
       await deleteVongTD(data.maVTD);
+      selectedIndex = -1;
     } else {
       console.error("Data không thỏa mãn");
     }

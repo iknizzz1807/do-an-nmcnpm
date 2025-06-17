@@ -32,6 +32,7 @@
     formState = $bindable(),
     submitForm,
     onOpenForm,
+    onCloseForm,
     fields,
   }: Props = $props();
   let inputValues: FormInputMap = $state(new SvelteMap());
@@ -71,6 +72,7 @@
       if (field.valueType === "string") inputValues.set(field.propertyName, "");
       if (field.valueType === "number") inputValues.set(field.propertyName, 0);
     }
+    onCloseForm?.();
   };
 </script>
 

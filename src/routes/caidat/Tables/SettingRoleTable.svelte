@@ -55,6 +55,7 @@
 
   const onCloseForm = () => {
     editData.clear();
+    selectedIndex = -1;
     formState = false;
   };
 

@@ -174,6 +174,8 @@
 
   const onCloseForm = () => {
     editData.clear();
+    selectedIndex = -1;
+    formState = false;
   };
 
   const onEditClick = (data: LichThiDau, index: number) => {
@@ -199,6 +201,7 @@
     if (data satisfies LichThiDau) {
       selectedIndex = index;
       await deleteTranDau(data);
+      selectedIndex = -1;
     } else {
       console.error("Data không thỏa mãn");
     }

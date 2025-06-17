@@ -34,6 +34,7 @@
 
   const onCloseForm = () => {
     editData.clear();
+    selectedIndex = -1;
     formState = false;
   };
 
@@ -90,6 +91,7 @@
     if (data satisfies ViTri) {
       selectedIndex = index;
       await deleteViTri(data.maVT);
+      selectedIndex = -1;
     } else {
       console.error("Data không thỏa mãn");
     }

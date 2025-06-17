@@ -17,8 +17,8 @@
   const cauThuDoiHai: { cauThu: CauThu; viTri: ViTri }[] = $state(
     data.cauThuDoiHai
   );
-  const maDoiMot = $state(data.maDoiMot);
-  const maDoiHai = $state(data.maDoiHai);
+  const doiMot = $state(data.doiMot!!);
+  const doiHai = $state(data.doiHai!!); 
   const danhSachBanThang: BanThang[] = $state(data.danhSachBanThang);
   const loaiBTs: LoaiBT[] = $state(data.loaiBTs);
   const isEditable = $state(data.isEditable);
@@ -42,9 +42,10 @@
     });
 
   const doiOption: FieldOption[] = [
-    { optionValue: maDoiMot, optionName: data.tenDoiMot },
-    { optionValue: maDoiHai, optionName: data.tenDoiHai },
+    { optionValue: doiMot?.maDoi ?? 0, optionName: doiMot?.tenDoi ?? "" },
+    { optionValue: doiHai?.maDoi ?? 0, optionName: doiHai?.tenDoi ?? "" },
   ];
+  $inspect(doiMot);
 </script>
 
 <svelte:head>
@@ -67,19 +68,21 @@
       <div
         class="w-20 h-20 sm:w-24 sm:h-24 bg-white/5 rounded-full flex items-center justify-center border-2 border-white/10"
       >
-        <!-- Using team initials as a placeholder -->
-        <span class="text-3xl font-bold text-gray-300"
-          >{data.tenDoiMot.substring(0, 1).toUpperCase()}</span
+      
+        <img
+          src={doiMot.imageURL}
+          alt={doiMot.tenDoi}
+          class="w-16 h-16 sm:w-20 sm:h-20 rounded-full"
         >
       </div>
-      <h2 class="text-lg sm:text-xl font-bold">{data.tenDoiMot}</h2>
+      <h2 class="text-lg sm:text-xl font-bold">{doiMot?.tenDoi}</h2>
     </div>
 
     <!-- Score -->
     <div class="text-4xl sm:text-5xl font-bold text-lime-300">
       <span class="tracking-widest">
-        {danhSachBanThang.filter((bt) => bt.maDoi === maDoiMot)
-          .length} - {danhSachBanThang.filter((bt) => bt.maDoi === maDoiHai)
+        {danhSachBanThang.filter((bt) => bt.maDoi === doiMot.maDoi)
+          .length} - {danhSachBanThang.filter((bt) => bt.maDoi === doiHai.maDoi)
           .length}
       </span>
     </div>
@@ -90,11 +93,13 @@
       <div
         class="w-20 h-20 sm:w-24 sm:h-24 bg-white/5 rounded-full flex items-center justify-center border-2 border-white/10"
       >
-        <span class="text-3xl font-bold text-gray-300"
-          >{data.tenDoiHai.substring(0, 1).toUpperCase()}</span
+        <img
+          src={doiHai.imageURL}
+          alt={doiHai.tenDoi}
+          class="w-16 h-16 sm:w-20 sm:h-20 rounded-full"
         >
       </div>
-      <h2 class="text-lg sm:text-xl font-bold">{data.tenDoiHai}</h2>
+      <h2 class="text-lg sm:text-xl font-bold">{doiHai?.tenDoi}</h2>
     </div>
   </div>
 </div>
@@ -105,10 +110,10 @@
   dsBanThang={danhSachBanThang}
   {cauThuDoiMot}
   {cauThuDoiHai}
-  {maDoiMot}
-  {maDoiHai}
-  tenDoiMot={data.tenDoiMot}
-  tenDoiHai={data.tenDoiHai}
+  maDoiMot={doiMot.maDoi!!}
+  maDoiHai={doiHai.maDoi!!}
+  tenDoiMot={doiMot.tenDoi}
+  tenDoiHai={doiHai.tenDoi}
   {loaiBTs}
   {cauThuDoiMotOption}
   {cauThuDoiHaiOption}

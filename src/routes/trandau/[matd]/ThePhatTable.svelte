@@ -81,6 +81,8 @@
 
   const onCloseForm = () => {
     editData.clear();
+    selectedIndex = -1;
+    formState = false;
   }
 
   const onEditClick = (data: ThePhat, index: number)  => {

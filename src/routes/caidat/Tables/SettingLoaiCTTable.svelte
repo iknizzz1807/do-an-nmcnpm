@@ -41,6 +41,7 @@
 
   const onCloseForm = () => {
     editData.clear();
+    selectedIndex = -1;
     formState = false;
   };
 
@@ -98,6 +99,7 @@
     if (data satisfies LoaiCT) {
       selectedIndex = index;
       await deleteLoaiCT(data.maLCT);
+      selectedIndex = -1;
     } else {
       console.error("Data không thỏa mãn");
     }

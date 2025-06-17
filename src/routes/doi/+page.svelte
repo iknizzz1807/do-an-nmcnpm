@@ -56,7 +56,7 @@
       options: sanNhaOption,
     },
   ];
-  let selectedIndex: number = $state(0);
+  let selectedIndex: number = $state(-1);
   let maDoi: number = $state(0);
 
   let formState: boolean = $state(false);
@@ -69,7 +69,10 @@
 
   const onCloseForm = () => {
     editData.clear();
+    selectedIndex = -1;
+    formState = false;
   };
+  $inspect(selectedIndex, "selectedIndex");
 
   const onEditClick = (data: DoiBong, index: number) => {
     if (data satisfies DoiBong) {
@@ -90,11 +93,13 @@
       selectedIndex = index;
       maDoi = data.maDoi;
       await deleteDoiBong();
+      selectedIndex = -1;
     } else {
       console.error("Data không thỏa mãn");
     }
   };
 
+  $inspect(selectedIndex, "selectedIndex");
   const addDoiBong = async (e: Event, data: DoiBong) => {
     e.preventDefault();
     if (data.tenDoi.trim() === "") return;
@@ -257,6 +262,6 @@
   bind:formState
   fields={formFields}
   submitForm={addDoiBong}
-  {onCloseForm}
-  {onOpenForm}
+  onCloseForm={onCloseForm}
+  onOpenForm={onOpenForm}
 />

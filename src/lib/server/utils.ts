@@ -17,4 +17,12 @@ type TypesAreEqual<T, U> =
     false;
 
 
-export { getRandomUUID, randIntBetween, choose, type TypesAreEqual };
+const randDateBetween = (from: Date, to: Date) => {
+    const fromTime = from.getTime();
+    const toTime = to.getTime();
+    return new Date(fromTime + Math.random() * (toTime - fromTime));
+}
+
+
+
+export { getRandomUUID, randIntBetween, randDateBetween, choose, type TypesAreEqual };

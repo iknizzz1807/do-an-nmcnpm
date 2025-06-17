@@ -97,7 +97,10 @@
 
   const onCloseForm = () => {
     editData.clear();
+    selectedIndex = -1;
+    formState = false;
   };
+  $inspect(selectedIndex, "selectedIndex");
 
   const onEditClick = (data: any, index: number) => {
     if (data satisfies CauThu) {
@@ -194,6 +197,7 @@
     if (data satisfies CauThu) {
       selectedIndex = index;
       await deletePlayer(data);
+      selectedIndex = -1;
     } else {
       console.error("Data không thỏa mãn loại CauThu");
     }

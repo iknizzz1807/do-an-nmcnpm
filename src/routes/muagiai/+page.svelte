@@ -81,6 +81,8 @@
 
   const onCloseForm = () => {
     editData.clear();
+    selectedIndex = -1;
+    formState = false;
   };
 
   const onEditClick = (data: MuaGiai, index: number) => {
@@ -103,6 +105,7 @@
     if (data satisfies MuaGiai) {
       selectedIndex = index;
       await deleteMuaGiai(data);
+      selectedIndex = -1;
     } else {
       console.error("Data không thỏa mãn loại MuaGiai");
     }

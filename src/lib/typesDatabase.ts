@@ -66,6 +66,7 @@ export type BanThang = {
   maDoi?: number | undefined;
   tenCT?: string | undefined;
   tenDoi?: string | undefined;
+  tenLBT?: string | undefined;
 };
 
 export type ThePhat = {
