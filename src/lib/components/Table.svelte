@@ -20,6 +20,7 @@
     onAddClick?: ((data: any, index: number) => void) | undefined;
     showExportCSV?: boolean;
     showTeamLogo?: boolean;
+    error?: boolean;
   };
 </script>
 
@@ -43,6 +44,7 @@
     onAddClick,
     showExportCSV = true,
     showTeamLogo = false,
+    error = false,
   }: TableProps = $props();
   const deleteButton = $state((onDeleteClick ?? null) !== null);
   const editButton = $state((onEditClick ?? null) !== null);
@@ -238,7 +240,10 @@
 <main class="flex justify-center items-start w-full">
   <div
     id="table-container"
-    class="bg-white rounded-lg shadow-md p-5 w-full border border-gray-200"
+    class="bg-white rounded-lg shadow-md p-5 w-full border transition-all duration-300"
+    class:border-gray-200={!error}
+    class:border-red-500={error}
+    class:shadow-red-100={error}
   >
     <div class="flex justify-between items-center mb-5">
       <h2 class="text-xl font-semibold text-gray-800">{title}</h2>
@@ -267,7 +272,7 @@
       {/if}
     </div>
 
-    <div class="max-h-120 overflow-auto border border-gray-200 rounded-lg">
+    <div class="max-h-110 overflow-auto border border-gray-200 rounded-lg">
       <table class="min-w-full">
         <!-- Header cố định -->
         <thead class="bg-slate-100 sticky top-0 z-10">

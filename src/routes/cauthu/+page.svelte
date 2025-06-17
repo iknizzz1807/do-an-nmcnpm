@@ -67,7 +67,9 @@
   const columns = [
     { header: "Mã cầu thủ", accessor: "maCT" },
     { header: "Tên cầu thủ", accessor: "tenCT" },
-    { header: "Ngày sinh", accessor: "ngaySinh",
+    {
+      header: "Ngày sinh",
+      accessor: "ngaySinh",
       accessFunction: (data: CauThu) => {
         return new Date(data.ngaySinh).toLocaleDateString("vi-VN");
       },
@@ -196,9 +198,7 @@
       if (error instanceof Error) {
         console.error("Error:", error.message);
         showErrorToast(error.message);
-      } 
-      else
-        console.error("Error:", error); 
+      } else console.error("Error:", error);
     }
   };
 
@@ -226,9 +226,7 @@
       if (error instanceof Error) {
         console.error("Error:", error.message);
         showErrorToast(error.message);
-      } 
-      else
-        console.error("Error:", error); 
+      } else console.error("Error:", error);
     }
   };
 </script>
@@ -237,42 +235,57 @@
   <title>Các Cầu thủ</title>
 </svelte:head>
 
-<div class="w-full max-w-md mx-auto relative mb-6">
-  <div class="relative">
-    <div
-      class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
-    >
-      <svg
-        class="w-4 h-4 text-gray-500"
-        aria-hidden="true"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 20 20"
+<div class="w-full max-w-4xl mx-auto relative mb-6">
+  <div class="flex gap-4 justify-center items-center">
+    <div class="relative flex-1">
+      <div
+        class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
       >
-        <path
-          stroke="currentColor"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-        />
-      </svg>
+        <svg
+          class="w-4 h-4 text-gray-500"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 20 20"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+          />
+        </svg>
+      </div>
+      <input
+        type="search"
+        class="w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+        placeholder="Tìm kiếm..."
+        bind:value={searchTerm}
+        oninput={handleInputChange}
+        onfocus={handleFocus}
+        onblur={handleBlur}
+        onkeydown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            searchPlayer();
+          }
+        }}
+      />
     </div>
-    <input
-      type="search"
-      class="w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-      placeholder="Tìm kiếm..."
-      bind:value={searchTerm}
-      oninput={handleInputChange}
-      onfocus={handleFocus}
-      onblur={handleBlur}
-      onkeydown={(e) => {
-        if (e.key === "Enter") {
-          e.preventDefault();
-          searchPlayer();
-        }
-      }}
-    />
+
+    <div>
+      {#if isEditable}
+        <div class="flex justify-center items-center">
+          <a
+            class="bg-green-600 text-white px-5 py-2.5 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 shadow-md cursor-pointer text-base font-semibold transition-all duration-200 transform hover:-translate-y-0.5"
+            href="/cauthu/lichsu"
+          >
+            Lịch sử cập nhật
+          </a>
+        </div>
+      {/if}
+    </div>
   </div>
 </div>
 
@@ -294,14 +307,3 @@
   {onCloseForm}
   {onOpenForm}
 />
-
-
-{#if isEditable}
-  <div class="flex justify-center">
-    <a 
-    class="bg-green-600 mb-4 text-white px-5 py-2.5 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 shadow-md cursor-pointer text-base font-semibold transition-all duration-200 transform hover:-translate-y-0.5"
-    href="/cauthu/lichsu">
-      Lịch sử cập nhật  
-    </a>
-  </div>
-{/if}

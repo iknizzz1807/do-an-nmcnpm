@@ -15,7 +15,7 @@
     <div class="main-wrapper flex-grow flex flex-col bg-white pl-[260px] ]">
       <main
         id="content-area"
-        class="content-area flex-grow p-[30px] pb-0 overflow-y-auto bg-[#f9f9f9]"
+        class="content-area flex-grow p-[20px] pb-0 overflow-y-auto bg-[#f9f9f9]"
         style="min-height:0;"
       >
         {@render children()}
