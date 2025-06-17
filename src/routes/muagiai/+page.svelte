@@ -10,6 +10,7 @@
   } from "$lib/components/Form.svelte";
   import { SvelteMap } from "svelte/reactivity";
   import { onMount } from "svelte";
+  import dateFormat from "dateformat";
   import {
     afterNavigate,
     beforeNavigate,
@@ -37,13 +38,13 @@
       header: "Ngày diễn ra",
       accessor: "ngayDienRa",
       accessFunction: (data: MuaGiai) =>
-        new Date(data.ngayDienRa!!).toLocaleDateString(),
+        new Date(data.ngayDienRa!!).toLocaleDateString("vi-VN"),
     },
     {
       header: "Ngày kết thúc",
       accessor: "ngayKetThuc",
       accessFunction: (data: MuaGiai) =>
-        new Date(data.ngayKetThuc!!).toLocaleDateString(),
+        new Date(data.ngayKetThuc!!).toLocaleDateString("vi-VN"),
     },
   ];
 
@@ -87,11 +88,13 @@
       editData.clear();
       editData.set("maMG", data.maMG ?? null);
       editData.set("tenMG", data.tenMG);
-      editData.set("ngayDienRa", data.ngayDienRa);
+      editData.set("ngayDienRa", new Date(data.ngayDienRa));
+      editData.set("ngayKetThuc", new Date(data.ngayKetThuc));
       selectedIndex = index;
       formState = true;
+      console.log(editData);
     } else {
-      console.error("Data không thỏa mãn LichThiDau");
+      console.error("Data không thỏa mãn MuaGiai");
       selectedIndex = -1;
     }
   };
@@ -101,13 +104,13 @@
       selectedIndex = index;
       await deleteMuaGiai(data);
     } else {
-      console.error("Data không thỏa mãn loại CauThu");
+      console.error("Data không thỏa mãn loại MuaGiai");
     }
   };
 
   const onItemClick = async (data: MuaGiai, index: number) => {
     try {
-      const response = await fetch("api/selectmuagiai", {
+      const response = await fetch("/api/selectmuagiai", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -126,16 +129,6 @@
     e.preventDefault();
     if (data.tenMG.trim() === "") return;
 
-    if (
-      danhSachMuaGiai.some(
-        (MuaGiai) =>
-          MuaGiai.tenMG.trim().toLowerCase() === data.tenMG.trim().toLowerCase()
-      )
-    ) {
-      showErrorToast("Tên Mùa giải đã tồn tại");
-      return;
-    }
-
     try {
       const response = await fetch("/api/muagiai", {
         method: "POST",
@@ -149,11 +142,15 @@
         throw new Error("Lỗi tạo Mùa giải");
       }
 
-      const result = await response.json();
+      let result = await response.json();
+      console.log("Mùa giải đã được tạo:", result);
 
       // Cập nhật danh sách Mùa giải nếu cần thiết
       if (selectedIndex === -1) danhSachMuaGiai.push(result);
-      else danhSachMuaGiai[selectedIndex] = result;
+      else {
+        result.imageURL = danhSachMuaGiai[selectedIndex].imageURL;
+        danhSachMuaGiai[selectedIndex] = result;
+      }
 
       // Đóng form và hiện toast thành công sau khi thành công
       formState = false;

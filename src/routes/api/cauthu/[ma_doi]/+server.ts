@@ -1,11 +1,12 @@
 import type { RequestHandler } from "./$types";
-import { deleteCauThu, selectCauThuDoiBong, updateCauThu } from "$lib/server/db/functions/CauThu";
+import { deleteCauThu, selectCauThuDoiBong, selectCauThuMaCT, updateCauThu } from "$lib/server/db/functions/CauThu";
 import { insertCauThu } from "$lib/server/db/functions/CauThu";
 import { countThamGiaDB, isThamGiaDBExceedMax } from "$lib/server/db/functions/ThamGiaDB";
 import type { CauThu } from "$lib/typesDatabase";
 import { calculateAge, errorResponseJSON } from "$lib";
 import { selectThamSo } from "$lib/server/db/functions/ThamSo";
 import { selectAllLoaiCT, selectLoaiCTMaLCT } from "$lib/server/db/functions/Data/LoaiCT";
+import dateFormat from "dateformat";
 
 export const _GETCauThuMaDoi = async(ma_doi: string) => {
   const maDoi = parseInt(ma_doi);
@@ -32,6 +33,8 @@ export const POST: RequestHandler = async ({ request, params, locals }) => {
   let data: CauThu = await request.json();
   try {
 
+    data.ngaySinh = dateFormat(data.ngaySinh, "isoDate");  
+
     const ctAge = calculateAge(new Date(data.ngaySinh));
     const tuoiMin = (await selectThamSo("tuoiMin"))!!;
     const tuoiMax = (await selectThamSo("tuoiMax"))!!;
@@ -44,22 +47,35 @@ export const POST: RequestHandler = async ({ request, params, locals }) => {
     const maDoi = parseInt(params.ma_doi);
 
     if (!Number.isFinite(maDoi))
-      throw new Error("Khong tim thay doi");
+      throw new Error("Không tìm thấy đội bóng");
 
-    const soCauThuMax = (await selectThamSo("soCauThuMax"))!!;
-    if ((await countThamGiaDB(maDoi)) >= soCauThuMax)
-      throw new Error("Đội bóng đã đạt đủ số cầu thủ tối đa");
-
-    if (data.maLCT && (await isThamGiaDBExceedMax(maDoi, data.maLCT))) {
-      const lct = await selectLoaiCTMaLCT(data.maLCT);
-      throw new Error("Đội bóng đã đạt đủ số cầu thủ tối đa của " + (lct?.tenLCT ?? ""));
-    }
+    const cauThu = await selectCauThuMaCT(data.maCT!!);
+    if (cauThu === null)
+      throw new Error("Không tìm thấy cầu thủ với mã " + data.maCT + " tên " + data.tenCT);
+    if (data.maLCT === null)
+      throw new Error("Không có mã loại cầu thủ");
     
     data.maDoi = maDoi;
-    if ((data.maCT ?? null) === null) 
+    if ((data.maCT ?? null) === null)  {
+      if (data.maLCT && (await isThamGiaDBExceedMax(maDoi, data.maLCT))) {
+        const lct = await selectLoaiCTMaLCT(data.maLCT);
+        throw new Error("Đội bóng đã đạt đủ số cầu thủ tối đa của " + (lct?.tenLCT ?? ""));
+      }
+
+      const soCauThuMax = (await selectThamSo("soCauThuMax"))!!;
+      if ((await countThamGiaDB(maDoi)) >= soCauThuMax)
+        throw new Error("Đội bóng đã đạt đủ số cầu thủ tối đa");
       await insertCauThu(data);
-    else
+    }
+    else {
+
+      if (cauThu.maLCT !== data.maLCT && (await isThamGiaDBExceedMax(data.maDoi, data.maLCT!!))) {
+        const lct = await selectLoaiCTMaLCT(data.maLCT!!);
+        throw new Error("Đội bóng đã đạt đủ số cầu thủ tối đa của " + (lct?.tenLCT ?? ""));
+      }
+      
       await updateCauThu(data);
+    }
     
   } catch (error) {
     if (error instanceof Error)

@@ -113,13 +113,17 @@
         throw new Error(error.message);
       }
 
-      const result = await response.json();
+      let result = await response.json();
       result.tenSan =
         danhSachSanNha.find((val) => val.maSan === result.maSan)?.tenSan ?? "";
 
       // Cập nhật danh sách đội bóng nếu cần thiết
       if (selectedIndex === -1) danhSachDoiBong.push(result);
-      else danhSachDoiBong[selectedIndex] = result;
+      else {
+        result.imageURL = danhSachDoiBong[selectedIndex].imageURL;
+        result.ketQua5TranGanNhat = danhSachDoiBong[selectedIndex].ketQua5TranGanNhat; 
+        danhSachDoiBong[selectedIndex] = result;
+      }
 
       // Đóng form và hiện toast thành công sau khi thành công
       formState = false;

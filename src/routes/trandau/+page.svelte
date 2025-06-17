@@ -138,19 +138,19 @@
     { header: "Đội thắng", accessor: "tenDoiThang" },
     { header: "Sân", accessor: "tenSan" },
     {
-      header: "Ngày giờ",
-      accessor: "ngayGioThucTe",
+      header: "Ngày giờ dự kiến",
+      accessor: "ngayGioDuKien",
       accessFunction: (data: LichThiDau) => {
-        return new Date(data.ngayGioThucTe!!).toLocaleString();
+        return new Date(data.ngayGioDuKien!!).toLocaleString("vi-VN");
       },
     },
-    // {
-    //   header: "Ngày giờ thực tế",
-    //   accessor: "ngayGioThucTe",
-    //   accessFunction: (data: LichThiDau) => {
-    //     return new Date(data.ngayGioThucTe!!).toLocaleString();
-    //   },
-    // },
+    {
+      header: "Ngày giờ thực tế",
+      accessor: "ngayGioThucTe",
+      accessFunction: (data: LichThiDau) => {
+        return new Date(data.ngayGioThucTe!!).toLocaleString("vi-VN");
+      },
+    },
   ];
 
   let selectedIndex: number = $state(0);
@@ -206,8 +206,10 @@
       data.doiHai === 0 ||
       data.maVTD === 0 ||
       data.maMG === 0
-    )
+    ) {
+      showErrorToast("Vui lòng chọn đủ thông tin");
       return;
+    }
 
     try {
       const response = await fetch("/api/lichthidau", {
@@ -245,8 +247,10 @@
       data.doiHai === 0 ||
       data.maVTD === 0 ||
       data.maMG === 0
-    )
+    ) {
+      showErrorToast("Vui lòng chọn đủ thông tin");
       return;
+    }
 
     console.log(editData);
     try {
@@ -269,8 +273,10 @@
       result.tenDoiHai =
         danhSachDoi.find((value) => value.maDoi == result.doiHai)?.tenDoi ?? "";
       result.tenDoiThang =
-        danhSachDoi.find((value) => value.maDoi == result.doiThang)?.tenDoi ??
-        null;
+        danhSachDoi.find((value) => value.maDoi == result.doiThang)?.tenDoi ?? null;
+      result.tenVTD = 
+        danhSachVTD.find((value) => value.maVTD === result.maVTD)?.tenVTD ?? "";
+      result.tenSan = danhSachSan.find(value => value.maSan === result.maSan)?.tenSan ?? "";
       // result.tenMG =
       //   danhSachMuaGiai.find((value) => value.maMG == result.maMG)?.tenMG ?? "";
       if (result.tenDoiThang === null) result.tenDoiThang = "Hòa";

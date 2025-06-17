@@ -32,7 +32,7 @@ export const POST : RequestHandler = async ({ request, locals } : { request: Req
       maVTD: data.maVTD,
       doiThang: data.doiThang,
       maMG: locals.muaGiai!!.maMG!!,
-      maSan: 1,
+      maSan: 1, // Select ma san o duoi
       maTD: data.maTD,
       maTT: data.maTT,
       thoiGianDaThiDau: 0,
@@ -42,6 +42,7 @@ export const POST : RequestHandler = async ({ request, locals } : { request: Req
     
     const doiBongMot = await selectDoiBongMaDoi(lichThiDau.doiMot);
     const doiBongHai = await selectDoiBongMaDoi(lichThiDau.doiHai);
+
     if (doiBongMot === null || doiBongHai === null)
       throw new Error("Đội bóng không tồn tại");
     const doiDaTrenSanNha = await selectThamSo("doiDaTrenSanNha");

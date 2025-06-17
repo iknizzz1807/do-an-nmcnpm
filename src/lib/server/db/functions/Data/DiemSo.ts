@@ -25,7 +25,7 @@ export const updateDiemSo = async(DiemSo: DiemSo) => {
   if ((DiemSo.maDS ?? null) == null)
     return;
   await db.update(DiemSoTable).set({
-    tenDS: DiemSo.tenDS,
+    // tenDS: DiemSo.tenDS,
     diemSo: DiemSo.diemSo
   }).where(eq(DiemSoTable.maDS, DiemSo.maDS!!));
 }

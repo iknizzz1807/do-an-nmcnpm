@@ -14,7 +14,9 @@ export const updateMuaGiai = async(muaGiai: MuaGiai) => {
   if ((muaGiai.maMG ?? null) == null)
     return;
   await db.update(MuaGiaiTable).set({
-    tenMG: muaGiai.tenMG
+    tenMG: muaGiai.tenMG,
+    ngayDienRa: muaGiai.ngayDienRa,
+    ngayKetThuc: muaGiai.ngayKetThuc,
   }).where(eq(MuaGiaiTable.maMG, muaGiai.maMG!!));
 }
 

@@ -1,5 +1,5 @@
 import type { RequestHandler } from "./$types";
-import { deleteCauThu, insertCauThu, selectAllCauThuWithBanThang, updateCauThu } from "$lib/server/db/functions/CauThu";
+import { deleteCauThu, insertCauThu, selectAllCauThuWithBanThang, selectCauThuMaCT, updateCauThu } from "$lib/server/db/functions/CauThu";
 import type { CauThu } from "$lib/typesDatabase";
 import { calculateAge, errorResponseJSON } from "$lib";
 import { selectThamSo } from "$lib/server/db/functions/ThamSo";
@@ -38,23 +38,23 @@ export const POST: RequestHandler = async ({
 
     if ((locals.muaGiai ?? null) === null)
       throw new Error("Không tìm thấy mùa giải");
-
-    console.log(data);
     if (!Number.isFinite(data.maDoi))
       throw new Error("Khong tim thay doi");
 
-    const soCauThuMax = (await selectThamSo("soCauThuMax"))!!;
-    if ((await countThamGiaDB(data.maDoi)) >= soCauThuMax)
-      throw new Error("Đội bóng đã đạt đủ số cầu thủ tối đa");    
-    if (data.maLCT && (await isThamGiaDBExceedMax(data.maDoi, data.maLCT))) {
-      const lct = await selectLoaiCTMaLCT(data.maLCT);
+    if ((data.maCT ?? null) === null)
+      throw new Error("Hiện tại /cauthu chỉ phục vụ update");
+    const cauThu = await selectCauThuMaCT(data.maCT!!);
+    if (cauThu === null)
+      throw new Error("Không tìm thấy cầu thủ với mã " + data.maCT + " tên " + data.tenCT);
+    if (data.maLCT === null)
+      throw new Error("Không có mã loại cầu thủ");
+
+    if (cauThu.maLCT !== data.maLCT && (await isThamGiaDBExceedMax(data.maDoi, data.maLCT!!))) {
+      const lct = await selectLoaiCTMaLCT(data.maLCT!!);
       throw new Error("Đội bóng đã đạt đủ số cầu thủ tối đa của " + (lct?.tenLCT ?? ""));
     }
 
-    if ((data.maCT ?? null) !== null) 
-      await updateCauThu(data);
-    else
-      throw new Error("Hiện tại /cauthu chỉ phục vụ update");
+    await updateCauThu(data);
       // await updateCauThu(data);
     
   }

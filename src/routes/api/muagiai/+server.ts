@@ -1,5 +1,7 @@
 import { deleteMuaGiai, insertMuaGiai, selectAllMuaGiai, updateMuaGiai } from "$lib/server/db/functions/MuaGiai";
+import type { MuaGiai } from "$lib/typesDatabase";
 import type { RequestHandler } from "@sveltejs/kit";
+import dateFormat from "dateformat";
 
 export const _GETMuaGiai = async () => {
   return await selectAllMuaGiai();
@@ -25,8 +27,10 @@ export const POST: RequestHandler = async ({
 }) => {
 
   // Cái post request này để tạo đội bóng, response ok sẽ tiến hành trả về đội bóng mới vừa tạo
-  const data = await request.json();
+  let data : MuaGiai = await request.json();
   console.log(data);
+  data.ngayDienRa = dateFormat(data.ngayDienRa, "isoDate");
+  data.ngayKetThuc = dateFormat(data.ngayKetThuc, "isoDate");
 
   if (data.maMG ?? null) {
     await updateMuaGiai(data);

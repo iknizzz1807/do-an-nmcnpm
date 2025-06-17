@@ -51,7 +51,7 @@
       header: "Ngày giờ",
       accessor: "ngayGioThucTe",
       accessFunction: (data: LichThiDau) => {
-        return new Date(data.ngayGioThucTe!!).toLocaleString();
+        return new Date(data.ngayGioThucTe!!).toLocaleString("vi-VN");
       },
     },
   ];

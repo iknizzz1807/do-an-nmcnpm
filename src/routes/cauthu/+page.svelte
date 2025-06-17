@@ -66,7 +66,11 @@
   const columns = [
     { header: "Mã cầu thủ", accessor: "maCT" },
     { header: "Tên cầu thủ", accessor: "tenCT" },
-    { header: "Ngày sinh", accessor: "ngaySinh" },
+    { header: "Ngày sinh", accessor: "ngaySinh",
+      accessFunction: (data: CauThu) => {
+        return new Date(data.ngaySinh).toLocaleDateString("vi-VN");
+      },
+    },
     {
       header: "Loại cầu thủ",
       accessor: "maLCT",
@@ -172,8 +176,8 @@
       });
 
       if (!response.ok) {
-        showErrorToast("Lỗi cập nhật cầu thủ");
-        throw new Error("Lỗi cập nhật cầu thủ");
+        const responseData = await response.json();
+        throw new Error(responseData.message || "Lỗi cập nhật cầu thủ");
       }
 
       const result = await response.json();
@@ -185,8 +189,12 @@
       formState = false;
       showOkToast("Cập nhật cầu thủ mới thành công");
     } catch (error) {
-      console.error("Error:", error);
-      showErrorToast(String(error));
+      if (error instanceof Error) {
+        console.error("Error:", error.message);
+        showErrorToast(error.message);
+      } 
+      else
+        console.error("Error:", error); 
     }
   };
 
@@ -201,8 +209,8 @@
       });
 
       if (!response.ok) {
-        showErrorToast("Lỗi cập nhật cầu thủ");
-        throw new Error("Lỗi cập nhật cầu thủ");
+        const responseData = await response.json();
+        throw new Error(responseData.message || "Lỗi cập nhật cầu thủ");
       }
 
       danhSachCauThu.splice(selectedIndex, 1);
@@ -211,8 +219,12 @@
       formState = false;
       showOkToast("Xóa cầu thủ thành công");
     } catch (error) {
-      console.error("Error:", error);
-      showErrorToast(String(error));
+      if (error instanceof Error) {
+        console.error("Error:", error.message);
+        showErrorToast(error.message);
+      } 
+      else
+        console.error("Error:", error); 
     }
   };
 </script>
