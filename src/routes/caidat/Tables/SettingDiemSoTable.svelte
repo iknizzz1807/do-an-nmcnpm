@@ -235,7 +235,7 @@
     }
 
     try {
-      const response = await fetch("api/diemso", {
+      const response = await fetch("/api/caidat/diemso", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -272,7 +272,7 @@
 
   const deleteDiemSo = async (maDS: number) => {
     try {
-      const response = await fetch("/api/diemso", {
+      const response = await fetch("/api/caidat/diemso", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

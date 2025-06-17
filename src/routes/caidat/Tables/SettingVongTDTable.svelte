@@ -59,7 +59,7 @@
     }
 
     try {
-      const response = await fetch("api/vongtd", {
+      const response = await fetch("/api/caidat/vongtd", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -97,7 +97,7 @@
 
   const deleteVongTD = async (maVTD: number) => {
     try {
-      const response = await fetch("/api/vongtd", {
+      const response = await fetch("/api/caidat/vongtd", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

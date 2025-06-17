@@ -48,9 +48,8 @@ export const backupDatabase = async () => {
     if (fs.existsSync(fileName)) {
       throw new Error("File " + fileName + " already exists");
     }
-
-    fs.copyFile("src/database/db.sqlite", fileName, 
-      (err) => { if (err) throw err; else console.log("File copied"); });
+    await fs.promises.copyFile("src/database/db.sqlite", fileName);
+    console.log("Backup database thành công: " + fileName);
   } catch (err) {
     throw err;
   }

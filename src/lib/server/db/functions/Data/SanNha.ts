@@ -27,7 +27,8 @@ export const updateSanNha = async(sannha: SanNha) => {
   if ((sannha.maSan ?? null) == null)
     return;
   await db.update(SanNhaTable).set({
-    tenSan: sannha.tenSan
+    tenSan: sannha.tenSan,
+    diaChi: sannha.diaChi,
   }).where(eq(SanNhaTable.maSan, sannha.maSan!!));
 }
 

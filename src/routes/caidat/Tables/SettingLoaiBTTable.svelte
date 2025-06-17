@@ -67,7 +67,7 @@
     }
 
     try {
-      const response = await fetch("api/loaibt", {
+      const response = await fetch("/api/caidat/loaibt", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -107,7 +107,7 @@
 
   const deleteLoaiBT = async (maLBT: number) => {
     try {
-      const response = await fetch("/api/loaibt", {
+      const response = await fetch("/api/caidat/loaibt", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

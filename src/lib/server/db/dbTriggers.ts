@@ -330,16 +330,16 @@ const createLBTBackupTrigger = async() => {
       CREATE TRIGGER IF NOT EXISTS TRGD_LBT_BACKUP
       AFTER DELETE ON LoaiBT
       BEGIN
-      INSERT INTO LoaiBTBackup(modifiedDate, maLBT, tenLBT)
-      VALUES(datetime('now'), OLD.maLBT, OLD.tenLBT);
+      INSERT INTO LoaiBTBackup(modifiedDate, maLBT, tenLBT, diemBT)
+      VALUES(datetime('now'), OLD.maLBT, OLD.tenLBT, OLD.diemBT);
       END
       `);
       tx.run(sql`
       CREATE TRIGGER IF NOT EXISTS TRGU_LBT_BACKUP
       AFTER UPDATE ON LoaiBT
       BEGIN
-      INSERT INTO LoaiBTBackup(modifiedDate, maLBT, tenLBT)
-      VALUES(datetime('now'), OLD.maLBT, OLD.tenLBT);
+      INSERT INTO LoaiBTBackup(modifiedDate, maLBT, tenLBT, diemBT)
+      VALUES(datetime('now'), OLD.maLBT, OLD.tenLBT, OLD.diemBT);
       END
       `);
   });
@@ -399,16 +399,16 @@ const createLCTBackupTrigger = async() => {
       CREATE TRIGGER IF NOT EXISTS TRGD_LCT_BACKUP
       AFTER DELETE ON LoaiCT
       BEGIN
-      INSERT INTO LoaiCTBackup(modifiedDate, maLCT, tenLCT)
-      VALUES(datetime('now'), OLD.maLCT, OLD.tenLCT);
+      INSERT INTO LoaiCTBackup(modifiedDate, maLCT, tenLCT, soCauThuToiDa)
+      VALUES(datetime('now'), OLD.maLCT, OLD.tenLCT, OLD.soCauThuToiDa);
       END
       `);
       tx.run(sql`
       CREATE TRIGGER IF NOT EXISTS TRGU_LCT_BACKUP
       AFTER UPDATE ON LoaiCT
       BEGIN
-      INSERT INTO LoaiCTBackup(modifiedDate, maLCT, tenLCT)
-      VALUES(datetime('now'), OLD.maLCT, OLD.tenLCT);
+      INSERT INTO LoaiCTBackup(modifiedDate, maLCT, tenLCT, soCauThuToiDa)
+      VALUES(datetime('now'), OLD.maLCT, OLD.tenLCT, OLD.soCauThuToiDa);
       END
       `);
   });

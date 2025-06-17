@@ -59,7 +59,7 @@
     }
 
     try {
-      const response = await fetch("api/vitri", {
+      const response = await fetch("/api/caidat/vitri", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -97,7 +97,7 @@
 
   const deleteViTri = async (maVT: number) => {
     try {
-      const response = await fetch("/api/vitri", {
+      const response = await fetch("/api/caidat/vitri", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

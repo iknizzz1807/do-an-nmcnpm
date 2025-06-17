@@ -32,13 +32,12 @@
         method: "POST",
       });
 
-      const result = await response.json();
-
       if (!response.ok) {
+        const result = await response.json();
         throw new Error(result.message || "Sao lưu thất bại.");
       }
 
-      showOkToast(result.message);
+      showOkToast("Đã sao lưu thành công.");
     } catch (err) {
       if (err instanceof Error) {
         showErrorToast(err.message);
@@ -113,7 +112,7 @@
   <div class="bg-white rounded-lg shadow-md p-6 mt-8 mb-8">
     <h2 class="text-2xl font-bold text-gray-800 mb-6">Tuỳ chọn hệ thống</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div>
+      <!-- <div>
         <label
           class="block text-sm font-medium text-gray-700 mb-2"
           for="defaultLanguage">Ngôn ngữ mặc định</label
@@ -125,8 +124,8 @@
           <option value="en">English</option>
           <option value="vi">Tiếng Việt</option>
         </select>
-      </div>
-      <div>
+      </div> -->
+      <!-- <div> -->
         <!-- <label
           class="block text-sm font-medium text-gray-700 mb-1"
           for="defaultTimeZone">Default Time Zone</label
@@ -138,7 +137,7 @@
           <option value="UTC+0700">Hanoi, Vietnam (UTC+07:00)</option>
           <option value="UTC+0000">London, UK (UTC+00:00)</option>
         </select> -->
-      </div>
+      <!-- </div> -->
       <div>
         <label
           class="block text-sm font-medium text-gray-700 mb-2"
