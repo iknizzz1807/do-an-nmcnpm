@@ -214,7 +214,9 @@
         prevBanThang = danhSachBanThang[selectedIndex];
         danhSachBanThang[selectedIndex] = result;
       }
+      result.tenLBT = loaiBTs.find((val) => val.maLBT === result.maLBT)?.tenLBT ?? "Không xác định";
       
+      console.log(result.tenLBT);
       if (prevBanThang) {
         if (prevBanThang.maDoi === maDoiMot) {
           if (prevBanThang.tenLBT === "Phản lưới")
@@ -280,6 +282,7 @@
       }
 
       const result: BanThang = danhSachBanThang[selectedIndex];
+      result.tenLBT = loaiBTs.find((val) => val.maLBT === result.maLBT)?.tenLBT ?? "Không xác định";
       if (result.maDoi === maDoiMot) {
         if (result.tenLBT === "Phản lưới")
           banThangDoiHai--;

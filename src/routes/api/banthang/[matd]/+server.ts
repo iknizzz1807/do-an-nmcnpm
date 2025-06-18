@@ -92,17 +92,17 @@ export const POST: RequestHandler = async ({
     } else {
       await updateBanThang(banThang.oldBanThang!!, banThang.newBanThang);
     }
+    return new Response(JSON.stringify(data.newBanThang), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   } catch (error) {
     if (error instanceof Error) return errorResponseJSON(400, error.message);
     else throw error;
   }
 
-  return new Response(JSON.stringify(data.newBanThang), {
-    status: 200,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
 };
 
 export const DELETE: RequestHandler = async ({

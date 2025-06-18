@@ -452,5 +452,5 @@
     bind:formState
   />
 {:else if activeTabId === "referees"}
-  <TrongTaiTable bind:dataTrongTai={danhSachTrongTai} />
+  <TrongTaiTable bind:dataTrongTai={danhSachTrongTai} isEditable={isEditable} />
 {/if}

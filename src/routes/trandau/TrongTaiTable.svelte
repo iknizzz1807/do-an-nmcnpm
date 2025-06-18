@@ -7,7 +7,7 @@
   import type { TrongTai } from "$lib/typesDatabase";
   import { SvelteMap } from "svelte/reactivity";
 
-  let { dataTrongTai = $bindable() }: { dataTrongTai: TrongTai[] } = $props();
+  let { dataTrongTai = $bindable(), isEditable }: { dataTrongTai: TrongTai[], isEditable: boolean } = $props();
 
   let trongTais: TrongTai[] = $state(dataTrongTai);
   let editData: FormInputMap = $state(new SvelteMap());
@@ -143,16 +143,19 @@
   data={trongTais}
   redirectParam={""}
   tableType=""
+  isEditable={isEditable}
   {onEditClick}
   {onDeleteClick}
 />
 
+{#if isEditable}
 <div class="flex justify-center pt-4">
   <ButtonPrimary
     text="Tạo trọng tài mới"
     onclick={() => (formState = true)}
   />
 </div>
+{/if}
 
 <Form
   fields={roleFields}
