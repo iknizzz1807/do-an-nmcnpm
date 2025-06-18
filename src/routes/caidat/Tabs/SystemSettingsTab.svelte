@@ -89,6 +89,14 @@
       <SettingNumberInput
         min={5}
         max={40}
+        forValue="soCauThuTGTDMin"
+        bind:bindValue={setting.soCauThuTGTDMin}
+        label="Số cầu thủ tham gia thi đấu tối thiểu"
+        unit=""
+      />
+      <SettingNumberInput
+        min={5}
+        max={40}
         forValue="soCauThuTGTDMax"
         bind:bindValue={setting.soCauThuTGTDMax}
         label="Số cầu thủ tham gia thi đấu tối đa"

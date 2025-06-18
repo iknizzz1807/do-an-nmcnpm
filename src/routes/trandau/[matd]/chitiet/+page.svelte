@@ -130,8 +130,18 @@
 
   async function saveSelection() {
     try {
-      let data = [...participatingTeam1Players, ...participatingTeam2Players];
-      const body = data.map(
+      if (participatingTeam1Players.length < data.soCauThuTGTDMin || participatingTeam1Players.length > data.soCauThuTGTDMax) {
+        throw new Error(
+          `Đội ${tenDoiMot} phải có từ ${data.soCauThuTGTDMin} đến ${data.soCauThuTGTDMax} cầu thủ tham gia thi đấu.`
+        );
+      }
+      if (participatingTeam2Players.length < data.soCauThuTGTDMin || participatingTeam2Players.length > data.soCauThuTGTDMax) {
+        throw new Error(
+          `Đội ${tenDoiHai} phải có từ ${data.soCauThuTGTDMin} đến ${data.soCauThuTGTDMax} cầu thủ tham gia thi đấu.`
+        );
+      } 
+      let tgtd = [...participatingTeam1Players, ...participatingTeam2Players];
+      const body = tgtd.map(
         (value) =>
           ({
             maTD: maTD!!,
@@ -147,7 +157,10 @@
         },
         body: JSON.stringify(body),
       });
-      if (!response.ok) throw new Error("Không thể cập nhật đội hình thi đấu");
+      if (!response.ok) {
+        const result = await response.json();
+        throw new Error(result.message || "Không thể cập nhật đội hình thi đấu");
+      }
 
       showOkToast("Cập nhật thành công");
     } catch (e) {

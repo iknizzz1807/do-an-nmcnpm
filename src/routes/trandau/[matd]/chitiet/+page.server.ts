@@ -83,6 +83,7 @@ export const load = (async ({ fetch, params, locals, route }) => {
     });
 
     return {
+      soCauThuTGTDMin: (await selectThamSo("soCauThuTGTDMin"))!!,
       soCauThuTGTDMax: (await selectThamSo("soCauThuTGTDMax"))!!,
       maTD: maTD,
       maDoiMot: tranDau.doiMot,
@@ -99,6 +100,7 @@ export const load = (async ({ fetch, params, locals, route }) => {
   } catch (err) {
     console.error(err);
     return {
+      soCauThuTGTDMin: 0,
       soCauThuTGTDMax: 0,
       maDoiMot: 0,
       maDoiHai: 0,

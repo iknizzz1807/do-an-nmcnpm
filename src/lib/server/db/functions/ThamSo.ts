@@ -17,6 +17,7 @@ export const selectSettings = async() => {
     tuoiMax: (await selectThamSo("tuoiMax"))!!,
     soCauThuMin: (await selectThamSo("soCauThuMin"))!!,
     soCauThuMax: (await selectThamSo("soCauThuMax"))!!,
+    soCauThuTGTDMin: (await selectThamSo("soCauThuTGTDMin"))!!,
     soCauThuTGTDMax: (await selectThamSo("soCauThuTGTDMax"))!!,
     doiDaTrenSanNha: (await selectThamSo("doiDaTrenSanNha"))!!,
     thoiDiemGhiBanToiThieu: (await selectThamSo("thoiDiemGhiBanToiThieu"))!!,
@@ -29,6 +30,7 @@ export const updateSettings = async(settings: Settings) => {
   await updateThamSo("tuoiMax", settings.tuoiMax);
   await updateThamSo("soCauThuMin", settings.soCauThuMin);
   await updateThamSo("soCauThuMax", settings.soCauThuMax);
+  await updateThamSo("soCauThuTGTDMin", settings.soCauThuTGTDMin);
   await updateThamSo("soCauThuTGTDMax", settings.soCauThuTGTDMax);
   await updateThamSo("doiDaTrenSanNha", settings.doiDaTrenSanNha);
   await updateThamSo("thoiDiemGhiBanToiThieu", settings.thoiDiemGhiBanToiThieu);

@@ -24,6 +24,7 @@ const DefaultSettings : ThamSo[] = [
   { tenThamSo: "tuoiMax", giaTri: 40 },
   { tenThamSo: "soCauThuMin", giaTri: 15 },
   { tenThamSo: "soCauThuMax", giaTri: 25 },
+  { tenThamSo: "soCauThuTGTDMin", giaTri: 11 },
   { tenThamSo: "soCauThuTGTDMax", giaTri: 11 },
   { tenThamSo: "doiDaTrenSanNha", giaTri: 1 },
 
