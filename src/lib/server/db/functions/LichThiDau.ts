@@ -1,4 +1,4 @@
-import { eq, and, getTableColumns, inArray, sql } from 'drizzle-orm';
+import { eq, and, getTableColumns, inArray, sql, or } from 'drizzle-orm';
 import { db } from '../client';
 import { LichThiDauTable } from '../schema/LichThiDau';
 import type { LichThiDau } from '$lib/typesDatabase';
@@ -49,6 +49,10 @@ export const deleteLichThiDau = async (maTD: number) => {
 
 export const selectAllLichThiDau = async() => {
     return await db.select().from(LichThiDauTable) satisfies LichThiDau[];
+}
+
+export const existsLichThiDauMaDoi = async(maDoi: number) => {
+    return (await db.select().from(LichThiDauTable).where(or(eq(LichThiDauTable.doiMot, maDoi), eq(LichThiDauTable.doiHai, maDoi))).limit(1)).length > 0;
 }
 
 export const selectLichThiDauMaTD = async(maTD: number) => {

@@ -1,4 +1,5 @@
 import { errorResponseJSON } from "$lib";
+import { existsBanThangMaTD } from "$lib/server/db/functions/BanThang";
 import { selectDoiBongMaDoi } from "$lib/server/db/functions/DoiBong";
 import { deleteLichThiDau, insertLichThiDau, selectAllLichThiDauWithName, updateLichThiDau } from "$lib/server/db/functions/LichThiDau";
 import { selectThamSo } from "$lib/server/db/functions/ThamSo";
@@ -77,12 +78,15 @@ export const POST : RequestHandler = async ({ request, locals } : { request: Req
 
 
 export const DELETE : RequestHandler = async ({ request } : { request: Request }) => {
-  const data = await request.json();
-
-  let result : number | null = null;
-
+  
   try {
-
+    
+    const data = await request.json();
+  
+    let result : number | null = null;
+    if (await existsBanThangMaTD(data.maTD!!)) {
+      throw new Error("Không thể xóa lịch thi đấu này vì có bàn thắng đã được ghi nhận");
+    }
     if ((data.maTD ?? null) === null) {
       throw new Error("Không có mã cầu thủ sao xóa? bruh");
     }
@@ -104,4 +108,8 @@ export const DELETE : RequestHandler = async ({ request } : { request: Request }
     else
       throw error;
   }
+}
+
+function selectBanThangMaTD(arg0: any) {
+  throw new Error("Function not implemented.");
 }

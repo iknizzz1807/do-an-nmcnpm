@@ -180,7 +180,11 @@
       });
 
       if (!response.ok) {
-        throw new Error("Lỗi tạo Bàn thắng");
+        const result = await response.json();
+        if (result.message) {
+          throw new Error(result.message);
+        }
+        throw new Error("Lỗi xóa Bàn thắng");
       }
 
       let result = await response.json();
@@ -268,21 +272,25 @@
       });
 
       if (!response.ok) {
+        const result = await response.json();
+        if (result.message) {
+          throw new Error(result.message);
+        }
         throw new Error("Lỗi xóa Bàn thắng");
       }
 
       const result: BanThang = danhSachBanThang[selectedIndex];
       if (result.maDoi === maDoiMot) {
         if (result.tenLBT === "Phản lưới")
-          banThangDoiHai++;
+          banThangDoiHai--;
         else
-          banThangDoiMot++;
+          banThangDoiMot--;
       }
       else {
         if (result.tenLBT === "Phản lưới")
-          banThangDoiMot++;
+          banThangDoiMot--;
         else
-          banThangDoiHai++;
+          banThangDoiHai--;
       } 
       danhSachBanThang.splice(selectedIndex, 1);
 

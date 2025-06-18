@@ -41,3 +41,8 @@ export const selectCauThuTranDau = async(maTD: number, maDoi: number) => {
     .innerJoin(CauThuTable, eq(CauThuTable.maCT, ThamGiaTDTable.maCT))
     .where(and(eq(ThamGiaTDTable.maTD, maTD), eq(ThamGiaTDTable.maDoi, maDoi)));
 }
+
+export const existsCauThuTGTD = async(maCT: number) => {
+  return (await db.select().from(ThamGiaTDTable)
+    .where(eq(ThamGiaTDTable.maCT, maCT)).limit(1)).length > 0;
+}

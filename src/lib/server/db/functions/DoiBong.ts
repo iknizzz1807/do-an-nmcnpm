@@ -46,6 +46,10 @@ export const selectDoiBongMaDoi = async (maDoi: number) : Promise<DoiBong | null
     .limit(1)).at(0) ?? null) satisfies (DoiBong | null);
 }
 
+export const existsDoiBongMuaGiai = async (maMG: number) => {
+  return (await db.select().from(DoiBongTable).where(eq(DoiBongTable.maMG, maMG)).limit(1)).length > 0;
+};
+
 export const selectDoiBongMuaGiai = async (maMG: number) => {
   return (await db.select().from(DoiBongTable).where(eq(DoiBongTable.maMG, maMG))) satisfies DoiBong[];
 };

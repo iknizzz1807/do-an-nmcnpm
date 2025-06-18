@@ -1,4 +1,5 @@
 import { errorResponseJSON } from "$lib";
+import { existsDoiBongMuaGiai } from "$lib/server/db/functions/DoiBong";
 import { deleteMuaGiai, insertMuaGiai, selectAllMuaGiai, updateMuaGiai } from "$lib/server/db/functions/MuaGiai";
 import type { MuaGiai } from "$lib/typesDatabase";
 import type { RequestHandler } from "@sveltejs/kit";
@@ -67,22 +68,32 @@ export const DELETE: RequestHandler = async ({
 }: {
   request: Request;
 }) => {
-  const data = await request.json();
-  let result : number | null = null;
+  try {
 
-  console.log(data.maMG);
-  if ((data.maMG) === null) {
-    throw new Error("Không có mã đội sao xóa? bruh");
+    const data = await request.json();
+    let result : number | null = null;
+    
+    if ((await existsDoiBongMuaGiai(data.maMG!!))) {
+      throw new Error("Không thể xóa mùa giải này vì có đội bóng đang tham gia");
+    }
+    if ((data.maMG) === null) {
+      throw new Error("Không có mã đội sao xóa? bruh");
+    }
+    else {
+      result = data.maMG!!;
+      await deleteMuaGiai(data.maMG!!);
+    }
+    
+    return new Response(JSON.stringify({ maMG: result!! }), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      return errorResponseJSON(400, error.message);
+    }
+    else throw error;
   }
-  else {
-    result = data.maMG!!;
-    await deleteMuaGiai(data.maMG!!);
-  }
-
-  return new Response(JSON.stringify({ maMG: result!! }), {
-    status: 200,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
 };

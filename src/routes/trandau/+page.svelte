@@ -218,6 +218,7 @@
       editData.set("maMG", data.maMG);
       editData.set("ngayGioDuKien", new Date(data.ngayGioDuKien ?? ""));
       editData.set("ngayGioThucTe", new Date(data.ngayGioThucTe ?? ""));
+      editData.set("maTT", data.maTT ?? null);
       selectedIndex = index;
       formState = true;
     } else {

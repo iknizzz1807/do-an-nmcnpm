@@ -196,7 +196,8 @@
       });
 
       if (!response.ok) {
-        throw new Error("Lỗi cập nhật");
+        const result = await response.json();
+        throw new Error(result.message || "Lỗi xóa Mùa giải");
       }
 
       danhSachMuaGiai.splice(selectedIndex, 1);
@@ -205,8 +206,11 @@
       formState = false;
       showOkToast("Xóa thành công");
     } catch (error) {
-      console.error("Error:", error);
-      showErrorToast(String(error));
+      if (error instanceof Error) {
+        showErrorToast(error.message);
+      } else {
+        console.error("Error:", error);
+      }
     }
   };
 </script>

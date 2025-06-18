@@ -1,10 +1,11 @@
 import type { RequestHandler } from "./$types";
-import { deleteCauThu, insertCauThu, selectAllCauThuWithBanThang, selectCauThuMaCT, updateCauThu } from "$lib/server/db/functions/CauThu";
+import { deleteCauThu, selectAllCauThuWithBanThang, selectCauThuMaCT, selectCauThuTGTD, updateCauThu } from "$lib/server/db/functions/CauThu";
 import type { CauThu } from "$lib/typesDatabase";
 import { calculateAge, errorResponseJSON } from "$lib";
 import { selectThamSo } from "$lib/server/db/functions/ThamSo";
 import { countThamGiaDB, isThamGiaDBExceedMax } from "$lib/server/db/functions/ThamGiaDB";
 import { selectAllLoaiCT, selectLoaiCTMaLCT } from "$lib/server/db/functions/Data/LoaiCT";
+import { existsCauThuTGTD } from "$lib/server/db/functions/ThamGiaTD";
 
 export const _GETCauThu = async() => {
   return await selectAllCauThuWithBanThang();
@@ -80,10 +81,12 @@ export const DELETE: RequestHandler = async ({
 }: {
   request: Request;
 }) => {
-  const data = await request.json();
-  let result : number | null = null;
-
+  
   try {
+    const data = await request.json();
+    let result : number | null = null;
+    if ((await existsCauThuTGTD(data.maCT!!)))
+      throw new Error("Không thể xóa cầu thủ này vì có lịch thi đấu đang diễn ra");
     if ((data.maCT ?? null) === null) {
       throw new Error("Không có mã cầu thủ sao xóa? bruh");
     }
@@ -91,6 +94,12 @@ export const DELETE: RequestHandler = async ({
       result = data.maCT!!;
       await deleteCauThu(data.maCT!!);
     }
+    return new Response(JSON.stringify({ maCT: result!! }), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   } catch (error) {
     if (error instanceof Error)
       return errorResponseJSON(400, error.message);
@@ -98,10 +107,4 @@ export const DELETE: RequestHandler = async ({
       throw error;
   }
 
-  return new Response(JSON.stringify({ maCT: result!! }), {
-    status: 200,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
 };

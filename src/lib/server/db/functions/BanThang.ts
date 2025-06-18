@@ -35,6 +35,10 @@ export const selectAllBanThang = async() => {
     return (await db.select().from(BanThangTable)) satisfies BanThang[];
 }
 
+export const existsBanThangMaTD = async(maTD: number) => {
+    return (await db.select().from(BanThangTable).where(eq(BanThangTable.maTD, maTD)).limit(1)).length > 0;
+}
+
 export const selectTiSoTranDau = async(maTD: number, maDoi: number) => {
   return (await db.select({ tySo: sql`count(${BanThangTable.thoiDiem})`.mapWith(Number)  })
           .from(BanThangTable)
