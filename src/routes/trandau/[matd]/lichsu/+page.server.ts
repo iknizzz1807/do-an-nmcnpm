@@ -37,7 +37,6 @@ export const load = (async ({ fetch, params, locals, route }) => {
       throw new Error("Chưa chọn mùa giải");
     const cauThuDoiMot = await selectCauThuTGTD(tranDau.maTD!!, tranDau.doiMot);
     const cauThuDoiHai = await selectCauThuTGTD(tranDau.maTD!!, tranDau.doiHai);
-
     const loaiBTs : LoaiBT[] = await selectAllLoaiBT();
     
     return {

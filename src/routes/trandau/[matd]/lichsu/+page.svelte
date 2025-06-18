@@ -40,19 +40,18 @@
   onMount(() => {
     for (let banThang of lichSu) {
       let cauThu: CauThu | null;
-      if (banThang.maDoi === doiMot?.maDoi) {
-        cauThu =
-          cauThuDoiMot.find((val) => val.cauThu.maCT === banThang.maCT)
-            ?.cauThu ?? null;
-        banThang.tenDoi = doiMot?.tenDoi;
-      } else {
+      cauThu =
+        cauThuDoiMot.find((val) => val.cauThu.maCT === banThang.maCT)
+          ?.cauThu ?? null;
+      banThang.tenDoi = doiMot?.tenDoi;
+      if (cauThu === null) {
         cauThu =
           cauThuDoiHai.find((val) => val.cauThu.maCT === banThang.maCT)
             ?.cauThu ?? null;
         banThang.tenDoi = doiHai?.tenDoi;
       }
-      if (cauThu === null) continue;
-      banThang.tenCT = cauThu.tenCT;
+      console.log(banThang);
+      banThang.tenCT = cauThu?.tenCT ?? "";
       banThang.tenLBT = loaiBTs.find((val) => val.maLBT === banThang.maLBT)?.tenLBT ?? "Không xác định";
     }
   });

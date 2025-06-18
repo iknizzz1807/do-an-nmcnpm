@@ -98,8 +98,8 @@
   </h1>
   <div class="title-underline w-88 h-1 bg-purple-600 mb-8"></div> -->
 
-  <div class="mb-6 bg-white p-4 rounded-lg shadow border border-gray-200">
-    <form class="flex items-center space-x-2 mb-4">
+  <div class="mb-4 bg-white p-4 rounded-lg shadow border border-gray-200">
+    <form class="flex items-center space-x-2 mb-2">
       <input type="radio" id="ngay" name="bxh" value="ngay" bind:group={bxhSelected} checked>
       <label for="ngay">Theo ngày</label>
       <input type="radio" id="thang" name="bxh" value="thang" bind:group={bxhSelected}>

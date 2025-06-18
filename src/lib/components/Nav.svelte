@@ -11,20 +11,24 @@
   import dateFormat from "dateformat";
   import { page } from "$app/state";
   import { goto } from "$app/navigation";
+  import type { UserGroupUserRoles } from "$lib/typesResponse";
 
   let {
     dsMuaGiai,
     selectedMuaGiai,
     isAdmin,
+    userRoles
   }: {
     dsMuaGiai: MuaGiai[];
     selectedMuaGiai: MuaGiai | null;
     isAdmin: boolean;
+    userRoles: UserGroupUserRoles
   } = $props();
+
   let selectedValue = $state(selectedMuaGiai?.maMG ?? 0);
   let form: HTMLFormElement;
 
-  $inspect(selectedValue);
+  $inspect(userRoles);
 
   $effect(() => {
     const muaGiai =
@@ -137,27 +141,30 @@
           <span>Trang chủ</span>
         </a>
       </li>
-      <li>
-        <a
-          href="/cauthu"
-          class="nav-link"
-          class:active={page.url.pathname.startsWith("/cauthu")}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="nav-icon"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-              clip-rule="evenodd"
-            />
-          </svg>
-          <span>Cầu thủ</span>
-        </a>
-      </li>
+      {#if userRoles.roles.filter((value) => "/cauthu".match(value.viewablePage)).length > 0}
+        <li>
+          <a
+            href="/cauthu"
+            class="nav-link"
+            class:active={page.url.pathname.startsWith("/cauthu")}
+            >
+              <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="nav-icon"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              >
+                <path
+                fill-rule="evenodd"
+                d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                clip-rule="evenodd"
+                />
+              </svg>
+            <span>Cầu thủ</span>
+          </a>
+        </li>
+      {/if}
+      {#if userRoles.roles.filter((value) => "/doi".match(value.viewablePage)).length > 0}
       <li>
         <a
           href="/doi"
@@ -180,6 +187,8 @@
           <span>Đội</span>
         </a>
       </li>
+      {/if}
+      {#if userRoles.roles.filter((value) => "/trandau".match(value.viewablePage)).length > 0}
       <li>
         <a
           href="/trandau"
@@ -201,6 +210,8 @@
           <span>Trận đấu</span>
         </a>
       </li>
+      {/if}
+      {#if userRoles.roles.filter((value) => "/bxh".match(value.viewablePage)).length > 0}
       <li>
         <a
           href={"/bxh"}
@@ -220,6 +231,8 @@
           <span>Bảng xếp hạng</span>
         </a>
       </li>
+      {/if}
+      {#if userRoles.roles.filter((value) => "/muagiai".match(value.viewablePage)).length > 0}
       <li>
         <a
           href="/muagiai"
@@ -241,7 +254,8 @@
           <span>Mùa giải</span>
         </a>
       </li>
-      {#if isAdmin}
+      {/if}
+      {#if userRoles.roles.filter((value) => "/caidat".match(value.viewablePage)).length > 0}
         <li>
           <a
             href="/caidat"

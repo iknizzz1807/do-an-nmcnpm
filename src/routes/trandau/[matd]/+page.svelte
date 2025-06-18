@@ -126,14 +126,7 @@
   {isEditable}
 />
 
-  {#if isEditable}
-    <div class="flex justify-center gap-4">
-      <ButtonPrimary
-        text={"Lịch sử cập nhật"}
-        onclick={() => goto("/trandau/" + data.maTD + "/lichsu")}
-      />
-    </div>
-  {/if}
+
 <!-- <ThePhatTable 
   maTD={data.maTD!!}
   dsThePhat={danhSachThePhat}

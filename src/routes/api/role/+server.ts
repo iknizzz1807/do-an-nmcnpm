@@ -7,13 +7,21 @@ import type { RequestHandler } from "./$types";
 // Update User Group Has Roles
 export const POST: RequestHandler = async ({ request, locals, route }) => {
 
-  const data : UserRoleInsertParams = await request.json();
+  try {
 
-  await upsertRole(data);
-  
-  return new Response(JSON.stringify(data), {
-    status: 200
-  });
+    const data : UserRoleInsertParams = await request.json();
+    
+    await upsertRole(data);
+    
+    return new Response(JSON.stringify(data), {
+      status: 200
+    });
+  } catch (error) {
+    if (error instanceof Error)
+      return errorResponseJSON(400, error.message);
+    else
+      throw error;
+  }
 }
 
 export const DELETE: RequestHandler = async ({ request, url, locals}) => {

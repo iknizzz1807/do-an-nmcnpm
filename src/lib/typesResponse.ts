@@ -1,3 +1,4 @@
+import type { UserRole } from "./typesAuth";
 import type { BanThang, DoiBong, ThePhat } from "./typesDatabase"
 
 // Query Results
@@ -21,6 +22,14 @@ export type UserGroupRoles = {
   groupName: string,
   roles: number[],
 }
+
+
+export type UserGroupUserRoles = {
+  groupId: number,
+  groupName: string,
+  roles: UserRole[],
+}
+
 
 export type KQTraCuuCauThu = {
   tenCT: string,

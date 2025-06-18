@@ -205,6 +205,7 @@
       // Đóng form và hiện toast thành công sau khi thành công
       formState = false;
       showOkToast("Xóa thành công");
+      invalidateAll();
     } catch (error) {
       if (error instanceof Error) {
         showErrorToast(error.message);

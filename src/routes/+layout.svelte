@@ -11,6 +11,7 @@
       dsMuaGiai={data.dsMuaGiai}
       selectedMuaGiai={data.selectedMuaGiai}
       isAdmin={data.isAdmin}
+      userRoles={data.viewablePages}
     />
     <div class="main-wrapper flex-grow flex flex-col bg-white pl-[260px] ]">
       <main

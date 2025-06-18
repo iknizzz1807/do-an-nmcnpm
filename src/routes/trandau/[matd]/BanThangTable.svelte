@@ -165,6 +165,8 @@
     e.preventDefault();
 
     try {
+      if (data.thoiDiem > thoiDiemGhiBanToiDa)
+        throw new Error("Thời điểm ghi bàn không thể lớn hơn " + thoiDiemGhiBanToiDa);
       const body: UpdateBanThang = {
         oldBanThang:
           selectedIndex == -1 ? null : danhSachBanThang[selectedIndex],
@@ -317,6 +319,10 @@
       text={"Thêm bàn thắng mới"}
       onclick={() => (formState = true)}
       />
+    <ButtonPrimary
+      text={"Lịch sử cập nhật"}
+      onclick={() => goto("/trandau/" + maTD + "/lichsu")}
+    />
   </div>
 {/if}
 

@@ -9,6 +9,8 @@ export const selectAllRole = async () => {
 }
 
 export const upsertRole = async(data : UserRoleInsertParams) => {
+  if (data.roleId === 9999)
+    throw new Error("Không thể update role này");
   await db.insert(UserRoleTable).values(data).onConflictDoUpdate({ 
     target: UserRoleTable.roleId,
     set: { roleName: data.roleName, viewablePage: data.viewablePage, canEdit: data.canEdit} });

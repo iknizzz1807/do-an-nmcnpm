@@ -1,9 +1,9 @@
-import { and, eq, inArray } from "drizzle-orm";
+import { and, eq, getTableColumns, inArray } from "drizzle-orm";
 import { db } from "../../client"
 import { HasRoleTable } from "../../schema/User/HasRole";
 import { UserGroupTable, type UserGroupInsertParams } from "../../schema/User/UserGroup"
 import { UserRoleTable } from "../../schema/User/UserRole";
-import type { UserGroupInsert, UserGroupRoles } from "$lib/typesResponse";
+import type { UserGroupInsert, UserGroupRoles, UserGroupUserRoles } from "$lib/typesResponse";
 import { error } from "@sveltejs/kit";
 
 export const selectAllUserGroup = async () => {
@@ -37,7 +37,27 @@ export const selectAllUserGroupWithRole = async () : Promise<UserGroupRoles[]> =
   return groupRoles
 }
 
+
+export const selectUserGroupWithRole = async (groupId: number) : Promise<UserGroupUserRoles> => {
+  const group = (await db.select().from(UserGroupTable).where(eq(UserGroupTable.groupId, groupId))).at(0) ??null;
+  if (group === null)
+    return ({
+    groupId: 0,
+    groupName: "",
+    roles: []
+  });
+  console.log(group)
+  const roles = (await db.select(getTableColumns(UserRoleTable)).from(HasRoleTable).innerJoin(UserRoleTable, eq(UserRoleTable.roleId, HasRoleTable.roleId)).where(eq(HasRoleTable.groupId, group.groupId)));
+  return ({
+    groupId: group.groupId,
+    groupName: group.groupName,
+    roles: roles
+  });
+}
+
 export const updateRolesToGroup = async(groupId: number, roles: number[]) => {
+  if (groupId === 0)
+    throw new Error("không thể sửa được");
   let groupRoles = (await db.select().from(HasRoleTable)
     .where(eq(HasRoleTable.groupId, groupId))).flatMap((val) => val.roleId);
   // Update
@@ -55,7 +75,7 @@ export const updateRolesToGroup = async(groupId: number, roles: number[]) => {
 }
 
 export const deleteUserGroup = async(groupId : number) => {
-  if (groupId === 0 || groupId === 1)
-    throw new Error("Bruh xóa cái này là ăn lồn đó con");
+  if (groupId === 0)
+    throw new Error("không thể xóa được");
   await db.delete(UserGroupTable).where(eq(UserGroupTable.groupId, groupId));
 }

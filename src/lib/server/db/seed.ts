@@ -106,7 +106,7 @@ const seedSeason = async(teams: any, matches: any) => {
         break;
       let cauThu = await insertCauThu({
         tenCT: player.name,
-        ngaySinh: player.dateOfBirth ?? dateFormat(new Date(), "isoDate"),
+        ngaySinh: player.dateOfBirth ?? dateFormat(randDateBetween(new Date("1980-01-01"), new Date("2000-01-01")), "isoDate"),
         ghiChu: faker.lorem.lines(1),
         soAo: randIntBetween(1, 99),
         maLCT: 1,

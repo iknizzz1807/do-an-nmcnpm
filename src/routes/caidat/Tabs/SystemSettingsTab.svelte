@@ -11,6 +11,10 @@
     e.preventDefault();
 
     try {
+      if(setting.soCauThuTGTDMax < setting.soCauThuTGTDMin)
+        throw new Error("Số cầu thủ tham gia trận đấu không thể bé hơn số cầu thủ tham gia trận đấu tối thiểu");
+      if(setting.soCauThuMax < setting.soCauThuMin)
+        throw new Error("Số cầu thủ tối đa không thể bé hơn số cầu thủ tối thiểu");
       const response = await fetch("api/caidat", {
         method: "POST",
         headers: {

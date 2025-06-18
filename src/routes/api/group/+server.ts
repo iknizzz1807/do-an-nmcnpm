@@ -8,12 +8,20 @@ import type { RequestHandler } from "./$types";
 // Update User Group Has Roles
 export const POST: RequestHandler = async ({ request, locals, route }) => {
 
-  const data : UserGroupInsert = await request.json();
-  const id = await upsertGroup({ groupId: data.groupId!!, groupName: data.groupName});
-  await updateRolesToGroup(id.id, data.roles);
-  return new Response(JSON.stringify(id), {
-    status: 200
-  });
+  try {
+
+    const data : UserGroupInsert = await request.json();
+    const id = await upsertGroup({ groupId: data.groupId!!, groupName: data.groupName});
+    await updateRolesToGroup(id.id, data.roles);
+    return new Response(JSON.stringify(id), {
+      status: 200
+    });
+  } catch (error) {
+    if (error instanceof Error)
+      return errorResponseJSON(400, error.message);
+    else
+      throw error;
+  }
 }
 
 export const DELETE: RequestHandler = async ({ request, url, locals}) => {

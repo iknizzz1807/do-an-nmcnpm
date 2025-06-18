@@ -67,6 +67,15 @@
         optionName: value.tenDoi,
       } satisfies FieldOption;
     });
+    
+  const vtdOption: FieldOption[] = danhSachVTD
+    .filter((val) => val.maVTD ?? null)
+    .map((value) => {
+      return {
+        optionValue: value.maVTD!!,
+        optionName: value.tenVTD,
+      } satisfies FieldOption;
+    });
 
   const muaGiaiOption: FieldOption[] = danhSachMuaGiai
     .filter((val) => val.maMG ?? null)
@@ -104,10 +113,7 @@
       propertyName: "maVTD",
       type: "select",
       valueType: "number",
-      options: [
-        { optionValue: 1, optionName: "1" },
-        { optionValue: 2, optionName: "2" },
-      ],
+      options: vtdOption,
     },
     {
       label: "Đội thắng",

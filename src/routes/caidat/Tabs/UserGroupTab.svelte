@@ -215,9 +215,7 @@
           </label>
           {#if selectedroles.length > 0}
             <span class="text-sm text-green-600 font-medium">
-              {selectedroles.length} vai trò{selectedroles.length === 1
-                ? ""
-                : "s"}
+              {selectedroles.length} vai trò
               đã chọn
             </span>
           {/if}
@@ -248,9 +246,7 @@
                 {#if selectedroles.length === 0}
                   Chọn những vai trò cho nhóm này
                 {:else}
-                  {selectedroles.length} role{selectedroles.length === 1
-                    ? ""
-                    : "s"} đã chọn
+                  {selectedroles.length} vai trò đã chọn
                 {/if}
               </span>
             </div>
@@ -464,9 +460,7 @@
                       {group.groupName}
                     </p>
                     <p class="mt-1 flex items-center text-sm text-gray-500">
-                      {group.roles.length} vai trò{group.roles.length === 1
-                        ? ""
-                        : "s"} được gán
+                      {group.roles.length} vai trò được gán
                     </p>
                   </div>
                   <div class="mt-2 flex-shrink-0 sm:mt-0 sm:ml-5">
