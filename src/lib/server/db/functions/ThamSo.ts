@@ -29,7 +29,7 @@ export const updateSettings = async(settings: Settings) => {
   await updateThamSo("tuoiMax", settings.tuoiMax);
   await updateThamSo("soCauThuMin", settings.soCauThuMin);
   await updateThamSo("soCauThuMax", settings.soCauThuMax);
-  await updateThamSo("soCauThuTGTDMax", settings.soCauThuMax);
+  await updateThamSo("soCauThuTGTDMax", settings.soCauThuTGTDMax);
   await updateThamSo("doiDaTrenSanNha", settings.doiDaTrenSanNha);
   await updateThamSo("thoiDiemGhiBanToiThieu", settings.thoiDiemGhiBanToiThieu);
   await updateThamSo("thoiDiemGhiBanToiDa", settings.thoiDiemGhiBanToiDa);
