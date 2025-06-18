@@ -1,3 +1,4 @@
+import { isNumber } from "$lib";
 import { selectAllLoaiCT } from "$lib/server/db/functions/Data/LoaiCT";
 import { selectThamSo } from "$lib/server/db/functions/ThamSo";
 import { checkPageEditable } from "$lib/server/db/functions/User/UserRole";
@@ -11,6 +12,11 @@ export const load = (async ({ params, fetch, locals, route }) => {
 
   try {
 
+    if (!params.ma_doi)
+      throw new Error("Mã đội không được cung cấp");
+    const maDoi = parseInt(params.ma_doi);
+    if (!isNumber(maDoi))
+      throw new Error("Mã đội phải là một số");
     const response = await _GETCauThuMaDoi(params.ma_doi);
   
     const danhSachCauThu: CauThu[] = response;
@@ -23,6 +29,7 @@ export const load = (async ({ params, fetch, locals, route }) => {
     return {
       danhSachCauThu,
       ma_doi: params.ma_doi,
+      maDoi: maDoi,
       tuoiMin: tuoiMin,
       tuoiMax: tuoiMax,
       loaiCTs: loaiCTs,
@@ -33,6 +40,7 @@ export const load = (async ({ params, fetch, locals, route }) => {
     return {
       danhSachCauThu: [],
       ma_doi: params.ma_doi,
+      maDoi: 0,
       tuoiMin: 0,
       tuoiMax: 0,
       loaiCTs: [],

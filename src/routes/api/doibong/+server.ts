@@ -59,7 +59,7 @@ export const POST: RequestHandler = async ({
       await updateDoiBong(data);
     }
     else{
-      await insertDoiBong(data);
+      data.maDoi = (await insertDoiBong(data)).at(0)!!.id;
     }
     
     return new Response(JSON.stringify(data), {

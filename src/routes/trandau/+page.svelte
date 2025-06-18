@@ -362,6 +362,9 @@
         danhSachVTD.find((value) => value.maVTD === result.maVTD)?.tenVTD ?? "";
       result.tenSan =
         danhSachSan.find((value) => value.maSan === result.maSan)?.tenSan ?? "";
+      result.tenTT =
+        danhSachTrongTai.find((value) => value.maTT === result.maTT)?.tenTT ??
+        "Chưa có trọng tài";
       // result.tenMG =
       //   danhSachMuaGiai.find((value) => value.maMG == result.maMG)?.tenMG ?? "";
       if (result.tenDoiThang === null) result.tenDoiThang = "Hòa";

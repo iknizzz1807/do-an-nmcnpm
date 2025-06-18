@@ -3,7 +3,7 @@ import { deleteCauThu, selectCauThuDoiBong, selectCauThuMaCT, updateCauThu } fro
 import { insertCauThu } from "$lib/server/db/functions/CauThu";
 import { countThamGiaDB, isThamGiaDBExceedMax } from "$lib/server/db/functions/ThamGiaDB";
 import type { CauThu } from "$lib/typesDatabase";
-import { calculateAge, errorResponseJSON } from "$lib";
+import { calculateAge, errorResponseJSON, isNumber } from "$lib";
 import { selectThamSo } from "$lib/server/db/functions/ThamSo";
 import { selectAllLoaiCT, selectLoaiCTMaLCT } from "$lib/server/db/functions/Data/LoaiCT";
 import dateFormat from "dateformat";
@@ -11,7 +11,7 @@ import { existsCauThuTGTD } from "$lib/server/db/functions/ThamGiaTD";
 
 export const _GETCauThuMaDoi = async(ma_doi: string) => {
   const maDoi = parseInt(ma_doi);
-  if (!Number.isFinite(maDoi))
+  if (!isNumber(maDoi))
     throw new Error("Khong tim thay doi");
   return await selectCauThuDoiBong(maDoi);
 }

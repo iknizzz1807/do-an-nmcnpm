@@ -10,6 +10,8 @@
   import { type FieldOption } from "$lib/components/Form.svelte";
   import BanThangTable from "./BanThangTable.svelte";
   import { onMount } from "svelte";
+  import ButtonPrimary from "$lib/components/ButtonPrimary.svelte";
+  import { goto } from "$app/navigation";
   let { data }: PageProps = $props();
 
   const cauThuDoiMot: { cauThu: CauThu; viTri: ViTri }[] = $state(
@@ -124,6 +126,14 @@
   {isEditable}
 />
 
+  {#if isEditable}
+    <div class="flex justify-center gap-4">
+      <ButtonPrimary
+        text={"Lịch sử cập nhật"}
+        onclick={() => goto("/trandau/" + data.maTD + "/lichsu")}
+      />
+    </div>
+  {/if}
 <!-- <ThePhatTable 
   maTD={data.maTD!!}
   dsThePhat={danhSachThePhat}

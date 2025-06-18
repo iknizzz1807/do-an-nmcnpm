@@ -6,6 +6,7 @@ import { selectThamSo } from "$lib/server/db/functions/ThamSo";
 import { countThamGiaDB, isThamGiaDBExceedMax } from "$lib/server/db/functions/ThamGiaDB";
 import { selectAllLoaiCT, selectLoaiCTMaLCT } from "$lib/server/db/functions/Data/LoaiCT";
 import { existsCauThuTGTD } from "$lib/server/db/functions/ThamGiaTD";
+import { existsCauThuBanThang } from "$lib/server/db/functions/BanThang";
 
 export const _GETCauThu = async() => {
   return await selectAllCauThuWithBanThang();
@@ -85,8 +86,8 @@ export const DELETE: RequestHandler = async ({
   try {
     const data = await request.json();
     let result : number | null = null;
-    if ((await existsCauThuTGTD(data.maCT!!)))
-      throw new Error("Không thể xóa cầu thủ này vì có lịch thi đấu đang diễn ra");
+    if ((await existsCauThuBanThang(data.maCT!!)))
+      throw new Error("Không thể xóa cầu thủ này vì có bàn thắng");
     if ((data.maCT ?? null) === null) {
       throw new Error("Không có mã cầu thủ sao xóa? bruh");
     }

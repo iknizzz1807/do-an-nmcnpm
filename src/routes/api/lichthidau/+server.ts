@@ -53,9 +53,10 @@ export const POST : RequestHandler = async ({ request, locals } : { request: Req
       throw new Error("Đội bóng không tồn tại");
     const doiDaTrenSanNha = await selectThamSo("doiDaTrenSanNha");
     lichThiDau.maSan = doiDaTrenSanNha === 1 ? doiBongMot.maSan : doiBongHai.maSan;
-    
+    console.log("Lich thi dau:", lichThiDau);
+
     if ((lichThiDau.maTD ?? null) === null) {
-      await insertLichThiDau(lichThiDau);
+      lichThiDau.maTD = (await insertLichThiDau(lichThiDau)).at(0)!!.id;
     }
     else {
       await updateLichThiDau(lichThiDau);

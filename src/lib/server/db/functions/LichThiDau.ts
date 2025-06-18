@@ -27,6 +27,7 @@ export const updateLichThiDau = async(lichThiDau: LichThiDau) => {
   await db.update(LichThiDauTable).set({
     maMG: lichThiDau.maMG,
     maVTD: lichThiDau.maVTD,
+    maSan: lichThiDau.maSan,
     
     doiMot: lichThiDau.doiMot,
     doiHai: lichThiDau.doiHai,

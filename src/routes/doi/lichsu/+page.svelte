@@ -18,7 +18,7 @@
     },
     { header: "Mã đội", accessor: "maDoi" },
     { header: "Tên đội", accessor: "tenDoi" },
-    { header: "Sân nhà", accessor: "tenSan" },
+    { header: "Mã sân", accessor: "maSan" },
   ];
 
   onMount(() => {

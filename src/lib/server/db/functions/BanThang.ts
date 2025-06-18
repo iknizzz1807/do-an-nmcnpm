@@ -79,3 +79,8 @@ export const selectBanThang = async(maTD: number) => {
     .where(eq(BanThangTable.maTD, maTD))
     .groupBy(BanThangTable.maTD, BanThangTable.thoiDiem)) satisfies BanThang[];
 }
+
+export const existsCauThuBanThang = async(maCT: number) => {
+  return (await db.select().from(BanThangTable)
+    .where(eq(BanThangTable.maCT, maCT)).limit(1)).length > 0;
+}
