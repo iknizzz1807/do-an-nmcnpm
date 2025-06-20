@@ -23,13 +23,13 @@
 
 ## Thành viên nhóm
 
-| Họ tên                 | Link GitHub                                                      | Mã số sinh viên |
-| ---------------------- | ---------------------------------------------------------------- | --------------- |
-| Nguyễn Mỹ Thống        | [github.com/iknizzz1807](https://github.com/iknizzz1807)         | 23521527        |
-| Đặng Trần Anh Hào      | [github.com/kohrabi](https://github.com/kohrabi)                 | 23520444        |
-| Trương Thiên Phú       | [github.com/MilkyChococo](https://github.com/MilkyChococo)       | 23521190        |
-| Đặng Ngọc Trường Giang | [github.com/ngoctruonggiang](https://github.com/ngoctruonggiang) | 23520406        |
-| Trần Đức Hải           | [github.com/duchai1703](https://github.com/duchai1703)           | 23520421        |
+| Họ tên                 | Link GitHub                                                      | Mã số sinh viên |                                                       |
+| ---------------------- | ---------------------------------------------------------------- | --------------- |-------------------------------------------------------|
+| Nguyễn Mỹ Thống        | [github.com/iknizzz1807](https://github.com/iknizzz1807)         | 23521527        |                                                       |
+| Đặng Trần Anh Hào      | [github.com/kohrabi](https://github.com/kohrabi)                 | 23520444        |did most of this shit and have depression due to this  |
+| Trương Thiên Phú       | [github.com/MilkyChococo](https://github.com/MilkyChococo)       | 23521190        |                                                       |
+| Đặng Ngọc Trường Giang | [github.com/ngoctruonggiang](https://github.com/ngoctruonggiang) | 23520406        |                                                       |
+| Trần Đức Hải           | [github.com/duchai1703](https://github.com/duchai1703)           | 23520421        |                                                       |
 
 ---
 
